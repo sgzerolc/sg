@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="文明6是个回合制策略游戏，在寒假70个小时左右的时间里我开了几局存档了十几次，最后只赢了两局。虽然文明用了相对简化的形式展现，文明的发展过程和人对世界的探索有相通之处，这也是吸引我的地方之一。本文主要记录对游戏玩法的思考过程以及一些天马行空的想法。  ¶世界观 文明有四种胜利的方式，科技，文化，宗教，统治，如果设定的回合数结束了仍没有任何一方达成胜利，那么分数最高的玩家赢。 文明的发展分成科技树和">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《文明6》——看不见的世界">
+<meta property="og:url" content="https://sgzerolc.github.io/sg/2022/02/17/civilization/index.html">
+<meta property="og:site_name" content="steins gate zero">
+<meta property="og:description" content="文明6是个回合制策略游戏，在寒假70个小时左右的时间里我开了几局存档了十几次，最后只赢了两局。虽然文明用了相对简化的形式展现，文明的发展过程和人对世界的探索有相通之处，这也是吸引我的地方之一。本文主要记录对游戏玩法的思考过程以及一些天马行空的想法。  ¶世界观 文明有四种胜利的方式，科技，文化，宗教，统治，如果设定的回合数结束了仍没有任何一方达成胜利，那么分数最高的玩家赢。 文明的发展分成科技树和">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://sgzerolc.github.io/sg/2022/02/17/civilization/imag.png">
+<meta property="og:image" content="https://sgzerolc.github.io/sg/2022/02/17/civilization/ima.png">
+<meta property="og:image" content="https://sgzerolc.github.io/sg/2022/02/17/civilization/image.png">
+<meta property="og:image" content="https://sgzerolc.github.io/sg/2022/02/17/civilization/i.png">
+<meta property="og:image" content="https://sgzerolc.github.io/sg/2022/02/17/civilization/m.png">
+<meta property="article:published_time" content="2022-02-16T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-04-09T02:58:02.426Z">
+<meta property="article:author" content="Sam Li">
+<meta property="article:tag" content="read">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://sgzerolc.github.io/sg/2022/02/17/civilization/imag.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/sg/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/sg/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/sg/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>《文明6》——看不见的世界</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/sg/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/sg/">Home</a></li><!--
+     --><!--
+       --><li><a href="/sg/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/sg/categories/">Category</a></li><!--
+     --><!--
+       --><li><a href="/sg/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/sg/CV/">CV</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/sg/2022/03/01/recitation_ds/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/sg/2022/02/15/6.046_coa/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://sgzerolc.github.io/sg/2022/02/17/civilization/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://sgzerolc.github.io/sg/2022/02/17/civilization/&text=《文明6》——看不见的世界"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://sgzerolc.github.io/sg/2022/02/17/civilization/&title=《文明6》——看不见的世界"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sgzerolc.github.io/sg/2022/02/17/civilization/&is_video=false&description=《文明6》——看不见的世界"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=《文明6》——看不见的世界&body=Check out this article: https://sgzerolc.github.io/sg/2022/02/17/civilization/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://sgzerolc.github.io/sg/2022/02/17/civilization/&title=《文明6》——看不见的世界"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://sgzerolc.github.io/sg/2022/02/17/civilization/&title=《文明6》——看不见的世界"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://sgzerolc.github.io/sg/2022/02/17/civilization/&title=《文明6》——看不见的世界"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://sgzerolc.github.io/sg/2022/02/17/civilization/&title=《文明6》——看不见的世界"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://sgzerolc.github.io/sg/2022/02/17/civilization/&name=《文明6》——看不见的世界&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://sgzerolc.github.io/sg/2022/02/17/civilization/&t=《文明6》——看不见的世界"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%96%E7%95%8C%E8%A7%82"><span class="toc-number">1.</span> <span class="toc-text">世界观</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%97%B6%E9%97%B4%E5%B0%B1%E6%98%AF%E9%87%91%E5%B8%81"><span class="toc-number">2.</span> <span class="toc-text">时间就是金币</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%9F%E4%BA%BA%E7%9A%84%E5%B8%AE%E5%8A%A9"><span class="toc-number">3.</span> <span class="toc-text">伟人的帮助</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%A0%E5%8A%BF%E5%88%A9%E5%AF%BC"><span class="toc-number">4.</span> <span class="toc-text">因势利导</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%82%E5%AF%9F%E4%B8%96%E7%95%8C"><span class="toc-number">4.1.</span> <span class="toc-text">观察世界</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8A%82%E7%82%B9%E5%AD%98%E6%A1%A3"><span class="toc-number">4.2.</span> <span class="toc-text">节点存档</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        《文明6》——看不见的世界
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Sam Li</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2022-02-16T16:00:00.000Z" itemprop="datePublished">2022-02-17</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/sg/categories/life/">life</a> › <a class="category-link" href="/sg/categories/life/read/">read</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/sg/tags/read/" rel="tag">read</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>文明6是个回合制策略游戏，在寒假70个小时左右的时间里我开了几局存档了十几次，最后只赢了两局。虽然文明用了相对简化的形式展现，文明的发展过程和人对世界的探索有相通之处，这也是吸引我的地方之一。本文主要记录对游戏玩法的思考过程以及一些天马行空的想法。</p>
+<img src="/sg/2022/02/17/civilization/imag.png" class="" title="imag">
+<h2 id="世界观"><a class="header-anchor" href="#世界观">¶</a>世界观</h2>
+<p>文明有四种胜利的方式，科技，文化，宗教，统治，如果设定的回合数结束了仍没有任何一方达成胜利，那么分数最高的玩家赢。</p>
+<p>文明的发展分成科技树和市政树，对应的历史发展的不同时期，从氏族，农耕文明，中世纪，文艺复兴，现代，原子能时代到信息时代，不同的科技和市政有相应的前置，达成能够解锁下一步行动。</p>
+<p>玩家选择难度和地图开局。</p>
+<h2 id="时间就是金币"><a class="header-anchor" href="#时间就是金币">¶</a>时间就是金币</h2>
+<p>生产力决定建筑完成的回合数，当解锁了主要建筑后，可以用时间或者金币来获得附加建筑。文明里我认为最重要的就是金币，其次是资源。金币可以换取时间，任何能够换得时间的行动都应该采取。</p>
+<p>科技树相比 breadth-first search 采用 depth-first search 最好，在确定目标的情况下这能最大程度的增加科技点。在给定的时期内找到能够有最快发展速度的可能方法，这需要知道可能性大的方式，并且确保走的下一步能够换得更宽的路。</p>
+<h2 id="伟人的帮助"><a class="header-anchor" href="#伟人的帮助">¶</a>伟人的帮助</h2>
+<p>世界是复杂的，单一方式的想法不能够解决问题。</p>
+<p>文明中伟人的存在能够根据其类别能够给予不同加成，但这种加成是因人而异的。原本我以为只要有大科学家的帮助，那么科技发展就不成问题了。于是某一局里我给所有城市都建了学院，以及附加的建筑，可是其他类别的建筑受到生产力的限制都没能得到很好的发展。而这又影响到了学院的建设，进入恶性循环，数不清多少次都止步于工业时期。</p>
+<p>很高兴的是我最新赢的这局终于获得了图灵。</p>
+<img src="/sg/2022/02/17/civilization/ima.png" class="" title="ima">
+<p>虽然文明最强的 buff 是信息时代的大科学家萨拉姆，能够给信息时代所有的科技启动尤里卡时刻。</p>
+<img src="/sg/2022/02/17/civilization/image.png" class="" title="image">
+<h2 id="因势利导"><a class="header-anchor" href="#因势利导">¶</a>因势利导</h2>
+<p>文明的基础在于城市发展，城市发展繁荣才能获得更多金币，带来更多别的选择。获得新城市的方式有两个，军事掠夺和开拓者自建。从文明发展开始获取新城市是最好的，因为城市够多发展商会和建立贸易路线才能获得更多的金币。每局能够获得500金币左右的加成就算比较好的发展趋势了，这一般需要10个城市左右。我输的几局里城市的数量相对都较少，只有6个城市，发展速度也不行。</p>
+<p>城市自建取决于当前人士的人口和未开发的土地资源。建筑获得有人口数量要求，开拓者会减少一个人口，如果城市发展速度不足那么当前城市发展就会停滞。而军事掠夺只要有比目标城市够强的军队就行。文明里战争设置的难度不高，只有玩家能够选择多个城市打击，而其余电脑用户玩家只有在邻国的军队已经到或过了边界才会攻击（或许之后能找到朋友一起玩）。</p>
+<p>我最新玩的一局选择的是实际地球地图模拟，随机市政科技模式，随机君主是西班牙菲利普三世。他的天赋主要是金币，生产力和宗教。发展重商主义能够获得更多的金币和生产力，而宗教信仰与敌人不同能够使军队获得更多战斗力。玩到中间我觉得通过战争掠夺能够获得更多科技点，于是选择和科技发展第一的邻国刚果（非洲）发动战争。当时军队都在欧洲南部，宣战过后北非最接近刚果的城市在边界就受到了攻击，而大量军队经过五个回合左右到了边界就直接被科技等级更高的刚果打败了，文明等级对战争的直接影响很大。</p>
+<img src="/sg/2022/02/17/civilization/i.png" class="" title="i">
+<h3 id="观察世界"><a class="header-anchor" href="#观察世界">¶</a>观察世界</h3>
+<p>我认为文明里任何的单一因素都对结果没有绝对作用，所以不用在意一时一地的得失。侦察兵去探索其它地方遇到别的文明是必要的，但是基础的是城市发展，周围邻国的发展情况比远方的世界更重要。西班牙所处的地方靠近海但首都马德里并不在海岸，而不能出海就限制了新大陆城市的开拓，所以在最开始我就想办法先发展航海业，同时宁愿花金币扩大边境也不能在某条路上卡死了。</p>
+<p>周边国家可以发动战争的处于同一层次的文明主要有英国，德国，罗马。罗马科技水平比我略高。由于法国君主关系和我不大好，经常谴责我（？），巴黎也阻碍了我往英德那边跑，所以最开始我就占领了巴黎，这导致我的军队主要集中在欧洲。在打刚果失败后，我的打算是通过掠夺英国将军队从火枪手发展到步兵。于是我读取存档到打刚果前，占领了英国两座城市。占领英国后我发现德国的边界线已经被周边国家锁死了，而德国文明还未发展出航海术，相比世界其它国家基本停滞不前于是我又占领了德国，没想到德国只有这一座城市，他们一直被边界锁住没有开拓新的城市。这时候我的军队已经发展到了线列步兵，比步兵低一个等级。</p>
+<p>文明我更倾向的胜利方式一直都是科技胜利，毕竟是个理工生😼。战争掠夺的主要目的也是发展科技。由于军队发展水平仍比不上科技更高的刚果，也为了打开通往别的国家的大门我又占领了相邻的罗马两个城市。这时候军队发展到了步兵程度，城市能够建立机场，贸易路线也开拓得够多，每回合加成300金币左右。同时我发现在世界排名中我最领先的胜利方式是统治胜利，并且统治胜利的程度比三种其它君主领先的方式要高。所以我选定了统治胜利的方式，这才发现需要占领其它所有国家的首都。</p>
+<p>在后来发展过程中刚果的文化胜利程度有一段时间和我的统治胜利程度差不多。由于奇观能带来文化加成，我选择了刚果两座奇观最多的城市作为战略目标。轰炸机和战斗机的出现和文明难度不高的战争模式使西班牙一步步占领了刚果，中国和日本的首都。这时候我确定自己基本上能赢了，剩下的只是时间问题。</p>
+<p>阿兹特克由于在其它大陆，我派出了两艘战舰和两支机械化步兵确定它首都的位置，然后布置飞机在疆域东侧空袭。最后一个首都反而花了额外的时间，虽然之前掠夺过挪威的城市但我忘记自己并未占领它的首都，查看世界排名面板后我才发现有漏网之鱼，确定了最后一个战略目标。攻下后到这里终于获得了统治胜利。</p>
+<img src="/sg/2022/02/17/civilization/m.png" class="" title="m">
+<h3 id="节点存档"><a class="header-anchor" href="#节点存档">¶</a>节点存档</h3>
+<p>游戏能够存档，人生却不能重来。今后我也会遇到更多失败。只要不自己认输，任何事情都有转机。</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/sg/">Home</a></li>
+         
+          <li><a href="/sg/about/">About</a></li>
+         
+          <li><a href="/sg/categories/">Category</a></li>
+         
+          <li><a href="/sg/archives/">Writing</a></li>
+         
+          <li><a href="/sg/CV/">CV</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%96%E7%95%8C%E8%A7%82"><span class="toc-number">1.</span> <span class="toc-text">世界观</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%97%B6%E9%97%B4%E5%B0%B1%E6%98%AF%E9%87%91%E5%B8%81"><span class="toc-number">2.</span> <span class="toc-text">时间就是金币</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%9F%E4%BA%BA%E7%9A%84%E5%B8%AE%E5%8A%A9"><span class="toc-number">3.</span> <span class="toc-text">伟人的帮助</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%A0%E5%8A%BF%E5%88%A9%E5%AF%BC"><span class="toc-number">4.</span> <span class="toc-text">因势利导</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%82%E5%AF%9F%E4%B8%96%E7%95%8C"><span class="toc-number">4.1.</span> <span class="toc-text">观察世界</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8A%82%E7%82%B9%E5%AD%98%E6%A1%A3"><span class="toc-number">4.2.</span> <span class="toc-text">节点存档</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://sgzerolc.github.io/sg/2022/02/17/civilization/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://sgzerolc.github.io/sg/2022/02/17/civilization/&text=《文明6》——看不见的世界"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://sgzerolc.github.io/sg/2022/02/17/civilization/&title=《文明6》——看不见的世界"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sgzerolc.github.io/sg/2022/02/17/civilization/&is_video=false&description=《文明6》——看不见的世界"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=《文明6》——看不见的世界&body=Check out this article: https://sgzerolc.github.io/sg/2022/02/17/civilization/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://sgzerolc.github.io/sg/2022/02/17/civilization/&title=《文明6》——看不见的世界"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://sgzerolc.github.io/sg/2022/02/17/civilization/&title=《文明6》——看不见的世界"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://sgzerolc.github.io/sg/2022/02/17/civilization/&title=《文明6》——看不见的世界"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://sgzerolc.github.io/sg/2022/02/17/civilization/&title=《文明6》——看不见的世界"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://sgzerolc.github.io/sg/2022/02/17/civilization/&name=《文明6》——看不见的世界&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://sgzerolc.github.io/sg/2022/02/17/civilization/&t=《文明6》——看不见的世界"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2022
+    Sam Li
+  </div>
+</footer>
+
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/sg/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

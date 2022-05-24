@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="¶R20: concurrency I’ve studied parallelism before however the implementation of locks remains unsolved. The goal of this reading is supposed to deepen the understanding and the process of coding. ¶two">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SC concurrency">
+<meta property="og:url" content="https://sgzerolc.github.io/sg/2021/10/20/SC_concurrency/index.html">
+<meta property="og:site_name" content="steins gate zero">
+<meta property="og:description" content="¶R20: concurrency I’ve studied parallelism before however the implementation of locks remains unsolved. The goal of this reading is supposed to deepen the understanding and the process of coding. ¶two">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-10-19T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-03-18T10:14:51.147Z">
+<meta property="article:author" content="Sam Li">
+<meta property="article:tag" content="6.031 software construction">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/sg/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/sg/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/sg/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>SC concurrency</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/sg/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/sg/">Home</a></li><!--
+     --><!--
+       --><li><a href="/sg/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/sg/categories/">Category</a></li><!--
+     --><!--
+       --><li><a href="/sg/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/sg/CV/">CV</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/sg/2021/10/29/SC_test-debug/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/sg/2021/10/19/db_memory_management/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://sgzerolc.github.io/sg/2021/10/20/SC_concurrency/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://sgzerolc.github.io/sg/2021/10/20/SC_concurrency/&text=SC concurrency"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://sgzerolc.github.io/sg/2021/10/20/SC_concurrency/&title=SC concurrency"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sgzerolc.github.io/sg/2021/10/20/SC_concurrency/&is_video=false&description=SC concurrency"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=SC concurrency&body=Check out this article: https://sgzerolc.github.io/sg/2021/10/20/SC_concurrency/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://sgzerolc.github.io/sg/2021/10/20/SC_concurrency/&title=SC concurrency"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://sgzerolc.github.io/sg/2021/10/20/SC_concurrency/&title=SC concurrency"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://sgzerolc.github.io/sg/2021/10/20/SC_concurrency/&title=SC concurrency"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://sgzerolc.github.io/sg/2021/10/20/SC_concurrency/&title=SC concurrency"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://sgzerolc.github.io/sg/2021/10/20/SC_concurrency/&name=SC concurrency&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://sgzerolc.github.io/sg/2021/10/20/SC_concurrency/&t=SC concurrency"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#R20-concurrency"><span class="toc-number">1.</span> <span class="toc-text">R20: concurrency</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#two-models-for-concurrent-programming"><span class="toc-number">1.1.</span> <span class="toc-text">two models for concurrent programming</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#basic-concepts"><span class="toc-number">1.2.</span> <span class="toc-text">basic concepts</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#starting-a-thread-with-an-anonymous-class"><span class="toc-number">1.3.</span> <span class="toc-text">starting a thread with an anonymous class</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Shared-memory-example"><span class="toc-number">1.4.</span> <span class="toc-text">Shared memory example</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Message-passing-example"><span class="toc-number">1.5.</span> <span class="toc-text">Message passing example</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#concurrency-is-hard-to-debug"><span class="toc-number">1.6.</span> <span class="toc-text">concurrency is hard to debug</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#R21-22-thread-safety"><span class="toc-number">2.</span> <span class="toc-text">R21&amp;22: thread safety</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#what-is-threadsafe"><span class="toc-number">2.1.</span> <span class="toc-text">what is threadsafe?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#how-to-make-a-safety-argument"><span class="toc-number">2.2.</span> <span class="toc-text">how to make a safety argument?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Strategy1-confinement"><span class="toc-number">2.3.</span> <span class="toc-text">Strategy1: confinement</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Strategy2-immutability"><span class="toc-number">2.4.</span> <span class="toc-text">Strategy2: immutability</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Strategy3-using-threadsafe-data-types"><span class="toc-number">2.5.</span> <span class="toc-text">Strategy3:using threadsafe data types</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Strategy4-synchronization"><span class="toc-number">2.6.</span> <span class="toc-text">Strategy4: synchronization</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#R23-queues-message-passing"><span class="toc-number">3.</span> <span class="toc-text">R23: queues &amp; message-passing</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#producer-consumer-design-pattern"><span class="toc-number">3.1.</span> <span class="toc-text">producer-consumer design pattern</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#race-conditions"><span class="toc-number">3.2.</span> <span class="toc-text">race conditions</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#R24-sockets-networking"><span class="toc-number">4.</span> <span class="toc-text">R24: sockets &amp; networking</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Client-server-design-pattern"><span class="toc-number">4.1.</span> <span class="toc-text">Client&#x2F;server design pattern</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sockets-and-streams"><span class="toc-number">4.2.</span> <span class="toc-text">sockets and streams</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Network-sockets"><span class="toc-number">4.2.1.</span> <span class="toc-text">&gt; Network sockets</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#streams"><span class="toc-number">4.2.2.</span> <span class="toc-text">&gt; streams</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#wire-protocols"><span class="toc-number">4.2.3.</span> <span class="toc-text">&gt; wire protocols</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Using-network-sockets-in-Java"><span class="toc-number">4.3.</span> <span class="toc-text">Using network sockets in Java</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        SC concurrency
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Sam Li</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-10-19T16:00:00.000Z" itemprop="datePublished">2021-10-20</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/sg/categories/software-engineering/">software engineering</a> › <a class="category-link" href="/sg/categories/software-engineering/6-031-software-construction/">6.031 software construction</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/sg/tags/6-031-software-construction/" rel="tag">6.031 software construction</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="R20-concurrency"><a class="header-anchor" href="#R20-concurrency">¶</a>R20: concurrency</h2>
+<p>I’ve studied parallelism before however the implementation of locks remains unsolved. The goal of this reading is supposed to deepen the understanding and the process of coding.</p>
+<h3 id="two-models-for-concurrent-programming"><a class="header-anchor" href="#two-models-for-concurrent-programming">¶</a>two models for concurrent programming</h3>
+<p>Hand-written notes</p>
+<h3 id="basic-concepts"><a class="header-anchor" href="#basic-concepts">¶</a>basic concepts</h3>
+<p><strong>Process</strong></p>
+<blockquote>
+<p>A process is an instance of a running program that is <em>isolated</em> from other processes on the same machine. In particular, it has its own private section of the machine’s memory.</p>
+</blockquote>
+<ul>
+<li>The process abstraction is a <em>virtual computer</em>.</li>
+</ul>
+<p><strong>Thread</strong></p>
+<blockquote>
+<p>A thread is a locus of control inside a running program. Think of it as a place in the program that is being run, plus the stack of method calls that led to that place (so the thread can go back up the stack when it reaches <code>return</code> statements).</p>
+</blockquote>
+<ul>
+<li>the thread abstraction represents a <em>virtual processor</em></li>
+</ul>
+<p><strong>Time slicing</strong></p>
+<ul>
+<li>the processor switches between threads when there are more threads than processors</li>
+</ul>
+<h3 id="starting-a-thread-with-an-anonymous-class"><a class="header-anchor" href="#starting-a-thread-with-an-anonymous-class">¶</a>starting a thread with an anonymous class</h3>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Hello from a thread!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;).start();</span><br><span class="line"></span><br><span class="line"><span class="comment">//named class</span></span><br><span class="line"><span class="comment">/** A comparison function that imposes a total ordering on some objects.</span></span><br><span class="line"><span class="comment"> *  ... */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Comparator</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="comment">/** Compares its two arguments for order.</span></span><br><span class="line"><span class="comment">     *  ...</span></span><br><span class="line"><span class="comment">     *  <span class="doctag">@return</span> a negative integer, zero, or a positive integer if the first</span></span><br><span class="line"><span class="comment">     *          argument is less than, equal to, or greater than the second */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(T o1, T o2)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/** Orders Strings by length (shorter first) and then lexicographically. */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StringLengthComparator</span> <span class="keyword">implements</span> <span class="title">Comparator</span>&lt;<span class="title">String</span>&gt; </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(String s1, String s2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (s1.length() == s2.length()) &#123;</span><br><span class="line">            <span class="keyword">return</span> s1.compareTo(s2);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> s1.length() - s2.length();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">SortedSet&lt;String&gt; strings = <span class="keyword">new</span> TreeSet&lt;&gt;();</span><br><span class="line">strings.addAll(List.of(<span class="string">&quot;yolanda&quot;</span>, <span class="string">&quot;zach&quot;</span>, <span class="string">&quot;alice&quot;</span>, <span class="string">&quot;bob&quot;</span>));</span><br><span class="line"><span class="comment">// strings is &#123; &quot;alice&quot;, &quot;bob&quot;, &quot;yolanda&quot;, &quot;zach&quot; &#125;</span></span><br><span class="line">With a Comparator:</span><br><span class="line"></span><br><span class="line"><span class="comment">// uses StringLengthComparator declared above</span></span><br><span class="line">Comparator&lt;String&gt; compareByLength = <span class="keyword">new</span> StringLengthComparator();</span><br><span class="line">SortedSet&lt;String&gt; strings = <span class="keyword">new</span> TreeSet&lt;&gt;(compareByLength);</span><br><span class="line">strings.addAll(List.of(<span class="string">&quot;yolanda&quot;</span>, <span class="string">&quot;zach&quot;</span>, <span class="string">&quot;alice&quot;</span>, <span class="string">&quot;bob&quot;</span>));</span><br><span class="line"><span class="comment">// strings is &#123; &quot;bob&quot;, &quot;zach&quot;, &quot;alice&quot;, &quot;yolanda&quot; &#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// uses StringLengthComparator declared above</span></span><br><span class="line">SortedSet&lt;String&gt; strings = <span class="keyword">new</span> TreeSet&lt;&gt;(<span class="keyword">new</span> StringLengthComparator());</span><br><span class="line">strings.addAll(List.of(<span class="string">&quot;yolanda&quot;</span>, <span class="string">&quot;zach&quot;</span>, <span class="string">&quot;alice&quot;</span>, <span class="string">&quot;bob&quot;</span>));</span><br><span class="line"><span class="comment">// strings is &#123; &quot;bob&quot;, &quot;zach&quot;, &quot;alice&quot;, &quot;yolanda&quot; &#125;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// no StringLengthComparator class!</span></span><br><span class="line">SortedSet&lt;String&gt; strings = <span class="keyword">new</span> TreeSet&lt;&gt;(<span class="keyword">new</span> Comparator&lt;String&gt;() &#123;</span><br><span class="line">    <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(String s1, String s2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (s1.length() == s2.length()) &#123;</span><br><span class="line">            <span class="keyword">return</span> s1.compareTo(s2);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> s1.length() - s2.length();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line">strings.addAll(List.of(<span class="string">&quot;yolanda&quot;</span>, <span class="string">&quot;zach&quot;</span>, <span class="string">&quot;alice&quot;</span>, <span class="string">&quot;bob&quot;</span>));</span><br><span class="line"><span class="comment">// strings is &#123; &quot;bob&quot;, &quot;zach&quot;, &quot;alice&quot;, &quot;yolanda&quot; &#125;</span></span><br></pre></td></tr></table></figure>
+<p>advantage: one-off implementations</p>
+<p>Disadvantage: a named class is good for needing more than once.</p>
+<p>Never call run() on a thread, or on a runnable that you created for a thread, which uses the same thread.</p>
+<p>Instead, make a new Thread() with an instance of your Runnable, and call start() on the thread to start it.</p>
+<p>junit: test fails if an exception is thrown and not caught by the test code itself.</p>
+<h3 id="Shared-memory-example"><a class="header-anchor" href="#Shared-memory-example">¶</a>Shared memory example</h3>
+<p>Race condition: the correctness of the program depends on the relative timing of events in concurrent computations A and B. “A is in a race with B.”</p>
+<p>It can’t be told what the atomic operations(the individual steps of the computation) will be.</p>
+<p>System.exit(): main() may return while its threads are still running. Use exit to force the process to exit.</p>
+<h3 id="Message-passing-example"><a class="header-anchor" href="#Message-passing-example">¶</a>Message passing example</h3>
+<p>Interleaving of the messages sent to the bank account.</p>
+<h3 id="concurrency-is-hard-to-debug"><a class="header-anchor" href="#concurrency-is-hard-to-debug">¶</a>concurrency is hard to debug</h3>
+<p>问题可能存在于多个程序，os？网络？cpu?</p>
+<p>问题很难再现，想想吧，相同的问题位置，出错的地方确不同或者不会发生。</p>
+<p>并且print-debug失效，因为它们相比于运行的程序的操作要慢100倍～1000倍。当使用print时，足够的时间改变操作的时间。</p>
+<p>Nondeterministic behavior causation?</p>
+<h2 id="R21-22-thread-safety"><a class="header-anchor" href="#R21-22-thread-safety">¶</a>R21&amp;22: thread safety</h2>
+<h3 id="what-is-threadsafe"><a class="header-anchor" href="#what-is-threadsafe">¶</a>what is threadsafe?</h3>
+<blockquote>
+<p>if it behaves correctly when used from multiple threads, regardless of how those threads are executed, and without demanding additional coordination from the calling code.</p>
+<ul>
+<li>“Behaves correctly” means satisfying its specification and preserving its rep invariant.</li>
+<li>“Regardless of how threads are executed” means threads might be on multiple processors or timesliced on the same processor.</li>
+<li>And “without additional coordination” means that the data type can’t put preconditions on its caller related to timing, like “you can’t call <code>get()</code> while <code>set()</code> is in progress.”</li>
+</ul>
+</blockquote>
+<h3 id="how-to-make-a-safety-argument"><a class="header-anchor" href="#how-to-make-a-safety-argument">¶</a>how to make a safety argument?</h3>
+<p>how to make code safe in concurrent programming?</p>
+<p>Don’t share data between threads (by confinement, immutability, threadsafe data types).</p>
+<p>The difficult one is how to implement a threadsafe type.</p>
+<h3 id="Strategy1-confinement"><a class="header-anchor" href="#Strategy1-confinement">¶</a>Strategy1: confinement</h3>
+<p>idea: Avoid races on reassignable references and mutable data by keeping those confined to a single thread.</p>
+<p>Shared mutable state is the root cause of a race condition.</p>
+<p>don’t use global variables: static variables are accessible to all threads therefore can be changed. While local variables are confined to single thread.</p>
+<h3 id="Strategy2-immutability"><a class="header-anchor" href="#Strategy2-immutability">¶</a>Strategy2: immutability</h3>
+<p>keep the data immutable and variables unreassignable.</p>
+<blockquote>
+<p>Threadsafe immutability:</p>
+<ul>
+<li>no mutator methods</li>
+<li>all fields declared <code>private</code> and <code>final</code></li>
+<li>no <a target="_blank" rel="noopener" href="https://web.mit.edu/6.031/www/sp21/classes/11-abstraction-functions-rep-invariants/#invariants">representation exposure</a></li>
+<li>no mutation whatsoever of mutable objects in the rep – not even <a target="_blank" rel="noopener" href="https://web.mit.edu/6.031/www/sp21/classes/11-abstraction-functions-rep-invariants/#beneficent_mutation">beneficent mutation</a></li>
+</ul>
+</blockquote>
+<h3 id="Strategy3-using-threadsafe-data-types"><a class="header-anchor" href="#Strategy3-using-threadsafe-data-types">¶</a>Strategy3:using threadsafe data types</h3>
+<p>Store shared data in existing threadsafe data types.</p>
+<p>threadsafe collections:</p>
+<p>wrapper methods that make collections threadsafe while still mutable</p>
+<p>Notice:</p>
+<ul>
+<li>don’t circumvent the wrapper</li>
+<li>Iterators are still not threadsafe
+<ul>
+<li>Solution: collections’ lock</li>
+</ul>
+</li>
+<li>Atomic operations aren’t enough to prevent races</li>
+</ul>
+<h3 id="Strategy4-synchronization"><a class="header-anchor" href="#Strategy4-synchronization">¶</a>Strategy4: synchronization</h3>
+<p><u>The correctness of a concurrrent program should not depend on accidents of timing.</u></p>
+<p>Problem: bugs in concurrent programming</p>
+<blockquote>
+<p>steps to develop the datatype:</p>
+<ol>
+<li>
+<p>Specify: define operations</p>
+</li>
+<li>
+<p>test</p>
+</li>
+<li>
+<p>rep</p>
+<p>a. Implement a simple, brute-force rep first</p>
+<p>b. write down the rep invariant and abstraction function, and implement checkRep()</p>
+</li>
+<li>
+<p>Synchronize</p>
+</li>
+<li>
+<p>Iterate</p>
+</li>
+</ol>
+</blockquote>
+<h2 id="R23-queues-message-passing"><a class="header-anchor" href="#R23-queues-message-passing">¶</a>R23: queues &amp; message-passing</h2>
+<p>主要用java讲了个queue&amp;message-passing的例子。内容：</p>
+<ol>
+<li>与shared memory system对比，message-passing使两个thread间有独立性，出错的概率更小。</li>
+<li>blocking queues pattern，其实和6.004中sophomore的例子相似，加上了一些java语法的细节</li>
+<li>实例： 放在冰箱里有一些饮料，一些人需要拿饮料。(代码在本地文件夹中)</li>
+</ol>
+<p>相当于6.004的sychronization另外的一个例子。</p>
+<h3 id="producer-consumer-design-pattern"><a class="header-anchor" href="#producer-consumer-design-pattern">¶</a>producer-consumer design pattern</h3>
+<p>problem: how to implement message passing with in single process?</p>
+<p>Design: producer-consumer design pattern</p>
+<p>Problem: how to stop the process?</p>
+<p>Approach1: a <em>poison pill</em>: a special message on the queue that signals the consumer of that message to end its work.</p>
+<p>Approach2: change the type of elements on the requests queue to an ADT:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">FridgeRequest = DrinkRequest(n:int) + StopRequest</span><br></pre></td></tr></table></figure>
+<p>with operations:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">drinksRequested : FridgeRequest → int</span><br><span class="line">shouldStop : FridgeRequest → boolean</span><br></pre></td></tr></table></figure>
+<p>and when we want to stop the fridge, we enqueue a <code>FridgeRequest</code> where <code>shouldStop</code> returns <code>true</code>.</p>
+<p>Approach3:signal a thread that it should stop working by calling that thread’s <a target="_blank" rel="noopener" href="http://docs.oracle.com/en/java/javase/15/docs/api/java.base/java/lang/Thread.html#interrupt()"><code>interrupt()</code></a> method</p>
+<h3 id="race-conditions"><a class="header-anchor" href="#race-conditions">¶</a>race conditions</h3>
+<p>prevent deadlock:</p>
+<ol>
+<li>
+<p>design the system so that there is no possibility of a cycle — so that if A is waiting for B, it cannot be that B was already (or will start) waiting for A.</p>
+</li>
+<li>
+<p><em>timeouts</em>：If a module has been blocked for too long (maybe 100 milliseconds? or 10 seconds? how to decide?), then you stop blocking and throw an exception.</p>
+<p>problem: what do you do when that exception is thrown?</p>
+</li>
+</ol>
+<h2 id="R24-sockets-networking"><a class="header-anchor" href="#R24-sockets-networking">¶</a>R24: sockets &amp; networking</h2>
+<p>compared to producer-consumer pattern, client-server pattern abstracts the communication over the network using the sockets.</p>
+<h3 id="Client-server-design-pattern"><a class="header-anchor" href="#Client-server-design-pattern">¶</a>Client/server design pattern</h3>
+<blockquote>
+<p>In this pattern there are two kinds of processes: clients and servers. A client initiates the communication by connecting to a server. The client sends requests to the server, and the server sends replies back. Finally, the client disconnects. A server might handle connections from many clients concurrently, and clients might also connect to multiple servers.</p>
+</blockquote>
+<h3 id="sockets-and-streams"><a class="header-anchor" href="#sockets-and-streams">¶</a>sockets and streams</h3>
+<p>Basic concepts related to network communication, and to input/output. (I/O refers to communication into and out of a process.)</p>
+<ul>
+<li>
+<p>IP addresses</p>
+</li>
+<li>
+<p>Hostnames</p>
+</li>
+<li>
+<p>Port numbers</p>
+</li>
+</ul>
+<h4 id="Network-sockets"><a class="header-anchor" href="#Network-sockets">¶</a>&gt; Network sockets</h4>
+<p>A <a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/Network_socket"><strong>socket</strong></a> represents one end of the connection between client and server.</p>
+<ul>
+<li>listening socket：used by a server process to wait for connections from remote clients.</li>
+<li>connected socket：send and receive messages to and from the process on the other end of the connection.</li>
+</ul>
+<p><strong>Physical-socket analogy</strong></p>
+<ul>
+<li>
+<p>用户和服务器的连接过程就像将USB线插入接口一样，没插入前的接口是listening socket，插入接口的线和接口是connected socket。正如一条线有两个终端，连接的socket也有两个终端分别在用户端和服务器端。</p>
+</li>
+<li>
+<p>细节上的区别：在实际的socket连接中，当用户请求被listening socket接收，服务器重新产生一个新的connected socket来管理连接，而保留着listening socker继续接受用户请求。</p>
+</li>
+</ul>
+<h4 id="streams"><a class="header-anchor" href="#streams">¶</a>&gt; streams</h4>
+<ul>
+<li>buffers</li>
+<li>Byte streams</li>
+<li>character streams</li>
+<li>Blocking</li>
+</ul>
+<h4 id="wire-protocols"><a class="header-anchor" href="#wire-protocols">¶</a>&gt; wire protocols</h4>
+<blockquote>
+<p>A <strong>protocol</strong> is a set of messages that can be exchanged by two communicating parties.</p>
+<p>A <strong>wire protocol</strong> in particular is a set of messages represented as byte sequences, like <code>hello world</code> and <code>bye</code> (assuming we’ve agreed on a way to encode those characters into bytes).</p>
+</blockquote>
+<ul>
+<li>
+<p>Telnet client</p>
+</li>
+<li>
+<p>http</p>
+</li>
+<li>
+<p>smtp</p>
+</li>
+</ul>
+<p><strong>Design a wire protocol</strong></p>
+<p>use same <a target="_blank" rel="noopener" href="http://web.mit.edu/6.031/www/sp21/classes/24-sockets-networking/#designing_a_wire_protocol">strategy</a> as designing ADT</p>
+<h3 id="Using-network-sockets-in-Java"><a class="header-anchor" href="#Using-network-sockets-in-Java">¶</a>Using network sockets in Java</h3>
+<ul>
+<li>client</li>
+<li>server</li>
+<li>multithreaded server</li>
+<li>Closing streams and sockets with <u>try-with-resources statement</u></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> (</span><br><span class="line">    <span class="comment">// preamble: declare variables initialized to objects that need closing after use</span></span><br><span class="line">) &#123;</span><br><span class="line">    <span class="comment">// body: runs with those variables in scope</span></span><br><span class="line">&#125; <span class="keyword">catch</span>(...) &#123;</span><br><span class="line">    <span class="comment">// catch clauses: optional, handles exceptions thrown by the preamble or body</span></span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    <span class="comment">// finally clause: optional, runs after the body and any catch clause</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// no matter how the try statement exits, it automatically calls</span></span><br><span class="line"><span class="comment">// close() on all variables declared in the preamble</span></span><br></pre></td></tr></table></figure>
+<p><strong>testing</strong></p>
+<p><a target="_blank" rel="noopener" href="http://web.mit.edu/6.031/www/sp21/classes/24-sockets-networking/#testing_clientserver_code">Example</a></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/sg/">Home</a></li>
+         
+          <li><a href="/sg/about/">About</a></li>
+         
+          <li><a href="/sg/categories/">Category</a></li>
+         
+          <li><a href="/sg/archives/">Writing</a></li>
+         
+          <li><a href="/sg/CV/">CV</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#R20-concurrency"><span class="toc-number">1.</span> <span class="toc-text">R20: concurrency</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#two-models-for-concurrent-programming"><span class="toc-number">1.1.</span> <span class="toc-text">two models for concurrent programming</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#basic-concepts"><span class="toc-number">1.2.</span> <span class="toc-text">basic concepts</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#starting-a-thread-with-an-anonymous-class"><span class="toc-number">1.3.</span> <span class="toc-text">starting a thread with an anonymous class</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Shared-memory-example"><span class="toc-number">1.4.</span> <span class="toc-text">Shared memory example</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Message-passing-example"><span class="toc-number">1.5.</span> <span class="toc-text">Message passing example</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#concurrency-is-hard-to-debug"><span class="toc-number">1.6.</span> <span class="toc-text">concurrency is hard to debug</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#R21-22-thread-safety"><span class="toc-number">2.</span> <span class="toc-text">R21&amp;22: thread safety</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#what-is-threadsafe"><span class="toc-number">2.1.</span> <span class="toc-text">what is threadsafe?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#how-to-make-a-safety-argument"><span class="toc-number">2.2.</span> <span class="toc-text">how to make a safety argument?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Strategy1-confinement"><span class="toc-number">2.3.</span> <span class="toc-text">Strategy1: confinement</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Strategy2-immutability"><span class="toc-number">2.4.</span> <span class="toc-text">Strategy2: immutability</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Strategy3-using-threadsafe-data-types"><span class="toc-number">2.5.</span> <span class="toc-text">Strategy3:using threadsafe data types</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Strategy4-synchronization"><span class="toc-number">2.6.</span> <span class="toc-text">Strategy4: synchronization</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#R23-queues-message-passing"><span class="toc-number">3.</span> <span class="toc-text">R23: queues &amp; message-passing</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#producer-consumer-design-pattern"><span class="toc-number">3.1.</span> <span class="toc-text">producer-consumer design pattern</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#race-conditions"><span class="toc-number">3.2.</span> <span class="toc-text">race conditions</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#R24-sockets-networking"><span class="toc-number">4.</span> <span class="toc-text">R24: sockets &amp; networking</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Client-server-design-pattern"><span class="toc-number">4.1.</span> <span class="toc-text">Client&#x2F;server design pattern</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sockets-and-streams"><span class="toc-number">4.2.</span> <span class="toc-text">sockets and streams</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Network-sockets"><span class="toc-number">4.2.1.</span> <span class="toc-text">&gt; Network sockets</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#streams"><span class="toc-number">4.2.2.</span> <span class="toc-text">&gt; streams</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#wire-protocols"><span class="toc-number">4.2.3.</span> <span class="toc-text">&gt; wire protocols</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Using-network-sockets-in-Java"><span class="toc-number">4.3.</span> <span class="toc-text">Using network sockets in Java</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://sgzerolc.github.io/sg/2021/10/20/SC_concurrency/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://sgzerolc.github.io/sg/2021/10/20/SC_concurrency/&text=SC concurrency"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://sgzerolc.github.io/sg/2021/10/20/SC_concurrency/&title=SC concurrency"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sgzerolc.github.io/sg/2021/10/20/SC_concurrency/&is_video=false&description=SC concurrency"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=SC concurrency&body=Check out this article: https://sgzerolc.github.io/sg/2021/10/20/SC_concurrency/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://sgzerolc.github.io/sg/2021/10/20/SC_concurrency/&title=SC concurrency"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://sgzerolc.github.io/sg/2021/10/20/SC_concurrency/&title=SC concurrency"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://sgzerolc.github.io/sg/2021/10/20/SC_concurrency/&title=SC concurrency"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://sgzerolc.github.io/sg/2021/10/20/SC_concurrency/&title=SC concurrency"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://sgzerolc.github.io/sg/2021/10/20/SC_concurrency/&name=SC concurrency&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://sgzerolc.github.io/sg/2021/10/20/SC_concurrency/&t=SC concurrency"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2022
+    Sam Li
+  </div>
+</footer>
+
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/sg/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

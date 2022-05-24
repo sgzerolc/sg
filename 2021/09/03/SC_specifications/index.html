@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="¶R6: specifications ¶Behavioral equivalence whether it could be substituted with one implementation for the other 1234static int find(...)&amp;#123;	&#x2F;&#x2F;requires: ........	&#x2F;&#x2F;effects:&amp;#125; ¶Specifications ¶">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SC specifications">
+<meta property="og:url" content="https://sgzerolc.github.io/sg/2021/09/03/SC_specifications/index.html">
+<meta property="og:site_name" content="steins gate zero">
+<meta property="og:description" content="¶R6: specifications ¶Behavioral equivalence whether it could be substituted with one implementation for the other 1234static int find(...)&amp;#123;	&#x2F;&#x2F;requires: ........	&#x2F;&#x2F;effects:&amp;#125; ¶Specifications ¶">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-09-02T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-12-30T06:24:28.073Z">
+<meta property="article:author" content="Sam Li">
+<meta property="article:tag" content="6.031 software construction">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/sg/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/sg/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/sg/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>SC specifications</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/sg/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/sg/">Home</a></li><!--
+     --><!--
+       --><li><a href="/sg/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/sg/categories/">Category</a></li><!--
+     --><!--
+       --><li><a href="/sg/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/sg/CV/">CV</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/sg/2021/09/05/SC_recursion/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/sg/2021/09/01/SC_code_review/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://sgzerolc.github.io/sg/2021/09/03/SC_specifications/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://sgzerolc.github.io/sg/2021/09/03/SC_specifications/&text=SC specifications"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://sgzerolc.github.io/sg/2021/09/03/SC_specifications/&title=SC specifications"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sgzerolc.github.io/sg/2021/09/03/SC_specifications/&is_video=false&description=SC specifications"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=SC specifications&body=Check out this article: https://sgzerolc.github.io/sg/2021/09/03/SC_specifications/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://sgzerolc.github.io/sg/2021/09/03/SC_specifications/&title=SC specifications"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://sgzerolc.github.io/sg/2021/09/03/SC_specifications/&title=SC specifications"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://sgzerolc.github.io/sg/2021/09/03/SC_specifications/&title=SC specifications"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://sgzerolc.github.io/sg/2021/09/03/SC_specifications/&title=SC specifications"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://sgzerolc.github.io/sg/2021/09/03/SC_specifications/&name=SC specifications&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://sgzerolc.github.io/sg/2021/09/03/SC_specifications/&t=SC specifications"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#R6-specifications"><span class="toc-number">1.</span> <span class="toc-text">R6: specifications</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Behavioral-equivalence"><span class="toc-number">1.1.</span> <span class="toc-text">Behavioral equivalence</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Specifications"><span class="toc-number">1.2.</span> <span class="toc-text">Specifications</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#why"><span class="toc-number">1.2.1.</span> <span class="toc-text">why</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#structure"><span class="toc-number">1.2.2.</span> <span class="toc-text">structure</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#in-java"><span class="toc-number">1.2.3.</span> <span class="toc-text">in java</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#do-not-allow-null-references"><span class="toc-number">1.3.</span> <span class="toc-text">do not allow null references</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Include-emptiness"><span class="toc-number">1.4.</span> <span class="toc-text">Include emptiness</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#testing"><span class="toc-number">1.5.</span> <span class="toc-text">~ testing</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mutating"><span class="toc-number">1.6.</span> <span class="toc-text">~ mutating</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#exceptions"><span class="toc-number">1.7.</span> <span class="toc-text">exceptions</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#R7-design-specifications"><span class="toc-number">2.</span> <span class="toc-text">R7: design specifications</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Deterministic-vs-underdetermined-specs"><span class="toc-number">2.1.</span> <span class="toc-text">Deterministic vs. underdetermined specs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Declarative-vs-operational-specs"><span class="toc-number">2.2.</span> <span class="toc-text">Declarative vs. operational specs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#stronger-vs-weaker-specs"><span class="toc-number">2.3.</span> <span class="toc-text">stronger vs. weaker specs</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        SC specifications
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Sam Li</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-09-02T16:00:00.000Z" itemprop="datePublished">2021-09-03</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/sg/categories/software-engineering/">software engineering</a> › <a class="category-link" href="/sg/categories/software-engineering/6-031-software-construction/">6.031 software construction</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/sg/tags/6-031-software-construction/" rel="tag">6.031 software construction</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="R6-specifications"><a class="header-anchor" href="#R6-specifications">¶</a>R6: specifications</h2>
+<h3 id="Behavioral-equivalence"><a class="header-anchor" href="#Behavioral-equivalence">¶</a>Behavioral equivalence</h3>
+<p>whether it could be substituted with one implementation for the other</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">find</span><span class="params">(...)</span></span>&#123;</span><br><span class="line">	<span class="comment">//requires: ........</span></span><br><span class="line">	<span class="comment">//effects:</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Specifications"><a class="header-anchor" href="#Specifications">¶</a>Specifications</h3>
+<h4 id="why"><a class="header-anchor" href="#why">¶</a>why</h4>
+<ul>
+<li>Acts as firewall</li>
+<li>Connect / separate client and implementer
+<ul>
+<li>Client: input, output</li>
+<li>Implementater: computation
+<ul>
+<li>Local variables, private fields, implementation details</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="structure"><a class="header-anchor" href="#structure">¶</a>structure</h4>
+<ul>
+<li>Composition
+<ul>
+<li>method signature</li>
+<li>requires clause -&gt; additional restrictions on the parameters
+<ul>
+<li>type</li>
+<li>interactions between parameters</li>
+</ul>
+</li>
+<li>effects clause -&gt; return value, exceptions, and other effects of the method
+<ul>
+<li>How the return value relates to the inputs</li>
+<li>exceptions</li>
+<li>Whether and how objects are mutated</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>precondition and postcondition of the method</li>
+<li>Overall structure:
+<ul>
+<li>if the precondition holds, then the postcondition must hold when the method completes</li>
+<li>Else, free to do anything</li>
+</ul>
+</li>
+</ul>
+<h4 id="in-java"><a class="header-anchor" href="#in-java">¶</a>in java</h4>
+<ul>
+<li>javadoc</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@param p</span><br><span class="line">@param q</span><br><span class="line">@return</span><br><span class="line">@throw</span><br></pre></td></tr></table></figure>
+<h3 id="do-not-allow-null-references"><a class="header-anchor" href="#do-not-allow-null-references">¶</a>do not allow null references</h3>
+<ul>
+<li>syntactically illigal
+<ul>
+<li>primitives cannot be null</li>
+<li>Some methods or fields: length()</li>
+</ul>
+</li>
+<li>Null values are vague
+<ul>
+<li>Disallowed in parameter and return values unless spec says otherwise</li>
+<li>use something other than null makes your meaning clear</li>
+<li>Fail fast: null can overlook many kinds of bugs</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Map.get(key) <span class="keyword">return</span> when the key is not found in the map: </span><br><span class="line">Optional&lt;T&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="Include-emptiness"><a class="header-anchor" href="#Include-emptiness">¶</a>Include emptiness</h3>
+<ul>
+<li>
+<p>difference between null and emptiness</p>
+</li>
+<li>
+<p>empty values are alway allowed as parameter or return values.</p>
+</li>
+</ul>
+<h3 id="testing"><a class="header-anchor" href="#testing">¶</a>~ testing</h3>
+<ul>
+<li>Black box tests need follow specification</li>
+<li>Glass box test must follow spec too.</li>
+</ul>
+<h3 id="mutating"><a class="header-anchor" href="#mutating">¶</a>~ mutating</h3>
+<ul>
+<li>describe side-effects-changes to mutable objects-in the postcondition</li>
+<li>Mutation is disallowed unless stated otherwise</li>
+</ul>
+<h3 id="exceptions"><a class="header-anchor" href="#exceptions">¶</a>exceptions</h3>
+<ul>
+<li>Function
+<ul>
+<li>Signaling bugs</li>
+<li>for special results</li>
+</ul>
+</li>
+<li>checked and unchecked exceptions</li>
+<li>exception hierarchy</li>
+<li>declare exceptions in specs</li>
+</ul>
+<h2 id="R7-design-specifications"><a class="header-anchor" href="#R7-design-specifications">¶</a>R7: design specifications</h2>
+<p>Three dimensions for comparing specs</p>
+<ul>
+<li>deterministic</li>
+<li>declarative</li>
+<li>strong</li>
+</ul>
+<h3 id="Deterministic-vs-underdetermined-specs"><a class="header-anchor" href="#Deterministic-vs-underdetermined-specs">¶</a>Deterministic vs. underdetermined specs</h3>
+<ul>
+<li>deterministic: one final state for the same input.</li>
+<li>undetermined: multiple valid outputs for the same input
+<ul>
+<li>different from Nondeterministic, which means same program with the same inputs can generate different outcomes</li>
+</ul>
+</li>
+</ul>
+<h3 id="Declarative-vs-operational-specs"><a class="header-anchor" href="#Declarative-vs-operational-specs">¶</a>Declarative vs. operational specs</h3>
+<ul>
+<li>Operational : steps that the method performs</li>
+<li>Delcarative : properties of the final outcome, and how it related to the initial state</li>
+</ul>
+<h3 id="stronger-vs-weaker-specs"><a class="header-anchor" href="#stronger-vs-weaker-specs">¶</a>stronger vs. weaker specs</h3>
+<p>a spec S2 is stronger than a spec S1 if the set of implementations that satisfy S2 is a strict subset of those that match S1.</p>
+<blockquote>
+<p>Rule: S2 is stronger than a spec S1 iff</p>
+<ul>
+<li>S2’s precondition is weaker than or equal to S1.
+<ul>
+<li>S2’s input is less, placing fewer demands on a client</li>
+</ul>
+</li>
+<li>S2’s postcondition is stronger than or equal to S1.
+<ul>
+<li>Make more promises to the client</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/sg/">Home</a></li>
+         
+          <li><a href="/sg/about/">About</a></li>
+         
+          <li><a href="/sg/categories/">Category</a></li>
+         
+          <li><a href="/sg/archives/">Writing</a></li>
+         
+          <li><a href="/sg/CV/">CV</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#R6-specifications"><span class="toc-number">1.</span> <span class="toc-text">R6: specifications</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Behavioral-equivalence"><span class="toc-number">1.1.</span> <span class="toc-text">Behavioral equivalence</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Specifications"><span class="toc-number">1.2.</span> <span class="toc-text">Specifications</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#why"><span class="toc-number">1.2.1.</span> <span class="toc-text">why</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#structure"><span class="toc-number">1.2.2.</span> <span class="toc-text">structure</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#in-java"><span class="toc-number">1.2.3.</span> <span class="toc-text">in java</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#do-not-allow-null-references"><span class="toc-number">1.3.</span> <span class="toc-text">do not allow null references</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Include-emptiness"><span class="toc-number">1.4.</span> <span class="toc-text">Include emptiness</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#testing"><span class="toc-number">1.5.</span> <span class="toc-text">~ testing</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mutating"><span class="toc-number">1.6.</span> <span class="toc-text">~ mutating</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#exceptions"><span class="toc-number">1.7.</span> <span class="toc-text">exceptions</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#R7-design-specifications"><span class="toc-number">2.</span> <span class="toc-text">R7: design specifications</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Deterministic-vs-underdetermined-specs"><span class="toc-number">2.1.</span> <span class="toc-text">Deterministic vs. underdetermined specs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Declarative-vs-operational-specs"><span class="toc-number">2.2.</span> <span class="toc-text">Declarative vs. operational specs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#stronger-vs-weaker-specs"><span class="toc-number">2.3.</span> <span class="toc-text">stronger vs. weaker specs</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://sgzerolc.github.io/sg/2021/09/03/SC_specifications/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://sgzerolc.github.io/sg/2021/09/03/SC_specifications/&text=SC specifications"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://sgzerolc.github.io/sg/2021/09/03/SC_specifications/&title=SC specifications"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sgzerolc.github.io/sg/2021/09/03/SC_specifications/&is_video=false&description=SC specifications"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=SC specifications&body=Check out this article: https://sgzerolc.github.io/sg/2021/09/03/SC_specifications/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://sgzerolc.github.io/sg/2021/09/03/SC_specifications/&title=SC specifications"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://sgzerolc.github.io/sg/2021/09/03/SC_specifications/&title=SC specifications"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://sgzerolc.github.io/sg/2021/09/03/SC_specifications/&title=SC specifications"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://sgzerolc.github.io/sg/2021/09/03/SC_specifications/&title=SC specifications"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://sgzerolc.github.io/sg/2021/09/03/SC_specifications/&name=SC specifications&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://sgzerolc.github.io/sg/2021/09/03/SC_specifications/&t=SC specifications"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2022
+    Sam Li
+  </div>
+</footer>
+
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/sg/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

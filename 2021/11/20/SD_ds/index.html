@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="our goal is to build reliable systems from unreliable components. we want to build systems that serve many clients, store a lot of data, perform well, all while keeping availability high.  ¶L14:RAID:">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SD distributed system">
+<meta property="og:url" content="https://sgzerolc.github.io/sg/2021/11/20/SD_ds/index.html">
+<meta property="og:site_name" content="steins gate zero">
+<meta property="og:description" content="our goal is to build reliable systems from unreliable components. we want to build systems that serve many clients, store a lot of data, perform well, all while keeping availability high.  ¶L14:RAID:">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://sgzerolc.github.io/sg/2021/11/20/SD_ds/m.png">
+<meta property="og:image" content="https://sgzerolc.github.io/sg/2021/11/20/SD_ds/6.png">
+<meta property="og:image" content="https://sgzerolc.github.io/sg/2021/11/20/SD_ds/7.png">
+<meta property="og:image" content="https://sgzerolc.github.io/sg/2021/11/20/SD_ds/8.png">
+<meta property="og:image" content="https://sgzerolc.github.io/sg/2021/11/20/SD_ds/9.png">
+<meta property="og:image" content="https://sgzerolc.github.io/sg/2021/11/20/SD_ds/0.png">
+<meta property="og:image" content="https://sgzerolc.github.io/sg/2021/11/20/SD_ds/1.png">
+<meta property="og:image" content="https://sgzerolc.github.io/sg/2021/11/20/SD_ds/2.png">
+<meta property="og:image" content="https://sgzerolc.github.io/sg/2021/11/20/SD_ds/3.png">
+<meta property="article:published_time" content="2021-11-19T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-02-13T08:42:44.787Z">
+<meta property="article:author" content="Sam Li">
+<meta property="article:tag" content="6.033 system design">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://sgzerolc.github.io/sg/2021/11/20/SD_ds/m.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/sg/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/sg/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/sg/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>SD distributed system</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/sg/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/sg/">Home</a></li><!--
+     --><!--
+       --><li><a href="/sg/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/sg/categories/">Category</a></li><!--
+     --><!--
+       --><li><a href="/sg/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/sg/CV/">CV</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/sg/2021/11/21/SD_communication_skill/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/sg/2021/11/17/SD_network/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://sgzerolc.github.io/sg/2021/11/20/SD_ds/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://sgzerolc.github.io/sg/2021/11/20/SD_ds/&text=SD distributed system"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://sgzerolc.github.io/sg/2021/11/20/SD_ds/&title=SD distributed system"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sgzerolc.github.io/sg/2021/11/20/SD_ds/&is_video=false&description=SD distributed system"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=SD distributed system&body=Check out this article: https://sgzerolc.github.io/sg/2021/11/20/SD_ds/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://sgzerolc.github.io/sg/2021/11/20/SD_ds/&title=SD distributed system"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://sgzerolc.github.io/sg/2021/11/20/SD_ds/&title=SD distributed system"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://sgzerolc.github.io/sg/2021/11/20/SD_ds/&title=SD distributed system"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://sgzerolc.github.io/sg/2021/11/20/SD_ds/&title=SD distributed system"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://sgzerolc.github.io/sg/2021/11/20/SD_ds/&name=SD distributed system&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://sgzerolc.github.io/sg/2021/11/20/SD_ds/&t=SD distributed system"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#L14-RAID-reliability-via-replication"><span class="toc-number">1.</span> <span class="toc-text">L14:RAID:reliability via replication</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#L15-Transactions-atomicity-isolation"><span class="toc-number">2.</span> <span class="toc-text">L15:Transactions: atomicity &amp; isolation</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Atomicity"><span class="toc-number">2.1.</span> <span class="toc-text">Atomicity</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#isolation"><span class="toc-number">2.2.</span> <span class="toc-text">isolation</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#L16-Logging-atomicity"><span class="toc-number">3.</span> <span class="toc-text">L16:Logging(atomicity)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#L17-two-phase-locking-isolation"><span class="toc-number">4.</span> <span class="toc-text">L17:two-phase locking(isolation)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Serializability"><span class="toc-number">4.1.</span> <span class="toc-text">Serializability</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Two-phase-locking"><span class="toc-number">4.2.</span> <span class="toc-text">Two-phase locking</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#L18-distributed-transactions-two-phase-commit-multi-site-atomicity"><span class="toc-number">5.</span> <span class="toc-text">L18:distributed transactions: two-phase commit(multi-site atomicity)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#L19-Replication-replicated-state-machines"><span class="toc-number">6.</span> <span class="toc-text">L19:Replication:replicated state machines</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        SD distributed system
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Sam Li</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-11-19T16:00:00.000Z" itemprop="datePublished">2021-11-20</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/sg/categories/computer-systems/">computer systems</a> › <a class="category-link" href="/sg/categories/computer-systems/6-033-system-design/">6.033 system design</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/sg/tags/6-033-system-design/" rel="tag">6.033 system design</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <blockquote>
+<p>our goal is to build reliable systems from unreliable components. we want to build systems that serve many clients, store a lot of data, perform well, all while keeping availability high.</p>
+</blockquote>
+<h3 id="L14-RAID-reliability-via-replication"><a class="header-anchor" href="#L14-RAID-reliability-via-replication">¶</a>L14:RAID:reliability via replication</h3>
+<p>Question: how to build fault-tolerant/reliable systems?</p>
+<p>The high-level process of dealing with failures is to identify the faults, detect/contain the faults, and handle the faults. in lecture, we will build a set of abstractions to make that process more manageable.</p>
+<p>How to measure success?</p>
+<ul>
+<li>availability is one way to measure reliability. Reliability metrics differ from different systems.</li>
+<li>Mean time to failure, mean time to repair, mean time between failures, availability</li>
+</ul>
+<p>Problem: single disk failures</p>
+<blockquote>
+<p>RAID is a data storage virtualization technology that combines multiple physical disk drive components into one or more logical units for the purposes of data redundancy, performance improvement, or both.</p>
+</blockquote>
+<p>Three effective approaches are as following:</p>
+<ol>
+<li>RAID 1: mirroring. Make a replica to store the same data inside.</li>
+<li>RAID 4: make a dedicated parity disk. A xor B = C. We can induce the failed one no matter which one failed.</li>
+<li>RAID 5:  intersperse the parity sectors amongst all N+1 disks to load balance writes.</li>
+</ol>
+<img src="/sg/2021/11/20/SD_ds/m.png" class="" title="截屏2021-11-21 上午9.29.05">
+<p>Review: RAID 不能解决现有的问题，因为现实中不会永远只是单个磁盘崩溃，需要更系统地处理方法。</p>
+<h3 id="L15-Transactions-atomicity-isolation"><a class="header-anchor" href="#L15-Transactions-atomicity-isolation">¶</a>L15:Transactions: atomicity &amp; isolation</h3>
+<p>problem: Possible crash in some point at thousand lines of code.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">transfer (bank_file, account_a, account_b, amount): </span><br><span class="line">    bank = read_accounts(bank_file) </span><br><span class="line">    bank[account_a] = bank[account_a] - amount </span><br><span class="line">    bank[account_b] = bank[account_b] + amount </span><br><span class="line">    write_accounts(tmp_file) </span><br><span class="line">    rename(tmp_file, bank_file)</span><br></pre></td></tr></table></figure>
+<h4 id="Atomicity"><a class="header-anchor" href="#Atomicity">¶</a>Atomicity</h4>
+<blockquote>
+<p><strong>What is atomicity?</strong></p>
+<ul>
+<li>
+<p>an action is atomic if it happens completely or not at all. if we can guarantee atomicity, it will be much easier to reason about failures.</p>
+</li>
+<li>
+<p>Understanding that this code should be atomic comes from understanding what the application is <em>doing</em>. What actions need to be atomic depends on the application.</p>
+</li>
+</ul>
+</blockquote>
+<p>分析：为了实现文件读写的原子性，我们需要保证文件的数据不能因为某行程序崩溃而丢失。</p>
+<p>Golden rule: never modify the only copy.</p>
+<p>Attempt 1: 只用一个文件存储账户，账户的任何操作（读写，加载，更新）都在这个文件中直接修改，当修改完成，再从内存写回到磁盘中。</p>
+<p>Attempt 2: <strong>shadow copy</strong>：创建一个复制的文件后再对原文件进行操作（比如rename). 这里需要一步重命名文件，以使能对failures更准确地推断。（在Example中详述）</p>
+<p>summary of shadow copy: it meets our goal. However, it perform badly. Problems include requiring copying the entire file for even small changes…</p>
+<p><strong>Example: file crash</strong></p>
+<p>Problem1: a crash during rename() potentially leaves bank_file in an intermediate state.</p>
+<p>Solution 1: make rename() atomic</p>
+<ul>
+<li>Single-sector writes are atomic</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">rename(tmp_file, orig_file): </span><br><span class="line">    tmp_inode = lookup(tmp_file)   // = <span class="number">2</span> </span><br><span class="line">    orig_inode = lookup(orig_file) // = <span class="number">1</span> </span><br><span class="line">    orig_file dirent = tmp_inode &lt;- crash!</span><br><span class="line">    remove tmp_file dirent </span><br><span class="line">    decref(orig_inode)</span><br></pre></td></tr></table></figure>
+<p>Problem2: rename happened, but refcounts wrong</p>
+<p>Solution2: recover the disk after a crash.</p>
+<p>如果在recover时crash，那么继续recover</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">recover(disk): </span><br><span class="line">    <span class="keyword">for</span> inode <span class="keyword">in</span> disk.inodes: </span><br><span class="line">        inode.refcount = find_all_refs(disk.root_dir, inode) </span><br><span class="line">    <span class="keyword">if</span> exists(tmp_file): </span><br><span class="line">        unlink(tmp_file)</span><br></pre></td></tr></table></figure>
+<h4 id="isolation"><a class="header-anchor" href="#isolation">¶</a>isolation</h4>
+<blockquote>
+<p>isolation refers to how and when the effects of one action (A1) are visible to another (A2) where A1 and A2 appear to have executed serially, even if they are actually executed in parallel.</p>
+</blockquote>
+<p>Problem: how to use lock?</p>
+<p>Problem: transactions are powerful abstraction that provides atomicity and isolation. How to implement transaction?</p>
+<p>Example:</p>
+<p>​	  T1                      		   T2<br>
+​      begin                 		  begin<br>
+​      transfer(A, B, 20)       transfer(B, C, 5)<br>
+​      withdraw(B, 10)         deposit(A, 5)<br>
+​      end                   		   end</p>
+<h3 id="L16-Logging-atomicity"><a class="header-anchor" href="#L16-Logging-atomicity">¶</a>L16:Logging(atomicity)</h3>
+<p>Problem 0: how do systems guarantee atomicity and isolation?</p>
+<p>Basic idea: Keep a log of all changes and whether a transaction commits.</p>
+<p>changes include:</p>
+<ol>
+<li>begin(allocate new transaction ID),</li>
+<li>write(append entry to log),</li>
+<li>read(scan log to find last committed value),</li>
+<li>commit(write commit record),</li>
+<li>recover(doing nothing).</li>
+</ol>
+<p>Problem 1: which operation in(read, write, recovery) is slowest?</p>
+<p>Answer: Read is slowest because it must scan entire log.</p>
+<p>Improvement 1: use cell storage(non-volatile memory) to store data. Updates go to log and cell storage, then we can read from cell storage without scanning the entire log.</p>
+<p>Changes with improvement 1:</p>
+<ol>
+<li>
+<p>how to write?</p>
+<p>Log before install. And the record helps to recover from a crash in between the two writes. (Write-ahead logging)</p>
+</li>
+<li>
+<p>how to recover?</p>
+<p>basically, scan the log entry requiring recovering</p>
+</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">read(var): </span><br><span class="line">  <span class="keyword">return</span> cell_read(var)</span><br><span class="line">write(var, value): </span><br><span class="line">  log.append(current_tid, “UPDATE”, var, </span><br><span class="line">             read(var), value) </span><br><span class="line">  cell_write(var, value)</span><br><span class="line">recover(log):   </span><br><span class="line">  commits = [] </span><br><span class="line">  <span class="keyword">for</span> record r <span class="keyword">in</span> log[<span class="built_in">len</span>(log)-<span class="number">1</span>] .. log[<span class="number">0</span>]: </span><br><span class="line">    <span class="keyword">if</span> r.<span class="built_in">type</span> == COMMIT: </span><br><span class="line">      commits.add(r.tid) </span><br><span class="line">    <span class="keyword">if</span> r.<span class="built_in">type</span> == UPDATE <span class="keyword">and</span> r.tid <span class="keyword">not</span> <span class="keyword">in</span> commits: </span><br><span class="line">      cell_write(r.var, r.old_val) // undo</span><br></pre></td></tr></table></figure>
+<p>problem 2: the changes made in problem 1 cause bad performance in recovery for it needs to scan the entire log.</p>
+<p>Improvement 2: use a cache(volatile memory).</p>
+<p>Problem 2.1: After crash, there may be updates that didn’t make it to cell storage (were in cache but not flushed)</p>
+<p>Improvement 2.1: We need a redo phase in addition to an undo phase in our recovery (see slide for code)</p>
+<p>Problem 2.2: recovery takes longer and longer as the log grows</p>
+<p>Improvement 2.2: truncate the log</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">read(var): </span><br><span class="line">  <span class="keyword">if</span> var <span class="keyword">in</span> cache: </span><br><span class="line">    <span class="keyword">return</span> cache[var] </span><br><span class="line">  <span class="keyword">else</span>: </span><br><span class="line">    // may evict others <span class="keyword">from</span> cache to cell storage </span><br><span class="line">    cache[var] = cell_read(var) </span><br><span class="line">    <span class="keyword">return</span> cache[var]</span><br><span class="line">  </span><br><span class="line">write(var, value): </span><br><span class="line">  log.append(current_tid, update, var, </span><br><span class="line">             read(var), value) </span><br><span class="line">  cache[var] = value</span><br><span class="line">  </span><br><span class="line">flush(): // called “occasionally” </span><br><span class="line">  cell_write(var, cache[var]) <span class="keyword">for</span> each var</span><br><span class="line">  </span><br><span class="line">recover(log):   </span><br><span class="line">  commits = &#123;&#125; </span><br><span class="line">  <span class="keyword">for</span> record r <span class="keyword">in</span> log[<span class="built_in">len</span>(log)-<span class="number">1</span>] .. log[<span class="number">0</span>]: </span><br><span class="line">    <span class="keyword">if</span> r.<span class="built_in">type</span> == commit: </span><br><span class="line">      commits.add(r.tid) </span><br><span class="line">    <span class="keyword">if</span> r.<span class="built_in">type</span> == update <span class="keyword">and</span> r.tid <span class="keyword">not</span> <span class="keyword">in</span> commits: </span><br><span class="line">      cell_write(r.var, r.old_val) // undo  </span><br><span class="line">  <span class="keyword">for</span> record r <span class="keyword">in</span> log[<span class="number">0</span>] .. log[<span class="built_in">len</span>(log)-<span class="number">1</span>]: </span><br><span class="line">    <span class="keyword">if</span> r.<span class="built_in">type</span> == UPDATE <span class="keyword">and</span> r.tid <span class="keyword">in</span> commits: </span><br><span class="line">      cell_write(r.var, r.new_value) // redo, improvement <span class="number">2.1</span></span><br></pre></td></tr></table></figure>
+<p>real problem: one single failure in high-scalability system can cause problems as well. like bank system, hospital system…</p>
+<h3 id="L17-two-phase-locking-isolation"><a class="header-anchor" href="#L17-two-phase-locking-isolation">¶</a>L17:two-phase locking(isolation)</h3>
+<p>Problem: We have multiple transactions – T1, T2, …, TN – all of which must be atomic, and all of which can have multiple steps.  We want to schedule the steps of these transactions so that it appears as if they ran sequentially.</p>
+<p>Solution: we need a fine-grained locking. our goal (in lecture) is to run transactions concurrently, but to produce a schedule that is conflict serializable</p>
+<h4 id="Serializability"><a class="header-anchor" href="#Serializability">¶</a>Serializability</h4>
+<p>what type of serializability you want depends on what your application needs/what state do we need/want?</p>
+<p>different type of serializability: <strong>conflict serializability</strong></p>
+<ul>
+<li>
+<p>Conflicts: two operations conflict if they operate on the same object and at least one of them is a write.</p>
+</li>
+<li>
+<p>a schedule is <strong>conflict serializable</strong> if the order of all of its conflicts is the same as the order of the conflicts in some sequential schedule.</p>
+</li>
+</ul>
+<p>Problem: how do we generate conflict-serializable schedules?</p>
+<h4 id="Two-phase-locking"><a class="header-anchor" href="#Two-phase-locking">¶</a>Two-phase locking</h4>
+<ol>
+<li>each shared variable has a lock</li>
+<li>before any operation on a variable, the transaction must acquire the corresponding lock</li>
+<li><em>multiple transactions can hold reader locks for the same variable at once; a transaction can only hold a writer lock for a variable if there are no other locks held for that variable.</em>(improvement 1)</li>
+<li><em>after a transaction releases a lock, it may not acquire any other locks</em>(improvement 0)</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">T1 </span><br><span class="line">begin acquire(x.lock) </span><br><span class="line">T1<span class="number">.1</span> read(x) </span><br><span class="line">acquire(y.lock) </span><br><span class="line">T1<span class="number">.2</span> tmp = read(y) </span><br><span class="line">T1<span class="number">.3</span> write(y, tmp+<span class="number">10</span>) </span><br><span class="line">commit release(x.lock) </span><br><span class="line">release(y.lock)</span><br><span class="line"></span><br><span class="line">T2 </span><br><span class="line">begin acquire(x.lock) </span><br><span class="line">T2<span class="number">.1</span> write(x, <span class="number">20</span>) </span><br><span class="line">acquire(y.lock) </span><br><span class="line">T2<span class="number">.2</span> write(y, <span class="number">30</span>) </span><br><span class="line">commit release(x.lock) </span><br><span class="line">release(y.lock)</span><br></pre></td></tr></table></figure>
+<p>Lemma:2PL produces a conflict-serializable schedule.</p>
+<p>Proof: prove by contradiction.</p>
+<p>problem 1: dead lock</p>
+<p>Better solution than global ordering on locks is to take advantage of atomicity and abort one of the transactions.</p>
+<p>performance improvement(improvement 1): reader-writer locks</p>
+<ul>
+<li>Rules: many readers, one writer.</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">T1 </span><br><span class="line">begin acquire(x.reader_lock) </span><br><span class="line">T1<span class="number">.1</span> read(x) </span><br><span class="line">acquire(y.reader_lock) </span><br><span class="line">T1<span class="number">.2</span> tmp = read(y) </span><br><span class="line">acquire(y.writer_lock) </span><br><span class="line">T1<span class="number">.3</span> write(y, tmp+<span class="number">10</span>) </span><br><span class="line">commit release(x.reader_lock) </span><br><span class="line">release(y.reader_lock) </span><br><span class="line">release(y.writer_lock)</span><br><span class="line"></span><br><span class="line">T2 </span><br><span class="line">begin acquire(x.writer_lock) </span><br><span class="line">T2<span class="number">.1</span> write(x, <span class="number">20</span>) </span><br><span class="line">acquire(y.writer_lock) </span><br><span class="line">T2<span class="number">.2</span> write(y, <span class="number">30</span>) </span><br><span class="line">commit release(x.writer_lock) </span><br><span class="line">release(y.writer_lock)</span><br></pre></td></tr></table></figure>
+<h3 id="L18-distributed-transactions-two-phase-commit-multi-site-atomicity"><a class="header-anchor" href="#L18-distributed-transactions-two-phase-commit-multi-site-atomicity">¶</a>L18:distributed transactions: two-phase commit(multi-site atomicity)</h3>
+<p>Scenario: Client + coordinator + two servers: one with accounts A-M, the other with accounts N-Z.</p>
+<img src="/sg/2021/11/20/SD_ds/6.png" class="" title="截屏2021-12-07 下午5.26.21">
+<p>Goal: develop a protocol that can provide multi-site atomicity in the face of all sorts of failures(every part of the system can fail)</p>
+<p>Problem: one server committed, the other did not</p>
+<p>Approach: two-phase commit, nodes agree that they’re ready to commit before committing</p>
+<p>more specifically,</p>
+<blockquote>
+<ol>
+<li>Coordinator sends tasks to servers (workers)</li>
+<li>Once all tasks are done, coordinator sends prepare messages to workers.</li>
+<li>Once all workers are confirmed to be prepared, coordinator will tell them to commit, and tell client that the transaction has committed.</li>
+</ol>
+</blockquote>
+<img src="/sg/2021/11/20/SD_ds/7.png" class="" title="截屏2021-12-07 下午5.33.40">
+<p>知道过程是怎样进行的才能推断失败发生的阶段，然后解决问题。</p>
+<p>basic idea: it’s ok to abort the process before the commit point. Otherwise, it cannot abort, and it needs recovery approach.</p>
+<p><u>question</u>: how things work?</p>
+<ul>
+<li>
+<p>Worker: worker prepared, worker acknowledged</p>
+</li>
+<li>
+<p>Coordinator</p>
+<ul>
+<li>if heared all workers prepared, it writes COMMIT to its own log,(commit point)</li>
+<li>if heard all workers committed, it writes DONE to its own log.(transaction is totally done at that point)</li>
+</ul>
+</li>
+</ul>
+<p>approach applies in different types of <u>failures</u>:</p>
+<ol>
+<li>Worker/Network Failures Prior to the Commit Point
+<ul>
+<li>Lost prepared message</li>
+<li>lost ACK for prepare</li>
+<li>Worker failure before prepare</li>
+</ul>
+</li>
+<li>Worker Failures After the Commit Point
+<ul>
+<li>Before receiving commit</li>
+<li>After commit received</li>
+</ul>
+</li>
+<li>Coordinator Failures
+<ul>
+<li>Before prepare</li>
+<li>After commit point, before DONE</li>
+<li>After writing DONE</li>
+</ul>
+</li>
+</ol>
+<p><u>performance issues</u>:</p>
+<p><u>Problem -1</u>: when sys fails, some data becomes unavailable.</p>
+<p>Solution: replication.</p>
+<p>approach: single-copy consistency</p>
+<p>Problem -1.1: we need to keep multiple copies of the same pieces of data consistent, and we need to decide what type of consistency we want in different scenarios.</p>
+<h3 id="L19-Replication-replicated-state-machines"><a class="header-anchor" href="#L19-Replication-replicated-state-machines">¶</a>L19:Replication:replicated state machines</h3>
+<p>goal:solve problem -1.1 of L18</p>
+<p>Attempt 1: replicate data on two servers</p>
+<img src="/sg/2021/11/20/SD_ds/8.png" class="" title="截屏2021-12-07 下午6.20.50">
+<p>Problem 1: messages can arrive at replicas in different orders resulting in inconsistent state.</p>
+<img src="/sg/2021/11/20/SD_ds/9.png" class="" title="截屏2021-12-07 下午6.24.06">
+<p>Attempt 2: make one replica the primary replica, and have a coordinator in place to help manage failures</p>
+<img src="/sg/2021/11/20/SD_ds/0.png" class="" title="截屏2021-12-07 下午6.28.17">
+<p>Problem 2: network partition splits the communication in half</p>
+<img src="/sg/2021/11/20/SD_ds/1.png" class="" title="截屏2021-12-07 下午6.28.31">
+<p>Attempt 3: use a view server to determine which replica is primary, in hopes that we can deal with network partitions</p>
+<img src="/sg/2021/11/20/SD_ds/2.png" class="" title="截屏2021-12-07 下午6.30.02">
+<p>problem 3.1: network partition prevents S1 from communicating with VS</p>
+<img src="/sg/2021/11/20/SD_ds/3.png" class="" title="截屏2021-12-07 下午6.31.01">
+<p>problem 4: VS fails</p>
+<p>Solution: achive agreement(Raft)</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/sg/">Home</a></li>
+         
+          <li><a href="/sg/about/">About</a></li>
+         
+          <li><a href="/sg/categories/">Category</a></li>
+         
+          <li><a href="/sg/archives/">Writing</a></li>
+         
+          <li><a href="/sg/CV/">CV</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#L14-RAID-reliability-via-replication"><span class="toc-number">1.</span> <span class="toc-text">L14:RAID:reliability via replication</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#L15-Transactions-atomicity-isolation"><span class="toc-number">2.</span> <span class="toc-text">L15:Transactions: atomicity &amp; isolation</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Atomicity"><span class="toc-number">2.1.</span> <span class="toc-text">Atomicity</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#isolation"><span class="toc-number">2.2.</span> <span class="toc-text">isolation</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#L16-Logging-atomicity"><span class="toc-number">3.</span> <span class="toc-text">L16:Logging(atomicity)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#L17-two-phase-locking-isolation"><span class="toc-number">4.</span> <span class="toc-text">L17:two-phase locking(isolation)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Serializability"><span class="toc-number">4.1.</span> <span class="toc-text">Serializability</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Two-phase-locking"><span class="toc-number">4.2.</span> <span class="toc-text">Two-phase locking</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#L18-distributed-transactions-two-phase-commit-multi-site-atomicity"><span class="toc-number">5.</span> <span class="toc-text">L18:distributed transactions: two-phase commit(multi-site atomicity)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#L19-Replication-replicated-state-machines"><span class="toc-number">6.</span> <span class="toc-text">L19:Replication:replicated state machines</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://sgzerolc.github.io/sg/2021/11/20/SD_ds/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://sgzerolc.github.io/sg/2021/11/20/SD_ds/&text=SD distributed system"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://sgzerolc.github.io/sg/2021/11/20/SD_ds/&title=SD distributed system"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sgzerolc.github.io/sg/2021/11/20/SD_ds/&is_video=false&description=SD distributed system"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=SD distributed system&body=Check out this article: https://sgzerolc.github.io/sg/2021/11/20/SD_ds/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://sgzerolc.github.io/sg/2021/11/20/SD_ds/&title=SD distributed system"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://sgzerolc.github.io/sg/2021/11/20/SD_ds/&title=SD distributed system"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://sgzerolc.github.io/sg/2021/11/20/SD_ds/&title=SD distributed system"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://sgzerolc.github.io/sg/2021/11/20/SD_ds/&title=SD distributed system"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://sgzerolc.github.io/sg/2021/11/20/SD_ds/&name=SD distributed system&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://sgzerolc.github.io/sg/2021/11/20/SD_ds/&t=SD distributed system"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2022
+    Sam Li
+  </div>
+</footer>
+
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/sg/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

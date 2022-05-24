@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="¶ps2   看题：when all but one is special means only one is not special.   set view and sequence view of data structures   Sequences maintain a collection of items in an extrinsic order, where each item s">
+<meta property="og:type" content="article">
+<meta property="og:title" content="hw1 data structures">
+<meta property="og:url" content="https://sgzerolc.github.io/sg/2021/12/18/hw1_structure/index.html">
+<meta property="og:site_name" content="steins gate zero">
+<meta property="og:description" content="¶ps2   看题：when all but one is special means only one is not special.   set view and sequence view of data structures   Sequences maintain a collection of items in an extrinsic order, where each item s">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://sgzerolc.github.io/sg/2021/12/18/hw1_structure/sc.png">
+<meta property="og:image" content="https://sgzerolc.github.io/sg/2021/12/18/hw1_structure/sc2.png">
+<meta property="og:image" content="https://sgzerolc.github.io/sg/2021/12/18/hw1_structure/sc3.png">
+<meta property="og:image" content="https://sgzerolc.github.io/sg/2021/12/18/hw1_structure/sc4.png">
+<meta property="article:published_time" content="2021-12-17T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-04-24T07:53:37.335Z">
+<meta property="article:author" content="Sam Li">
+<meta property="article:tag" content="6.006 algorithms">
+<meta property="article:tag" content="hw">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://sgzerolc.github.io/sg/2021/12/18/hw1_structure/sc.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/sg/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/sg/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/sg/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>hw1 data structures</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/sg/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/sg/">Home</a></li><!--
+     --><!--
+       --><li><a href="/sg/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/sg/categories/">Category</a></li><!--
+     --><!--
+       --><li><a href="/sg/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/sg/CV/">CV</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/sg/2021/12/18/dm_graph/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/sg/2021/12/12/psy_belief/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://sgzerolc.github.io/sg/2021/12/18/hw1_structure/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://sgzerolc.github.io/sg/2021/12/18/hw1_structure/&text=hw1 data structures"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://sgzerolc.github.io/sg/2021/12/18/hw1_structure/&title=hw1 data structures"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sgzerolc.github.io/sg/2021/12/18/hw1_structure/&is_video=false&description=hw1 data structures"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=hw1 data structures&body=Check out this article: https://sgzerolc.github.io/sg/2021/12/18/hw1_structure/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://sgzerolc.github.io/sg/2021/12/18/hw1_structure/&title=hw1 data structures"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://sgzerolc.github.io/sg/2021/12/18/hw1_structure/&title=hw1 data structures"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://sgzerolc.github.io/sg/2021/12/18/hw1_structure/&title=hw1 data structures"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://sgzerolc.github.io/sg/2021/12/18/hw1_structure/&title=hw1 data structures"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://sgzerolc.github.io/sg/2021/12/18/hw1_structure/&name=hw1 data structures&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://sgzerolc.github.io/sg/2021/12/18/hw1_structure/&t=hw1 data structures"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#ps2"><span class="toc-number">1.</span> <span class="toc-text">ps2</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ps3"><span class="toc-number">2.</span> <span class="toc-text">ps3</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ps4"><span class="toc-number">3.</span> <span class="toc-text">ps4</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#binary-tree"><span class="toc-number">3.1.</span> <span class="toc-text">binary tree</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#heap"><span class="toc-number">3.2.</span> <span class="toc-text">heap</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#problem-set"><span class="toc-number">3.3.</span> <span class="toc-text">problem set</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#recitation"><span class="toc-number">4.</span> <span class="toc-text">recitation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#AVL-tree"><span class="toc-number">4.1.</span> <span class="toc-text">AVL tree</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Principle-of-algorithm"><span class="toc-number">4.2.</span> <span class="toc-text">Principle of algorithm</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reminder"><span class="toc-number">5.</span> <span class="toc-text">Reminder</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#olc"><span class="toc-number">5.1.</span> <span class="toc-text">olc</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        hw1 data structures
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Sam Li</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-12-17T16:00:00.000Z" itemprop="datePublished">2021-12-18</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/sg/categories/Algorithms/">Algorithms</a> › <a class="category-link" href="/sg/categories/Algorithms/6-006-algorithms/">6.006 algorithms</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/sg/tags/6-006-algorithms/" rel="tag">6.006 algorithms</a>, <a class="tag-link-link" href="/sg/tags/hw/" rel="tag">hw</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="ps2"><a class="header-anchor" href="#ps2">¶</a>ps2</h2>
+<ol>
+<li>
+<p>看题：when all but one is special means only one is not special.</p>
+</li>
+<li>
+<p>set view and sequence view of data structures</p>
+<ul>
+<li>
+<p>Sequences maintain a collection of items in an extrinsic order, where each item stored has a rank. In the sequence, including a first item and a last item. That the first item is “first” is because some external party put it there.</p>
+</li>
+<li>
+<p>By contrast, sets maintains a collection of items based on an intrinsic property involving what the items are, usually based on a unique key, x.key, associated with each item x.</p>
+</li>
+</ul>
+<p>Set: hash table, binary search tree</p>
+<p>Sequence: array, linked list, direct access array</p>
+<p>That’s why sequence has insert/delete_at_somewhere operations while set has a loosen insert/delete items operation and supports order operations to find the items.</p>
+</li>
+<li>
+<p>Merge_sort</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">merge_sort</span>(<span class="params">Arr</span>):</span></span><br><span class="line">	size = <span class="built_in">len</span>(Arr)</span><br><span class="line">	<span class="keyword">if</span> size == <span class="number">1</span>:</span><br><span class="line">		<span class="keyword">return</span> Arr</span><br><span class="line">	mid = size//<span class="number">2</span></span><br><span class="line">	Left = merge_sort(Arr[:mid])</span><br><span class="line">	Right = merge_sort(Arr[mid:])</span><br><span class="line">	i,j = <span class="number">0</span>,<span class="number">0</span></span><br><span class="line">	start = <span class="number">0</span></span><br><span class="line">	<span class="keyword">while</span> start &lt; size:</span><br><span class="line">		<span class="keyword">if</span> j &gt;= <span class="built_in">len</span>(Right) <span class="keyword">or</span> (i &lt; <span class="built_in">len</span>(Left) <span class="keyword">and</span> Left[i] &lt; Right[j]): <span class="comment"># offbyone error</span></span><br><span class="line">			Arr[start] = Left[i]</span><br><span class="line">			i += <span class="number">1</span></span><br><span class="line">		<span class="keyword">else</span>:</span><br><span class="line">			Arr[start] = Right[j]</span><br><span class="line">			j += <span class="number">1</span></span><br><span class="line">		start += <span class="number">1</span></span><br><span class="line">	<span class="keyword">return</span> Arr <span class="comment"># missing return value</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="ps3"><a class="header-anchor" href="#ps3">¶</a>ps3</h2>
+<ol>
+<li>
+<p>How to use hash tables(its set operations) to implementing sequence operations?</p>
+<p>Read the problem. We are not storing things in order but storing in hash tables.</p>
+<p>idea 1: assign key to each item as index</p>
+<ul>
+<li>
+<p>Seq[key] = value</p>
+</li>
+<li>
+<p>Seq-build(A): set-build(&lt;key, A[i].value&gt; for i = 0,1,2,… )</p>
+</li>
+<li>
+<p>insert/delete_at: iterate all items, insert/delete one, rebuild</p>
+</li>
+<li>
+<p>Insert_last: easy, however insert_first would take linear time</p>
+</li>
+</ul>
+<p>Idea 2: have an extra varibles to track the original index</p>
+<ul>
+<li>
+<p>How many index should we track at least?</p>
+<p>one: First</p>
+<ul>
+<li>
+<ul>
+<li>Store variable <u>first</u> = key of first item(index 0)</li>
+<li>Hashing(map negative index to positive)</li>
+<li>
+<img src="/sg/2021/12/18/hw1_structure/sc.png" class="" title="sc">
+</li>
+</ul>
+</li>
+<li>
+<p>Insert_first: decrement first, insert(&lt;key first, value x&gt;)</p>
+</li>
+<li>
+<p>and make tiny fix to previous operations(ex: find(i+first))</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>best sorting algs: sort n objects by keys</p>
+<p>nagative items: Increase a large enough number then sort. Decrease after sorting.</p>
+<p>String: convert str to a unique number and use radix sort</p>
+<p>Number of fignts fought: counting sort is enough. Or merge sort.</p>
+<p>ratio w_i / f_i (w_i &lt; f_i): it’s a floating number. We need to consider the precision</p>
+<p>Idea: mapping rational number/letters/negative integer to integer</p>
+<p>runtime of radix sort is O(n + nlog_n_(u)), such that it can handle any polynomial u.</p>
+<p>突然想到了data-oriented pattern</p>
+</li>
+<li>
+<p>college construction</p>
+<ol>
+<li>naive approach: check for h - s_i for S_i, this would take O(n**2) time</li>
+</ol>
+<ul>
+<li>
+<p>problem: how to speed up to O(n)?</p>
+<ul>
+<li>use data structures: store the input S in hash table S’: we can search (h - s_i) in S’ for si in S, each find take O(1) time.</li>
+</ul>
+</li>
+</ul>
+<ol start="2">
+<li>h = 600*n**6, add two things up.</li>
+</ol>
+<p>Idea 1: radix sort</p>
+<ul>
+<li>naive approach: store S in sorted_array_set where sort method is implemented using radix sort. For any S_i, binary search for (h - S_i) in S(know as find_prev).
+<ul>
+<li>It takes O(n*logn) time</li>
+</ul>
+</li>
+</ul>
+<p>Idea 2: two-finger algorithm</p>
+<ul>
+<li>Improvement 1: linear scan: any S_i greater than h is impossible. Rebuild S’ in the sorted_array_set where S’_i &lt; h.</li>
+<li>Improvement 2:</li>
+</ul>
+</li>
+<li>
+<p>copy detection problem</p>
+</li>
+</ol>
+<h2 id="ps4"><a class="header-anchor" href="#ps4">¶</a>ps4</h2>
+<h3 id="binary-tree"><a class="header-anchor" href="#binary-tree">¶</a>binary tree</h3>
+<p>Problem 1: why we need a binary tree to store items?</p>
+<p>ans: Compared with linked list which takes O(n) time to traverse all the items, we use binary serach instead. The traverse now takes O(hight of the tree) = O(logn) time.</p>
+<p>Design:</p>
+<ol>
+<li>
+<p>We define the traverse order to meet our needs.</p>
+<ul>
+<li>we can use binary tree to implement sequence(order) or set…</li>
+<li>property: represent binary relation in different way: left-aligned complete binary tree</li>
+</ul>
+</li>
+<li>
+<p>Navigation: first/last, walk down/up the tree</p>
+</li>
+<li>
+<p>Dynamic operation: add or remove items in a binary tree</p>
+<p>problem 2: maintain the tree balance while insertion/deletion</p>
+<p>The logic is that if skew is not in the balance range(-1,0,1) in such condition it changes into (2,-2), we should rebalance the tree. First, we need to detect such conditions, then we should modify that by rebalance(namely, by rotations). After each rebalance operation, we need to update the subtree heigh to calculate update skew. Then we walk up the tree and maintain balance in each recursion step until there is none.</p>
+<ul>
+<li>
+<p>Rotation</p>
+<p>Problem 3: what will happen after rotations?</p>
+<p>just draw the picture.</p>
+<ul>
+<li>Rotate right(D): D becomes its left child’s right child, and subtree_update</li>
+<li>Rotate left(B): B becomes its right child’s left child, and subtree_update</li>
+</ul>
+</li>
+</ul>
+<p>觉得讲义上的insert B before A有点怪</p>
+<p>Problem 3: BST and AVL have nuances in insertion/deletion.</p>
+<p>这一点我看错了，我把插入节点的大小搞错了，这两个树结构的差异是由于AVL会维持树结构的平衡。</p>
+<p>BST: deletion: swap down predecessor/successor</p>
+</li>
+</ol>
+<p>the difference between BST and AVL is: AVL maintains balance: AVL will check skew of every node in the traverse order to decide rotation operations; BST mains binary search.(AVL can use binary search as well)</p>
+<h3 id="heap"><a class="header-anchor" href="#heap">¶</a>heap</h3>
+<p>Build heap in linear time:</p>
+<ul>
+<li>
+<p>idea: walk up the heap.</p>
+<p>-&gt; loop backward over array.</p>
+<p>problem: the order of swapping</p>
+</li>
+</ul>
+<img src="/sg/2021/12/18/hw1_structure/sc2.png" class="" title="sc2">
+<p>heap doesn’t support ordering.</p>
+<h3 id="problem-set"><a class="header-anchor" href="#problem-set">¶</a>problem set</h3>
+<ol>
+<li>
+<p>n items, k largest one list. O(logn) space to write, O(nlog(logn)) runnning time.</p>
+<p>Problem 1: how is logn related to k?</p>
+<p>这两个题目不一样😅，这道题根本没提到k。解法和我之前想的一样</p>
+</li>
+<li>
+<p>SCLR: 设计一个数据结构满足：</p>
+<p>new_bid(d,b), O(logn);</p>
+<p>update_bid(d, b) O(logn);</p>
+<p>get_revenue() O(1).</p>
+<p>we should ask ourselves these questions before writing down the answer:</p>
+<ul>
+<li>what is stored in data structures? -&gt;</li>
+<li>what is maintaining by operations? -&gt;</li>
+<li>what is querying? -&gt;</li>
+</ul>
+<p>Idea 1: we should maintain a dictionary of (bidder ID, bid) for the update operations. Dictionary can be implemented by AVL tree set or hash table while the latter’s running time is amortized</p>
+<p>Idea 2: we need data structures to preserve the priority we need</p>
+<ul>
+<li>naive approach: use binary heap/AVL tree</li>
+<li>Store n items in one max-heap -&gt; <u>store k largest items in min-heap, n-k items in max-heap</u>, in which case it doesn’t need to use delete_max to find the minimal item in max-heap.</li>
+</ul>
+<p>Idea 3: we need to link two data structures to support fast find.</p>
+<p>Approach: we want to find the bidder’s current bid quickly. -&gt; cross linking</p>
+<ul>
+<li>That’s why we don’t save bid directly in the dictionary, in which case we save the time in updating the dictionary every time we change the bidder’s bid.</li>
+</ul>
+<img src="/sg/2021/12/18/hw1_structure/sc3.png" class="" title="sc3">
+</li>
+<li>
+<p>It seems right but where goes wrong?</p>
+<p>这部分看了又看,仍旧没发现错误在哪里。后来把问题定位到了一个测试进而找到了问题。忽略了max_temp是所在class的instance，所以在bug版第一个判断语句永远都会返回None.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># bug</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">subtree_max_in_range</span>(<span class="params">A, d1, d2</span>):</span></span><br><span class="line">    max_temp = <span class="literal">None</span></span><br><span class="line">    <span class="comment"># ------------------------------------ #</span></span><br><span class="line">    <span class="keyword">if</span> A.max_date &lt;= d2 <span class="keyword">and</span> A.min_date &gt;= d1:</span><br><span class="line">        <span class="keyword">return</span> A.max_temp</span><br><span class="line">    <span class="keyword">if</span> A.max_date &lt; d1 <span class="keyword">or</span> A.min_date &gt; d2:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">    <span class="keyword">if</span> d1 &lt;= A.item.key &lt;= d2:</span><br><span class="line">        max_temp = A.item.temp</span><br><span class="line">    <span class="keyword">if</span> A.left:</span><br><span class="line">        l_temp = A.left.subtree_max_in_range(d1, d2)</span><br><span class="line">        <span class="keyword">if</span> l_temp:</span><br><span class="line">            <span class="keyword">if</span> max_temp:</span><br><span class="line">                max_temp = <span class="built_in">max</span>(l_temp, max_temp)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                max_temp = l_temp</span><br><span class="line">    <span class="keyword">if</span> A.right:</span><br><span class="line">        r_temp = A.right.subtree_max_in_range(d1, d2)</span><br><span class="line">        <span class="keyword">if</span> r_temp:</span><br><span class="line">            <span class="keyword">if</span> max_temp:</span><br><span class="line">                max_temp = <span class="built_in">max</span>(r_temp, max_temp)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                mex_temp = r_temp</span><br><span class="line">    <span class="comment"># ------------------------------------ #</span></span><br><span class="line">    <span class="keyword">return</span> max_temp</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># fixed version</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">subtree_max_in_range</span>(<span class="params">A, d1, d2</span>):</span></span><br><span class="line">    temp = <span class="literal">None</span></span><br><span class="line">    <span class="comment"># ------------------------------------ #</span></span><br><span class="line">    <span class="keyword">if</span> A.max_date &lt;= d2 <span class="keyword">and</span> A.min_date &gt;= d1:</span><br><span class="line">        <span class="keyword">return</span> A.max_temp</span><br><span class="line">    <span class="keyword">if</span> A.max_date &lt; d1 <span class="keyword">or</span> A.min_date &gt; d2:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">    <span class="keyword">if</span> d1 &lt;= A.item.key &lt;= d2:</span><br><span class="line">        temp = A.item.temp</span><br><span class="line">    <span class="keyword">if</span> A.left:</span><br><span class="line">        l_temp = A.left.subtree_max_in_range(d1, d2)</span><br><span class="line">        <span class="keyword">if</span> l_temp:</span><br><span class="line">            <span class="keyword">if</span> temp:</span><br><span class="line">                temp = <span class="built_in">max</span>(l_temp, temp)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                temp = l_temp</span><br><span class="line">    <span class="keyword">if</span> A.right:</span><br><span class="line">        r_temp = A.right.subtree_max_in_range(d1, d2)</span><br><span class="line">        <span class="keyword">if</span> r_temp:</span><br><span class="line">            <span class="keyword">if</span> temp:</span><br><span class="line">                temp = <span class="built_in">max</span>(r_temp, temp)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                temp = r_temp</span><br><span class="line">    <span class="comment"># ------------------------------------ #</span></span><br><span class="line">    <span class="keyword">return</span> temp</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="recitation"><a class="header-anchor" href="#recitation">¶</a>recitation</h2>
+<h3 id="AVL-tree"><a class="header-anchor" href="#AVL-tree">¶</a>AVL tree</h3>
+<p>full binary tree guarantees the height of O(logn)</p>
+<p>Build a AVL tree with fewer nodes as possible -&gt; prove h = O(logn)</p>
+<p>why rotations -&gt; balance -&gt; tree search</p>
+<p>Rotation:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">rotateRight(A):</span><br><span class="line">	<span class="comment"># A&#x27;s original parent e; A could be e&#x27;s left/right child =&gt; B</span></span><br><span class="line">	B.p = e</span><br><span class="line">	<span class="keyword">if</span> e.r == A <span class="comment"># pointer comparison</span></span><br><span class="line">		e.r = B</span><br><span class="line">	<span class="keyword">else</span>:</span><br><span class="line">		e.l = B</span><br><span class="line">	<span class="comment"># A&#x27;s original left child B =&gt; A is B&#x27;s right child</span></span><br><span class="line">	B.r = A</span><br><span class="line">	(A.p = B)</span><br><span class="line">	<span class="comment"># B&#x27;s original right child c =&gt; A&#x27;s left child</span></span><br><span class="line">	A.l = c</span><br><span class="line">	(c.p = A)</span><br></pre></td></tr></table></figure>
+<h3 id="Principle-of-algorithm"><a class="header-anchor" href="#Principle-of-algorithm">¶</a>Principle of algorithm</h3>
+<p><u>thghout process matters</u>: take 30-60 minutes to think about a problem</p>
+<p><u>problem 0</u>: shifted array, find e in N sorted items shifted length of k,</p>
+<ul>
+<li>if k is defined</li>
+<li>if k is undefined, find k =&gt; find min</li>
+</ul>
+<p>How to solve it?</p>
+<ol>
+<li>simplest solution: linear scan, O(N)</li>
+<li>in another way? shift k + binary search, O(k + logN)</li>
+<li>…</li>
+</ol>
+<p><u>Problem 1</u>: find kth smallest in N items in a min-heap, want O(K*logK)time</p>
+<p>How to think about it?</p>
+<ol>
+<li>
+<p>use min-heap: O(klogN), k times find_min in min-heap</p>
+</li>
+<li>
+<p>Find an O(NlogK) algorithms:</p>
+<p>Idea 1: cut out irrelevant layers. We have k levels of heap =&gt; O(k**2) time, given the height is O(k)</p>
+<p>Problem 1.1: how to cut a heap into k elements?</p>
+<p>Problem 1.2: how to split it up into k, (N - k) groups?</p>
+<p>Idea 2: maintain a max-heap of k. Iterate all items and we can get what we want</p>
+</li>
+<li>
+<p>think more about the process of finding the kth smallest items.</p>
+<p>Idea: horizon.</p>
+<p>Idea: augmentation: index of array</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># initialize</span></span><br><span class="line">H, original <span class="built_in">min</span>-heap(array back-based)</span><br><span class="line">Z, horizon</span><br><span class="line">Z.insert(H[<span class="number">1</span>])</span><br><span class="line"><span class="keyword">for</span> ith <span class="keyword">in</span> <span class="built_in">range</span>(K):</span><br><span class="line">  ith, j = Z.extract-<span class="built_in">min</span></span><br><span class="line">  Z.insert H[<span class="number">2j</span>], <span class="number">2j</span></span><br><span class="line">  Z,insert H[<span class="number">2j</span>+<span class="number">1</span>], <span class="number">2j</span>+<span class="number">1</span></span><br><span class="line"><span class="keyword">return</span> ith</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p><u>Problem 2</u>: find min(e[i,…,j]), e is a list of N items, N = 2**k</p>
+<p>Process: pre-process, then query</p>
+<p>How to think about it?</p>
+<ol>
+<li>
+<p>simple idea: hash into [i,…,j], we can get H[[i,…,j],…], N**2 pair; then take min in O(N) time in each pair</p>
+<p>=&gt; O(N**3)time</p>
+<p>Improve to O(N**2) time by comparing current pair result with previous result which takes O(1) time</p>
+</li>
+<li>
+<p>how to spend time?</p>
+<ul>
+<li>in pre-process: O(N**2) | O(1)</li>
+<li>in query: O(1) | O(N)</li>
+</ul>
+</li>
+<li>
+<p>binary search in two halves recursively</p>
+<img src="/sg/2021/12/18/hw1_structure/sc4.png" class="" title="sc4">
+</li>
+</ol>
+<h2 id="Reminder"><a class="header-anchor" href="#Reminder">¶</a>Reminder</h2>
+<ol>
+<li>
+<p>two-finger algorithm:</p>
+</li>
+<li>
+<p>cross linking: by store pointers to another data structures.</p>
+</li>
+<li>
+<p>Proximate sorting</p>
+<blockquote>
+<p>An array of distinct integers is k-proximate if every integer of the array is at most k places away from its place in the array after being sorted, i.e., if the ith integer of the unsorted input array is the jth largest integer contained in the array, then |i −j| ≤ k. In this problem, we will show how to sort a k-proximate array faster than Θ(n log n)</p>
+</blockquote>
+<p>这里关于insertion sort k-proximate array takes O(nk) time, heap sort takes O(nlogk)time的讨论还挺有意思的。</p>
+</li>
+<li>
+<p>a general/naive approach and subsequent analysis</p>
+</li>
+<li>
+<p>approriate description</p>
+<ul>
+<li>
+<p>key with</p>
+<p>example 1: in priority queue: Key each Revenger ri with opinion si on the pair (|si|, i) to make keys unique.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Worst-case, expected, amortized(dynamic operations)</p>
+</li>
+</ol>
+<h3 id="olc"><a class="header-anchor" href="#olc">¶</a>olc</h3>
+<p>First we should decide which view:</p>
+<ul>
+<li>ordered or not -&gt; sequence/set view</li>
+<li>does it have priority? -&gt; priority queue -&gt; binary heap/ binary tree</li>
+</ul>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/sg/">Home</a></li>
+         
+          <li><a href="/sg/about/">About</a></li>
+         
+          <li><a href="/sg/categories/">Category</a></li>
+         
+          <li><a href="/sg/archives/">Writing</a></li>
+         
+          <li><a href="/sg/CV/">CV</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#ps2"><span class="toc-number">1.</span> <span class="toc-text">ps2</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ps3"><span class="toc-number">2.</span> <span class="toc-text">ps3</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ps4"><span class="toc-number">3.</span> <span class="toc-text">ps4</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#binary-tree"><span class="toc-number">3.1.</span> <span class="toc-text">binary tree</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#heap"><span class="toc-number">3.2.</span> <span class="toc-text">heap</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#problem-set"><span class="toc-number">3.3.</span> <span class="toc-text">problem set</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#recitation"><span class="toc-number">4.</span> <span class="toc-text">recitation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#AVL-tree"><span class="toc-number">4.1.</span> <span class="toc-text">AVL tree</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Principle-of-algorithm"><span class="toc-number">4.2.</span> <span class="toc-text">Principle of algorithm</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reminder"><span class="toc-number">5.</span> <span class="toc-text">Reminder</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#olc"><span class="toc-number">5.1.</span> <span class="toc-text">olc</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://sgzerolc.github.io/sg/2021/12/18/hw1_structure/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://sgzerolc.github.io/sg/2021/12/18/hw1_structure/&text=hw1 data structures"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://sgzerolc.github.io/sg/2021/12/18/hw1_structure/&title=hw1 data structures"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sgzerolc.github.io/sg/2021/12/18/hw1_structure/&is_video=false&description=hw1 data structures"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=hw1 data structures&body=Check out this article: https://sgzerolc.github.io/sg/2021/12/18/hw1_structure/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://sgzerolc.github.io/sg/2021/12/18/hw1_structure/&title=hw1 data structures"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://sgzerolc.github.io/sg/2021/12/18/hw1_structure/&title=hw1 data structures"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://sgzerolc.github.io/sg/2021/12/18/hw1_structure/&title=hw1 data structures"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://sgzerolc.github.io/sg/2021/12/18/hw1_structure/&title=hw1 data structures"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://sgzerolc.github.io/sg/2021/12/18/hw1_structure/&name=hw1 data structures&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://sgzerolc.github.io/sg/2021/12/18/hw1_structure/&t=hw1 data structures"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2022
+    Sam Li
+  </div>
+</footer>
+
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/sg/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
