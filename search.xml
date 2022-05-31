@@ -4,38 +4,11 @@
   
     
     <entry>
-      <title>NVMe</title>
-      <link href="/sg/2022/05/31/storages_nvme/"/>
-      <url>/sg/2022/05/31/storages_nvme/</url>
-      
-        <content type="html"><![CDATA[]]></content>
-      
-      
-      <categories>
-          
-          <category> computer systems </category>
-          
-          <category> storage systems </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> storage systems </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>OS Lab Reports</title>
-      <link href="/sg/2022/05/29/os_xv6/"/>
-      <url>/sg/2022/05/29/os_xv6/</url>
+      <link href="/sg/2022/05/20/os_xv6/"/>
+      <url>/sg/2022/05/20/os_xv6/</url>
       
-        <content type="html"><![CDATA[<h2 id="Lab1"><a class="header-anchor" href="#Lab1">¶</a>Lab1</h2><h3 id="Book"><a class="header-anchor" href="#Book">¶</a>Book</h3><ol><li>file descriptors: when to share offsets? Only dup + fork calls.</li><li>Error file redirection: 2 &gt; &amp;1</li><li>Pipe: read will wait for write.</li></ol><h3 id="Exp-primes"><a class="header-anchor" href="#Exp-primes">¶</a>Exp:primes</h3><p>process communication:</p><ul><li><p>Type matching: pass ints to pipe</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//write(int fd, char* buf, int n);</span></span><br><span class="line">write(fd, &amp;<span class="keyword">int</span>, <span class="keyword">sizeof</span> <span class="keyword">int</span>);</span><br></pre></td></tr></table></figure></li></ul><p>Goal: pipe-base sieve and correctness</p><p>Thinking process:</p><ol><li>Write fork + pipe as a whole in main(). Can’t figure out how to write tranportation between process tree and pipe.</li><li>Write a helper function: a process generating primes. Can’t figure out choosing input/output</li><li>Found out how to write process tree after rereading the xv6 book: pass array as input<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></li><li>prime logic: found that the first number passed into pipe is prime number. So we can add fork() in newProcess and recurrence relation in the child process.</li><li>details：error handling/read/write error/close logic/wait-&gt;exit</li></ol><p>Hypothiesis:</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">newProcess</span><span class="params">(<span class="keyword">int</span> p[<span class="number">2</span>])</span></span>&#123;</span><br><span class="line">...</span><br><span class="line">    pipe(c);</span><br><span class="line">    read(p[<span class="number">0</span>], buff, <span class="number">4</span>); <span class="comment">//read from parent</span></span><br><span class="line">    <span class="keyword">int</span> prime = buff[<span class="number">0</span>]; </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;prime %d\n&quot;</span>, prime);</span><br><span class="line">    <span class="keyword">while</span>(read(p[<span class="number">0</span>], buff, <span class="number">4</span>) != <span class="number">0</span>)&#123; <span class="comment">//???</span></span><br><span class="line">        <span class="keyword">int</span> n = buff[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">if</span> (n % prime != <span class="number">0</span>)&#123;</span><br><span class="line">            write(c[<span class="number">1</span>], &amp;n, <span class="number">4</span>);</span><br><span class="line">            newProcess(c);</span><br><span class="line">        &#125;</span><br><span class="line">        &#125;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><ol><li>Read from Parent or Child</li><li>write/read error</li></ol><p>I think the process is right. But the program runs too slow to find the right answer</p><p>Problem: why would read error occur?</p><p>Possible reason:</p><ol><li><p>run out of resources: file desicriptors between recursive calls</p><p>-&gt; nothing changes -&gt; wrong methods</p></li></ol><p>Experiment:</p><p>Exp 1:  rewrite the newProcess by using fork</p><p>Exp 2: rewrite the close logic</p><p>Predictions:</p><ol><li><p>when to close</p><p>After when we don’t need use the file descriptor in current process.</p></li></ol><p>Observations:</p><ol><li>Wait would pass the file descriptor to the exit</li></ol><h3 id="Exp-xargs"><a class="header-anchor" href="#Exp-xargs">¶</a>Exp:xargs</h3><p>Thinking process：</p><ol><li>Write as a whole: split line, then split execution. Difficulty: split string into array.</li></ol><p>problem: cmd part and argument part.</p><p>specification: cmd = argv[1], the rest is argument.</p><h2 id="Lab2"><a class="header-anchor" href="#Lab2">¶</a>Lab2</h2><h3 id="Book-v2"><a class="header-anchor" href="#Book-v2">¶</a>Book</h3><h3 id="Exp-trace"><a class="header-anchor" href="#Exp-trace">¶</a>Exp: trace</h3><p>Problem: what is trace?</p><p>Trace is a user call helping to track one particular syscall in the execution process.</p><p>Problem: what’s the relation between sys_call and sys_proc?</p><h3 id="Exp-sysinfo"><a class="header-anchor" href="#Exp-sysinfo">¶</a>Exp: sysinfo</h3><p>It’s easy to overlook the spelling error. One bracket makes you question about everything:)</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (copyout(myproc()-&gt;pagetable, addr, (<span class="keyword">char</span> *)&amp;info, <span class="keyword">sizeof</span>(info) &lt; <span class="number">0</span>); <span class="comment">// off-by-one-bracket error</span></span><br><span class="line"><span class="keyword">if</span> (copyout(myproc()-&gt;pagetable, addr, (<span class="keyword">char</span> *)&amp;info, <span class="keyword">sizeof</span>(info)) &lt; <span class="number">0</span>);  <span class="comment">// correct one</span></span><br></pre></td></tr></table></figure><h2 id="Lab3"><a class="header-anchor" href="#Lab3">¶</a>Lab3</h2><p>Goal: allow the kernel to directly dereference user pointers</p><h3 id="Book-v3"><a class="header-anchor" href="#Book-v3">¶</a>Book</h3><h3 id="Exp-print-pt"><a class="header-anchor" href="#Exp-print-pt">¶</a>Exp:print pt</h3><p>You can’t write it without knowing the page table implementation in xv6. At first, it needs a simple and straightforward solution and then optimize it. I was thinking about using iteration or recursion, which took a while.</p><h3 id="Exp-kernel-page-table"><a class="header-anchor" href="#Exp-kernel-page-table">¶</a>Exp: kernel page table</h3><p>problem: page table set up: panic</p><ul><li>When to start paging?</li></ul><p>Hypothesis:</p><ol><li>Traps due to missing mappings</li><li>scheduler</li></ol><p>Experiment:</p><ol><li><p>modify allocproc: seems correct</p></li><li><p>modify scheduler: move around w_satp, errors occur</p><p>-&gt; scheduler goes wrong</p></li></ol><p>Problem 1: how scheduler goes wrong?</p><p>Key point: context switching. A fixed version <a href="https://github.com/sgzerolc/xv6-os/commit/a1c15ec80eea1d0006099fbaf74003bb0d8493b8#diff-f06ba4e6ae5b13cb787bad05af2c231bcf826410f25bfd78b18774115f0d20a8L481-R510">here</a>.(thanks to @GuoZhi)</p><p><code>pit</code>: Problem 2: why truncate2 OK but truncate3 not?</p><p>We shouldn’t be worried if we can get grade part ok. And it’s time to move to real problem.</p><p>aside: Problem 3: lost some freepages in kernmem</p><p>Predictions:</p><p>Observations:</p><ol><li>Allocproc sets up one process’s kernel stack</li></ol><h3 id="Exp-copyin"><a class="header-anchor" href="#Exp-copyin">¶</a>Exp: copyin</h3><p>Task: add user mappings to user process’s kernel page table</p><p>Problem:</p><ol><li>when user mappings  are changed in <code>exec</code> ? what should be done in <code>exec</code> ?</li></ol><p>Hypothesis:</p><p>Experiment:</p><ol><li><code>pit</code>: no need to change copyin_new yet. The task is to make it work.</li></ol><p>Predictions:</p><p>Observations:</p><h2 id="Lab4"><a class="header-anchor" href="#Lab4">¶</a>Lab4</h2><h2 id="Lab5"><a class="header-anchor" href="#Lab5">¶</a>Lab5</h2><h2 id="Lab6"><a class="header-anchor" href="#Lab6">¶</a>Lab6</h2><h2 id="Lab7"><a class="header-anchor" href="#Lab7">¶</a>Lab7</h2><h2 id="Lab8"><a class="header-anchor" href="#Lab8">¶</a>Lab8</h2><h2 id="Tool"><a class="header-anchor" href="#Tool">¶</a>Tool</h2><p>Qemu 5.1<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup>, Mac m1, Riscv-toolchain 10.1</p><p>6.s081 20fall labs</p><img src="/sg/2022/05/29/os_xv6/step-by-step-debugging.png" class="" title="step-by-step-debugging"><hr class="footnotes-sep"><section class="footnotes"><ol class="footnotes-list"><li id="fn1" class="footnote-item"><p>stuck for a long time due to not very familiar with C in 21/03/20 <a href="#fnref1" class="footnote-backref">↩︎</a></p></li><li id="fn2" class="footnote-item"><p>build from source. Configure prefix to /opt/qemu. More can be found <a href="https://github.com/BASARANOMO/xv6-labs-2020/issues/1">here</a>. <a href="#fnref2" class="footnote-backref">↩︎</a></p></li></ol></section>]]></content>
+        <content type="html"><![CDATA[<h2 id="Lab1"><a class="header-anchor" href="#Lab1">¶</a>Lab1</h2><h3 id="Book"><a class="header-anchor" href="#Book">¶</a>Book</h3><ol><li>file descriptors: when to share offsets? Only dup + fork calls.</li><li>Error file redirection: 2 &gt; &amp;1</li><li>Pipe: read will wait for write.</li></ol><h3 id="Exp-primes"><a class="header-anchor" href="#Exp-primes">¶</a>Exp:primes</h3><p>process communication:</p><ul><li><p>Type matching: pass ints to pipe</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//write(int fd, char* buf, int n);</span></span><br><span class="line">write(fd, &amp;<span class="keyword">int</span>, <span class="keyword">sizeof</span> <span class="keyword">int</span>);</span><br></pre></td></tr></table></figure></li></ul><p>Goal: pipe-base sieve and correctness</p><p>Thinking process:</p><ol><li>Write fork + pipe as a whole in main(). Can’t figure out how to write tranportation between process tree and pipe.</li><li>Write a helper function: a process generating primes. Can’t figure out choosing input/output</li><li>Found out how to write process tree after rereading the xv6 book: pass array as input<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></li><li>prime logic: found that the first number passed into pipe is prime number. So we can add fork() in newProcess and recurrence relation in the child process.</li><li>details：error handling/read/write error/close logic/wait-&gt;exit</li></ol><p>Hypothiesis:</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">newProcess</span><span class="params">(<span class="keyword">int</span> p[<span class="number">2</span>])</span></span>&#123;</span><br><span class="line">...</span><br><span class="line">    pipe(c);</span><br><span class="line">    read(p[<span class="number">0</span>], buff, <span class="number">4</span>); <span class="comment">//read from parent</span></span><br><span class="line">    <span class="keyword">int</span> prime = buff[<span class="number">0</span>]; </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;prime %d\n&quot;</span>, prime);</span><br><span class="line">    <span class="keyword">while</span>(read(p[<span class="number">0</span>], buff, <span class="number">4</span>) != <span class="number">0</span>)&#123; <span class="comment">//???</span></span><br><span class="line">        <span class="keyword">int</span> n = buff[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">if</span> (n % prime != <span class="number">0</span>)&#123;</span><br><span class="line">            write(c[<span class="number">1</span>], &amp;n, <span class="number">4</span>);</span><br><span class="line">            newProcess(c);</span><br><span class="line">        &#125;</span><br><span class="line">        &#125;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><ol><li>Read from Parent or Child</li><li>write/read error</li></ol><p>I think the process is right. But the program runs too slow to find the right answer</p><p>Problem: why would read error occur?</p><p>Possible reason:</p><ol><li><p>run out of resources: file desicriptors between recursive calls</p><p>-&gt; nothing changes -&gt; wrong methods</p></li></ol><p>Experiment:</p><p>Exp 1:  rewrite the newProcess by using fork</p><p>Exp 2: rewrite the close logic</p><p>Predictions:</p><ol><li><p>when to close</p><p>After when we don’t need use the file descriptor in current process.</p></li></ol><p>Observations:</p><ol><li>Wait would pass the file descriptor to the exit</li></ol><h3 id="Exp-xargs"><a class="header-anchor" href="#Exp-xargs">¶</a>Exp:xargs</h3><p>Thinking process：</p><ol><li>Write as a whole: split line, then split execution. Difficulty: split string into array.</li></ol><p>problem: cmd part and argument part.</p><p>specification: cmd = argv[1], the rest is argument.</p><h2 id="Lab2"><a class="header-anchor" href="#Lab2">¶</a>Lab2</h2><h3 id="Book-v2"><a class="header-anchor" href="#Book-v2">¶</a>Book</h3><h3 id="Exp-trace"><a class="header-anchor" href="#Exp-trace">¶</a>Exp: trace</h3><p>Problem: what is trace?</p><p>Trace is a user call helping to track one particular syscall in the execution process.</p><p>Problem: what’s the relation between sys_call and sys_proc?</p><h3 id="Exp-sysinfo"><a class="header-anchor" href="#Exp-sysinfo">¶</a>Exp: sysinfo</h3><p>It’s easy to overlook the spelling error. One bracket makes you question about everything:)</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (copyout(myproc()-&gt;pagetable, addr, (<span class="keyword">char</span> *)&amp;info, <span class="keyword">sizeof</span>(info) &lt; <span class="number">0</span>); <span class="comment">// off-by-one-bracket error</span></span><br><span class="line"><span class="keyword">if</span> (copyout(myproc()-&gt;pagetable, addr, (<span class="keyword">char</span> *)&amp;info, <span class="keyword">sizeof</span>(info)) &lt; <span class="number">0</span>);  <span class="comment">// correct one</span></span><br></pre></td></tr></table></figure><h2 id="Lab3"><a class="header-anchor" href="#Lab3">¶</a>Lab3</h2><p>Goal: allow the kernel to directly dereference user pointers</p><h3 id="Book-v3"><a class="header-anchor" href="#Book-v3">¶</a>Book</h3><h3 id="Exp-print-pt"><a class="header-anchor" href="#Exp-print-pt">¶</a>Exp:print pt</h3><p>You can’t write it without knowing the page table implementation in xv6. At first, it needs a simple and straightforward solution and then optimize it. I was thinking about using iteration or recursion, which took a while.</p><h3 id="Exp-kernel-page-table"><a class="header-anchor" href="#Exp-kernel-page-table">¶</a>Exp: kernel page table</h3><p>problem: page table set up: panic</p><ul><li>When to start paging?</li></ul><p>Hypothesis:</p><ol><li>Traps due to missing mappings</li><li>scheduler</li></ol><p>Experiment:</p><ol><li><p>modify allocproc: seems correct</p></li><li><p>modify scheduler: move around w_satp, errors occur</p><p>-&gt; scheduler goes wrong</p></li></ol><p>Problem 1: how scheduler goes wrong?</p><p>Key point: context switching. A fixed version <a href="https://github.com/sgzerolc/xv6-os/commit/a1c15ec80eea1d0006099fbaf74003bb0d8493b8#diff-f06ba4e6ae5b13cb787bad05af2c231bcf826410f25bfd78b18774115f0d20a8L481-R510">here</a>.(thanks to @GuoZhi)</p><p><code>pit</code>: Problem 2: why truncate2 OK but truncate3 not?</p><p>We shouldn’t be worried if we can get grade part ok. And it’s time to move to real problem.</p><p>aside: Problem 3: lost some freepages in kernmem</p><p>Predictions:</p><p>Observations:</p><ol><li>Allocproc sets up one process’s kernel stack</li></ol><h3 id="Exp-copyin"><a class="header-anchor" href="#Exp-copyin">¶</a>Exp: copyin</h3><p>Task: add user mappings to user process’s kernel page table</p><p>Problem:</p><ol><li>when user mappings  are changed in <code>exec</code> ? what should be done in <code>exec</code> ?</li></ol><p>Hypothesis:</p><p>Experiment:</p><ol><li><code>pit</code>: no need to change copyin_new yet. The task is to make it work.</li></ol><p>Predictions:</p><p>Observations:</p><h2 id="Lab4"><a class="header-anchor" href="#Lab4">¶</a>Lab4</h2><h2 id="Lab5"><a class="header-anchor" href="#Lab5">¶</a>Lab5</h2><h2 id="Lab6"><a class="header-anchor" href="#Lab6">¶</a>Lab6</h2><h2 id="Lab7"><a class="header-anchor" href="#Lab7">¶</a>Lab7</h2><h2 id="Lab8"><a class="header-anchor" href="#Lab8">¶</a>Lab8</h2><h2 id="Tool"><a class="header-anchor" href="#Tool">¶</a>Tool</h2><p>Qemu 5.1<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup>, Mac m1, Riscv-toolchain 10.1</p><p>6.s081 20fall labs</p><img src="/sg/2022/05/20/os_xv6/step-by-step-debugging.png" class="" title="step-by-step-debugging"><hr class="footnotes-sep"><section class="footnotes"><ol class="footnotes-list"><li id="fn1" class="footnote-item"><p>stuck for a long time due to not very familiar with C in 21/03/20 <a href="#fnref1" class="footnote-backref">↩︎</a></p></li><li id="fn2" class="footnote-item"><p>build from source. Configure prefix to /opt/qemu. More can be found <a href="https://github.com/BASARANOMO/xv6-labs-2020/issues/1">here</a>. <a href="#fnref2" class="footnote-backref">↩︎</a></p></li></ol></section>]]></content>
       
       
       <categories>
@@ -52,118 +25,6 @@
             <tag> lab </tag>
             
             <tag> 6.s081 operating systems </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>problem sets write-ups for algorithms design course</title>
-      <link href="/sg/2022/05/26/6.046_psets/"/>
-      <url>/sg/2022/05/26/6.046_psets/</url>
-      
-        <content type="html"><![CDATA[<p>Brief guide: be clear and precise.</p><p><strong>Goal : To communicate.</strong></p><p>Form: a short essay. The body of the essay provides:</p><ol><li>Description of algorithm. Pseudocode</li><li>worked example/diagram</li><li>Proof of the correctness</li><li>annalysis of runtime</li></ol><h2 id="algorithms-design-tools"><a class="header-anchor" href="#algorithms-design-tools">¶</a>algorithms design tools</h2><ol><li>have both algorithms techniques and problems solved list in mind</li></ol><img src="/sg/2022/05/26/6.046_psets/Screenshot-7936656.png" class="" title="example"><h2 id="Ps-1"><a class="header-anchor" href="#Ps-1">¶</a>Ps 1</h2><h3 id="Asymptotic-growth"><a class="header-anchor" href="#Asymptotic-growth">¶</a>Asymptotic growth</h3><ol><li><p>Some confusing terms:</p><img src="/sg/2022/05/26/6.046_psets/Screenshot-3357742.png" class="" title="Screenshot-3357742"></li><li><p>insert A and B into C in big-O growth</p><p>C[0] &lt; A[0] &lt; C[1], C[1] &lt; A[1:] &lt; C[2], C[-2]&lt; B[0] &lt; C[-1]</p></li><li><p>Brief summary：</p><ul><li><p>Log growing in exponential times is still faster than polynomials.</p></li><li><p>With the same radix, the exponent growing speed is in the order of : exponential &gt; polynomial &gt; log</p></li></ul></li></ol><h3 id="recurrence"><a class="header-anchor" href="#recurrence">¶</a>recurrence</h3><ol><li>Techniques: master theorem/recurring tree</li><li>try to satisfy constraint of master theorem: Let n = $2^m$, $f(n) = \log_2{n}$=&gt; m.</li></ol><h3 id="Restaurant-location"><a class="header-anchor" href="#Restaurant-location">¶</a>Restaurant location</h3><p>b) max profit</p><ol><li><p>algorithm</p></li><li><p>correctness</p></li><li><p>time analysis</p></li></ol><h3 id="radio-frequency-assignment"><a class="header-anchor" href="#radio-frequency-assignment">¶</a>radio frequency assignment</h3><h2 id="Ps-2"><a class="header-anchor" href="#Ps-2">¶</a>Ps 2</h2><h2 id="Ps-3"><a class="header-anchor" href="#Ps-3">¶</a>Ps 3</h2><h2 id="Ps-4"><a class="header-anchor" href="#Ps-4">¶</a>Ps 4</h2><h2 id="Ps-5"><a class="header-anchor" href="#Ps-5">¶</a>Ps 5</h2><h2 id="Ps-6-dp"><a class="header-anchor" href="#Ps-6-dp">¶</a>Ps 6 dp</h2><h2 id="Ps-7-maxflow"><a class="header-anchor" href="#Ps-7-maxflow">¶</a>Ps 7 maxflow</h2><h2 id="Ps-10-ds"><a class="header-anchor" href="#Ps-10-ds">¶</a>Ps 10 ds</h2>]]></content>
-      
-      
-      <categories>
-          
-          <category> Algorithms </category>
-          
-          <category> 6.046 algorithms design </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> 6.046 algorithms design </tag>
-            
-            <tag> hw </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>storage services in QEMU -- virtio-blk and virtio-scci</title>
-      <link href="/sg/2022/05/25/qemu_virtio-blk/"/>
-      <url>/sg/2022/05/25/qemu_virtio-blk/</url>
-      
-        <content type="html"><![CDATA[<h2 id="brief-introduction"><a class="header-anchor" href="#brief-introduction">¶</a>brief introduction</h2>]]></content>
-      
-      
-      <categories>
-          
-          <category> FOSS </category>
-          
-          <category> QEMU </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> QEMU </tag>
-            
-            <tag> code reading </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>File Systems</title>
-      <link href="/sg/2022/05/24/storages_fs/"/>
-      <url>/sg/2022/05/24/storages_fs/</url>
-      
-        <content type="html"><![CDATA[]]></content>
-      
-      
-      <categories>
-          
-          <category> computer systems </category>
-          
-          <category> storage systems </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> storage systems </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>3 processors</title>
-      <link href="/sg/2022/05/21/6.004_processor/"/>
-      <url>/sg/2022/05/21/6.004_processor/</url>
-      
-        <content type="html"><![CDATA[<h2 id="9-Pipelining"><a class="header-anchor" href="#9-Pipelining">¶</a>9 Pipelining</h2><h2 id="10-Design-Tradeoffs-in-Sequential-Circuits"><a class="header-anchor" href="#10-Design-Tradeoffs-in-Sequential-Circuits">¶</a>10 Design Tradeoffs in Sequential Circuits</h2><h2 id="11-RISCV-Processor"><a class="header-anchor" href="#11-RISCV-Processor">¶</a>11 RISCV-Processor</h2><h2 id="12-Pipelined-Processors"><a class="header-anchor" href="#12-Pipelined-Processors">¶</a>12 Pipelined Processors</h2><h2 id="13-Data-and-Control-Hazards-in-Pipelined-Processors"><a class="header-anchor" href="#13-Data-and-Control-Hazards-in-Pipelined-Processors">¶</a>13 Data and Control Hazards in Pipelined Processors</h2><h2 id="14-the-memory-hierarchy"><a class="header-anchor" href="#14-the-memory-hierarchy">¶</a>14 the memory hierarchy</h2><h2 id="15-Cache"><a class="header-anchor" href="#15-Cache">¶</a>15 Cache</h2><p>Goal: minimize the average memory access time by building a hierarchical memory system that had both low latency and high capacity.</p><p>Choice: block size -&gt; replacement policy -&gt; write policy</p><h3 id="Direct-mapped-cache-problem-conflict-misses"><a class="header-anchor" href="#Direct-mapped-cache-problem-conflict-misses">¶</a>Direct-mapped cache problem: conflict misses</h3><blockquote><p>Assuming a 1024-line DM cache with a block size of 1:</p><p>Consider running the 3-instruction LOOP A code with the instructions located starting at word address 1024 and the data starting at word address 2048 where the program is making alternating accesses to instruction and data, <em>e.g.</em>, a loop of LD instructions.</p><p>Address conflict will cause the current resident of a cache line to be evicted in favor of the new request.</p></blockquote><p>Conflict misses occur when two address call from cpu reflects to the same cache line.</p><p>If we use fully-associative cache instead, there will be no conflict misses since every address call reflects to different cache line at the high cost of specs/time.</p><p>To fix above problem,  it required a cache that could hold two 3-word blocks in DM cache while FA cache needs two of its cache lines and achieve a 100% hit ratio.</p><h3 id="N-way-set-associative-cache-N-DM-cache"><a class="header-anchor" href="#N-way-set-associative-cache-N-DM-cache">¶</a>N-way set-associative cache = N DM cache</h3><p>improvements compared to DM cache: reduce confilcting addresses</p><blockquote><p>N-way SA cache can accommodate up to N blocks whose addresses map to the same cache index.</p></blockquote><p>Associativitity: increase the number of cache locations checked on each access.</p><p>similar to how big the block size to achieve higher hit ratio, how many ways do we need to avoid the cache line conflicts in DM cache?</p><p>这里的way主要指cache中有多少条线路能够同时进行tag查询。</p><blockquote><p>The mapping from addresses to cache lines is designed to avoid conflicts between neighboring locations.</p></blockquote><p>we only need to worry about conflicts between the different regions: code, stack and data.</p><blockquote><p>Associativity tradeoffs: there’s little additional impact on the miss ratio beyond 4 to 8 ways.</p></blockquote><h3 id="Associativity-implies-choices"><a class="header-anchor" href="#Associativity-implies-choices">¶</a>Associativity implies choices</h3><p>when conflict misses occur, which location in cache to store new data fetched from main memory? This question leads to the replacement policies with the goal of minimizing the impact on the hit ration in the future.</p><blockquote><p>Idea: If a block has not been recently accessed, it’s less likely to be accessed in the near future. (Principle of locality)</p></blockquote><p>LRU replacement policy: replace the block that was accessed furthest in the past.</p><p>Except random policy and LRU, other strategies will occasionally cause a particular program to execute much more slowly than expected.</p><h3 id="Write-policy"><a class="header-anchor" href="#Write-policy">¶</a>Write policy</h3><p>How to handle memory writes in the cache when updating main memory with the new data?</p><ul><li><p>write-through: whenever the CPU sends a write request to the cache, the cache then performs the same write to main memory.</p><ul><li>pro:CPU locations: up-to-date value</li><li>Con:DRAM write is slow: bottleneck could be</li></ul><blockquote><p>what if the program is constantly writing a particular memory location, <em>e.g.</em>, updating the value of a local variable in the current stack frame?</p></blockquote></li><li><p>Write-behind: let the CPU continue execution while the cache waits for the write to main memory to complete</p><blockquote><p>if there’s another cache miss while the write is still pending, everything will have to wait at that point until both the write and subsequent refill read finish, since the CPU can’t proceed until the cache miss is resolved.</p></blockquote></li><li><p>Write-back(best write policy):  the contents of the cache are updated and the CPU continues execution immediately.</p><blockquote><p>The updated cache value is only written to main memory when the cache line is chosen as the replacement line for a cache miss.</p></blockquote></li></ul><p>write-back minimizes the number of accesses to main memory, preserving the memory bandwidth for other operations.</p><p>Implementation:</p><ul><li>how to replace a cache line?</li></ul><p>We can avoid unnecessary write-backs by adding another state bit to each cache line: the <em>dirty</em> bit. The dirty bit is set to 0 when a cache line is filled during a cache miss.</p><h2 id="16-Cache-Coherence"><a class="header-anchor" href="#16-Cache-Coherence">¶</a>16 Cache Coherence</h2>]]></content>
-      
-      
-      <categories>
-          
-          <category> computer architecture </category>
-          
-          <category> 6.004 computation structures </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> 6.004 computation structures </tag>
             
         </tags>
       
@@ -201,40 +62,11 @@
     
     
     <entry>
-      <title>from Virtualization to Virtual Machines</title>
-      <link href="/sg/2022/05/05/SD_b_virtulization/"/>
-      <url>/sg/2022/05/05/SD_b_virtulization/</url>
-      
-        <content type="html"><![CDATA[<p>about<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>: 5.1,5.2,5.3,5.4,5.8</p><hr class="footnotes-sep"><section class="footnotes"><ol class="footnotes-list"><li id="fn1" class="footnote-item"><p>Why read this book? Recently, I have bought an expensive book called Principles of Computer System Design as the textbook for 6.033 course. Therefore I would want my money paid off. <a href="#fnref1" class="footnote-backref">↩︎</a></p></li></ol></section>]]></content>
-      
-      
-      <categories>
-          
-          <category> computer systems </category>
-          
-          <category> 6.033 system design </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> 6.033 system design </tag>
-            
-            <tag> CS books </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>Flash SSD Operations</title>
       <link href="/sg/2022/04/28/storages_ssd/"/>
       <url>/sg/2022/04/28/storages_ssd/</url>
       
-        <content type="html"><![CDATA[<h2 id="Readings"><a class="header-anchor" href="#Readings">¶</a>Readings</h2><h3 id="basics"><a class="header-anchor" href="#basics">¶</a>basics</h3><ol><li><p>Terminology in flash: banks consist of blocks; and blocks consist of pages.</p><ul><li>banks/planes: consist of a large number of cells</li><li>blocks: size 128 KB or 256 KB</li><li>pages: size 4 KB</li><li>cell level<ul><li>one level: store a single bit into a transistor(1/0)</li><li>multi-level: store two bits into different levels of charge(00/01/10/11)… etc</li></ul></li></ul><img src="/sg/2022/04/28/storages_ssd/Screenshot-2751756.png" class="" title="Screenshot-2751756"><ul><li><p>Flash-based SSDs</p><ul><li>Flash translation layer(FTL)</li><li>Logical block address(LBA)</li></ul><img src="/sg/2022/04/28/storages_ssd/Screenshot-2753619.png" class="" title="Screenshot-2753619"></li></ul></li><li><p>basic flash operations</p><ul><li>Read(a page)</li><li>Erase(a block)</li><li>Program(a page)</li></ul></li><li><p>Page has state: <code>INVALID</code>, <code>ERASED</code>, <code>VALID</code></p></li><li><p>raw flash performance</p><ul><li>device property: <strong>a page can be written until the entire block first be erased.</strong></li><li>Given above property: program-erase cycle<ol><li>latency: we should move data that is about to be erased to another place.</li><li>Problem of reliability: wear out</li></ol></li></ul><img src="/sg/2022/04/28/storages_ssd/Screenshot-2752855.png" class="" title="Screenshot-2752855"></li><li><p>FTL organization</p><ul><li>direct mapped: an operation to logical page N is mapped to physical page N.<ul><li>Bad: causing the flash constantly overwritten and worn out eventually</li></ul></li><li>log structured: in-memory mapping table<ul><li>Good:use logging to speedup recovery</li></ul></li></ul></li></ol><h3 id="performance"><a class="header-anchor" href="#performance">¶</a>performance</h3><p>Performance problem:</p><ol><li><p>Flash operation: erase &gt;&gt; program(10*) &gt;&gt; read (10*)</p><ul><li>How to improve:<ol><li>parallel</li><li>reduce write amplification</li></ol></li></ul></li><li><p><u>garbage collection</u>(Log-structured FTL): old versions of data takes over the space.</p><p>Overwritten -&gt; garbage data -&gt; data migration</p></li><li><p>high cost of in-memory <u>mapping table</u>(Log-structured FTL)</p></li></ol><p>Riliability problem:</p><ol><li><p>Wear out</p><p>(Head crash in mechanical disk in contrast)</p><ul><li><u>wear leveling</u>: spread writes across the blocks evenly</li></ul></li><li><p>Disturbance: When accessing a page within a flash, some bits can get flipped in neighboring pages.</p><ul><li>sequential programming: write pages in order can reduce the disturbance.</li></ul></li></ol><h3 id="garbage-collection"><a class="header-anchor" href="#garbage-collection">¶</a>garbage collection</h3><h3 id="mapping-table"><a class="header-anchor" href="#mapping-table">¶</a>mapping table</h3><h3 id="wear-leveling"><a class="header-anchor" href="#wear-leveling">¶</a>wear leveling</h3><h2 id="Hw"><a class="header-anchor" href="#Hw">¶</a>Hw</h2>]]></content>
+        <content type="html"><![CDATA[<h2 id="Readings"><a class="header-anchor" href="#Readings">¶</a>Readings</h2><h3 id="basics"><a class="header-anchor" href="#basics">¶</a>basics</h3><ol><li><p>Terminology in flash: banks consist of blocks; and blocks consist of pages.</p><ul><li>banks/planes: consist of a large number of cells</li><li>blocks: size 128 KB or 256 KB</li><li>pages: size 4 KB</li><li>cell level<ul><li>one level: store a single bit into a transistor(1/0)</li><li>multi-level: store two bits into different levels of charge(00/01/10/11)… etc</li></ul></li></ul><img src="/sg/2022/04/28/storages_ssd/Screenshot-2751756.png" class="" title="Screenshot-2751756"><ul><li><p>Flash-based SSDs</p><ul><li>Flash translation layer(FTL)</li><li>Logical block address(LBA)</li></ul><img src="/sg/2022/04/28/storages_ssd/Screenshot-2753619.png" class="" title="Screenshot-2753619"></li></ul></li><li><p>basic flash operations</p><ul><li>Read(a page)</li><li>Erase(a block)</li><li>Program(a page)</li></ul></li><li><p>Page has state: <code>INVALID</code>, <code>ERASED</code>, <code>VALID</code></p></li><li><p>raw flash performance</p><ul><li>device property: <strong>a page can be written until the entire block first be erased.</strong></li><li>Given above property: program-erase cycle<ol><li>latency: we should move data that is about to be erased to another place.</li><li>Problem of reliability: wear out</li></ol></li></ul><img src="/sg/2022/04/28/storages_ssd/Screenshot-2752855.png" class="" title="Screenshot-2752855"></li><li><p>FTL organization</p><ul><li>direct mapped: an operation to logical page N is mapped to physical page N.<ul><li>Bad: causing the flash constantly overwritten and worn out eventually</li></ul></li><li>log structured: in-memory mapping table<ul><li>Good:use logging to speedup recovery</li></ul></li></ul></li></ol><h3 id="performance"><a class="header-anchor" href="#performance">¶</a>performance</h3><p>Performance problem:</p><ol><li><p>Flash operation: erase &gt;&gt; program(10*) &gt;&gt; read (10*)</p><ul><li>How to improve:<ol><li>parallel</li><li>reduce write amplification</li></ol></li></ul></li><li><p><u>garbage collection</u>(Log-structured FTL): old versions of data takes over the space.</p><p>Overwritten -&gt; garbage data -&gt; data migration</p></li><li><p>high cost of in-memory <u>mapping table</u>(Log-structured FTL)</p></li></ol><p>Riliability problem:</p><ol><li><p>Wear out</p><p>(Head crash in mechanical disk in contrast)</p><ul><li><u>wear leveling</u>: spread writes across the blocks evenly</li></ul></li><li><p>Disturbance: When accessing a page within a flash, some bits can get flipped in neighboring pages.</p><ul><li>sequential programming: write pages in order can reduce the disturbance.</li></ul></li></ol><h3 id="garbage-collection"><a class="header-anchor" href="#garbage-collection">¶</a>garbage collection</h3><h3 id="mapping-table"><a class="header-anchor" href="#mapping-table">¶</a>mapping table</h3><h3 id="wear-leveling"><a class="header-anchor" href="#wear-leveling">¶</a>wear leveling</h3>]]></content>
       
       
       <categories>
@@ -278,35 +110,6 @@
             <tag> lab </tag>
             
             <tag> cs 61 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>Zoned Storage</title>
-      <link href="/sg/2022/04/17/storages_zones/"/>
-      <url>/sg/2022/04/17/storages_zones/</url>
-      
-        <content type="html"><![CDATA[<h2 id="Brief-intro-v2"><a class="header-anchor" href="#Brief-intro-v2">¶</a>Brief intro</h2><h3 id="Linux-ZBD-ioctls-v2"><a class="header-anchor" href="#Linux-ZBD-ioctls-v2">¶</a>Linux ZBD ioctls</h3><p>Zoned block devices I/O:</p><p>zone types: conventional, support sequential writes, not support sequential writes.</p><p>zone state: empty, implicit open, explicit open, closed, full, read only, offline.</p><ul><li>? Explicit /implicit open</li></ul><p>feature flags of reported zone descriptors</p><p>Zoned block device ioctl: report zone, reset zone, get zone, get number of zone, open zone, close zone, finish zone</p><p>three struct: block zone, to report, range</p><h3 id="Block-device-virtio-blk-v2"><a class="header-anchor" href="#Block-device-virtio-blk-v2">¶</a>Block device: virtio-blk</h3><ol><li><p>how to add QEMU block layer APIs for the Linux ZBD ioctls?</p><p>new block layer APIs to perform <strong>zoned device I/O</strong> on behalf of the guest</p></li><li><p>the virtio-blk device specification to understand how read, write, and other commands are sent on the request virtqueue and device parameters are reported from the Device Configuration Space. Zoned commands will work much in the same way.</p></li></ol><h3 id="Zoned-storage-v2"><a class="header-anchor" href="#Zoned-storage-v2">¶</a>Zoned storage</h3><ol><li><p>SSD and HDD differs in handling data writes:</p><ul><li>HDD writes data on empty spaces</li><li>SSD erases data first before it writes new data inside the Flash storage chips(data blocks and pages).Block sizes of an SSD are fixed, for example, 512kb, to 4MB while a page has 4kb of data</li><li>when one page is rewritten, the whole block will be erased and write again. Expensive writes in SSD lead to write amplification.</li></ul></li><li><p>common standard of zoned storage: SCSI (ZBC) and ZAC on SMR HDDs, NVMe ZNS on SSD</p><img src="/sg/2022/04/17/storages_zones/Screenshot-9834466.png" class="" title="Screenshot-9834466"></li><li><p>NVMe ZNS SSDs: it can be read in any order but written sequentially.</p><ul><li>convential SSDs support random writes.</li><li>Different improving data repacement leads to higher write throughput, lower Qos, and increased capacity.</li></ul><img src="/sg/2022/04/17/storages_zones/Screenshot-9994087.png" class="" title="Screenshot-9994087"></li></ol>]]></content>
-      
-      
-      <categories>
-          
-          <category> computer systems </category>
-          
-          <category> storage systems </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> code reading </tag>
-            
-            <tag> storage systems </tag>
             
         </tags>
       
@@ -452,35 +255,6 @@
     </entry>
     
     
-    
-    
-    
-    <entry>
-      <title>DB Lab Reports</title>
-      <link href="/sg/2022/03/20/db_reports/"/>
-      <url>/sg/2022/03/20/db_reports/</url>
-      
-        <content type="html"><![CDATA[<p>15-445 20fall: a small educational database</p><h2 id="pj0"><a class="header-anchor" href="#pj0">¶</a>pj0</h2><ul><li><p>pragma: tell compilers, Once: compile once</p></li><li><p>warning: <a href="https://stackoverflow.com/questions/35860527/warning-error-disabling-address-space-randomization-operation-not-permitted">Error disabling address space randomization: Operation not permitted</a></p><p>unable to use gdb breakpoints-&gt; docker’s security limit</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --cap-add=SYS_PTRACE --security-opt seccomp=unconfined bustub</span><br></pre></td></tr></table></figure></li><li><p>2D array initialization</p></li><li><p>size_t vs int: The stdlib.h and stddef.h header files define a datatype called <strong>size_t</strong> which is used to represent the size of an object. Library functions that take sizes expect them to be of type size_t, and the sizeof operator evaluates to size_t.</p></li><li><p><ins>i vs i</ins>: i++ return the value before it is incremented, assign -&gt; increment; ++i return the value after it is incremented, increment -&gt; assign</p></li><li><p>smart pointers</p></li></ul><p>…</p><h2 id="pj1"><a class="header-anchor" href="#pj1">¶</a>pj1</h2><p>Goal of bustub: build a new disk-oriented storage manager</p><p>problem 1: pin_count rules</p><ul><li><p>if any thread is using the page, that page’s pin + 1.</p></li><li><p>base case: every page’s pin is 0.</p><ul><li>New page: pin + 1</li><li>Fetch page: pin + 1</li><li>Unpin: set/check pin = 0, replacer: unpin</li></ul></li></ul><p>Problem 2: unpin page -&gt; new page</p><p>Problem 3: deletePage and fetchPage goes wrong. Check dirty condition.</p><h2 id="pj2"><a class="header-anchor" href="#pj2">¶</a>pj2</h2><p>Transaction</p><h2 id="pj3"><a class="header-anchor" href="#pj3">¶</a>pj3</h2><h2 id="pj4"><a class="header-anchor" href="#pj4">¶</a>pj4</h2>]]></content>
-      
-      
-      <categories>
-          
-          <category> computer systems </category>
-          
-          <category> 15-445 database </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> 15-445 database </tag>
-            
-            <tag> lab </tag>
-            
-        </tags>
-      
-    </entry>
     
     
     
@@ -680,168 +454,6 @@
     
     
     <entry>
-      <title>6.046 cache-oblivious algorithms</title>
-      <link href="/sg/2022/02/15/6.046_coa/"/>
-      <url>/sg/2022/02/15/6.046_coa/</url>
-      
-        <content type="html"><![CDATA[]]></content>
-      
-      
-      <categories>
-          
-          <category> Algorithms </category>
-          
-          <category> 6.046 algorithms design </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> 6.046 algorithms design </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>6.046 distrubuted algorithms</title>
-      <link href="/sg/2022/02/14/6.046_da/"/>
-      <url>/sg/2022/02/14/6.046_da/</url>
-      
-        <content type="html"><![CDATA[<h2 id="intro"><a class="header-anchor" href="#intro">¶</a>intro</h2><p>goal: Study the basic algorithms and analysis techniques.</p><h2 id="Synchronous"><a class="header-anchor" href="#Synchronous">¶</a>Synchronous</h2><h3 id="Leader-election"><a class="header-anchor" href="#Leader-election">¶</a>Leader election</h3><h3 id="Maximal-independent-set"><a class="header-anchor" href="#Maximal-independent-set">¶</a>Maximal independent set</h3><h3 id="Breadth-first-spanning-tree"><a class="header-anchor" href="#Breadth-first-spanning-tree">¶</a>Breadth-first spanning tree</h3><h3 id="shortest-paths-trees"><a class="header-anchor" href="#shortest-paths-trees">¶</a>shortest paths trees</h3><h2 id="Asychronous"><a class="header-anchor" href="#Asychronous">¶</a>Asychronous</h2><h3 id="Breadth-first-spanning-trees"><a class="header-anchor" href="#Breadth-first-spanning-trees">¶</a>Breadth-first spanning trees</h3><h3 id="shortest-paths-trees-v2"><a class="header-anchor" href="#shortest-paths-trees-v2">¶</a>shortest paths trees</h3>]]></content>
-      
-      
-      <categories>
-          
-          <category> Algorithms </category>
-          
-          <category> 6.046 algorithms design </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> 6.046 algorithms design </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>6.046 network flow</title>
-      <link href="/sg/2022/02/11/6.046_flow/"/>
-      <url>/sg/2022/02/11/6.046_flow/</url>
-      
-        <content type="html"><![CDATA[]]></content>
-      
-      
-      <categories>
-          
-          <category> Algorithms </category>
-          
-          <category> 6.046 algorithms design </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> 6.046 algorithms design </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>6.046 greedy algorithm</title>
-      <link href="/sg/2022/02/09/6.046_greedy/"/>
-      <url>/sg/2022/02/09/6.046_greedy/</url>
-      
-        <content type="html"><![CDATA[]]></content>
-      
-      
-      <categories>
-          
-          <category> Algorithms </category>
-          
-          <category> 6.046 algorithms design </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> 6.046 algorithms design </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>6.046 dynamic programming</title>
-      <link href="/sg/2022/02/07/6.046_dp/"/>
-      <url>/sg/2022/02/07/6.046_dp/</url>
-      
-        <content type="html"><![CDATA[]]></content>
-      
-      
-      <categories>
-          
-          <category> Algorithms </category>
-          
-          <category> 6.046 algorithms design </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> 6.046 algorithms design </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>6.046 augmentation</title>
-      <link href="/sg/2022/02/05/6.046_augmentation/"/>
-      <url>/sg/2022/02/05/6.046_augmentation/</url>
-      
-        <content type="html"><![CDATA[]]></content>
-      
-      
-      <categories>
-          
-          <category> Algorithms </category>
-          
-          <category> 6.046 algorithms design </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> 6.046 algorithms design </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>摘录</title>
       <link href="/sg/2022/01/11/algernon/"/>
       <url>/sg/2022/01/11/algernon/</url>
@@ -861,6 +473,33 @@
         <tags>
             
             <tag> read </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>3 processors</title>
+      <link href="/sg/2021/12/31/6.004_processor/"/>
+      <url>/sg/2021/12/31/6.004_processor/</url>
+      
+        <content type="html"><![CDATA[<h2 id="9-Pipelining"><a class="header-anchor" href="#9-Pipelining">¶</a>9 Pipelining</h2><h2 id="10-Design-Tradeoffs-in-Sequential-Circuits"><a class="header-anchor" href="#10-Design-Tradeoffs-in-Sequential-Circuits">¶</a>10 Design Tradeoffs in Sequential Circuits</h2><h2 id="11-RISCV-Processor"><a class="header-anchor" href="#11-RISCV-Processor">¶</a>11 RISCV-Processor</h2><h2 id="12-Pipelined-Processors"><a class="header-anchor" href="#12-Pipelined-Processors">¶</a>12 Pipelined Processors</h2><h2 id="13-Data-and-Control-Hazards-in-Pipelined-Processors"><a class="header-anchor" href="#13-Data-and-Control-Hazards-in-Pipelined-Processors">¶</a>13 Data and Control Hazards in Pipelined Processors</h2><h2 id="14-the-memory-hierarchy"><a class="header-anchor" href="#14-the-memory-hierarchy">¶</a>14 the memory hierarchy</h2><h2 id="15-Cache"><a class="header-anchor" href="#15-Cache">¶</a>15 Cache</h2><p>Goal: minimize the average memory access time by building a hierarchical memory system that had both low latency and high capacity.</p><p>Choice: block size -&gt; replacement policy -&gt; write policy</p><h3 id="Direct-mapped-cache-problem-conflict-misses"><a class="header-anchor" href="#Direct-mapped-cache-problem-conflict-misses">¶</a>Direct-mapped cache problem: conflict misses</h3><blockquote><p>Assuming a 1024-line DM cache with a block size of 1:</p><p>Consider running the 3-instruction LOOP A code with the instructions located starting at word address 1024 and the data starting at word address 2048 where the program is making alternating accesses to instruction and data, <em>e.g.</em>, a loop of LD instructions.</p><p>Address conflict will cause the current resident of a cache line to be evicted in favor of the new request.</p></blockquote><p>Conflict misses occur when two address call from cpu reflects to the same cache line.</p><p>If we use fully-associative cache instead, there will be no conflict misses since every address call reflects to different cache line at the high cost of specs/time.</p><p>To fix above problem,  it required a cache that could hold two 3-word blocks in DM cache while FA cache needs two of its cache lines and achieve a 100% hit ratio.</p><h3 id="N-way-set-associative-cache-N-DM-cache"><a class="header-anchor" href="#N-way-set-associative-cache-N-DM-cache">¶</a>N-way set-associative cache = N DM cache</h3><p>improvements compared to DM cache: reduce confilcting addresses</p><blockquote><p>N-way SA cache can accommodate up to N blocks whose addresses map to the same cache index.</p></blockquote><p>Associativitity: increase the number of cache locations checked on each access.</p><p>similar to how big the block size to achieve higher hit ratio, how many ways do we need to avoid the cache line conflicts in DM cache?</p><p>这里的way主要指cache中有多少条线路能够同时进行tag查询。</p><blockquote><p>The mapping from addresses to cache lines is designed to avoid conflicts between neighboring locations.</p></blockquote><p>we only need to worry about conflicts between the different regions: code, stack and data.</p><blockquote><p>Associativity tradeoffs: there’s little additional impact on the miss ratio beyond 4 to 8 ways.</p></blockquote><h3 id="Associativity-implies-choices"><a class="header-anchor" href="#Associativity-implies-choices">¶</a>Associativity implies choices</h3><p>when conflict misses occur, which location in cache to store new data fetched from main memory? This question leads to the replacement policies with the goal of minimizing the impact on the hit ration in the future.</p><blockquote><p>Idea: If a block has not been recently accessed, it’s less likely to be accessed in the near future. (Principle of locality)</p></blockquote><p>LRU replacement policy: replace the block that was accessed furthest in the past.</p><p>Except random policy and LRU, other strategies will occasionally cause a particular program to execute much more slowly than expected.</p><h3 id="Write-policy"><a class="header-anchor" href="#Write-policy">¶</a>Write policy</h3><p>How to handle memory writes in the cache when updating main memory with the new data?</p><ul><li><p>write-through: whenever the CPU sends a write request to the cache, the cache then performs the same write to main memory.</p><ul><li>pro:CPU locations: up-to-date value</li><li>Con:DRAM write is slow: bottleneck could be</li></ul><blockquote><p>what if the program is constantly writing a particular memory location, <em>e.g.</em>, updating the value of a local variable in the current stack frame?</p></blockquote></li><li><p>Write-behind: let the CPU continue execution while the cache waits for the write to main memory to complete</p><blockquote><p>if there’s another cache miss while the write is still pending, everything will have to wait at that point until both the write and subsequent refill read finish, since the CPU can’t proceed until the cache miss is resolved.</p></blockquote></li><li><p>Write-back(best write policy):  the contents of the cache are updated and the CPU continues execution immediately.</p><blockquote><p>The updated cache value is only written to main memory when the cache line is chosen as the replacement line for a cache miss.</p></blockquote></li></ul><p>write-back minimizes the number of accesses to main memory, preserving the memory bandwidth for other operations.</p><p>Implementation:</p><ul><li>how to replace a cache line?</li></ul><p>We can avoid unnecessary write-backs by adding another state bit to each cache line: the <em>dirty</em> bit. The dirty bit is set to 0 when a cache line is filled during a cache miss.</p><h2 id="16-Cache-Coherence"><a class="header-anchor" href="#16-Cache-Coherence">¶</a>16 Cache Coherence</h2>]]></content>
+      
+      
+      <categories>
+          
+          <category> computer architecture </category>
+          
+          <category> 6.004 computation structures </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 6.004 computation structures </tag>
             
         </tags>
       
@@ -1668,7 +1307,7 @@
       <link href="/sg/2021/11/09/6.046-divide_and_conquer/"/>
       <url>/sg/2021/11/09/6.046-divide_and_conquer/</url>
       
-        <content type="html"><![CDATA[<h2 id="Interval-scheduling"><a class="header-anchor" href="#Interval-scheduling">¶</a>Interval scheduling</h2><h2 id="Convex-hull"><a class="header-anchor" href="#Convex-hull">¶</a>Convex hull</h2><h2 id="Median-finding"><a class="header-anchor" href="#Median-finding">¶</a>Median finding</h2><p>Runtime: O($n^2$)</p><h2 id="R1-methods"><a class="header-anchor" href="#R1-methods">¶</a>R1: methods</h2><h3 id="smarter-IS"><a class="header-anchor" href="#smarter-IS">¶</a>smarter IS</h3><p>recursion tree: reduce the runtime to O(logn)</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">M[j] = max(w(j) + M[p(j)], M[j - 1]) for j=1 to n</span><br></pre></td></tr></table></figure><h3 id="Strassen’s-algorithm"><a class="header-anchor" href="#Strassen’s-algorithm">¶</a>Strassen’s algorithm</h3><ol><li>multiplication runs much slower than addition</li><li>Strassen’s only uses 7 multiplications instead of 8</li></ol><h3 id="Master-theorem"><a class="header-anchor" href="#Master-theorem">¶</a>Master theorem</h3><ol><li>Old stuff of 6.006</li></ol><h2 id="Fast-Fourier-Transform"><a class="header-anchor" href="#Fast-Fourier-Transform">¶</a>Fast Fourier Transform</h2><ol><li><p>polynomial representations</p><ul><li>Coefficient vector</li><li>Roots and a scale term: A(x) = ( x − $r_0$) · (x − $r_1$) · · · · · (x −$ r_{n−1}$) · c</li><li>Samples: (x0, y0),  (x1, y1),  . . . ,  ( xn−1, yn−1) with A(xi) =  yi (∀i) , xi is distinct.</li></ul></li><li><p>Operations: evaluation; addition; multiplication</p></li><li><p>Conversion between coefficients and samples in O(nlgn) time</p></li></ol><h3 id="Polynomial-multiplication"><a class="header-anchor" href="#Polynomial-multiplication">¶</a>Polynomial multiplication</h3><ol><li><p>a divide and conquer algorithm: Divide into even and odd coefficients</p></li><li><p>Construct a collapsing set X</p></li><li><p>nth roots of unity: Euler’s formula</p></li></ol><h3 id="FFT"><a class="header-anchor" href="#FFT">¶</a>FFT</h3><ol><li><p>FFT: O(nlgn) divide and conquer algorithm for DFT</p></li><li><p>Discrete Fourier Transform: computing A → A* = V  · A for $x_k  = e^{iτk/n}$ where n = $2^l$, where A is the set of coefficients and<br>A* is the resulting samples.</p></li><li><p>Inverse Discrete Fourier Transform: A*  → $V^ {−1}$ · A*  = A</p><p>$V^ {−1}$  = 1/n * complex conjugate of V</p></li><li><p>Fast Polynomial Multiplication</p><ul><li>A* = FFT(A), B* = FFT(B)</li><li>c_k* = a_k* b_k * for k = 0, 1, …, n-1</li><li>C = IFFT(c*)</li></ul></li></ol><h3 id="application"><a class="header-anchor" href="#application">¶</a>application</h3><ol><li>audio processing</li></ol><h2 id="Van-Emade-Boas-Tree"><a class="header-anchor" href="#Van-Emade-Boas-Tree">¶</a>Van Emade Boas Tree</h2><p>problem: why use b tree instead of bst in practice?</p><p>答案与内存层级有关。通常的算法中我们假定从内存中直接获取数据，而实际上计算机的基本内存结构包括：cpu与缓存器间的高速通道，缓存与磁盘中的低速通道。每次访问磁盘获取数据的花费都很大，所以我们需要减少磁盘的访问，因而引入了缓存器。然后我们需要将需要的内存块从磁盘带到缓存中，当块的大小与cache line size相同时，能更大的利用访问的花费。</p><p>二叉树的存储方式是逐层存储的，一个分支对应一个数据。而b tree可以将整个块存储在同个分支，这样能更快的带出需要的内存块而不需要逐次访问磁盘。</p><h3 id="Structure"><a class="header-anchor" href="#Structure">¶</a>Structure</h3><ol><li><p>B represents branching factor, which is related to cache line length. ex:in 2-3 tree: B = 2</p><ul><li>All leaves are at the same level</li></ul></li><li><p>Operation: how to delete node?</p><ul><li><p>move deletion to the leaves.</p><p>Successor: leftmost in the right subtree or rightmost in the left subtree.</p></li><li><p>Case1: have sibling tree undersell</p></li><li><p>Case2: don’t have sibing tree underfull -&gt; merge: propagate the emptiness up, merge; if sibling tree is underfull, rotate.</p></li></ul></li></ol><h3 id="Analysis"><a class="header-anchor" href="#Analysis">¶</a>Analysis</h3><p>We want to maintain n elements in the range {0, 1, 2, . . . , u − 1} and perform Insert, Delete and Successor operations in O(log log u) time.</p><p>Intuition: binary search on the levels of tree.</p><p>Improvements: how a very simple data structure become vEB tree?</p><ol><li><p>Bit vector: We maintain a vector V  of size u such that V[x] = 1 if and only if  x  is in the set.</p></li><li><p>Split Universe into Clusters: splitting up the range {0, 1, 2, . . . , u − 1} into sqrt(u) clusters of size sqrt(u).</p><p>Then we have a summary vector.</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">low(x) = x mod sqrt(u) = j</span><br><span class="line">high(x) = x //（下取整）sqrt(u) = i</span><br><span class="line">index(i,j) = i*sqrt(u) + j</span><br></pre></td></tr></table></figure><p>Version 1:</p><blockquote><p>Insert:</p><ul><li>Set V.cluster[ high(x) ] [ low(x) ] = 1</li><li>Mark cluster high(x) as non-empty</li></ul><p>Successor:</p><ul><li>Look within cluster high(x)</li><li>Else, find next non-empty cluster i</li><li>Find minimum entry j in that cluster</li><li>Return index(i, j)</li></ul></blockquote><p>Version 2: use recursion: successor calls inside successor, insert calls inside insert.</p><p>V.cluster[i], V.summary, V.summary[i]</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">INSERT(V, x) </span><br><span class="line"><span class="number">1</span> Insert(V.cluster[high(x)], low[x]) </span><br><span class="line"><span class="number">2</span> Insert(V.summary, high[x])</span><br><span class="line"></span><br><span class="line">SUCCESSOR(V, x) </span><br><span class="line"><span class="number">1</span> i = high(x) </span><br><span class="line"><span class="number">2</span> j = Successor(V.cluster[i], j) </span><br><span class="line"><span class="number">3</span> <span class="keyword">if</span> j = =   ∞ </span><br><span class="line"><span class="number">4</span> i = Successor(V.summary, i) </span><br><span class="line"><span class="number">5</span> j = Successor(V.cluster[i], −∞) </span><br><span class="line"><span class="number">6</span> <span class="keyword">return</span> index(i, j)</span><br></pre></td></tr></table></figure><p>then we have a problem: two recursive call in insert, three recursive call in successor. We want one recursive call to achieve our goal.</p></li><li><p>Maintain Min and Max: We store the minimum and maximum entry in each structure.  This gives an O(1) time overhead for each Insert operation.</p></li><li><p>Don’t store Min recursively:</p><p>The Successor call now needs to check for the min separately.</p><blockquote><p>if x &lt; V.min : return V.min</p></blockquote></li></ol><p>space improvement: We can improve from Θ(u) to O(n log log u).</p><p>Intuition: for each element in n, perform a O(lglgu) runtime insertion.</p>]]></content>
+        <content type="html"><![CDATA[<h2 id="Interval-scheduling"><a class="header-anchor" href="#Interval-scheduling">¶</a>Interval scheduling</h2><img src="/sg/2021/11/09/6.046-divide_and_conquer/Screenshot-7925628.png" class="" title="Screenshot-7925628"><h2 id="Convex-hull"><a class="header-anchor" href="#Convex-hull">¶</a>Convex hull</h2><img src="/sg/2021/11/09/6.046-divide_and_conquer/Screenshot-7925587.png" class="" title="Screenshot-7925587"><h2 id="Median-finding"><a class="header-anchor" href="#Median-finding">¶</a>Median finding</h2><p>Runtime: O($n^2$)</p><img src="/sg/2021/11/09/6.046-divide_and_conquer/Screenshot-7925566.png" class="" title="Screenshot-7925566"><h2 id="R1-methods"><a class="header-anchor" href="#R1-methods">¶</a>R1: methods</h2><h3 id="smarter-IS"><a class="header-anchor" href="#smarter-IS">¶</a>smarter IS</h3><p>recursion tree: reduce the runtime to O(logn)</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">M[j] = max(w(j) + M[p(j)], M[j - 1]) for j=1 to n</span><br></pre></td></tr></table></figure><h3 id="Strassen’s-algorithm"><a class="header-anchor" href="#Strassen’s-algorithm">¶</a>Strassen’s algorithm</h3><ol><li>multiplication runs much slower than addition</li><li>Strassen’s only uses 7 multiplications instead of 8</li></ol><h3 id="Master-theorem"><a class="header-anchor" href="#Master-theorem">¶</a>Master theorem</h3><ol><li>Old stuff of 6.006</li></ol><h2 id="Fast-Fourier-Transform"><a class="header-anchor" href="#Fast-Fourier-Transform">¶</a>Fast Fourier Transform</h2><ol><li><p>polynomial representations</p><ul><li>Coefficient vector</li><li>Roots and a scale term: A(x) = ( x − $r_0$) · (x − $r_1$) · · · · · (x −$ r_{n−1}$) · c</li><li>Samples: (x0, y0),  (x1, y1),  . . . ,  ( xn−1, yn−1) with A(xi) =  yi (∀i) , xi is distinct.</li></ul></li><li><p>Operations: evaluation; addition; multiplication</p></li><li><p>Conversion between coefficients and samples in O(nlgn) time</p><img src="/sg/2021/11/09/6.046-divide_and_conquer/Screenshot-7930623.png" class="" title="Screenshot-7930623"></li></ol><h3 id="Polynomial-multiplication"><a class="header-anchor" href="#Polynomial-multiplication">¶</a>Polynomial multiplication</h3><ol><li><p>a divide and conquer algorithm: Divide into even and odd coefficients</p></li><li><p>Construct a collapsing set X</p></li><li><p>nth roots of unity: Euler’s formula</p><img src="/sg/2021/11/09/6.046-divide_and_conquer/Screenshot-7931842.png" class="" title="Screenshot-7931842"></li></ol><h3 id="FFT"><a class="header-anchor" href="#FFT">¶</a>FFT</h3><ol><li><p>FFT: O(nlgn) divide and conquer algorithm for DFT</p></li><li><p>Discrete Fourier Transform: computing A → A* = V  · A for $x_k  = e^{iτk/n}$ where n = $2^l$, where A is the set of coefficients and<br>A* is the resulting samples.</p></li><li><p>Inverse Discrete Fourier Transform: A*  → $V^ {−1}$ · A*  = A</p><p>$V^ {−1}$  = 1/n * complex conjugate of V</p></li><li><p>Fast Polynomial Multiplication</p><ul><li>A* = FFT(A), B* = FFT(B)</li><li>c_k* = a_k* b_k * for k = 0, 1, …, n-1</li><li>C = IFFT(c*)</li></ul></li></ol><h3 id="application"><a class="header-anchor" href="#application">¶</a>application</h3><ol><li>audio processing</li></ol><h2 id="Van-Emade-Boas-Tree"><a class="header-anchor" href="#Van-Emade-Boas-Tree">¶</a>Van Emade Boas Tree</h2><p>problem: why use b tree instead of bst in practice?</p><p>答案与内存层级有关。通常的算法中我们假定从内存中直接获取数据，而实际上计算机的基本内存结构包括：cpu与缓存器间的高速通道，缓存与磁盘中的低速通道。每次访问磁盘获取数据的花费都很大，所以我们需要减少磁盘的访问，因而引入了缓存器。然后我们需要将需要的内存块从磁盘带到缓存中，当块的大小与cache line size相同时，能更大的利用访问的花费。</p><p>二叉树的存储方式是逐层存储的，一个分支对应一个数据。而b tree可以将整个块存储在同个分支，这样能更快的带出需要的内存块而不需要逐次访问磁盘。</p><h3 id="Structure"><a class="header-anchor" href="#Structure">¶</a>Structure</h3><ol><li><p>B represents branching factor, which is related to cache line length. ex:in 2-3 tree: B = 2</p><ul><li>All leaves are at the same level</li></ul></li><li><p>Operation: how to delete node?</p><ul><li><p>move deletion to the leaves.</p><p>Successor: leftmost in the right subtree or rightmost in the left subtree.</p></li><li><p>Case1: have sibling tree undersell</p></li><li><p>Case2: don’t have sibing tree underfull -&gt; merge: propagate the emptiness up, merge; if sibling tree is underfull, rotate.</p></li></ul></li></ol><h3 id="Analysis"><a class="header-anchor" href="#Analysis">¶</a>Analysis</h3><p>We want to maintain n elements in the range {0, 1, 2, . . . , u − 1} and perform Insert, Delete and Successor operations in O(log log u) time.</p><p>Intuition: binary search on the levels of tree.</p><p>Improvements: how a very simple data structure become vEB tree?</p><ol><li><p>Bit vector: We maintain a vector V  of size u such that V[x] = 1 if and only if  x  is in the set.</p></li><li><p>Split Universe into Clusters: splitting up the range {0, 1, 2, . . . , u − 1} into sqrt(u) clusters of size sqrt(u).</p><p>Then we have a summary vector.</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">low(x) = x mod sqrt(u) = j</span><br><span class="line">high(x) = x //（下取整）sqrt(u) = i</span><br><span class="line">index(i,j) = i*sqrt(u) + j</span><br></pre></td></tr></table></figure><p>Version 1:</p><blockquote><p>Insert:</p><ul><li>Set V.cluster[ high(x) ] [ low(x) ] = 1</li><li>Mark cluster high(x) as non-empty</li></ul><p>Successor:</p><ul><li>Look within cluster high(x)</li><li>Else, find next non-empty cluster i</li><li>Find minimum entry j in that cluster</li><li>Return index(i, j)</li></ul></blockquote><p>Version 2: use recursion: successor calls inside successor, insert calls inside insert.</p><p>V.cluster[i], V.summary, V.summary[i]</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">INSERT(V, x) </span><br><span class="line"><span class="number">1</span> Insert(V.cluster[high(x)], low[x]) </span><br><span class="line"><span class="number">2</span> Insert(V.summary, high[x])</span><br><span class="line"></span><br><span class="line">SUCCESSOR(V, x) </span><br><span class="line"><span class="number">1</span> i = high(x) </span><br><span class="line"><span class="number">2</span> j = Successor(V.cluster[i], j) </span><br><span class="line"><span class="number">3</span> <span class="keyword">if</span> j = =   ∞ </span><br><span class="line"><span class="number">4</span> i = Successor(V.summary, i) </span><br><span class="line"><span class="number">5</span> j = Successor(V.cluster[i], −∞) </span><br><span class="line"><span class="number">6</span> <span class="keyword">return</span> index(i, j)</span><br></pre></td></tr></table></figure><p>then we have a problem: two recursive call in insert, three recursive call in successor. We want one recursive call to achieve our goal.</p></li><li><p>Maintain Min and Max: We store the minimum and maximum entry in each structure.  This gives an O(1) time overhead for each Insert operation.</p></li><li><p>Don’t store Min recursively:</p><p>The Successor call now needs to check for the min separately.</p><blockquote><p>if x &lt; V.min : return V.min</p></blockquote></li></ol><p>space improvement: We can improve from Θ(u) to O(n log log u).</p><p>Intuition: for each element in n, perform a O(lglgu) runtime insertion.</p>]]></content>
       
       
       <categories>

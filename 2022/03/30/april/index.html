@@ -6,16 +6,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="3月有半个月处于闲置状态。先是被辅导员约谈导致对当前状态的烦躁不安，看了一周的闲书；调整好了状态学了一周后又感冒😷了一周。唯一的好消息就是 outreachy 初申过了，这意味着我可以继续尝试下一阶段的测试。 最好的学习方式就是练习，这是老生常谈了。本文尝试说明如何练习以及4-5月我会做的一些实践，这些个人实验不一定会有结果，但对我来说去做了就是对 carpe diem 的最佳实践。由于我不是个">
+    <meta name="description" content="3月有半个月处于闲置状态。先是被辅导员约谈导致对当前状态的烦躁不安，看了一周的闲书；调整好了状态学了一周后又感冒😷了一周。唯一的好消息就是 outreachy 初申过了，这意味着我可以继续尝试下一阶段的测试。 最好的学习方式就是练习，这是老生常谈了。本文尝试说明如何练习以及我会做的一些实践，这些个人实验不一定会有结果，但对我来说去做了就是对 carpe diem 的最佳实践。由于我不是个聪明的人">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Carpe Diem">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2022/03/30/april/index.html">
 <meta property="og:site_name" content="steins gate zero">
-<meta property="og:description" content="3月有半个月处于闲置状态。先是被辅导员约谈导致对当前状态的烦躁不安，看了一周的闲书；调整好了状态学了一周后又感冒😷了一周。唯一的好消息就是 outreachy 初申过了，这意味着我可以继续尝试下一阶段的测试。 最好的学习方式就是练习，这是老生常谈了。本文尝试说明如何练习以及4-5月我会做的一些实践，这些个人实验不一定会有结果，但对我来说去做了就是对 carpe diem 的最佳实践。由于我不是个">
+<meta property="og:description" content="3月有半个月处于闲置状态。先是被辅导员约谈导致对当前状态的烦躁不安，看了一周的闲书；调整好了状态学了一周后又感冒😷了一周。唯一的好消息就是 outreachy 初申过了，这意味着我可以继续尝试下一阶段的测试。 最好的学习方式就是练习，这是老生常谈了。本文尝试说明如何练习以及我会做的一些实践，这些个人实验不一定会有结果，但对我来说去做了就是对 carpe diem 的最佳实践。由于我不是个聪明的人">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/03/30/april/e4dd1718fe09a4da.jpeg">
 <meta property="article:published_time" content="2022-03-29T16:00:00.000Z">
-<meta property="article:modified_time" content="2022-05-24T02:41:58.118Z">
+<meta property="article:modified_time" content="2022-05-24T02:51:51.433Z">
 <meta property="article:author" content="Sam Li">
 <meta property="article:tag" content="diary">
 <meta name="twitter:card" content="summary">
@@ -82,7 +82,7 @@
         <li><a class="icon" aria-label="Previous post" href="/sg/2022/04/01/os_basics/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
         
         
-        <li><a class="icon" aria-label="Next post" href="/sg/2022/03/20/db_reports/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Next post" href="/sg/2022/03/17/db_concurrency/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
         
         <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
         <li><a class="icon" aria-label="Share post" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
@@ -160,8 +160,8 @@
 
   <div class="content" itemprop="articleBody">
     <p>3月有半个月处于闲置状态。先是被辅导员约谈导致对当前状态的烦躁不安，看了一周的闲书；调整好了状态学了一周后又感冒😷了一周。唯一的好消息就是 outreachy 初申过了，这意味着我可以继续尝试下一阶段的测试。</p>
-<p>最好的学习方式就是练习，这是老生常谈了。本文尝试说明如何练习以及4-5月我会做的一些实践，这些个人实验不一定会有结果，但对我来说去做了就是对 carpe diem 的最佳实践。由于我不是个聪明的人，和同伴相比又缺乏卷的精神。不过最坏情况就去咖啡店打工好了，我对金钱的追逐仅限于维持一个极简的高质量生活组成。比起鳞次栉比的商场，我更喜欢自然的纯粹。今天从实验室洗瓶子出来后发现空中的好多只鹤穿梭在茂密的树林之上，有只撑着两条大长腿停在了单薄的树叶上，也是蛮奇特的。不明白他为什么能够这样立着。（扯远了）</p>
-<p>~~课程学习计划打算在这两个月大致结束。~~更重要的是我可以通过 gsoc/outreachy 的某些开源组织给的项目做一些针对 os, db 的练习，关键是从这个过程得到工程项目的最大实践机会。而 ds 对应的练习就是 vldb 的 lab, ca 对应的练习测试是看能不能通过 intel 的 cloud storage intern 面试。</p>
+<p>最好的学习方式就是练习，这是老生常谈了。本文尝试说明如何练习以及我会做的一些实践，这些个人实验不一定会有结果，但对我来说去做了就是对 carpe diem 的最佳实践。由于我不是个聪明的人，和同伴相比又缺乏卷的精神。不过最坏情况就去咖啡店打工好了，我对金钱的追逐仅限于维持一个极简的高质量生活组成。比起鳞次栉比的商场，我更喜欢自然的纯粹。今天从实验室洗瓶子出来后发现空中的好多只鹤穿梭在茂密的树林之上，有只撑着两条大长腿停在了单薄的树叶上，也是蛮奇特的。不明白他为什么能够这样立着。（扯远了）</p>
+<p>课程学习计划打算在这 ??? 个月大致结束。更重要的是我可以通过 gsoc/outreachy 的某些开源组织给的项目做一些针对 os, db 的练习，关键是从这个过程得到工程项目的最大实践机会。而 ds 对应的练习就是 vldb 的 lab, ca 对应的练习测试是看能不能通过 intel 的 cloud storage intern 面试。</p>
 <p>编程语言我主要使用 c/c++ ，python 练算法题，稍微了解 go, rust, java 。别的小工具看情况。</p>
 <p>很多人的数据库存储方向的学习路线是：公开课项目 -&gt; 自己写个小型存储引擎/数据库/实习 * N(maximal) 。我应该会根据得到的实际机会考虑未来几年的从业方向。</p>
 <img src="/sg/2022/03/30/april/e4dd1718fe09a4da.jpeg" class="" title="virtual">
