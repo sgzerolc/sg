@@ -14,7 +14,7 @@
 <meta property="og:description" content="Example: test io_uring.c in QEMU Environment: Fedora 35 It requires a host[1] os having a new kernel, QEMU and liburing.git(one specific version). build the kernel from source: various mistakes can ar">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-04-15T07:22:27.000Z">
-<meta property="article:modified_time" content="2022-04-17T10:54:27.756Z">
+<meta property="article:modified_time" content="2022-06-17T10:23:12.516Z">
 <meta property="article:author" content="Sam Li">
 <meta property="article:tag" content="environment">
 <meta property="article:tag" content="QEMU">
@@ -174,7 +174,7 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">make menuconfig</span><br><span class="line">make -j 8</span><br><span class="line">make modules</span><br><span class="line">make bzImage</span><br><span class="line">sudo make modules_install</span><br><span class="line">sudo make install</span><br><span class="line">sudo kernel-install add &lt;version&gt; /boot/vmlinuz-&lt;version&gt;  <span class="comment"># Fedora linux</span></span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<p><strong>build a QEMU from source</strong>: Follow the documentation</p>
+<p><strong>build QEMU from source</strong>: Follow the documentation</p>
 <p><strong>build liburing from source:</strong> After this step, liburing support can be found in config with version 2.2 and QEMU should run correctly.</p>
 <ol>
 <li>
