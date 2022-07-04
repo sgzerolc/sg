@@ -4,6 +4,27 @@
   
     
     <entry>
+      <title>Zoned Block Devices in QEMU</title>
+      <link href="/sg/2022/07/06/qemu_pj_intro/"/>
+      <url>/sg/2022/07/06/qemu_pj_intro/</url>
+      
+        <content type="html"><![CDATA[<p>As the <a href="https://www.qemu.org/">homepage</a> says, QEMU is a generic and open source machine emulator and virtualizer. The project I’ve been working on is adding zoned device support in virtio-blk emulation<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>.</p><p>QEMU is a big project which looks a bit intimidating at first (and afterward :). It’s also lots of fun investigating different parts to solve problems in the way. Sometimes, I feel like a lousy detective trying to figure out how things fit together. Luckily, my mentors in this project always give me a hand when I am stuct at wrong directions.</p><h2 id="Brief-introduction"><a class="header-anchor" href="#Brief-introduction">¶</a>Brief introduction</h2><table><thead><tr><th>Terminology</th><th>Abbr.</th><th>Concept</th></tr></thead><tbody><tr><td>Shingled Magnetic Recording</td><td>SMR</td><td>write data in zones of overlapped tracks</td></tr><tr><td>Perpendicular/Conventional Magnetic Recording</td><td>PMR/CMR</td><td>write data in discrete tracks</td></tr><tr><td>write pointer</td><td>WP</td><td>it points to the lowest LBA(Logic Block Address) that have not been written of that zone</td></tr><tr><td>sequential write required</td><td>SWR</td><td>Host Managed Model(HM): write operations must be sequential</td></tr><tr><td>sequential write preferred</td><td>SWP</td><td>Host Aware Model(HA): unconstrained writes possible</td></tr><tr><td>open zone resource</td><td>OZR</td><td>the open zone resource in a zone block device is limited</td></tr></tbody></table><h3 id="Zoned-storage"><a class="header-anchor" href="#Zoned-storage">¶</a>Zoned storage</h3><p>Imagining the shingle in the roof, SMR writes data in a similar overlapping manner.  BY removing the gaps, more data tracks placing on each magnetic surface reflects in wider write head of design. The recording head will advance partial width of one data track after a write. Such overlapping tracks are grouped into zones. The gaps between zones prevents data overwrite from write head changing from one zone to another. (Ignoring-physics version)</p><p>What we want to take advantage of SMR in the project is the SWR property. For example, if LBA <code>x</code>, <code>x+a</code> is in zone 1, we can’t write <code>x+a</code> after write <code>x</code> because it is potentially under another zone. The area dencity of SMR results in higher disk capacity, better erasure coding, reduing adjacent-track interference exposure. Meanwhile, SMR also supports random read like CMR. Therefore SWR is good fro data detection and recovery.</p><img src="/sg/2022/07/06/qemu_pj_intro/Screenshot-4060048.png" class="" title="Screenshot-4060048"><p>The main purpose of zoned storage emulation is to let VM Guest OS see a zoned block device file on the Host OS. However QEMU sees the zoned device as regular block device right now. Meanwhile, I should enable guest driver testing in NVMe ZNS so we can test if our previous works and benchmark it, which would be a nice topic for another blog(once I figure out how benmarking works :)</p><p>The cool vision about this project is to enable zoned storage on a regular file. It means VM Guest OS can see a regular file as zoned block device file, which is helpful for development related to zoned storage on a machine without such support. Whereas I have some doubts about the overhead and design of such improvement. For example, why should we emulate such zoned device if it maybe not offer enough performance for using? Again, another topic saving later.</p><h3 id="Virtio-blk-device"><a class="header-anchor" href="#Virtio-blk-device">¶</a>Virtio-blk device</h3><p>Virtio-blk device is a storage controller that presents host’s block devices to the guest. The structure of storage layers is designed for extensibility and performance. There is a BlockDriverState graph involved with block layers. BlockBackend provides a interface connecting block drivers to other part like qemu-io or virtio-blk device. It has a root pointer points to other nodes in the BlockDriverState graph. Format node and filter node are above protocal node. It is good for adding a BlockDriver inside the big project.</p><p>The overview of the emulation part is: the guest os sends a request of zoned commands which contains parameters to its virtio-blk driver. Then virtio-blk device receives the request which is basically a big chunk of memory and transforms it to the QEMU’s struct so that block layers can execute correlated commands on the zoned block device. After that, we can transform the results to the guest’s struct and send it back.</p><p>I haven’t though through the performance of virtio-blk device brings in though. Roughly speaking, zoned block devices can offer better performance than regular one especially above HDD level.</p><img src="/sg/2022/07/06/qemu_pj_intro/Screenshot-6787937.png" class="" title="Screenshot-6787937"><h2 id="Zone-state-machine-APIs"><a class="header-anchor" href="#Zone-state-machine-APIs">¶</a>Zone state machine &amp; APIs</h2><p>Zone state machine tracks open zone resource of zoned block devices. Sufficient open zone resource are required for open state in HDD. Zone operations will change states in the write pointer zone models.</p><p>The basic structs of zoned block devices handling is: zone_descriptors, zone_dev, zone_report_struct. Other than the five operations ioctl provides, we would like to add zone append write in the emulation.</p><img src="/sg/2022/07/06/qemu_pj_intro/Screenshot-6799625.png" class="" title="Block I&#x2F;O stack"><p>​<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></p><hr class="footnotes-sep"><section class="footnotes"><ol class="footnotes-list"><li id="fn1" class="footnote-item"><p>The project idea can be found at: <a href="https://wiki.qemu.org/Internships/ProjectIdeas/VirtIOBlkZonedBlockDevices">https://wiki.qemu.org/Internships/ProjectIdeas/VirtIOBlkZonedBlockDevices</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p></li><li id="fn2" class="footnote-item"><p>The pic is from Damien Le Moal’s presentation: <a href="https://www.snia.org/sites/default/files/SDC/2016/presentations/smr/DamienLeMoal_ZBC-ZAC_Linux.pdf">ZBC/ZAC support in Linux</a> <a href="#fnref2" class="footnote-backref">↩︎</a></p></li></ol></section>]]></content>
+      
+      
+      <categories>
+          
+          <category> FOSS </category>
+          
+          <category> QEMU </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>A Vocabulary Term</title>
       <link href="/sg/2022/06/17/outr_vocab/"/>
       <url>/sg/2022/06/17/outr_vocab/</url>
@@ -19,12 +40,6 @@
           
       </categories>
       
-      
-        <tags>
-            
-            <tag> Outreachy </tag>
-            
-        </tags>
       
     </entry>
     
@@ -46,12 +61,6 @@
           
       </categories>
       
-      
-        <tags>
-            
-            <tag> Outreachy </tag>
-            
-        </tags>
       
     </entry>
     
@@ -77,8 +86,6 @@
         <tags>
             
             <tag> lab </tag>
-            
-            <tag> 6.s081 operating systems </tag>
             
         </tags>
       
@@ -107,8 +114,6 @@
             
             <tag> lab </tag>
             
-            <tag> 6.009 programming </tag>
-            
         </tags>
       
     </entry>
@@ -132,12 +137,6 @@
       </categories>
       
       
-        <tags>
-            
-            <tag> storage systems </tag>
-            
-        </tags>
-      
     </entry>
     
     
@@ -160,8 +159,6 @@
       
       
         <tags>
-            
-            <tag> cs 61 </tag>
             
             <tag> lab </tag>
             
@@ -188,14 +185,6 @@
       </categories>
       
       
-        <tags>
-            
-            <tag> environment </tag>
-            
-            <tag> QEMU </tag>
-            
-        </tags>
-      
     </entry>
     
     
@@ -217,22 +206,16 @@
       </categories>
       
       
-        <tags>
-            
-            <tag> read </tag>
-            
-        </tags>
-      
     </entry>
     
     
     
     <entry>
-      <title>io_uring&#39;s API and implementation in qemu</title>
-      <link href="/sg/2022/04/08/qemu_io/"/>
-      <url>/sg/2022/04/08/qemu_io/</url>
+      <title>IO_uring&#39;s API and Implementation in QEMU</title>
+      <link href="/sg/2022/04/08/qemu_iouring/"/>
+      <url>/sg/2022/04/08/qemu_iouring/</url>
       
-        <content type="html"><![CDATA[<h2 id="Qemu-structures"><a class="header-anchor" href="#Qemu-structures">¶</a>Qemu structures</h2><table><thead><tr><th>Terminology</th><th>details</th></tr></thead><tbody><tr><td>Host formats</td><td>raw, qcow2, qed, vhdx</td></tr><tr><td>Protocols</td><td>file system, block device, NBD, Ceph, gluster</td></tr><tr><td>virtio</td><td>behave like a memory-mapped register bank, different register layout</td></tr><tr><td>Network cards</td><td>e1000 card on the PCI bus</td></tr></tbody></table><ol><li><p>what is qemu?</p><p>Qemu is a virtual machine trying to emulate OS without actual hw so as to run multiple OS in single machine.</p></li><li><p>why qemu?</p><p>The general purpose of virtual machine is to trick the guest os that it is running on the real host os. Qemu is designed to manage this big memory to achieve better formance in emulation.</p></li><li><p>How?</p><ul><li>“Accelerator”: Trap and emulate</li><li>“Paravirtualization”: tradeoff between virtualization in os and emulation in devices -&gt; virtio</li></ul></li></ol><img src="/sg/2022/04/08/qemu_io/Screenshot.png" class="" title="Screenshot"><p>I/O path in VM<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>: host view of qemu is like additional RAM(a big chunk of memory and that’s it)</p><img src="/sg/2022/04/08/qemu_io/Screenshot-9477410.png" class="" title="Screenshot-9477410"><h2 id="brief-introducation"><a class="header-anchor" href="#brief-introducation">¶</a>brief introducation</h2><p>Terminology in QEMU’s event loop:</p><table><thead><tr><th>Event sources</th><th>Abbr</th><th>Usage</th></tr></thead><tbody><tr><td>Bottom-halves</td><td>BHs</td><td>Invoke a function in another thread or deferring a func call to avoid reentrancy</td></tr><tr><td>Asynchronous I/O context</td><td>aio_ctx</td><td>Event loop</td></tr></tbody></table><ol><li><p>Io_uring is a kernel ring buffer for asynchronous communication with kernel.</p><ul><li>Current integration into qemu: use epoll for completion check; use io_uring_enter() for submission; check completion on irq</li><li>Improvement: want to use fd registration</li></ul></li><li><p>Two ways to solve blocking mode problems(blocked processes are suspended): nonblocking mode, I/O multiplexing syscalls(async IO).</p><p>Async IO syscalls like select, poll, epoll</p><ol><li>Scenario: server wants to know if new input comes. Run program to know states -&gt; Ask Linux kernel which file changes -&gt; monitor file descriptors</li><li>poll: choose specific fds to monitor. Select:choose a range of fds to monitor.</li><li>Poll and select need kernel to check fds whether are available for writing, which takes a lot of time. Epoll(not for regular files) avoids the problem: create, control<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup>, wait</li></ol></li><li><p>Coroutines in qemu: write multiple processes in a sequential way compared to callback<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup> for correct order in scheduling.</p><ol><li><p>rules of scheduling:</p><ul><li>Explicit: other cpu sees coroutines.</li><li>only one coroutine executes at a time; can’t be interrupted</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"># using callbacks: the list can go on and on</span><br><span class="line">start():</span><br><span class="line">send(&quot;ask&quot;,step1)</span><br><span class="line">step1():</span><br><span class="line">read(step2)</span><br><span class="line">step2():</span><br><span class="line">send(&quot;hi, %s&quot;,name, step3)</span><br><span class="line">step3():</span><br><span class="line">done</span><br><span class="line"></span><br><span class="line"># using coroutines</span><br><span class="line">coroutine_say_hi():</span><br><span class="line">co_send(&quot;ask&quot;)</span><br><span class="line">name = co_read()</span><br><span class="line">co_send(&quot;hi, %s&quot;, name)</span><br><span class="line"># done here</span><br><span class="line"></span><br></pre></td></tr></table></figure></li><li><p>API<sup class="footnote-ref"><a href="#fn4" id="fnref4">[4]</a></sup></p><p>Struct: coroutine</p><p>Transfer of control: enter, yield</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">typedef</span> <span class="keyword">void</span> coroutine_fn <span class="title">CoroutineEntry</span><span class="params">(<span class="keyword">void</span> *opaque)</span></span>;</span><br><span class="line"><span class="function">Coroutine *<span class="title">qemu_coroutine_create</span><span class="params">(CoroutineEntry *entry, <span class="keyword">void</span> *opaque)</span></span>;</span><br></pre></td></tr></table></figure></li></ol></li><li><p>event loop in QEMU</p><p>two stucts appear in io_uring: AioContext, BH.</p><p>common APIs<sup class="footnote-ref"><a href="#fn5" id="fnref5">[5]</a></sup> in even loop are: aio_set_fd_handler(),  aio_set_event_handler(), aio_timer_init(), aio_bh_new()</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">QEMUBH</span> &#123;</span></span><br><span class="line">    AioContext *ctx;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *name;</span><br><span class="line">    QEMUBHFunc *cb;</span><br><span class="line">    <span class="keyword">void</span> *opaque;</span><br><span class="line">    QSLIST_ENTRY(QEMUBH) next; <span class="comment">// point to next eleent</span></span><br><span class="line">    <span class="keyword">unsigned</span> flags;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">AioContext</span> &#123;</span></span><br><span class="line">    BHList bh_list;</span><br><span class="line">    QSIMPLEQ_HEAD(, BHListSlice) bh_slice_list;</span><br><span class="line">...</span><br><span class="line">    QSLIST_HEAD(, Coroutine) scheduled_coroutines;</span><br><span class="line">    QEMUBH *co_schedule_bh;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ThreadPool</span> *<span class="title">thread_pool</span>;</span></span><br><span class="line">...</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li></ol><h2 id="API"><a class="header-anchor" href="#API">¶</a>API</h2><img src="/sg/2022/04/08/qemu_io/Screenshot-0192659.png" class="" title="Screenshot"><h2 id="Implementation"><a class="header-anchor" href="#Implementation">¶</a>Implementation</h2><hr class="footnotes-sep"><section class="footnotes"><ol class="footnotes-list"><li id="fn1" class="footnote-item"><p><a href="https://archive.fosdem.org/2020/schedule/event/vai_io_uring_in_qemu/attachments/slides/4145/export/events/attachments/vai_io_uring_in_qemu/slides/4145/io_uring_fosdem.pdf">Io_uring in qemu</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p></li><li id="fn2" class="footnote-item"><p><a href="https://github.com/torvalds/linux/blob/v4.10/fs/eventpoll.c#L1849">linux/eventpoll.c</a> <a href="#fnref2" class="footnote-backref">↩︎</a></p></li><li id="fn3" class="footnote-item"><p>Callback function is reentrant code meaning it can be called even while a call to it is underway. Like recv(pkt, via_ron), it is called when a packet arrives for the client program. <a href="#fnref3" class="footnote-backref">↩︎</a></p></li><li id="fn4" class="footnote-item"><p><a href="https://github.com/qemu/qemu/blob/master/include/qemu/coroutine.h#L58">qemu/include/qemu/coroutine.h</a> <a href="#fnref4" class="footnote-backref">↩︎</a></p></li><li id="fn5" class="footnote-item"><p><a href="https://github.com/qemu/qemu/blob/master/include/block/aio.h#L466">qemu/include/block/aio.h</a> <a href="#fnref5" class="footnote-backref">↩︎</a></p></li></ol></section>]]></content>
+        <content type="html"><![CDATA[<h2 id="Qemu-structures"><a class="header-anchor" href="#Qemu-structures">¶</a>Qemu structures</h2><table><thead><tr><th>Terminology</th><th>Concept</th></tr></thead><tbody><tr><td>Protocols</td><td>file system, block device, NBD, Ceph, gluster</td></tr><tr><td>virtio</td><td>behave like a memory-mapped register bank, different register layout</td></tr><tr><td>Network cards</td><td>e1000 card on the PCI bus</td></tr><tr><td>Host formats</td><td>raw, qcow2, qed, vhdx</td></tr></tbody></table><ol><li><p>what?</p><p>QEMU is a virtual machine trying to emulate OS without actual hw so as to run multiple OS in single machine.</p></li><li><p>why?</p><p>The general purpose of virtual machine is to trick the guest os that it is running on the real host os. Qemu is designed to manage this big memory to achieve better formance in emulation.</p></li><li><p>how?</p><ul><li>“Accelerator”: Trap and emulate</li><li>“Paravirtualization”: tradeoff between virtualization in os and emulation in devices -&gt; virtio</li></ul></li></ol><img src="/sg/2022/04/08/qemu_iouring/Screenshot.png" class="" title="Screenshot"><p>I/O path in VM<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>: host view of qemu is like additional RAM(a big chunk of memory and that’s it)</p><img src="/sg/2022/04/08/qemu_iouring/Screenshot-9477410.png" class="" title="Screenshot-9477410"><h2 id="brief-introducation"><a class="header-anchor" href="#brief-introducation">¶</a>brief introducation</h2><p>Terminology in QEMU’s event loop:</p><table><thead><tr><th>Event sources</th><th>Abbr.</th><th>Usage</th></tr></thead><tbody><tr><td>Bottom-halves</td><td>BHs</td><td>Invoke a function in another thread or deferring a func call to avoid reentrancy</td></tr><tr><td>Asynchronous I/O context</td><td>aio_ctx</td><td>Event loop</td></tr></tbody></table><ol><li><p>Io_uring is a kernel ring buffer for asynchronous communication with kernel.</p><ul><li>Current integration into qemu: use epoll for completion check; use io_uring_enter() for submission; check completion on irq</li><li>Improvement: want to use fd registration</li></ul></li><li><p>Two ways to solve blocking mode problems(blocked processes are suspended): nonblocking mode, I/O multiplexing syscalls(async IO).</p><p>Async IO syscalls like select, poll, epoll</p><ol><li>Scenario: server wants to know if new input comes. Run program to know states -&gt; Ask Linux kernel which file changes -&gt; monitor file descriptors</li><li>poll: choose specific fds to monitor. Select:choose a range of fds to monitor.</li><li>Poll and select need kernel to check fds whether are available for writing, which takes a lot of time. Epoll(not for regular files) avoids the problem: create, control<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup>, wait</li></ol></li><li><p>Coroutines in qemu: write multiple processes in a sequential way compared to callback<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup> for correct order in scheduling.</p><ol><li><p>rules of scheduling:</p><ul><li>Explicit: other cpu sees coroutines.</li><li>only one coroutine executes at a time; can’t be interrupted</li></ul><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"># using callbacks: the list can go on and on</span><br><span class="line">start():</span><br><span class="line">send(&quot;ask&quot;,step1)</span><br><span class="line">step1():</span><br><span class="line">read(step2)</span><br><span class="line">step2():</span><br><span class="line">send(&quot;hi, %s&quot;,name, step3)</span><br><span class="line">step3():</span><br><span class="line">done</span><br><span class="line"></span><br><span class="line"># using coroutines</span><br><span class="line">coroutine_say_hi():</span><br><span class="line">co_send(&quot;ask&quot;)</span><br><span class="line">name = co_read()</span><br><span class="line">co_send(&quot;hi, %s&quot;, name)</span><br><span class="line"># done here</span><br><span class="line"></span><br></pre></td></tr></table></figure></li><li><p>API<sup class="footnote-ref"><a href="#fn4" id="fnref4">[4]</a></sup></p><p>Struct: coroutine</p><p>Transfer of control: enter, yield</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">typedef</span> <span class="keyword">void</span> coroutine_fn <span class="title">CoroutineEntry</span><span class="params">(<span class="keyword">void</span> *opaque)</span></span>;</span><br><span class="line"><span class="function">Coroutine *<span class="title">qemu_coroutine_create</span><span class="params">(CoroutineEntry *entry, <span class="keyword">void</span> *opaque)</span></span>;</span><br></pre></td></tr></table></figure></li></ol></li><li><p>event loop in QEMU</p><p>two stucts appear in io_uring: AioContext, BH.</p><p>common APIs<sup class="footnote-ref"><a href="#fn5" id="fnref5">[5]</a></sup> in even loop are: aio_set_fd_handler(),  aio_set_event_handler(), aio_timer_init(), aio_bh_new()</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">QEMUBH</span> &#123;</span></span><br><span class="line">    AioContext *ctx;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *name;</span><br><span class="line">    QEMUBHFunc *cb;</span><br><span class="line">    <span class="keyword">void</span> *opaque;</span><br><span class="line">    QSLIST_ENTRY(QEMUBH) next; <span class="comment">// point to next eleent</span></span><br><span class="line">    <span class="keyword">unsigned</span> flags;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">AioContext</span> &#123;</span></span><br><span class="line">    BHList bh_list;</span><br><span class="line">    QSIMPLEQ_HEAD(, BHListSlice) bh_slice_list;</span><br><span class="line">...</span><br><span class="line">    QSLIST_HEAD(, Coroutine) scheduled_coroutines;</span><br><span class="line">    QEMUBH *co_schedule_bh;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ThreadPool</span> *<span class="title">thread_pool</span>;</span></span><br><span class="line">...</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li></ol><h2 id="API"><a class="header-anchor" href="#API">¶</a>API</h2><h2 id="Implementation"><a class="header-anchor" href="#Implementation">¶</a>Implementation</h2><hr class="footnotes-sep"><section class="footnotes"><ol class="footnotes-list"><li id="fn1" class="footnote-item"><p><a href="https://archive.fosdem.org/2020/schedule/event/vai_io_uring_in_qemu/attachments/slides/4145/export/events/attachments/vai_io_uring_in_qemu/slides/4145/io_uring_fosdem.pdf">Io_uring in qemu</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p></li><li id="fn2" class="footnote-item"><p><a href="https://github.com/torvalds/linux/blob/v4.10/fs/eventpoll.c#L1849">linux/eventpoll.c</a> <a href="#fnref2" class="footnote-backref">↩︎</a></p></li><li id="fn3" class="footnote-item"><p>Callback function is reentrant code meaning it can be called even while a call to it is underway. Like recv(pkt, via_ron), it is called when a packet arrives for the client program. <a href="#fnref3" class="footnote-backref">↩︎</a></p></li><li id="fn4" class="footnote-item"><p><a href="https://github.com/qemu/qemu/blob/master/include/qemu/coroutine.h#L58">qemu/include/qemu/coroutine.h</a> <a href="#fnref4" class="footnote-backref">↩︎</a></p></li><li id="fn5" class="footnote-item"><p><a href="https://github.com/qemu/qemu/blob/master/include/block/aio.h#L466">qemu/include/block/aio.h</a> <a href="#fnref5" class="footnote-backref">↩︎</a></p></li></ol></section>]]></content>
       
       
       <categories>
@@ -245,8 +228,6 @@
       
       
         <tags>
-            
-            <tag> QEMU </tag>
             
             <tag> code reading </tag>
             
@@ -273,12 +254,6 @@
       </categories>
       
       
-        <tags>
-            
-            <tag> 6.s081 operating systems </tag>
-            
-        </tags>
-      
     </entry>
     
     
@@ -299,12 +274,6 @@
           
       </categories>
       
-      
-        <tags>
-            
-            <tag> 6.s081 operating systems </tag>
-            
-        </tags>
       
     </entry>
     
@@ -329,12 +298,6 @@
       </categories>
       
       
-        <tags>
-            
-            <tag> 15-445 database </tag>
-            
-        </tags>
-      
     </entry>
     
     
@@ -355,12 +318,6 @@
           
       </categories>
       
-      
-        <tags>
-            
-            <tag> 15-445 database </tag>
-            
-        </tags>
       
     </entry>
     
@@ -385,12 +342,6 @@
       </categories>
       
       
-        <tags>
-            
-            <tag> 15-445 database </tag>
-            
-        </tags>
-      
     </entry>
     
     
@@ -413,8 +364,6 @@
       
       
         <tags>
-            
-            <tag> 6.006 algorithms </tag>
             
             <tag> hw </tag>
             
@@ -441,12 +390,6 @@
       </categories>
       
       
-        <tags>
-            
-            <tag> read </tag>
-            
-        </tags>
-      
     </entry>
     
     
@@ -470,8 +413,6 @@
       
         <tags>
             
-            <tag> 6.033 system design </tag>
-            
             <tag> paper </tag>
             
         </tags>
@@ -492,23 +433,17 @@
           
           <category> life </category>
           
-          <category> read </category>
+          <category> game </category>
           
       </categories>
       
-      
-        <tags>
-            
-            <tag> read </tag>
-            
-        </tags>
       
     </entry>
     
     
     
     <entry>
-      <title>摘录</title>
+      <title>quotes</title>
       <link href="/sg/2022/01/11/algernon/"/>
       <url>/sg/2022/01/11/algernon/</url>
       
@@ -523,12 +458,6 @@
           
       </categories>
       
-      
-        <tags>
-            
-            <tag> read </tag>
-            
-        </tags>
       
     </entry>
     
@@ -551,12 +480,6 @@
       </categories>
       
       
-        <tags>
-            
-            <tag> 6.004 computation structures </tag>
-            
-        </tags>
-      
     </entry>
     
     
@@ -566,7 +489,7 @@
       <link href="/sg/2021/12/30/hw2_graph/"/>
       <url>/sg/2021/12/30/hw2_graph/</url>
       
-        <content type="html"><![CDATA[<h2 id="ps5"><a class="header-anchor" href="#ps5">¶</a>ps5</h2><p>bfs</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># bfs</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">bfs</span>(<span class="params">Adj, s</span>):</span></span><br><span class="line">    parent = [<span class="literal">None</span> <span class="keyword">for</span> v <span class="keyword">in</span> Adj]</span><br><span class="line">    parent[s] = s</span><br><span class="line">    level = [[s]]</span><br><span class="line">    <span class="keyword">while</span> <span class="number">0</span> &lt; <span class="built_in">len</span>(level[-<span class="number">1</span>]):</span><br><span class="line">        level.append([])</span><br><span class="line">        <span class="keyword">for</span> u <span class="keyword">in</span> level[-<span class="number">2</span>]:</span><br><span class="line">            <span class="keyword">for</span> v <span class="keyword">in</span> Adj[u]:</span><br><span class="line">                <span class="keyword">if</span> parent[v] <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">                    parent[v] = u</span><br><span class="line">                    level[-<span class="number">1</span>].append(v)</span><br><span class="line">    <span class="keyword">return</span> parent</span><br></pre></td></tr></table></figure><p>Analysis:</p><ol><li><p>overall runtime of this bfs: O(|V| + |E|) or O(|E|)</p><ul><li>inner loop takes O(|E|) time: it cycles through all deg(v) outgoing edges from vertex v.</li><li>Parent has length |V|</li></ul></li><li><p>Graph radius</p></li><li><p>network</p><p>Approach: construct a graph.</p><p>Idea: add an additional node s (a super node) to the graph with an edge to every entry point.</p></li><li><p>search for connected components</p></li></ol><h2 id="ps6"><a class="header-anchor" href="#ps6">¶</a>ps6</h2><p>dfs</p><ol><li><p>topological sort: DAG</p><ul><li>Simple graph has no self-loops, DAG has no loops</li></ul></li><li><p>relaxation</p><ul><li>Tree: In a tree, there is a unique simple path between any pair of vertices, as two distinct simple paths could be used to construct a cycle.</li></ul></li><li><p>DAG relaxation</p></li><li><p>Bellman ford: detect loops and negative weight</p></li><li><p>Input</p></li><li><p>DAG problem</p><ul><li><p>Use DFS to check visiting order is the particular topological order</p></li><li><p>Topological tree has no backward edges/loops.</p></li><li><p>Auxiliary information: index</p></li></ul></li></ol><h2 id="ps7"><a class="header-anchor" href="#ps7">¶</a>ps7</h2><ol><li>Feel smooth when thinking it as water flow.<ul><li>How pq breaks ties may change the visiting order</li><li>It should be clear how to implement operations.</li><li>think about connected components （这个图的减小的方式是通过扔掉已经确定是最短路径的点来进行的</li></ul></li><li>negitive weights: detect negative loops<ul><li>connected component C: one vertex can reach any vertex<ul><li>we don’t know if the graph is connected. Likewise, it should be considered if a graph is a DAG/connected/weighted/…(graph’s property)</li><li>how to find a connected component: considering it is a undirected graph, use DFS/BFS to find C.</li></ul></li><li>Whether has negative loops<ul><li>Yes, V in C is -inf, V not in C is inf</li><li>No, use Dijkstra</li></ul></li></ul></li></ol><h2 id="reminder"><a class="header-anchor" href="#reminder">¶</a>reminder</h2><ol><li><p>python lambda expression</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">lambda</span> x: x**<span class="number">2</span></span><br></pre></td></tr></table></figure></li><li><p>Why doesn’t  Dijkstra’s algorithm work with non-negative edge weights?</p><p>I think the tight bound is Dijkstra not allowing negative loops that will destroy its minimal property.</p></li></ol><h2 id="Recitation"><a class="header-anchor" href="#Recitation">¶</a>Recitation</h2><p>The problem solving process: transform raw input to IN, apply the algorithm we are familiar with, read raw output to OUT.</p><p>Then calculate the runtime and prove for correctness and efficiency.</p><img src="/sg/2021/12/30/hw2_graph/Screenshot-7934843.png" class="" title="Screenshot-7934843"><h3 id="Bfs"><a class="header-anchor" href="#Bfs">¶</a>Bfs</h3><p>connected components</p><h3 id="Dfs"><a class="header-anchor" href="#Dfs">¶</a>Dfs</h3><p><u>the important part is reasoning process so that we can reason by ourselves to get the answer</u></p><p>edge classification</p><ul><li>tree edge(dfs traverse)</li><li>not tree edge<ul><li>Back/forward/cross edge</li></ul></li></ul><p>Problem 1: how this concept relates to dfs?</p><p>Problem 1.1: how that defers to undirected graph compared with directed graph?</p><p>topological sort -&gt; directed, acyclic, graph</p><p>Problem 2: how this concept relates to topological sort?</p><h3 id="weighted-graph"><a class="header-anchor" href="#weighted-graph">¶</a>weighted graph</h3><p>problem 0: how to build a shortest path algorithm?</p><p>simple case: take an edge, split it up, put in fake nodes. Then use bfs</p><p>Problem 1: shortest path with odd edges?</p><p>比较有趣的是可以把两个状态看成两个平面。</p><p>Idea: track state during path building</p><p>problem 2: fast way, least fuel. An edge has fixed fuel cost, varying time cost depenTime table Tc (minutes): M = 24*60</p><p>Idea: choose a more reasonable state to track and reason carefully.</p><h4 id="Bellman-ford"><a class="header-anchor" href="#Bellman-ford">¶</a>Bellman-ford</h4><p>Notice: negative weight</p><p>-&gt; detect loops</p><h4 id="Dijkstra"><a class="header-anchor" href="#Dijkstra">¶</a>Dijkstra</h4><p>Notice: non-negative weight</p><p>讲义中分成两部分来看这个算法。整体上看： Dijkstra 像一个流动的水龙头阀门，水流从起点匀速地流动到下一个开关。算法把连续的过程通过 edge relaxation 离散的表示。</p><ol><li><p>Edge relaxation: priority queue -&gt; extract_min/insert/delete</p></li><li><p>算法的运行时长与 pq 的具体实现有关。可以从三种角度看：</p><p>存一对 (key, value)， 需要实现三个操作。</p><ul><li>当图的点密集时：|E| = Ω(|V|^2) ; direct_access_array; T = O(|V|^2+ |E|)</li><li>当图的点稀疏时：|E| = O(|V|) ; heap; T = O((|V |+ |E|) log |V |)</li><li>介于两者之间：binary heap; T = O(|V |log |V |+ |E|)</li></ul></li></ol><h3 id="All-pairs-shortest-paths"><a class="header-anchor" href="#All-pairs-shortest-paths">¶</a>All pairs shortest paths</h3><p>Runtime: at least O(V^2), because we need find all pairs’ path</p><p>naive approach: use n * SSSP algorithms:</p><ul><li>Using dijkstra for each vertices so as to solve APSP is easy to think but has details to rethink.</li></ul><p><strong>Better:</strong></p><p>tricky part: how to deal with negative weights?</p><ol><li><p>adgusting edge weights</p><p>problem 1: Are shortest paths still shortest paths?</p><ul><li>it’s easy to think of adjusting edge weights by adding a large number to each edge weight. But it will base paths with fewer edges.</li><li>Idea: pick a node u, add 10 to its incoming edges, and subtract 10 from its outgoing edges.</li></ul><p>Problem 2: it’s hard to think a general reweighting functions.</p></li><li><p>making all wights nonnegative</p><p>Clever choice of reweighting function: Add a new node X with weight-0 directed edges (X, v) for each v ∈V , and choose h(v) = d(X, v).</p></li><li><p>Johnson’s algorithm is basically two parts: reweighting function then n * dijkstra.</p><ul><li><p>the essense is the way to construct a new graph G’ with nonnegative weights:</p><p>Add new vertex X and weight-0 edges (X, v) for all v ∈V as above, and run Bellman-Ford from X to compute h(v) = d(X, v)</p></li><li><p>make sure changing back to G.</p><p>The correct d values in G are d(u, v) = d′(u, v) + h(v) −h(u), and the shortest path trees in G′are also shortest path trees in G</p></li></ul></li></ol><h2 id="olc-v2"><a class="header-anchor" href="#olc-v2">¶</a>olc</h2><ol><li><p>I think the basic idea is date transformation and build intuition about the problems.</p></li><li><p>why should we know about edge classification…?  because it would help to understand the problem better.</p></li><li><p>Lec 14 notes(19fall) about APSP is worthy reading.</p></li><li><p>Relaxation: it checks for (u,v) in constructing graph</p></li></ol>]]></content>
+        <content type="html"><![CDATA[<h2 id="ps5"><a class="header-anchor" href="#ps5">¶</a>ps5</h2><p>bfs</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># bfs</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">bfs</span>(<span class="params">Adj, s</span>):</span></span><br><span class="line">    parent = [<span class="literal">None</span> <span class="keyword">for</span> v <span class="keyword">in</span> Adj]</span><br><span class="line">    parent[s] = s</span><br><span class="line">    level = [[s]]</span><br><span class="line">    <span class="keyword">while</span> <span class="number">0</span> &lt; <span class="built_in">len</span>(level[-<span class="number">1</span>]):</span><br><span class="line">        level.append([])</span><br><span class="line">        <span class="keyword">for</span> u <span class="keyword">in</span> level[-<span class="number">2</span>]:</span><br><span class="line">            <span class="keyword">for</span> v <span class="keyword">in</span> Adj[u]:</span><br><span class="line">                <span class="keyword">if</span> parent[v] <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">                    parent[v] = u</span><br><span class="line">                    level[-<span class="number">1</span>].append(v)</span><br><span class="line">    <span class="keyword">return</span> parent</span><br></pre></td></tr></table></figure><p>Analysis:</p><ol><li><p>overall runtime of this bfs: O(|V| + |E|) or O(|E|)</p><ul><li>inner loop takes O(|E|) time: it cycles through all deg(v) outgoing edges from vertex v.</li><li>Parent has length |V|</li></ul></li><li><p>Graph radius</p></li><li><p>network</p><p>Approach: construct a graph.</p><p>Idea: add an additional node s (a super node) to the graph with an edge to every entry point.</p></li><li><p>search for connected components</p></li></ol><h2 id="ps6"><a class="header-anchor" href="#ps6">¶</a>ps6</h2><p>dfs</p><ol><li><p>topological sort: DAG</p><ul><li>Simple graph has no self-loops, DAG has no loops</li></ul></li><li><p>relaxation</p><ul><li>Tree: In a tree, there is a unique simple path between any pair of vertices, as two distinct simple paths could be used to construct a cycle.</li></ul></li><li><p>DAG relaxation</p></li><li><p>Bellman ford: detect loops and negative weight</p></li><li><p>Input</p></li><li><p>DAG problem</p><ul><li><p>Use DFS to check visiting order is the particular topological order</p></li><li><p>Topological tree has no backward edges/loops.</p></li><li><p>Auxiliary information: index</p></li></ul></li></ol><h2 id="ps7"><a class="header-anchor" href="#ps7">¶</a>ps7</h2><ol><li>Feel smooth when thinking it as water flow.<ul><li>How pq breaks ties may change the visiting order</li><li>It should be clear how to implement operations.</li><li>think about connected components （这个图的减小的方式是通过扔掉已经确定是最短路径的点来进行的</li></ul></li><li>negitive weights: detect negative loops<ul><li>connected component C: one vertex can reach any vertex<ul><li>we don’t know if the graph is connected. Likewise, it should be considered if a graph is a DAG/connected/weighted/…(graph’s property)</li><li>how to find a connected component: considering it is a undirected graph, use DFS/BFS to find C.</li></ul></li><li>Whether has negative loops<ul><li>Yes, V in C is -inf, V not in C is inf</li><li>No, use Dijkstra</li></ul></li></ul></li></ol><h2 id="reminder"><a class="header-anchor" href="#reminder">¶</a>reminder</h2><ol><li><p>python lambda expression</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">lambda</span> x: x**<span class="number">2</span></span><br></pre></td></tr></table></figure></li><li><p>Why doesn’t  Dijkstra’s algorithm work with non-negative edge weights?</p><p>I think the tight bound is Dijkstra not allowing negative loops that will destroy its minimal property.</p></li></ol><h2 id="Recitation"><a class="header-anchor" href="#Recitation">¶</a>Recitation</h2><p>The problem solving process: transform raw input to IN, apply the algorithm we are familiar with, read raw output to OUT.</p><p>Then calculate the runtime and prove for correctness and efficiency.</p><img src="/sg/2021/12/30/hw2_graph/Screenshot-7934843.png" class="" title="Screenshot-7934843"><h3 id="Bfs"><a class="header-anchor" href="#Bfs">¶</a>Bfs</h3><p>connected components</p><h3 id="Dfs"><a class="header-anchor" href="#Dfs">¶</a>Dfs</h3><p><u>the important part is reasoning process so that we can reason by ourselves to get the answer</u></p><p>edge classification</p><ul><li>tree edge(dfs traverse)</li><li>not tree edge<ul><li>Back/forward/cross edge</li></ul></li></ul><p>Problem 1: how this concept relates to dfs?</p><p>Problem 1.1: how that defers to undirected graph compared with directed graph?</p><p>topological sort -&gt; directed, acyclic, graph</p><p>Problem 2: how this concept relates to topological sort?</p><h3 id="weighted-graph"><a class="header-anchor" href="#weighted-graph">¶</a>weighted graph</h3><p>problem 0: how to build a shortest path algorithm?</p><p>simple case: take an edge, split it up, put in fake nodes. Then use bfs</p><p>Problem 1: shortest path with odd edges?</p><p>比较有趣的是可以把两个状态看成两个平面。</p><p>Idea: track state during path building</p><p>problem 2: fast way, least fuel. An edge has fixed fuel cost, varying time cost depenTime table Tc (minutes): M = 24*60</p><p>Idea: choose a more reasonable state to track and reason carefully.</p><h4 id="Bellman-ford"><a class="header-anchor" href="#Bellman-ford">¶</a>Bellman-ford</h4><p>Notice: negative weight</p><p>-&gt; detect loops</p><h4 id="Dijkstra"><a class="header-anchor" href="#Dijkstra">¶</a>Dijkstra</h4><p>Notice: non-negative weight</p><p>讲义中分成两部分来看这个算法。整体上看： Dijkstra 像一个流动的水龙头阀门，水流从起点匀速地流动到下一个开关。算法把连续的过程通过 edge relaxation 离散的表示。</p><ol><li><p>Edge relaxation: priority queue -&gt; extract_min/insert/delete</p></li><li><p>算法的运行时长与 pq 的具体实现有关。可以从三种角度看：</p><p>存一对 (key, value)， 需要实现三个操作。</p><ul><li>当图的点密集时：|E| = Ω(|V|^2) ; direct_access_array; T = O(|V|^2+ |E|)</li><li>当图的点稀疏时：|E| = O(|V|) ; heap; T = O((|V |+ |E|) log |V |)</li><li>介于两者之间：binary heap; T = O(|V |log |V |+ |E|)</li></ul></li></ol><h3 id="All-pairs-shortest-paths"><a class="header-anchor" href="#All-pairs-shortest-paths">¶</a>All pairs shortest paths</h3><p>Runtime: at least O(V^2), because we need find all pairs’ path</p><p>naive approach: use n * SSSP algorithms:</p><ul><li>Using dijkstra for each vertices so as to solve APSP is easy to think but has details to rethink.</li></ul><p><strong>Better:</strong></p><p>tricky part: how to deal with negative weights?</p><ol><li><p>adgusting edge weights</p><p>problem 1: Are shortest paths still shortest paths?</p><ul><li>it’s easy to think of adjusting edge weights by adding a large number to each edge weight. But it will base paths with fewer edges.</li><li>Idea: pick a node u, add 10 to its incoming edges, and subtract 10 from its outgoing edges.</li></ul><p>Problem 2: it’s hard to think a general reweighting functions.</p></li><li><p>making all wights nonnegative</p><p>Clever choice of reweighting function: Add a new node X with weight-0 directed edges (X, v) for each v ∈V , and choose h(v) = d(X, v).</p></li><li><p>Johnson’s algorithm is basically two parts: reweighting function then n * dijkstra.</p><ul><li><p>the essense is the way to construct a new graph G’ with nonnegative weights:</p><p>Add new vertex X and weight-0 edges (X, v) for all v ∈V as above, and run Bellman-Ford from X to compute h(v) = d(X, v)</p></li><li><p>make sure changing back to G.</p><p>The correct d values in G are d(u, v) = d′(u, v) + h(v) −h(u), and the shortest path trees in G′are also shortest path trees in G</p></li></ul></li></ol><h2 id="olc"><a class="header-anchor" href="#olc">¶</a>olc</h2><ol><li><p>I think the basic idea is date transformation and build intuition about the problems.</p></li><li><p>why should we know about edge classification…?  because it would help to understand the problem better.</p></li><li><p>Lec 14 notes(19fall) about APSP is worthy reading.</p></li><li><p>Relaxation: it checks for (u,v) in constructing graph</p></li></ol>]]></content>
       
       
       <categories>
@@ -579,8 +502,6 @@
       
       
         <tags>
-            
-            <tag> 6.006 algorithms </tag>
             
             <tag> hw </tag>
             
@@ -609,8 +530,6 @@
       
         <tags>
             
-            <tag> 6.004 computation structures </tag>
-            
             <tag> lab </tag>
             
         </tags>
@@ -636,12 +555,6 @@
       </categories>
       
       
-        <tags>
-            
-            <tag> 6.004 computation structures </tag>
-            
-        </tags>
-      
     </entry>
     
     
@@ -662,12 +575,6 @@
           
       </categories>
       
-      
-        <tags>
-            
-            <tag> tool </tag>
-            
-        </tags>
       
     </entry>
     
@@ -690,12 +597,6 @@
       </categories>
       
       
-        <tags>
-            
-            <tag> 6.004 computation structures </tag>
-            
-        </tags>
-      
     </entry>
     
     
@@ -716,12 +617,6 @@
           
       </categories>
       
-      
-        <tags>
-            
-            <tag> positive psychology </tag>
-            
-        </tags>
       
     </entry>
     
@@ -771,12 +666,6 @@
       </categories>
       
       
-        <tags>
-            
-            <tag> read </tag>
-            
-        </tags>
-      
     </entry>
     
     
@@ -800,8 +689,6 @@
       
         <tags>
             
-            <tag> 6.042 discrete math </tag>
-            
             <tag> hw </tag>
             
         </tags>
@@ -815,7 +702,7 @@
       <link href="/sg/2021/12/18/hw1_structure/"/>
       <url>/sg/2021/12/18/hw1_structure/</url>
       
-        <content type="html"><![CDATA[<h2 id="ps2"><a class="header-anchor" href="#ps2">¶</a>ps2</h2><ol><li><p>看题：when all but one is special means only one is not special.</p></li><li><p>set view and sequence view of data structures</p><ul><li><p>Sequences maintain a collection of items in an extrinsic order, where each item stored has a rank. In the sequence, including a first item and a last item. That the first item is “first” is because some external party put it there.</p></li><li><p>By contrast, sets maintains a collection of items based on an intrinsic property involving what the items are, usually based on a unique key, x.key, associated with each item x.</p></li></ul><p>Set: hash table, binary search tree</p><p>Sequence: array, linked list, direct access array</p><p>That’s why sequence has insert/delete_at_somewhere operations while set has a loosen insert/delete items operation and supports order operations to find the items.</p></li><li><p>Merge_sort</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">merge_sort</span>(<span class="params">Arr</span>):</span></span><br><span class="line">size = <span class="built_in">len</span>(Arr)</span><br><span class="line"><span class="keyword">if</span> size == <span class="number">1</span>:</span><br><span class="line"><span class="keyword">return</span> Arr</span><br><span class="line">mid = size//<span class="number">2</span></span><br><span class="line">Left = merge_sort(Arr[:mid])</span><br><span class="line">Right = merge_sort(Arr[mid:])</span><br><span class="line">i,j = <span class="number">0</span>,<span class="number">0</span></span><br><span class="line">start = <span class="number">0</span></span><br><span class="line"><span class="keyword">while</span> start &lt; size:</span><br><span class="line"><span class="keyword">if</span> j &gt;= <span class="built_in">len</span>(Right) <span class="keyword">or</span> (i &lt; <span class="built_in">len</span>(Left) <span class="keyword">and</span> Left[i] &lt; Right[j]): <span class="comment"># offbyone error</span></span><br><span class="line">Arr[start] = Left[i]</span><br><span class="line">i += <span class="number">1</span></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">Arr[start] = Right[j]</span><br><span class="line">j += <span class="number">1</span></span><br><span class="line">start += <span class="number">1</span></span><br><span class="line"><span class="keyword">return</span> Arr <span class="comment"># missing return value</span></span><br></pre></td></tr></table></figure></li></ol><h2 id="ps3"><a class="header-anchor" href="#ps3">¶</a>ps3</h2><ol><li><p>How to use hash tables(its set operations) to implementing sequence operations?</p><p>Read the problem. We are not storing things in order but storing in hash tables.</p><p>idea 1: assign key to each item as index</p><ul><li><p>Seq[key] = value</p></li><li><p>Seq-build(A): set-build(&lt;key, A[i].value&gt; for i = 0,1,2,… )</p></li><li><p>insert/delete_at: iterate all items, insert/delete one, rebuild</p></li><li><p>Insert_last: easy, however insert_first would take linear time</p></li></ul><p>Idea 2: have an extra varibles to track the original index</p><ul><li><p>How many index should we track at least?</p><p>one: First</p><ul><li><ul><li>Store variable <u>first</u> = key of first item(index 0)</li><li>Hashing(map negative index to positive)</li><li><img src="/sg/2021/12/18/hw1_structure/sc.png" class="" title="sc"></li></ul></li><li><p>Insert_first: decrement first, insert(&lt;key first, value x&gt;)</p></li><li><p>and make tiny fix to previous operations(ex: find(i+first))</p></li></ul></li></ul></li><li><p>best sorting algs: sort n objects by keys</p><p>nagative items: Increase a large enough number then sort. Decrease after sorting.</p><p>String: convert str to a unique number and use radix sort</p><p>Number of fignts fought: counting sort is enough. Or merge sort.</p><p>ratio w_i / f_i (w_i &lt; f_i): it’s a floating number. We need to consider the precision</p><p>Idea: mapping rational number/letters/negative integer to integer</p><p>runtime of radix sort is O(n + nlog_n_(u)), such that it can handle any polynomial u.</p><p>突然想到了data-oriented pattern</p></li><li><p>college construction</p><ol><li>naive approach: check for h - s_i for S_i, this would take O(n**2) time</li></ol><ul><li><p>problem: how to speed up to O(n)?</p><ul><li>use data structures: store the input S in hash table S’: we can search (h - s_i) in S’ for si in S, each find take O(1) time.</li></ul></li></ul><ol start="2"><li>h = 600*n**6, add two things up.</li></ol><p>Idea 1: radix sort</p><ul><li>naive approach: store S in sorted_array_set where sort method is implemented using radix sort. For any S_i, binary search for (h - S_i) in S(know as find_prev).<ul><li>It takes O(n*logn) time</li></ul></li></ul><p>Idea 2: two-finger algorithm</p><ul><li>Improvement 1: linear scan: any S_i greater than h is impossible. Rebuild S’ in the sorted_array_set where S’_i &lt; h.</li><li>Improvement 2:</li></ul></li><li><p>copy detection problem</p></li></ol><h2 id="ps4"><a class="header-anchor" href="#ps4">¶</a>ps4</h2><h3 id="binary-tree"><a class="header-anchor" href="#binary-tree">¶</a>binary tree</h3><p>Problem 1: why we need a binary tree to store items?</p><p>ans: Compared with linked list which takes O(n) time to traverse all the items, we use binary serach instead. The traverse now takes O(hight of the tree) = O(logn) time.</p><p>Design:</p><ol><li><p>We define the traverse order to meet our needs.</p><ul><li>we can use binary tree to implement sequence(order) or set…</li><li>property: represent binary relation in different way: left-aligned complete binary tree</li></ul></li><li><p>Navigation: first/last, walk down/up the tree</p></li><li><p>Dynamic operation: add or remove items in a binary tree</p><p>problem 2: maintain the tree balance while insertion/deletion</p><p>The logic is that if skew is not in the balance range(-1,0,1) in such condition it changes into (2,-2), we should rebalance the tree. First, we need to detect such conditions, then we should modify that by rebalance(namely, by rotations). After each rebalance operation, we need to update the subtree heigh to calculate update skew. Then we walk up the tree and maintain balance in each recursion step until there is none.</p><ul><li><p>Rotation</p><p>Problem 3: what will happen after rotations?</p><p>just draw the picture.</p><ul><li>Rotate right(D): D becomes its left child’s right child, and subtree_update</li><li>Rotate left(B): B becomes its right child’s left child, and subtree_update</li></ul></li></ul><p>觉得讲义上的insert B before A有点怪</p><p>Problem 3: BST and AVL have nuances in insertion/deletion.</p><p>这一点我看错了，我把插入节点的大小搞错了，这两个树结构的差异是由于AVL会维持树结构的平衡。</p><p>BST: deletion: swap down predecessor/successor</p></li></ol><p>the difference between BST and AVL is: AVL maintains balance: AVL will check skew of every node in the traverse order to decide rotation operations; BST mains binary search.(AVL can use binary search as well)</p><h3 id="heap"><a class="header-anchor" href="#heap">¶</a>heap</h3><p>Build heap in linear time:</p><ul><li><p>idea: walk up the heap.</p><p>-&gt; loop backward over array.</p><p>problem: the order of swapping</p></li></ul><img src="/sg/2021/12/18/hw1_structure/sc2.png" class="" title="sc2"><p>heap doesn’t support ordering.</p><h3 id="problem-set"><a class="header-anchor" href="#problem-set">¶</a>problem set</h3><ol><li><p>n items, k largest one list. O(logn) space to write, O(nlog(logn)) runnning time.</p><p>Problem 1: how is logn related to k?</p><p>这两个题目不一样😅，这道题根本没提到k。解法和我之前想的一样</p></li><li><p>SCLR: 设计一个数据结构满足：</p><p>new_bid(d,b), O(logn);</p><p>update_bid(d, b) O(logn);</p><p>get_revenue() O(1).</p><p>we should ask ourselves these questions before writing down the answer:</p><ul><li>what is stored in data structures? -&gt;</li><li>what is maintaining by operations? -&gt;</li><li>what is querying? -&gt;</li></ul><p>Idea 1: we should maintain a dictionary of (bidder ID, bid) for the update operations. Dictionary can be implemented by AVL tree set or hash table while the latter’s running time is amortized</p><p>Idea 2: we need data structures to preserve the priority we need</p><ul><li>naive approach: use binary heap/AVL tree</li><li>Store n items in one max-heap -&gt; <u>store k largest items in min-heap, n-k items in max-heap</u>, in which case it doesn’t need to use delete_max to find the minimal item in max-heap.</li></ul><p>Idea 3: we need to link two data structures to support fast find.</p><p>Approach: we want to find the bidder’s current bid quickly. -&gt; cross linking</p><ul><li>That’s why we don’t save bid directly in the dictionary, in which case we save the time in updating the dictionary every time we change the bidder’s bid.</li></ul><img src="/sg/2021/12/18/hw1_structure/sc3.png" class="" title="sc3"></li><li><p>It seems right but where goes wrong?</p><p>这部分看了又看,仍旧没发现错误在哪里。后来把问题定位到了一个测试进而找到了问题。忽略了max_temp是所在class的instance，所以在bug版第一个判断语句永远都会返回None.</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># bug</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">subtree_max_in_range</span>(<span class="params">A, d1, d2</span>):</span></span><br><span class="line">    max_temp = <span class="literal">None</span></span><br><span class="line">    <span class="comment"># ------------------------------------ #</span></span><br><span class="line">    <span class="keyword">if</span> A.max_date &lt;= d2 <span class="keyword">and</span> A.min_date &gt;= d1:</span><br><span class="line">        <span class="keyword">return</span> A.max_temp</span><br><span class="line">    <span class="keyword">if</span> A.max_date &lt; d1 <span class="keyword">or</span> A.min_date &gt; d2:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">    <span class="keyword">if</span> d1 &lt;= A.item.key &lt;= d2:</span><br><span class="line">        max_temp = A.item.temp</span><br><span class="line">    <span class="keyword">if</span> A.left:</span><br><span class="line">        l_temp = A.left.subtree_max_in_range(d1, d2)</span><br><span class="line">        <span class="keyword">if</span> l_temp:</span><br><span class="line">            <span class="keyword">if</span> max_temp:</span><br><span class="line">                max_temp = <span class="built_in">max</span>(l_temp, max_temp)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                max_temp = l_temp</span><br><span class="line">    <span class="keyword">if</span> A.right:</span><br><span class="line">        r_temp = A.right.subtree_max_in_range(d1, d2)</span><br><span class="line">        <span class="keyword">if</span> r_temp:</span><br><span class="line">            <span class="keyword">if</span> max_temp:</span><br><span class="line">                max_temp = <span class="built_in">max</span>(r_temp, max_temp)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                mex_temp = r_temp</span><br><span class="line">    <span class="comment"># ------------------------------------ #</span></span><br><span class="line">    <span class="keyword">return</span> max_temp</span><br></pre></td></tr></table></figure><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># fixed version</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">subtree_max_in_range</span>(<span class="params">A, d1, d2</span>):</span></span><br><span class="line">    temp = <span class="literal">None</span></span><br><span class="line">    <span class="comment"># ------------------------------------ #</span></span><br><span class="line">    <span class="keyword">if</span> A.max_date &lt;= d2 <span class="keyword">and</span> A.min_date &gt;= d1:</span><br><span class="line">        <span class="keyword">return</span> A.max_temp</span><br><span class="line">    <span class="keyword">if</span> A.max_date &lt; d1 <span class="keyword">or</span> A.min_date &gt; d2:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">    <span class="keyword">if</span> d1 &lt;= A.item.key &lt;= d2:</span><br><span class="line">        temp = A.item.temp</span><br><span class="line">    <span class="keyword">if</span> A.left:</span><br><span class="line">        l_temp = A.left.subtree_max_in_range(d1, d2)</span><br><span class="line">        <span class="keyword">if</span> l_temp:</span><br><span class="line">            <span class="keyword">if</span> temp:</span><br><span class="line">                temp = <span class="built_in">max</span>(l_temp, temp)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                temp = l_temp</span><br><span class="line">    <span class="keyword">if</span> A.right:</span><br><span class="line">        r_temp = A.right.subtree_max_in_range(d1, d2)</span><br><span class="line">        <span class="keyword">if</span> r_temp:</span><br><span class="line">            <span class="keyword">if</span> temp:</span><br><span class="line">                temp = <span class="built_in">max</span>(r_temp, temp)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                temp = r_temp</span><br><span class="line">    <span class="comment"># ------------------------------------ #</span></span><br><span class="line">    <span class="keyword">return</span> temp</span><br></pre></td></tr></table></figure></li></ol><h2 id="recitation"><a class="header-anchor" href="#recitation">¶</a>recitation</h2><h3 id="AVL-tree"><a class="header-anchor" href="#AVL-tree">¶</a>AVL tree</h3><p>full binary tree guarantees the height of O(logn)</p><p>Build a AVL tree with fewer nodes as possible -&gt; prove h = O(logn)</p><p>why rotations -&gt; balance -&gt; tree search</p><p>Rotation:</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">rotateRight(A):</span><br><span class="line"><span class="comment"># A&#x27;s original parent e; A could be e&#x27;s left/right child =&gt; B</span></span><br><span class="line">B.p = e</span><br><span class="line"><span class="keyword">if</span> e.r == A <span class="comment"># pointer comparison</span></span><br><span class="line">e.r = B</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">e.l = B</span><br><span class="line"><span class="comment"># A&#x27;s original left child B =&gt; A is B&#x27;s right child</span></span><br><span class="line">B.r = A</span><br><span class="line">(A.p = B)</span><br><span class="line"><span class="comment"># B&#x27;s original right child c =&gt; A&#x27;s left child</span></span><br><span class="line">A.l = c</span><br><span class="line">(c.p = A)</span><br></pre></td></tr></table></figure><h3 id="Principle-of-algorithm"><a class="header-anchor" href="#Principle-of-algorithm">¶</a>Principle of algorithm</h3><p><u>thghout process matters</u>: take 30-60 minutes to think about a problem</p><p><u>problem 0</u>: shifted array, find e in N sorted items shifted length of k,</p><ul><li>if k is defined</li><li>if k is undefined, find k =&gt; find min</li></ul><p>How to solve it?</p><ol><li>simplest solution: linear scan, O(N)</li><li>in another way? shift k + binary search, O(k + logN)</li><li>…</li></ol><p><u>Problem 1</u>: find kth smallest in N items in a min-heap, want O(K*logK)time</p><p>How to think about it?</p><ol><li><p>use min-heap: O(klogN), k times find_min in min-heap</p></li><li><p>Find an O(NlogK) algorithms:</p><p>Idea 1: cut out irrelevant layers. We have k levels of heap =&gt; O(k**2) time, given the height is O(k)</p><p>Problem 1.1: how to cut a heap into k elements?</p><p>Problem 1.2: how to split it up into k, (N - k) groups?</p><p>Idea 2: maintain a max-heap of k. Iterate all items and we can get what we want</p></li><li><p>think more about the process of finding the kth smallest items.</p><p>Idea: horizon.</p><p>Idea: augmentation: index of array</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># initialize</span></span><br><span class="line">H, original <span class="built_in">min</span>-heap(array back-based)</span><br><span class="line">Z, horizon</span><br><span class="line">Z.insert(H[<span class="number">1</span>])</span><br><span class="line"><span class="keyword">for</span> ith <span class="keyword">in</span> <span class="built_in">range</span>(K):</span><br><span class="line">  ith, j = Z.extract-<span class="built_in">min</span></span><br><span class="line">  Z.insert H[<span class="number">2j</span>], <span class="number">2j</span></span><br><span class="line">  Z,insert H[<span class="number">2j</span>+<span class="number">1</span>], <span class="number">2j</span>+<span class="number">1</span></span><br><span class="line"><span class="keyword">return</span> ith</span><br></pre></td></tr></table></figure></li></ol><p><u>Problem 2</u>: find min(e[i,…,j]), e is a list of N items, N = 2**k</p><p>Process: pre-process, then query</p><p>How to think about it?</p><ol><li><p>simple idea: hash into [i,…,j], we can get H[[i,…,j],…], N**2 pair; then take min in O(N) time in each pair</p><p>=&gt; O(N**3)time</p><p>Improve to O(N**2) time by comparing current pair result with previous result which takes O(1) time</p></li><li><p>how to spend time?</p><ul><li>in pre-process: O(N**2) | O(1)</li><li>in query: O(1) | O(N)</li></ul></li><li><p>binary search in two halves recursively</p><img src="/sg/2021/12/18/hw1_structure/sc4.png" class="" title="sc4"></li></ol><h2 id="Reminder"><a class="header-anchor" href="#Reminder">¶</a>Reminder</h2><ol><li><p>two-finger algorithm:</p></li><li><p>cross linking: by store pointers to another data structures.</p></li><li><p>Proximate sorting</p><blockquote><p>An array of distinct integers is k-proximate if every integer of the array is at most k places away from its place in the array after being sorted, i.e., if the ith integer of the unsorted input array is the jth largest integer contained in the array, then |i −j| ≤ k. In this problem, we will show how to sort a k-proximate array faster than Θ(n log n)</p></blockquote><p>这里关于insertion sort k-proximate array takes O(nk) time, heap sort takes O(nlogk)time的讨论还挺有意思的。</p></li><li><p>a general/naive approach and subsequent analysis</p></li><li><p>approriate description</p><ul><li><p>key with</p><p>example 1: in priority queue: Key each Revenger ri with opinion si on the pair (|si|, i) to make keys unique.</p></li></ul></li><li><p>Worst-case, expected, amortized(dynamic operations)</p></li></ol><h3 id="olc"><a class="header-anchor" href="#olc">¶</a>olc</h3><p>First we should decide which view:</p><ul><li>ordered or not -&gt; sequence/set view</li><li>does it have priority? -&gt; priority queue -&gt; binary heap/ binary tree</li></ul>]]></content>
+        <content type="html"><![CDATA[<h2 id="ps2"><a class="header-anchor" href="#ps2">¶</a>ps2</h2><ol><li><p>看题：when all but one is special means only one is not special.</p></li><li><p>set view and sequence view of data structures</p><ul><li><p>Sequences maintain a collection of items in an extrinsic order, where each item stored has a rank. In the sequence, including a first item and a last item. That the first item is “first” is because some external party put it there.</p></li><li><p>By contrast, sets maintains a collection of items based on an intrinsic property involving what the items are, usually based on a unique key, x.key, associated with each item x.</p></li></ul><p>Set: hash table, binary search tree</p><p>Sequence: array, linked list, direct access array</p><p>That’s why sequence has insert/delete_at_somewhere operations while set has a loosen insert/delete items operation and supports order operations to find the items.</p></li><li><p>Merge_sort</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">merge_sort</span>(<span class="params">Arr</span>):</span></span><br><span class="line">size = <span class="built_in">len</span>(Arr)</span><br><span class="line"><span class="keyword">if</span> size == <span class="number">1</span>:</span><br><span class="line"><span class="keyword">return</span> Arr</span><br><span class="line">mid = size//<span class="number">2</span></span><br><span class="line">Left = merge_sort(Arr[:mid])</span><br><span class="line">Right = merge_sort(Arr[mid:])</span><br><span class="line">i,j = <span class="number">0</span>,<span class="number">0</span></span><br><span class="line">start = <span class="number">0</span></span><br><span class="line"><span class="keyword">while</span> start &lt; size:</span><br><span class="line"><span class="keyword">if</span> j &gt;= <span class="built_in">len</span>(Right) <span class="keyword">or</span> (i &lt; <span class="built_in">len</span>(Left) <span class="keyword">and</span> Left[i] &lt; Right[j]): <span class="comment"># offbyone error</span></span><br><span class="line">Arr[start] = Left[i]</span><br><span class="line">i += <span class="number">1</span></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">Arr[start] = Right[j]</span><br><span class="line">j += <span class="number">1</span></span><br><span class="line">start += <span class="number">1</span></span><br><span class="line"><span class="keyword">return</span> Arr <span class="comment"># missing return value</span></span><br></pre></td></tr></table></figure></li></ol><h2 id="ps3"><a class="header-anchor" href="#ps3">¶</a>ps3</h2><ol><li><p>How to use hash tables(its set operations) to implementing sequence operations?</p><p>Read the problem. We are not storing things in order but storing in hash tables.</p><p>idea 1: assign key to each item as index</p><ul><li><p>Seq[key] = value</p></li><li><p>Seq-build(A): set-build(&lt;key, A[i].value&gt; for i = 0,1,2,… )</p></li><li><p>insert/delete_at: iterate all items, insert/delete one, rebuild</p></li><li><p>Insert_last: easy, however insert_first would take linear time</p></li></ul><p>Idea 2: have an extra varibles to track the original index</p><ul><li><p>How many index should we track at least?</p><p>one: First</p><ul><li><ul><li>Store variable <u>first</u> = key of first item(index 0)</li><li>Hashing(map negative index to positive)</li><li><img src="/sg/2021/12/18/hw1_structure/sc.png" class="" title="sc"></li></ul></li><li><p>Insert_first: decrement first, insert(&lt;key first, value x&gt;)</p></li><li><p>and make tiny fix to previous operations(ex: find(i+first))</p></li></ul></li></ul></li><li><p>best sorting algs: sort n objects by keys</p><p>nagative items: Increase a large enough number then sort. Decrease after sorting.</p><p>String: convert str to a unique number and use radix sort</p><p>Number of fignts fought: counting sort is enough. Or merge sort.</p><p>ratio w_i / f_i (w_i &lt; f_i): it’s a floating number. We need to consider the precision</p><p>Idea: mapping rational number/letters/negative integer to integer</p><p>runtime of radix sort is O(n + nlog_n_(u)), such that it can handle any polynomial u.</p><p>突然想到了data-oriented pattern</p></li><li><p>college construction</p><ol><li>naive approach: check for h - s_i for S_i, this would take O(n**2) time</li></ol><ul><li><p>problem: how to speed up to O(n)?</p><ul><li>use data structures: store the input S in hash table S’: we can search (h - s_i) in S’ for si in S, each find take O(1) time.</li></ul></li></ul><ol start="2"><li>h = 600*n**6, add two things up.</li></ol><p>Idea 1: radix sort</p><ul><li>naive approach: store S in sorted_array_set where sort method is implemented using radix sort. For any S_i, binary search for (h - S_i) in S(know as find_prev).<ul><li>It takes O(n*logn) time</li></ul></li></ul><p>Idea 2: two-finger algorithm</p><ul><li>Improvement 1: linear scan: any S_i greater than h is impossible. Rebuild S’ in the sorted_array_set where S’_i &lt; h.</li><li>Improvement 2:</li></ul></li><li><p>copy detection problem</p></li></ol><h2 id="ps4"><a class="header-anchor" href="#ps4">¶</a>ps4</h2><h3 id="binary-tree"><a class="header-anchor" href="#binary-tree">¶</a>binary tree</h3><p>Problem 1: why we need a binary tree to store items?</p><p>ans: Compared with linked list which takes O(n) time to traverse all the items, we use binary serach instead. The traverse now takes O(hight of the tree) = O(logn) time.</p><p>Design:</p><ol><li><p>We define the traverse order to meet our needs.</p><ul><li>we can use binary tree to implement sequence(order) or set…</li><li>property: represent binary relation in different way: left-aligned complete binary tree</li></ul></li><li><p>Navigation: first/last, walk down/up the tree</p></li><li><p>Dynamic operation: add or remove items in a binary tree</p><p>problem 2: maintain the tree balance while insertion/deletion</p><p>The logic is that if skew is not in the balance range(-1,0,1) in such condition it changes into (2,-2), we should rebalance the tree. First, we need to detect such conditions, then we should modify that by rebalance(namely, by rotations). After each rebalance operation, we need to update the subtree heigh to calculate update skew. Then we walk up the tree and maintain balance in each recursion step until there is none.</p><ul><li><p>Rotation</p><p>Problem 3: what will happen after rotations?</p><p>just draw the picture.</p><ul><li>Rotate right(D): D becomes its left child’s right child, and subtree_update</li><li>Rotate left(B): B becomes its right child’s left child, and subtree_update</li></ul></li></ul><p>觉得讲义上的insert B before A有点怪</p><p>Problem 3: BST and AVL have nuances in insertion/deletion.</p><p>这一点我看错了，我把插入节点的大小搞错了，这两个树结构的差异是由于AVL会维持树结构的平衡。</p><p>BST: deletion: swap down predecessor/successor</p></li></ol><p>the difference between BST and AVL is: AVL maintains balance: AVL will check skew of every node in the traverse order to decide rotation operations; BST mains binary search.(AVL can use binary search as well)</p><h3 id="heap"><a class="header-anchor" href="#heap">¶</a>heap</h3><p>Build heap in linear time:</p><ul><li><p>idea: walk up the heap.</p><p>-&gt; loop backward over array.</p><p>problem: the order of swapping</p></li></ul><img src="/sg/2021/12/18/hw1_structure/sc2.png" class="" title="sc2"><p>heap doesn’t support ordering.</p><h3 id="problem-set"><a class="header-anchor" href="#problem-set">¶</a>problem set</h3><ol><li><p>n items, k largest one list. O(logn) space to write, O(nlog(logn)) runnning time.</p><p>Problem 1: how is logn related to k?</p><p>这两个题目不一样😅，这道题根本没提到k。解法和我之前想的一样</p></li><li><p>SCLR: 设计一个数据结构满足：</p><p>new_bid(d,b), O(logn);</p><p>update_bid(d, b) O(logn);</p><p>get_revenue() O(1).</p><p>we should ask ourselves these questions before writing down the answer:</p><ul><li>what is stored in data structures? -&gt;</li><li>what is maintaining by operations? -&gt;</li><li>what is querying? -&gt;</li></ul><p>Idea 1: we should maintain a dictionary of (bidder ID, bid) for the update operations. Dictionary can be implemented by AVL tree set or hash table while the latter’s running time is amortized</p><p>Idea 2: we need data structures to preserve the priority we need</p><ul><li>naive approach: use binary heap/AVL tree</li><li>Store n items in one max-heap -&gt; <u>store k largest items in min-heap, n-k items in max-heap</u>, in which case it doesn’t need to use delete_max to find the minimal item in max-heap.</li></ul><p>Idea 3: we need to link two data structures to support fast find.</p><p>Approach: we want to find the bidder’s current bid quickly. -&gt; cross linking</p><ul><li>That’s why we don’t save bid directly in the dictionary, in which case we save the time in updating the dictionary every time we change the bidder’s bid.</li></ul><img src="/sg/2021/12/18/hw1_structure/sc3.png" class="" title="sc3"></li><li><p>It seems right but where goes wrong?</p><p>这部分看了又看,仍旧没发现错误在哪里。后来把问题定位到了一个测试进而找到了问题。忽略了max_temp是所在class的instance，所以在bug版第一个判断语句永远都会返回None.</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># bug</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">subtree_max_in_range</span>(<span class="params">A, d1, d2</span>):</span></span><br><span class="line">    max_temp = <span class="literal">None</span></span><br><span class="line">    <span class="comment"># ------------------------------------ #</span></span><br><span class="line">    <span class="keyword">if</span> A.max_date &lt;= d2 <span class="keyword">and</span> A.min_date &gt;= d1:</span><br><span class="line">        <span class="keyword">return</span> A.max_temp</span><br><span class="line">    <span class="keyword">if</span> A.max_date &lt; d1 <span class="keyword">or</span> A.min_date &gt; d2:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">    <span class="keyword">if</span> d1 &lt;= A.item.key &lt;= d2:</span><br><span class="line">        max_temp = A.item.temp</span><br><span class="line">    <span class="keyword">if</span> A.left:</span><br><span class="line">        l_temp = A.left.subtree_max_in_range(d1, d2)</span><br><span class="line">        <span class="keyword">if</span> l_temp:</span><br><span class="line">            <span class="keyword">if</span> max_temp:</span><br><span class="line">                max_temp = <span class="built_in">max</span>(l_temp, max_temp)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                max_temp = l_temp</span><br><span class="line">    <span class="keyword">if</span> A.right:</span><br><span class="line">        r_temp = A.right.subtree_max_in_range(d1, d2)</span><br><span class="line">        <span class="keyword">if</span> r_temp:</span><br><span class="line">            <span class="keyword">if</span> max_temp:</span><br><span class="line">                max_temp = <span class="built_in">max</span>(r_temp, max_temp)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                mex_temp = r_temp</span><br><span class="line">    <span class="comment"># ------------------------------------ #</span></span><br><span class="line">    <span class="keyword">return</span> max_temp</span><br></pre></td></tr></table></figure><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># fixed version</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">subtree_max_in_range</span>(<span class="params">A, d1, d2</span>):</span></span><br><span class="line">    temp = <span class="literal">None</span></span><br><span class="line">    <span class="comment"># ------------------------------------ #</span></span><br><span class="line">    <span class="keyword">if</span> A.max_date &lt;= d2 <span class="keyword">and</span> A.min_date &gt;= d1:</span><br><span class="line">        <span class="keyword">return</span> A.max_temp</span><br><span class="line">    <span class="keyword">if</span> A.max_date &lt; d1 <span class="keyword">or</span> A.min_date &gt; d2:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">    <span class="keyword">if</span> d1 &lt;= A.item.key &lt;= d2:</span><br><span class="line">        temp = A.item.temp</span><br><span class="line">    <span class="keyword">if</span> A.left:</span><br><span class="line">        l_temp = A.left.subtree_max_in_range(d1, d2)</span><br><span class="line">        <span class="keyword">if</span> l_temp:</span><br><span class="line">            <span class="keyword">if</span> temp:</span><br><span class="line">                temp = <span class="built_in">max</span>(l_temp, temp)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                temp = l_temp</span><br><span class="line">    <span class="keyword">if</span> A.right:</span><br><span class="line">        r_temp = A.right.subtree_max_in_range(d1, d2)</span><br><span class="line">        <span class="keyword">if</span> r_temp:</span><br><span class="line">            <span class="keyword">if</span> temp:</span><br><span class="line">                temp = <span class="built_in">max</span>(r_temp, temp)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                temp = r_temp</span><br><span class="line">    <span class="comment"># ------------------------------------ #</span></span><br><span class="line">    <span class="keyword">return</span> temp</span><br></pre></td></tr></table></figure></li></ol><h2 id="recitation"><a class="header-anchor" href="#recitation">¶</a>recitation</h2><h3 id="AVL-tree"><a class="header-anchor" href="#AVL-tree">¶</a>AVL tree</h3><p>full binary tree guarantees the height of O(logn)</p><p>Build a AVL tree with fewer nodes as possible -&gt; prove h = O(logn)</p><p>why rotations -&gt; balance -&gt; tree search</p><p>Rotation:</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">rotateRight(A):</span><br><span class="line"><span class="comment"># A&#x27;s original parent e; A could be e&#x27;s left/right child =&gt; B</span></span><br><span class="line">B.p = e</span><br><span class="line"><span class="keyword">if</span> e.r == A <span class="comment"># pointer comparison</span></span><br><span class="line">e.r = B</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">e.l = B</span><br><span class="line"><span class="comment"># A&#x27;s original left child B =&gt; A is B&#x27;s right child</span></span><br><span class="line">B.r = A</span><br><span class="line">(A.p = B)</span><br><span class="line"><span class="comment"># B&#x27;s original right child c =&gt; A&#x27;s left child</span></span><br><span class="line">A.l = c</span><br><span class="line">(c.p = A)</span><br></pre></td></tr></table></figure><h3 id="Principle-of-algorithm"><a class="header-anchor" href="#Principle-of-algorithm">¶</a>Principle of algorithm</h3><p><u>thghout process matters</u>: take 30-60 minutes to think about a problem</p><p><u>problem 0</u>: shifted array, find e in N sorted items shifted length of k,</p><ul><li>if k is defined</li><li>if k is undefined, find k =&gt; find min</li></ul><p>How to solve it?</p><ol><li>simplest solution: linear scan, O(N)</li><li>in another way? shift k + binary search, O(k + logN)</li><li>…</li></ol><p><u>Problem 1</u>: find kth smallest in N items in a min-heap, want O(K*logK)time</p><p>How to think about it?</p><ol><li><p>use min-heap: O(klogN), k times find_min in min-heap</p></li><li><p>Find an O(NlogK) algorithms:</p><p>Idea 1: cut out irrelevant layers. We have k levels of heap =&gt; O(k**2) time, given the height is O(k)</p><p>Problem 1.1: how to cut a heap into k elements?</p><p>Problem 1.2: how to split it up into k, (N - k) groups?</p><p>Idea 2: maintain a max-heap of k. Iterate all items and we can get what we want</p></li><li><p>think more about the process of finding the kth smallest items.</p><p>Idea: horizon.</p><p>Idea: augmentation: index of array</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># initialize</span></span><br><span class="line">H, original <span class="built_in">min</span>-heap(array back-based)</span><br><span class="line">Z, horizon</span><br><span class="line">Z.insert(H[<span class="number">1</span>])</span><br><span class="line"><span class="keyword">for</span> ith <span class="keyword">in</span> <span class="built_in">range</span>(K):</span><br><span class="line">  ith, j = Z.extract-<span class="built_in">min</span></span><br><span class="line">  Z.insert H[<span class="number">2j</span>], <span class="number">2j</span></span><br><span class="line">  Z,insert H[<span class="number">2j</span>+<span class="number">1</span>], <span class="number">2j</span>+<span class="number">1</span></span><br><span class="line"><span class="keyword">return</span> ith</span><br></pre></td></tr></table></figure></li></ol><p><u>Problem 2</u>: find min(e[i,…,j]), e is a list of N items, N = 2**k</p><p>Process: pre-process, then query</p><p>How to think about it?</p><ol><li><p>simple idea: hash into [i,…,j], we can get H[[i,…,j],…], N**2 pair; then take min in O(N) time in each pair</p><p>=&gt; O(N**3)time</p><p>Improve to O(N**2) time by comparing current pair result with previous result which takes O(1) time</p></li><li><p>how to spend time?</p><ul><li>in pre-process: O(N**2) | O(1)</li><li>in query: O(1) | O(N)</li></ul></li><li><p>binary search in two halves recursively</p><img src="/sg/2021/12/18/hw1_structure/sc4.png" class="" title="sc4"></li></ol><h2 id="Reminder"><a class="header-anchor" href="#Reminder">¶</a>Reminder</h2><ol><li><p>two-finger algorithm:</p></li><li><p>cross linking: by store pointers to another data structures.</p></li><li><p>Proximate sorting</p><blockquote><p>An array of distinct integers is k-proximate if every integer of the array is at most k places away from its place in the array after being sorted, i.e., if the ith integer of the unsorted input array is the jth largest integer contained in the array, then |i −j| ≤ k. In this problem, we will show how to sort a k-proximate array faster than Θ(n log n)</p></blockquote><p>这里关于insertion sort k-proximate array takes O(nk) time, heap sort takes O(nlogk)time的讨论还挺有意思的。</p></li><li><p>a general/naive approach and subsequent analysis</p></li><li><p>approriate description</p><ul><li><p>key with</p><p>example 1: in priority queue: Key each Revenger ri with opinion si on the pair (|si|, i) to make keys unique.</p></li></ul></li><li><p>Worst-case, expected, amortized(dynamic operations)</p></li></ol><h3 id="olc-v2"><a class="header-anchor" href="#olc-v2">¶</a>olc</h3><p>First we should decide which view:</p><ul><li>ordered or not -&gt; sequence/set view</li><li>does it have priority? -&gt; priority queue -&gt; binary heap/ binary tree</li></ul>]]></content>
       
       
       <categories>
@@ -828,8 +715,6 @@
       
       
         <tags>
-            
-            <tag> 6.006 algorithms </tag>
             
             <tag> hw </tag>
             
@@ -844,7 +729,7 @@
       <link href="/sg/2021/12/12/psy_belief/"/>
       <url>/sg/2021/12/12/psy_belief/</url>
       
-        <content type="html"><![CDATA[<p>Beliefs  -&gt; focus-&gt; change -&gt; goal setting</p><h2 id="Beliefs"><a class="header-anchor" href="#Beliefs">¶</a>Beliefs</h2><p>例子：Roger Bannister，首位历史上4分钟跑1英里的人。当时从医学/生物学上证明是不可能的。</p><p>信念为什么不是一种神秘主义？belief Vs. illusion</p><p>olc: 中学的失败刻骨铭心。</p><p>忽略事实的部分很容易，即使它就在我们面前。</p><h3 id="The-power-of-the-situation"><a class="header-anchor" href="#The-power-of-the-situation">¶</a>The power of the situation</h3><p>例子：斯坦福监狱实验: obdient to the authority</p><p><u>Question</u>: how to create a positive situation whether consciously or unconsciously to bring out the best of ourselves?</p><p>Ans: priming with positive words.</p><p>problem: is the message right? 常常言过其实，收效甚微，尽管看起来振奋人心（比如：“Whether you think you can or can’t—you are right”  Henry Ford）</p><ul><li>Coexist with hard work, persistence and failures.</li><li>Self efficacy: malleable</li><li>Self-esteem: belief in ourselves</li></ul><p>mind is powerful. 不是说外在因素没有影响，而是思想的力量同样很强大。</p><h3 id="Beliefs-become-self-fulfilling-prophecies"><a class="header-anchor" href="#Beliefs-become-self-fulfilling-prophecies">¶</a>Beliefs become self-fulfilling prophecies</h3><p>How beliefs impact our performance?</p><ul><li>Motivation inconsistency</li><li>理想和现实存在差距。</li><li>when there is discrepancy or inconsistency between reality and ideal?<ul><li>Update schema</li><li>Ignore/discard the information</li><li>actively seek confirmation</li><li>Create a new reality</li></ul></li><li>interpretation of performance</li></ul><p>olc: 实习选择存在太多偏差。</p><p>Learn to fail, or fail to learn. No short cuts.</p><img src="/sg/2021/12/12/psy_belief/sc.png" class="" title="sc"><h3 id="Optimism-Vs-pessimism"><a class="header-anchor" href="#Optimism-Vs-pessimism">¶</a>Optimism Vs. pessimism</h3><p>悲观者设定现实的短期目标和长期目标，乐观者设定期待过高的短期目标和现实的长期目标。悲观者在表现不好时说我的期待值本来就不高，这样就足够了；在表现好时说这只是碰运气。而乐观者虽然由于设定过高的不切实际的短期目标导致表现一直不好，但他会不断反思自己从过去的经历学到了什么重新设定下一次目标，增强自己的信念。而不管需要经过多久，有足够的尝试，努力工作，失败，坚持，乐观者终究会实现自己的信念。</p><p>乐观/悲观只是不同的解释生活的态度。乐观不是盲目的对一切事情表示乐观，而是对生活中挫折的解释。</p><ul><li><p>暂时的/永久的失败。例子：比如一份被一份想要的工作拒了，看成永久的失败——我之后永远也找不到工作了；暂时的失败——这只是暂时的挫折，我能从中学到什么？比如重新锁定求职范围，找到属于自己的理想位置。</p></li><li><p>普遍/特殊化的例子。</p></li></ul><p>learn to interpret things as optimist</p><p>olc: 我竟然属于乐观者…不过中学的我非常悲观。</p><h3 id="realistic-VS-unrealistic-belief"><a class="header-anchor" href="#realistic-VS-unrealistic-belief">¶</a>realistic VS. unrealistic belief</h3><p><u>question:</u> how to distinguish between realitic belief and unrealistic belief?</p><p>ans: Right evaluation of reality</p><p><u>question:</u> Do high expectations lead to disappointment?</p><ul><li>关心我们的人常常希望降低我们的期望，因为期待过高常意味着自尊受到打击的机会更大。</li><li>fact：基础幸福感的水平线是一定的，生活的起伏带来的幸福感水平总会回到这一水平</li></ul><h3 id="action"><a class="header-anchor" href="#action">¶</a>action</h3><p><u>Problem: how to raise the base level of happiness?</u></p><p>Coping Vs. avoidance</p><p>解决问题而不是逃不问题，允许自己去冒险，走出舒适区，承担失败的风险，去尝试做没做过的事情，去一个想去但在小的时候不敢去的地方。只有处理问题，解决问题能够改变现状。</p><p>我们评价自己所用的方式和评价他人一样，就是看他的行为。</p><p>事实：失败带来的痛苦其实远比想象中失败的痛苦要小的多，幸福感水平总会回到基准线附近。</p><p><u>problem:</u> how to become a optimist?</p><ol><li><p>Just do it! (action)</p><p>单纯的灌输积极信息，无论是从内还是从外都无助于改善现状除非采取行动。</p><p>失败是不可避免的，我们需要给自己失败的机会。但这不是说主动搞砸一件事，而是在一件事失败后不要有太多的负担。</p></li><li><p>Imagine that… (visualization)</p><p>Focus on journey and destination.</p><p>Mistake: focus not just on the destination.</p><p>例子：马丁路德金：我有一个梦想。</p><p>olc: 转专业面试之前我总想象着自己会流畅地度过整个流程，但结果就是支支吾吾地熬过了五分钟（这仅有的面试时间）。失败的原因是没有专门准备面试，人也不够自信，表达能力也欠缺等等，但当时开始停滞的最重要的原因是行动仍旧不够。6.009在大一下那时因为拖延症卡了一次，大二上因为基础不够又卡了一次，现在大三上的我一定要解决这门课程。</p></li><li><p>Cognitive therapy (rational thinking)</p><p>Event -&gt; thoughts(evaluation) -&gt; emotion</p></li></ol><p>误区1: magnify: 过度放大失败而不是把它当成进步的阶梯：one or nothing: perfectionism</p><p>误区2: minimize: tunnel vision-&gt;忽略非理性因素让自己能更理智地看待事情的全局变化</p><p>fact: emotion is personal evaluation of reality, which doesn’t reflect the reality.</p><p>Get real through the question we asked. Look out.</p><h3 id="Reminder-v3"><a class="header-anchor" href="#Reminder-v3">¶</a>Reminder</h3><ul><li>Optimism(believe in myself), passion(love what you do), hard work</li><li>learn to fail, or fail to learn</li></ul><p>有的时候沮丧让人甚至失去了行动能力，这就是我希望增强自己心理健康免疫系统的原因。</p><p>所有的一切都是为了transformation。如果只改变当前的态度，而改变后的态度却不能影响任何行动，那么所有的乐观解释不过是对过去生活的简单记录，没有任何意义。</p><h2 id="Focus"><a class="header-anchor" href="#Focus">¶</a>Focus</h2><p>How focus creates reality?</p><p>P8 32:00开始</p><h3 id="Adaption"><a class="header-anchor" href="#Adaption">¶</a>Adaption</h3><p>我们总是看到事物的反面的原因是我们适应于现有的生活，对好的事习以为常，而对发生的不好的事非常敏感。</p><p><u>Problem:</u> 能否适应糟糕的环境同时不对积极的事物习以为常？</p><p><u>Problem:</u> 是不是只有失去的时候才懂得珍惜？</p><p>Ans: learn to appreciate.</p><h3 id="Appreciation"><a class="header-anchor" href="#Appreciation">¶</a>Appreciation</h3><p>There is always something to appreciate in real. If we don’t appreciate the good things, they depreciates.</p><p><u>problem</u>: what I am grateful for?</p><ul><li>Be grateful for everythings. What we focus on appreciates.<ul><li>Chipping away negativity</li></ul></li><li>express gratitude to ourselves and others.</li></ul><p><u>Question</u> : how to express gratitude?</p><ul><li><p>Take time to reflect</p></li><li><p>Letter, phone, or in-person</p></li><li><p>Regularly (weekly, bi-weekly or monthly)</p></li><li><p>Writing helps even if letter not sent</p></li></ul><h2 id="Goal-setting"><a class="header-anchor" href="#Goal-setting">¶</a>Goal setting</h2><p>拖延症的解决方式。今年9月初开始调整状态，到现在（12月）已经没有了超过两天的拖延。不过仍然存在因为别的事而耽搁学习的情况。</p><p>Setting goal resolves internal conflicts.</p><p>olc: 当你知道你将去哪儿，那么就会获得内心的平静。</p><p>Job -&gt; career -&gt; calling</p><p>Problem: what is your calling?</p><p>Ans: Listen to the inner calls which guide your direction. When we pursue our passion, when we pursue a self-concordant goal and a self-concordant journey, that’s when we become alive.</p><p>这个答案会随着时间变化，可能过了两年又是不同的样子。但是我们打开了可能性，看到的事物的真实性和自己的职责和使命。</p><p>Tips for setting goal:</p><ol><li><p>writing down</p></li><li><p>set lifelines(not DDL): the date by which we want to achieve those certain goals</p></li><li><p>make it specific</p></li><li><p><u>Future goals as means; present experiences as ends.</u></p><p>设定目标的目的不是为了完成它，完成目标与否不应该影响我们情绪的好坏，更重要的是目标是为了激励我们去进行这项旅程。如果我们只关注结果而不关注过程，那么我们就不太可能取得成功。</p><p>常常出现这样的情形：设定了一个目标没有完成它，或者完成了一个目标后就没有新的目标设定。</p></li></ol><h3 id="Stress"><a class="header-anchor" href="#Stress">¶</a>Stress</h3><p>P13 58:24</p><p>Too much to do -&gt; stress(feeling overwhelmed ) -&gt; depression</p><p><u>question</u>: how to deal with distress?</p><p>Ans: take a time-out</p><p><u>problem</u>: Why are so many people stressed? -&gt;<u>What do those who are successful and able to lead a healthy and happy life do?</u></p><p>Ans: Stress is fine as long as we take recovery.</p><p>Solution: <strong>take a break</strong>.</p><ol><li>From marathon to sprint intervals.(sprint-&gt;recovery-&gt;sprint-&gt;recovery…)</li><li>Creating a ritual of both work and recovery: 60-120 minutes of work, 15+ minutes of recovery.</li><li>Maintaining flexibility. 合理安排杂事。</li><li>Take multi-level recovery.</li></ol><h3 id="Focus-v2"><a class="header-anchor" href="#Focus-v2">¶</a>Focus!</h3><p>The key is focus.</p><p>例子：当你放超过一首歌时，就产生了噪音。</p><p>当多件事重叠在一起，那么再好的事情都会变糟糕。</p><ul><li><p>Recovery: Quantity affects quality</p></li><li><p>Work: Reducing multi-tasking</p><ul><li>elimination is not possible.</li></ul></li></ul><p>这里的multi-task指的是在同一时间做超过一件事，比如在写作的时候关注着邮件或消息提示。</p><p>olc:在相同时间里我应该只开一项工作的网页然后关掉再开另一项工作的，之前总是开太多网页结果根本不可能在同一时间兼顾。</p><h3 id="Simplify"><a class="header-anchor" href="#Simplify">¶</a>Simplify!</h3><p>Do less things, the important one.</p><p><strong>Time affluence</strong></p><p><u>problem:</u> how to lead a life with fun and functionality?</p><p><u>Problem:</u> what do we really really really want to do?</p><h3 id="Reminder-v4"><a class="header-anchor" href="#Reminder-v4">¶</a>Reminder</h3><p>有趣的概念</p><ol><li><p>Self-concordant goal</p></li><li><p>加强性格优势对应的能力</p></li><li><p>Multi-level recovery:</p><ul><li>Micro (minutes, hours)</li><li>Mezzo (nights, days)</li><li>Macro (weeks, months)</li></ul></li><li><p>Optimum simplicity:找到一天最优的工作时间</p></li><li><p>可持续发展</p></li></ol>]]></content>
+        <content type="html"><![CDATA[<p>Beliefs  -&gt; focus-&gt; change -&gt; goal setting</p><h2 id="Beliefs"><a class="header-anchor" href="#Beliefs">¶</a>Beliefs</h2><p>例子：Roger Bannister，首位历史上4分钟跑1英里的人。当时从医学/生物学上证明是不可能的。</p><p>信念为什么不是一种神秘主义？belief Vs. illusion</p><p>olc: 中学的失败刻骨铭心。</p><p>忽略事实的部分很容易，即使它就在我们面前。</p><h3 id="The-power-of-the-situation"><a class="header-anchor" href="#The-power-of-the-situation">¶</a>The power of the situation</h3><p>例子：斯坦福监狱实验: obdient to the authority</p><p><u>Question</u>: how to create a positive situation whether consciously or unconsciously to bring out the best of ourselves?</p><p>Ans: priming with positive words.</p><p>problem: is the message right? 常常言过其实，收效甚微，尽管看起来振奋人心（比如：“Whether you think you can or can’t—you are right”  Henry Ford）</p><ul><li>Coexist with hard work, persistence and failures.</li><li>Self efficacy: malleable</li><li>Self-esteem: belief in ourselves</li></ul><p>mind is powerful. 不是说外在因素没有影响，而是思想的力量同样很强大。</p><h3 id="Beliefs-become-self-fulfilling-prophecies"><a class="header-anchor" href="#Beliefs-become-self-fulfilling-prophecies">¶</a>Beliefs become self-fulfilling prophecies</h3><p>How beliefs impact our performance?</p><ul><li>Motivation inconsistency</li><li>理想和现实存在差距。</li><li>when there is discrepancy or inconsistency between reality and ideal?<ul><li>Update schema</li><li>Ignore/discard the information</li><li>actively seek confirmation</li><li>Create a new reality</li></ul></li><li>interpretation of performance</li></ul><p>olc: 实习选择存在太多偏差。</p><p>Learn to fail, or fail to learn. No short cuts.</p><img src="/sg/2021/12/12/psy_belief/sc.png" class="" title="sc"><h3 id="Optimism-Vs-pessimism"><a class="header-anchor" href="#Optimism-Vs-pessimism">¶</a>Optimism Vs. pessimism</h3><p>悲观者设定现实的短期目标和长期目标，乐观者设定期待过高的短期目标和现实的长期目标。悲观者在表现不好时说我的期待值本来就不高，这样就足够了；在表现好时说这只是碰运气。而乐观者虽然由于设定过高的不切实际的短期目标导致表现一直不好，但他会不断反思自己从过去的经历学到了什么重新设定下一次目标，增强自己的信念。而不管需要经过多久，有足够的尝试，努力工作，失败，坚持，乐观者终究会实现自己的信念。</p><p>乐观/悲观只是不同的解释生活的态度。乐观不是盲目的对一切事情表示乐观，而是对生活中挫折的解释。</p><ul><li><p>暂时的/永久的失败。例子：比如一份被一份想要的工作拒了，看成永久的失败——我之后永远也找不到工作了；暂时的失败——这只是暂时的挫折，我能从中学到什么？比如重新锁定求职范围，找到属于自己的理想位置。</p></li><li><p>普遍/特殊化的例子。</p></li></ul><p>learn to interpret things as optimist</p><p>olc: 我竟然属于乐观者…不过中学的我非常悲观。</p><h3 id="realistic-VS-unrealistic-belief"><a class="header-anchor" href="#realistic-VS-unrealistic-belief">¶</a>realistic VS. unrealistic belief</h3><p><u>question:</u> how to distinguish between realitic belief and unrealistic belief?</p><p>ans: Right evaluation of reality</p><p><u>question:</u> Do high expectations lead to disappointment?</p><ul><li>关心我们的人常常希望降低我们的期望，因为期待过高常意味着自尊受到打击的机会更大。</li><li>fact：基础幸福感的水平线是一定的，生活的起伏带来的幸福感水平总会回到这一水平</li></ul><h3 id="action"><a class="header-anchor" href="#action">¶</a>action</h3><p><u>Problem: how to raise the base level of happiness?</u></p><p>Coping Vs. avoidance</p><p>解决问题而不是逃不问题，允许自己去冒险，走出舒适区，承担失败的风险，去尝试做没做过的事情，去一个想去但在小的时候不敢去的地方。只有处理问题，解决问题能够改变现状。</p><p>我们评价自己所用的方式和评价他人一样，就是看他的行为。</p><p>事实：失败带来的痛苦其实远比想象中失败的痛苦要小的多，幸福感水平总会回到基准线附近。</p><p><u>problem:</u> how to become a optimist?</p><ol><li><p>Just do it! (action)</p><p>单纯的灌输积极信息，无论是从内还是从外都无助于改善现状除非采取行动。</p><p>失败是不可避免的，我们需要给自己失败的机会。但这不是说主动搞砸一件事，而是在一件事失败后不要有太多的负担。</p></li><li><p>Imagine that… (visualization)</p><p>Focus on journey and destination.</p><p>Mistake: focus not just on the destination.</p><p>例子：马丁路德金：我有一个梦想。</p><p>olc: 转专业面试之前我总想象着自己会流畅地度过整个流程，但结果就是支支吾吾地熬过了五分钟（这仅有的面试时间）。失败的原因是没有专门准备面试，人也不够自信，表达能力也欠缺等等，但当时开始停滞的最重要的原因是行动仍旧不够。6.009在大一下那时因为拖延症卡了一次，大二上因为基础不够又卡了一次，现在大三上的我一定要解决这门课程。</p></li><li><p>Cognitive therapy (rational thinking)</p><p>Event -&gt; thoughts(evaluation) -&gt; emotion</p></li></ol><p>误区1: magnify: 过度放大失败而不是把它当成进步的阶梯：one or nothing: perfectionism</p><p>误区2: minimize: tunnel vision-&gt;忽略非理性因素让自己能更理智地看待事情的全局变化</p><p>fact: emotion is personal evaluation of reality, which doesn’t reflect the reality.</p><p>Get real through the question we asked. Look out.</p><h3 id="Reminder-v2"><a class="header-anchor" href="#Reminder-v2">¶</a>Reminder</h3><ul><li>Optimism(believe in myself), passion(love what you do), hard work</li><li>learn to fail, or fail to learn</li></ul><p>有的时候沮丧让人甚至失去了行动能力，这就是我希望增强自己心理健康免疫系统的原因。</p><p>所有的一切都是为了transformation。如果只改变当前的态度，而改变后的态度却不能影响任何行动，那么所有的乐观解释不过是对过去生活的简单记录，没有任何意义。</p><h2 id="Focus"><a class="header-anchor" href="#Focus">¶</a>Focus</h2><p>How focus creates reality?</p><p>P8 32:00开始</p><h3 id="Adaption"><a class="header-anchor" href="#Adaption">¶</a>Adaption</h3><p>我们总是看到事物的反面的原因是我们适应于现有的生活，对好的事习以为常，而对发生的不好的事非常敏感。</p><p><u>Problem:</u> 能否适应糟糕的环境同时不对积极的事物习以为常？</p><p><u>Problem:</u> 是不是只有失去的时候才懂得珍惜？</p><p>Ans: learn to appreciate.</p><h3 id="Appreciation"><a class="header-anchor" href="#Appreciation">¶</a>Appreciation</h3><p>There is always something to appreciate in real. If we don’t appreciate the good things, they depreciates.</p><p><u>problem</u>: what I am grateful for?</p><ul><li>Be grateful for everythings. What we focus on appreciates.<ul><li>Chipping away negativity</li></ul></li><li>express gratitude to ourselves and others.</li></ul><p><u>Question</u> : how to express gratitude?</p><ul><li><p>Take time to reflect</p></li><li><p>Letter, phone, or in-person</p></li><li><p>Regularly (weekly, bi-weekly or monthly)</p></li><li><p>Writing helps even if letter not sent</p></li></ul><h2 id="Goal-setting"><a class="header-anchor" href="#Goal-setting">¶</a>Goal setting</h2><p>拖延症的解决方式。今年9月初开始调整状态，到现在（12月）已经没有了超过两天的拖延。不过仍然存在因为别的事而耽搁学习的情况。</p><p>Setting goal resolves internal conflicts.</p><p>olc: 当你知道你将去哪儿，那么就会获得内心的平静。</p><p>Job -&gt; career -&gt; calling</p><p>Problem: what is your calling?</p><p>Ans: Listen to the inner calls which guide your direction. When we pursue our passion, when we pursue a self-concordant goal and a self-concordant journey, that’s when we become alive.</p><p>这个答案会随着时间变化，可能过了两年又是不同的样子。但是我们打开了可能性，看到的事物的真实性和自己的职责和使命。</p><p>Tips for setting goal:</p><ol><li><p>writing down</p></li><li><p>set lifelines(not DDL): the date by which we want to achieve those certain goals</p></li><li><p>make it specific</p></li><li><p><u>Future goals as means; present experiences as ends.</u></p><p>设定目标的目的不是为了完成它，完成目标与否不应该影响我们情绪的好坏，更重要的是目标是为了激励我们去进行这项旅程。如果我们只关注结果而不关注过程，那么我们就不太可能取得成功。</p><p>常常出现这样的情形：设定了一个目标没有完成它，或者完成了一个目标后就没有新的目标设定。</p></li></ol><h3 id="Stress"><a class="header-anchor" href="#Stress">¶</a>Stress</h3><p>P13 58:24</p><p>Too much to do -&gt; stress(feeling overwhelmed ) -&gt; depression</p><p><u>question</u>: how to deal with distress?</p><p>Ans: take a time-out</p><p><u>problem</u>: Why are so many people stressed? -&gt;<u>What do those who are successful and able to lead a healthy and happy life do?</u></p><p>Ans: Stress is fine as long as we take recovery.</p><p>Solution: <strong>take a break</strong>.</p><ol><li>From marathon to sprint intervals.(sprint-&gt;recovery-&gt;sprint-&gt;recovery…)</li><li>Creating a ritual of both work and recovery: 60-120 minutes of work, 15+ minutes of recovery.</li><li>Maintaining flexibility. 合理安排杂事。</li><li>Take multi-level recovery.</li></ol><h3 id="Focus-v2"><a class="header-anchor" href="#Focus-v2">¶</a>Focus!</h3><p>The key is focus.</p><p>例子：当你放超过一首歌时，就产生了噪音。</p><p>当多件事重叠在一起，那么再好的事情都会变糟糕。</p><ul><li><p>Recovery: Quantity affects quality</p></li><li><p>Work: Reducing multi-tasking</p><ul><li>elimination is not possible.</li></ul></li></ul><p>这里的multi-task指的是在同一时间做超过一件事，比如在写作的时候关注着邮件或消息提示。</p><p>olc:在相同时间里我应该只开一项工作的网页然后关掉再开另一项工作的，之前总是开太多网页结果根本不可能在同一时间兼顾。</p><h3 id="Simplify"><a class="header-anchor" href="#Simplify">¶</a>Simplify!</h3><p>Do less things, the important one.</p><p><strong>Time affluence</strong></p><p><u>problem:</u> how to lead a life with fun and functionality?</p><p><u>Problem:</u> what do we really really really want to do?</p><h3 id="Reminder-v3"><a class="header-anchor" href="#Reminder-v3">¶</a>Reminder</h3><p>有趣的概念</p><ol><li><p>Self-concordant goal</p></li><li><p>加强性格优势对应的能力</p></li><li><p>Multi-level recovery:</p><ul><li>Micro (minutes, hours)</li><li>Mezzo (nights, days)</li><li>Macro (weeks, months)</li></ul></li><li><p>Optimum simplicity:找到一天最优的工作时间</p></li><li><p>可持续发展</p></li></ol>]]></content>
       
       
       <categories>
@@ -855,12 +740,6 @@
           
       </categories>
       
-      
-        <tags>
-            
-            <tag> positive psychology </tag>
-            
-        </tags>
       
     </entry>
     
@@ -871,7 +750,7 @@
       <link href="/sg/2021/12/12/psy_perfection/"/>
       <url>/sg/2021/12/12/psy_perfection/</url>
       
-        <content type="html"><![CDATA[<p>对我来说最重要的一节课。</p><h3 id="What-is-Perfectionism"><a class="header-anchor" href="#What-is-Perfectionism">¶</a>What is Perfectionism?</h3><p>例子1：（os:感觉教授在整人）Tal先让学生画一个正圆，不停地强调画出他的最好水平。然后画一个假如他三岁能画出的圆。再画一个假如他一岁能画出的圆。最后教授开始打分，给正圆打了勾，其他的歪歪扭扭的曲线打了叉。</p><p>Take away: 在画出一个完美的圆之前需要画很多个不完美的圆才能做到。</p><p>例子2：小婴儿在刚开始学走路总会摔跤很多次，在学会吃饭前总会弄得满嘴都是食物。</p><p>Take away: **Learn to fail or fail to learn.**There is no other way to learn, to grow.</p><p>例子3：进行了一项对医院医护人员犯错的调查问卷。结果反而和现实表现不同：在问卷上犯错较少的人在实际工作中的错误反而更多。实际上这是由于那些问卷上犯错较少的人隐瞒了犯的小错误，只有当错误太大不可隐瞒时才认为这是错误；而问卷上犯错较多的人如实记录下大的或小的错误，他们在工作中的表现也相对比另一类人更好。</p><p>Take away: 平时经历了更多失败的团队成功的概率更高。类似软件工程的fast fail</p><p><u>perfection Vs. excellence</u></p><blockquote><p>def: Perfectionism is an <strong>incapacitating</strong> fear of failure that permeates our lives, especially those areas that we <strong>care about most</strong>.</p><p>It is an approach, a cognitive and emotional schema, that we hold toward <strong>the journey</strong> of our lives, toward the process of getting from point A to point B.</p></blockquote><p>完美主义是一种对失败的失能性恐惧，尤其是对于我们最关心的事。</p><img src="/sg/2021/12/12/psy_perfection/sc.png" class="" title="sc"><p>olc: 震惊🤯这彻底改变了我对失败的看法。我总是以为事情应该像perfection那样完成，但却忽略了事物认知理解实现的曲线应该是曲折的。这不是说我们应该可以去弯弯绕绕地避开我们真实的目标，而是说即使在实现目标的过程中遇到了失败也是非常正常的，这正是理解和学习的唯一途径。</p><p>在遇到失败时，我没有问正确的问题。完美主义是我经常遇到的问题但我并不知道自己有这种倾向，对失败的恐惧导致我无法真正行动，阻碍了我的学习和成长。学编程最初我以为项目直接从头到尾写就写完了，但事实上是写一点儿，进行简单的测试，再写一点儿，然后继续测试。学离散数学也以为一道题就这么干想就想出来，而忽略了真正的学习过程需要从例题中寻找解法，忽视了recitation的学习。看到了优秀的人的成功，却没有看到他们遇到的失败和怎么去解决这样的失败。</p><h3 id="Characteristics"><a class="header-anchor" href="#Characteristics">¶</a>Characteristics</h3><p>追求perfection的人防御性很强，固执己见；而追求excellence的人对建议/批评保持开放的态度。</p><p>追求perfection的人只关注自己没有完成的一半；而追求excellence的人更关注已经完成的部分。</p><p>追求perfection的人过分概括当前的情况，把一次的失败看成所有事情的失败；而追求excellence的人认清现实，知道只是一次的失败。</p><p>追求perfection的人永远不能真正接受自己；而追求excellence的人对自己无条件接纳，这包括失败与成功。</p><p>追求perfection的人害怕失败，只专注结果/终点，认为事情是静态的，不会再发生变化，比如“他这么强，无论我再怎么努力我也无法赶上他”；而追求excellence的人知道把失败看成对自己的反馈，把关注放在结果/终点和旅程上，知道事情是动态变化的，把重心放在可以改变的部分。</p><h3 id="Consequences"><a class="header-anchor" href="#Consequences">¶</a>Consequences</h3><p>例子：Mr X. X先生从小学起就追求完美主义，他要上最好的中学所以在小学时就非常努力。当他去了最好的中学，他高兴了两周，然后又变得忧虑，这样还不够，他要上最好的大学，于是在中学时他参加各种课外活动，同时在学业成绩上的表现也非常好。当他去了最好的大学，他高兴了两个月，可以歇歇了么？不行，他需要有一份最好的工作，于是他积极参与课外互动，参加领导了三个社团，同时还参加了一个大公司的实习，这样总该休息了吧？X先生始终有一个更完美的目标需要完成，即使他能够短暂地休息两个月，两周，他总会回到那种焦虑失望的状态。在他老的时候，别人问了他一个问题：你想要的生活是什么样的？</p><p>完美主义导致的结果是：他总是只有暂时的轻松解脱；只能看到不可避免的失败；把发生的一些状况外的杂事看成浪费时间；有出现混乱/病症的倾向。由于只看到了失败，他的自尊受到打击，不再相信自己。而这会进一步影响他的人际关系，引起他的焦虑和压力和痛苦。</p><p>追求excellence的结果是：他总是有能够持续的满足感；对比不可避免的失败，他看到的是成功的可能性；对比看成浪费时间的杂事，他看到的是恰当的时间分配；他对焦虑和失落有健康的方法去解决。他看的是持续的改善和变化，而这时他能够成长。虽然他也会遇到焦虑紧张，但这变得可以控制。更少的痛苦同时更多的收益。</p><h3 id="Sources-of-Perfectionism"><a class="header-anchor" href="#Sources-of-Perfectionism">¶</a>Sources of Perfectionism</h3><blockquote><p>Destination = Reward = Acceptance</p><p>Journey = Unrewarded = Means Only</p></blockquote><p>完美主义的起源时永远只能看到目标，奖励结果。社会环境就是如此，只奖励成功的人。</p><p>但我们应该看到过程和结果，奖励过程，尽管有时失败了。顺应自己的天性，允许自己犯错，接纳自己的失败。</p><h3 id="Overcoming-Perfectionism"><a class="header-anchor" href="#Overcoming-Perfectionism">¶</a>Overcoming Perfectionism</h3><p><u>problem:</u> how to overcome this: living in the future, being afraid of the present because what if I fail?</p><ol><li><p>being aware of what I want to change? and what I want to maintain?</p></li><li><p>rewarding effort</p></li><li><p>Active acceptance</p><p>误区：用完美主义的方式解决完美主义的问题。</p><p>it’s ok to prone to perfection.</p><p>Accept it, then go ahead and change it</p></li><li><p>Behavior:open to criticism</p><p>putting myself on the line</p></li><li><p>Visualization: 想象自己像追求卓越的人一样行动</p></li><li><p>rough draft: Setting a liberating goal or vision</p><p>例子：直到我写出绝世佳作，其他的是草稿。</p><p>例子：20年后我会到最顶尖的学府教授积极心理学，在那之前都是准备。</p><p>解放自己，享受当下。重点是舍弃当下这种吹毛求疵，完美无缺的生活。</p></li><li><p>The Platinum Rule: have compassion for ourselves</p><p>accepting failures in the same way thatwe accept in others, in people we love.</p></li><li><p>how to help others?</p><p>改变不是从一夜就能完成的。</p><ul><li>By example: people do what you do, not what you say.</li><li>Tell stories about it.</li><li>Rewarding the journey/process/effort</li></ul></li></ol><p><u>Technique:</u></p><p>当面临生活的艰难时刻时，受到焦虑挫折打击时，</p><ol><li><p>Permission</p><ul><li><p>Acceptance</p></li><li><p>Respect for reality</p></li></ul></li><li><p>Positive: reframing question: what is the growth opportunity here?</p><ul><li><p>Benefit finding</p></li><li><p>Failure as opportunity:See the opportunity in failures.</p></li><li><p>Distracting</p><p>分散注意力是说当一种想法或感觉反复出现，而我们也与之做着西西弗斯式的对抗时。在这种情况下沉思反而会在同一种思路里越陷越深，得不到什么结果，同时又让人崩溃。最好的方法是分散自己的注意力。当被焦虑压垮的时候，用其他的事情分散注意力，跑步，听音乐，或者做别的。这和逃避问题不同，逃避是指之后不会再处理生活中的任何问题。</p></li></ul></li><li><p>Perspective</p><ul><li><p>Don’t sweat the small stuff… 别为小事抓狂。</p><p>olc: 比如我差点因为翘课被辅导员约谈。</p></li><li><p>Psychological maturity: willingly to shift perspective</p><blockquote><p>It’s the ability, when we want, to be immersed in the here and now in the present. It’s the ability, when we want, to take a step back, zoom out those in time and in space and ask the question in the big picture “is this gonna matter in one year?”</p></blockquote></li></ul></li></ol><p>例子：教授讲了一个他最近遇到崩溃时，怎么运用以上的技巧改变角度，并改善了生活。</p><p>这些技巧不是疫苗，而像药片。</p><h3 id="Reminder-v2"><a class="header-anchor" href="#Reminder-v2">¶</a>Reminder</h3><p>有趣的概念：</p><ul><li><p>Courage: courage is not about having no fears. Instead, it’s about having fear and go ahead anyway.</p></li><li><p>心理安全</p></li><li><p>flow experiences</p></li><li><p>80/20 Rule:一天20%的时间里干完了80%的事情。</p></li></ul><h3 id="olc-v4"><a class="header-anchor" href="#olc-v4">¶</a>olc</h3><p>听从内心的声音，那个声音是完成MIT 6-3 course plan。这是我现在生活的优先级。做完这个后我才会完成实习计划。</p>]]></content>
+        <content type="html"><![CDATA[<p>对我来说最重要的一节课。</p><h3 id="What-is-Perfectionism"><a class="header-anchor" href="#What-is-Perfectionism">¶</a>What is Perfectionism?</h3><p>例子1：（os:感觉教授在整人）Tal先让学生画一个正圆，不停地强调画出他的最好水平。然后画一个假如他三岁能画出的圆。再画一个假如他一岁能画出的圆。最后教授开始打分，给正圆打了勾，其他的歪歪扭扭的曲线打了叉。</p><p>Take away: 在画出一个完美的圆之前需要画很多个不完美的圆才能做到。</p><p>例子2：小婴儿在刚开始学走路总会摔跤很多次，在学会吃饭前总会弄得满嘴都是食物。</p><p>Take away: **Learn to fail or fail to learn.**There is no other way to learn, to grow.</p><p>例子3：进行了一项对医院医护人员犯错的调查问卷。结果反而和现实表现不同：在问卷上犯错较少的人在实际工作中的错误反而更多。实际上这是由于那些问卷上犯错较少的人隐瞒了犯的小错误，只有当错误太大不可隐瞒时才认为这是错误；而问卷上犯错较多的人如实记录下大的或小的错误，他们在工作中的表现也相对比另一类人更好。</p><p>Take away: 平时经历了更多失败的团队成功的概率更高。类似软件工程的fast fail</p><p><u>perfection Vs. excellence</u></p><blockquote><p>def: Perfectionism is an <strong>incapacitating</strong> fear of failure that permeates our lives, especially those areas that we <strong>care about most</strong>.</p><p>It is an approach, a cognitive and emotional schema, that we hold toward <strong>the journey</strong> of our lives, toward the process of getting from point A to point B.</p></blockquote><p>完美主义是一种对失败的失能性恐惧，尤其是对于我们最关心的事。</p><img src="/sg/2021/12/12/psy_perfection/sc.png" class="" title="sc"><p>olc: 震惊🤯这彻底改变了我对失败的看法。我总是以为事情应该像perfection那样完成，但却忽略了事物认知理解实现的曲线应该是曲折的。这不是说我们应该可以去弯弯绕绕地避开我们真实的目标，而是说即使在实现目标的过程中遇到了失败也是非常正常的，这正是理解和学习的唯一途径。</p><p>在遇到失败时，我没有问正确的问题。完美主义是我经常遇到的问题但我并不知道自己有这种倾向，对失败的恐惧导致我无法真正行动，阻碍了我的学习和成长。学编程最初我以为项目直接从头到尾写就写完了，但事实上是写一点儿，进行简单的测试，再写一点儿，然后继续测试。学离散数学也以为一道题就这么干想就想出来，而忽略了真正的学习过程需要从例题中寻找解法，忽视了recitation的学习。看到了优秀的人的成功，却没有看到他们遇到的失败和怎么去解决这样的失败。</p><h3 id="Characteristics"><a class="header-anchor" href="#Characteristics">¶</a>Characteristics</h3><p>追求perfection的人防御性很强，固执己见；而追求excellence的人对建议/批评保持开放的态度。</p><p>追求perfection的人只关注自己没有完成的一半；而追求excellence的人更关注已经完成的部分。</p><p>追求perfection的人过分概括当前的情况，把一次的失败看成所有事情的失败；而追求excellence的人认清现实，知道只是一次的失败。</p><p>追求perfection的人永远不能真正接受自己；而追求excellence的人对自己无条件接纳，这包括失败与成功。</p><p>追求perfection的人害怕失败，只专注结果/终点，认为事情是静态的，不会再发生变化，比如“他这么强，无论我再怎么努力我也无法赶上他”；而追求excellence的人知道把失败看成对自己的反馈，把关注放在结果/终点和旅程上，知道事情是动态变化的，把重心放在可以改变的部分。</p><h3 id="Consequences"><a class="header-anchor" href="#Consequences">¶</a>Consequences</h3><p>例子：Mr X. X先生从小学起就追求完美主义，他要上最好的中学所以在小学时就非常努力。当他去了最好的中学，他高兴了两周，然后又变得忧虑，这样还不够，他要上最好的大学，于是在中学时他参加各种课外活动，同时在学业成绩上的表现也非常好。当他去了最好的大学，他高兴了两个月，可以歇歇了么？不行，他需要有一份最好的工作，于是他积极参与课外互动，参加领导了三个社团，同时还参加了一个大公司的实习，这样总该休息了吧？X先生始终有一个更完美的目标需要完成，即使他能够短暂地休息两个月，两周，他总会回到那种焦虑失望的状态。在他老的时候，别人问了他一个问题：你想要的生活是什么样的？</p><p>完美主义导致的结果是：他总是只有暂时的轻松解脱；只能看到不可避免的失败；把发生的一些状况外的杂事看成浪费时间；有出现混乱/病症的倾向。由于只看到了失败，他的自尊受到打击，不再相信自己。而这会进一步影响他的人际关系，引起他的焦虑和压力和痛苦。</p><p>追求excellence的结果是：他总是有能够持续的满足感；对比不可避免的失败，他看到的是成功的可能性；对比看成浪费时间的杂事，他看到的是恰当的时间分配；他对焦虑和失落有健康的方法去解决。他看的是持续的改善和变化，而这时他能够成长。虽然他也会遇到焦虑紧张，但这变得可以控制。更少的痛苦同时更多的收益。</p><h3 id="Sources-of-Perfectionism"><a class="header-anchor" href="#Sources-of-Perfectionism">¶</a>Sources of Perfectionism</h3><blockquote><p>Destination = Reward = Acceptance</p><p>Journey = Unrewarded = Means Only</p></blockquote><p>完美主义的起源时永远只能看到目标，奖励结果。社会环境就是如此，只奖励成功的人。</p><p>但我们应该看到过程和结果，奖励过程，尽管有时失败了。顺应自己的天性，允许自己犯错，接纳自己的失败。</p><h3 id="Overcoming-Perfectionism"><a class="header-anchor" href="#Overcoming-Perfectionism">¶</a>Overcoming Perfectionism</h3><p><u>problem:</u> how to overcome this: living in the future, being afraid of the present because what if I fail?</p><ol><li><p>being aware of what I want to change? and what I want to maintain?</p></li><li><p>rewarding effort</p></li><li><p>Active acceptance</p><p>误区：用完美主义的方式解决完美主义的问题。</p><p>it’s ok to prone to perfection.</p><p>Accept it, then go ahead and change it</p></li><li><p>Behavior:open to criticism</p><p>putting myself on the line</p></li><li><p>Visualization: 想象自己像追求卓越的人一样行动</p></li><li><p>rough draft: Setting a liberating goal or vision</p><p>例子：直到我写出绝世佳作，其他的是草稿。</p><p>例子：20年后我会到最顶尖的学府教授积极心理学，在那之前都是准备。</p><p>解放自己，享受当下。重点是舍弃当下这种吹毛求疵，完美无缺的生活。</p></li><li><p>The Platinum Rule: have compassion for ourselves</p><p>accepting failures in the same way thatwe accept in others, in people we love.</p></li><li><p>how to help others?</p><p>改变不是从一夜就能完成的。</p><ul><li>By example: people do what you do, not what you say.</li><li>Tell stories about it.</li><li>Rewarding the journey/process/effort</li></ul></li></ol><p><u>Technique:</u></p><p>当面临生活的艰难时刻时，受到焦虑挫折打击时，</p><ol><li><p>Permission</p><ul><li><p>Acceptance</p></li><li><p>Respect for reality</p></li></ul></li><li><p>Positive: reframing question: what is the growth opportunity here?</p><ul><li><p>Benefit finding</p></li><li><p>Failure as opportunity:See the opportunity in failures.</p></li><li><p>Distracting</p><p>分散注意力是说当一种想法或感觉反复出现，而我们也与之做着西西弗斯式的对抗时。在这种情况下沉思反而会在同一种思路里越陷越深，得不到什么结果，同时又让人崩溃。最好的方法是分散自己的注意力。当被焦虑压垮的时候，用其他的事情分散注意力，跑步，听音乐，或者做别的。这和逃避问题不同，逃避是指之后不会再处理生活中的任何问题。</p></li></ul></li><li><p>Perspective</p><ul><li><p>Don’t sweat the small stuff… 别为小事抓狂。</p><p>olc: 比如我差点因为翘课被辅导员约谈。</p></li><li><p>Psychological maturity: willingly to shift perspective</p><blockquote><p>It’s the ability, when we want, to be immersed in the here and now in the present. It’s the ability, when we want, to take a step back, zoom out those in time and in space and ask the question in the big picture “is this gonna matter in one year?”</p></blockquote></li></ul></li></ol><p>例子：教授讲了一个他最近遇到崩溃时，怎么运用以上的技巧改变角度，并改善了生活。</p><p>这些技巧不是疫苗，而像药片。</p><h3 id="Reminder-v4"><a class="header-anchor" href="#Reminder-v4">¶</a>Reminder</h3><p>有趣的概念：</p><ul><li><p>Courage: courage is not about having no fears. Instead, it’s about having fear and go ahead anyway.</p></li><li><p>心理安全</p></li><li><p>flow experiences</p></li><li><p>80/20 Rule:一天20%的时间里干完了80%的事情。</p></li></ul><h3 id="olc-v4"><a class="header-anchor" href="#olc-v4">¶</a>olc</h3><p>听从内心的声音，那个声音是完成MIT 6-3 course plan。这是我现在生活的优先级。做完这个后我才会完成实习计划。</p>]]></content>
       
       
       <categories>
@@ -882,12 +761,6 @@
           
       </categories>
       
-      
-        <tags>
-            
-            <tag> positive psychology </tag>
-            
-        </tags>
       
     </entry>
     
@@ -910,12 +783,6 @@
       </categories>
       
       
-        <tags>
-            
-            <tag> positive psychology </tag>
-            
-        </tags>
-      
     </entry>
     
     
@@ -936,12 +803,6 @@
           
       </categories>
       
-      
-        <tags>
-            
-            <tag> read </tag>
-            
-        </tags>
       
     </entry>
     
@@ -964,12 +825,6 @@
       </categories>
       
       
-        <tags>
-            
-            <tag> environment </tag>
-            
-        </tags>
-      
     </entry>
     
     
@@ -990,12 +845,6 @@
           
       </categories>
       
-      
-        <tags>
-            
-            <tag> tool </tag>
-            
-        </tags>
       
     </entry>
     
@@ -1019,8 +868,6 @@
       
       
         <tags>
-            
-            <tag> 6.033 system design </tag>
             
             <tag> paper </tag>
             
@@ -1047,12 +894,6 @@
       </categories>
       
       
-        <tags>
-            
-            <tag> 6.031 software construction </tag>
-            
-        </tags>
-      
     </entry>
     
     
@@ -1073,12 +914,6 @@
           
       </categories>
       
-      
-        <tags>
-            
-            <tag> 6.033 system design </tag>
-            
-        </tags>
       
     </entry>
     
@@ -1101,12 +936,6 @@
       </categories>
       
       
-        <tags>
-            
-            <tag> 6.033 system design </tag>
-            
-        </tags>
-      
     </entry>
     
     
@@ -1127,12 +956,6 @@
           
       </categories>
       
-      
-        <tags>
-            
-            <tag> 6.033 system design </tag>
-            
-        </tags>
       
     </entry>
     
@@ -1155,12 +978,6 @@
       </categories>
       
       
-        <tags>
-            
-            <tag> 6.033 system design </tag>
-            
-        </tags>
-      
     </entry>
     
     
@@ -1182,12 +999,6 @@
       </categories>
       
       
-        <tags>
-            
-            <tag> 6.046 algorithms design </tag>
-            
-        </tags>
-      
     </entry>
     
     
@@ -1197,7 +1008,7 @@
       <link href="/sg/2021/11/15/SD_os/"/>
       <url>/sg/2021/11/15/SD_os/</url>
       
-        <content type="html"><![CDATA[<p>A revisit in virtulization, 2022/04/28</p><h2 id="Threads-virtual-machines-os-structures"><a class="header-anchor" href="#Threads-virtual-machines-os-structures">¶</a>Threads, virtual machines, os structures</h2><h3 id="concurrency"><a class="header-anchor" href="#concurrency">¶</a>concurrency</h3><p>problem: how to handle concurrency problem using yield? And the problems encountered.(from lecture 5)</p><p>yield(): suspends the running thread, chooses a new thread to run, and resumes the new thread</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">yield</span>(): </span><br><span class="line">  acquire(t_lock) </span><br><span class="line">  // Suspend the running thread </span><br><span class="line">  <span class="built_in">id</span> = cpus[CPU].thread </span><br><span class="line">  threads[<span class="built_in">id</span>].state = RUNNABLE </span><br><span class="line">  threads[<span class="built_in">id</span>].sp = SP </span><br><span class="line">  threads[<span class="built_in">id</span>].ptr = PTR </span><br><span class="line">  // Choose a new thread to run </span><br><span class="line">  do: </span><br><span class="line">    <span class="built_in">id</span> = (<span class="built_in">id</span> + <span class="number">1</span>) mod N </span><br><span class="line">  <span class="keyword">while</span> threads[<span class="built_in">id</span>].state != RUNNABLE </span><br><span class="line">  // Resume the new thread </span><br><span class="line">  SP = threads[<span class="built_in">id</span>].sp </span><br><span class="line">  PTR = threads[<span class="built_in">id</span>].ptr </span><br><span class="line">  threads[<span class="built_in">id</span>].state = RUNNING </span><br><span class="line">  cpus[CPU].thread = <span class="built_in">id</span> </span><br><span class="line">    </span><br><span class="line">  release(t_lock)</span><br></pre></td></tr></table></figure><h3 id="virtual-machines"><a class="header-anchor" href="#virtual-machines">¶</a>virtual machines</h3><p>Scenario: running multiple Ones on a single physical machine.</p><p>problem: how to safely share physical hardware?</p><img src="/sg/2021/11/15/SD_os/sc.png" class="" title="截屏2021-11-15 下午10.12.27">]]></content>
+        <content type="html"><![CDATA[<p>A revisit in virtulization, 2022/04/28</p><h2 id="concurrency"><a class="header-anchor" href="#concurrency">¶</a>concurrency</h2><p>problem: how to handle concurrency problem using yield? And the problems encountered.(from lecture 5)</p><p>yield(): suspends the running thread, chooses a new thread to run, and resumes the new thread</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">yield</span>(): </span><br><span class="line">  acquire(t_lock) </span><br><span class="line">  // Suspend the running thread </span><br><span class="line">  <span class="built_in">id</span> = cpus[CPU].thread </span><br><span class="line">  threads[<span class="built_in">id</span>].state = RUNNABLE </span><br><span class="line">  threads[<span class="built_in">id</span>].sp = SP </span><br><span class="line">  threads[<span class="built_in">id</span>].ptr = PTR </span><br><span class="line">  // Choose a new thread to run </span><br><span class="line">  do: </span><br><span class="line">    <span class="built_in">id</span> = (<span class="built_in">id</span> + <span class="number">1</span>) mod N </span><br><span class="line">  <span class="keyword">while</span> threads[<span class="built_in">id</span>].state != RUNNABLE </span><br><span class="line">  // Resume the new thread </span><br><span class="line">  SP = threads[<span class="built_in">id</span>].sp </span><br><span class="line">  PTR = threads[<span class="built_in">id</span>].ptr </span><br><span class="line">  threads[<span class="built_in">id</span>].state = RUNNING </span><br><span class="line">  cpus[CPU].thread = <span class="built_in">id</span> </span><br><span class="line">    </span><br><span class="line">  release(t_lock)</span><br></pre></td></tr></table></figure><h2 id="virtual-machines"><a class="header-anchor" href="#virtual-machines">¶</a>virtual machines</h2><p>Scenario: running multiple Ones on a single physical machine.</p><p>problem: how to safely share physical hardware?</p><img src="/sg/2021/11/15/SD_os/sc.png" class="" title="截屏2021-11-15 下午10.12.27">]]></content>
       
       
       <categories>
@@ -1208,12 +1019,6 @@
           
       </categories>
       
-      
-        <tags>
-            
-            <tag> 6.033 system design </tag>
-            
-        </tags>
       
     </entry>
     
@@ -1235,12 +1040,6 @@
           
       </categories>
       
-      
-        <tags>
-            
-            <tag> skill </tag>
-            
-        </tags>
       
     </entry>
     
@@ -1264,8 +1063,6 @@
       
       
         <tags>
-            
-            <tag> 6.033 system design </tag>
             
             <tag> paper </tag>
             
@@ -1292,39 +1089,6 @@
       </categories>
       
       
-        <tags>
-            
-            <tag> 6.046 algorithms design </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>6.006 data structures</title>
-      <link href="/sg/2021/11/09/6.006-data_structures/"/>
-      <url>/sg/2021/11/09/6.006-data_structures/</url>
-      
-        <content type="html"><![CDATA[<h3 id="Binary-search-tree"><a class="header-anchor" href="#Binary-search-tree">¶</a>Binary search tree</h3><p>Balanced: a tree on n nodes is balanced if its height is O(logn). Bst is not always balanced.</p><ul><li><p>AVL tree: height-balanced tree</p><ul><li>skew of a node is the height difference between right subtree and left subtree.</li><li>skew is -1,0,1</li></ul></li></ul><h3 id="sort"><a class="header-anchor" href="#sort">¶</a>sort</h3><p>Selection sort, insertion sort, heap sort, merge sort, quick sort</p><ul><li><p>in-place: 当数列中有相同的成员时，先后次序的不同。</p><ul><li>Whether merge sort is stable depends on how an implementation breaks ties when merging<ul><li>Stable: that items with duplicate keys appear in the same order in the output as the input</li></ul></li></ul></li><li><p>Comparison model</p><ul><li>worse case analysis</li></ul><p>The worst-case number of comparisons that must be made by any comparison search algorithm will be the height of the algorithm’s decision tree. Comparisons are limiting because each operation performed can lead to most constant branching factor in the decision tree. Any fixed a will lead to a decision tree with at least omega(logn) height. It can be improved that data structures are not limited to comparisons.</p></li><li><p>comparison sorting</p><ul><li>Analysis to lower bound the worst-case running time of any sorting algorithm that only uses comparisons</li></ul><p>sort n items, n! Permutations of the items,  height of decision tree is omega(log(n!)) = omega(nlogn). so run time at least omega(nlogn).</p></li><li><p>Direct access array: use data as index, might cause collisions and interger overflow, but skip comparisons to gain more efficiency.</p><p>Space: u slots to store items;  n items</p><ul><li><p>solution: make it dynamic: let m = O(n)</p><p>need a function that maps item keys to different slots of the direct access array, and no two keys map to the same direct access array index. Then we can support worst-case constant time search.</p></li><li><p>If m &lt; u: collisions occur.</p><ul><li>Solution: 1. Open address. 2. Chaining</li></ul><p>Chaining, a separate data structure that supports the dynamic set interfaces, operations including <strong>find, insert and delete.</strong> It is common to implant using a linked list or dynamic array, but any implementation supporting those operations would work.</p><p>what’s a good hash function? Minimize the frequency of collisions (all items stored in one chain) in order to minimize the maximum size of any chain.</p><ul><li>hash function: the performance of data structures would be independent of the keys we choose to store.</li><li>amortized bounds for dynamic operations<ul><li>Resize</li></ul></li></ul></li><li><p>Problems: n positive integers array A, find duplicates.</p></li><li><p>direct access array sort</p><p>n items, u slots array. (n &lt;= u)</p><ul><li>runtime analysis: insert + initialize &amp; scan: theta(n+u), if u = O(n), then the algorithm is linear.</li><li>Drawbacks: can’t handle duplicate keys and large key ranges</li></ul></li></ul></li></ul><p>Impovement:</p><ul><li><p>Allow duplicates on the basis of direct access array sort while preserving linear runtime property-&gt; counting sort</p></li><li><p>sort keys from a larger integer range: break up integer keys into parts, and then sort each part -&gt; tuple sort</p><ul><li>Example: LSD/MSD radix sort, sort in a certain order.</li></ul><blockquote><p>Then tuple sort uses a stable sorting algorithm as a subroutine to repeatedly sort the objects, first according to the least important key, then the second least important key, all the way up to most important key, thus lexicographically sorting the objects.</p></blockquote></li><li><p>Radix sort: counting sort + tuple sort</p><ul><li>Problems<ul><li>n ints from [-n** 2, n** 3]</li><li>n strings having k English characters</li></ul></li></ul></li></ul>]]></content>
-      
-      
-      <categories>
-          
-          <category> Algorithms </category>
-          
-          <category> 6.006 algorithms </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> 6.006 algorithms </tag>
-            
-        </tags>
-      
     </entry>
     
     
@@ -1345,12 +1109,6 @@
           
       </categories>
       
-      
-        <tags>
-            
-            <tag> 6.004 computation structures </tag>
-            
-        </tags>
       
     </entry>
     
@@ -1373,11 +1131,26 @@
       </categories>
       
       
-        <tags>
-            
-            <tag> 6.046 algorithms design </tag>
-            
-        </tags>
+    </entry>
+    
+    
+    
+    <entry>
+      <title>6.006 data structures</title>
+      <link href="/sg/2021/11/09/6.006-data_structures/"/>
+      <url>/sg/2021/11/09/6.006-data_structures/</url>
+      
+        <content type="html"><![CDATA[<h3 id="Binary-search-tree"><a class="header-anchor" href="#Binary-search-tree">¶</a>Binary search tree</h3><p>Balanced: a tree on n nodes is balanced if its height is O(logn). Bst is not always balanced.</p><ul><li><p>AVL tree: height-balanced tree</p><ul><li>skew of a node is the height difference between right subtree and left subtree.</li><li>skew is -1,0,1</li></ul></li></ul><h3 id="sort"><a class="header-anchor" href="#sort">¶</a>sort</h3><p>Selection sort, insertion sort, heap sort, merge sort, quick sort</p><ul><li><p>in-place: 当数列中有相同的成员时，先后次序的不同。</p><ul><li>Whether merge sort is stable depends on how an implementation breaks ties when merging<ul><li>Stable: that items with duplicate keys appear in the same order in the output as the input</li></ul></li></ul></li><li><p>Comparison model</p><ul><li>worse case analysis</li></ul><p>The worst-case number of comparisons that must be made by any comparison search algorithm will be the height of the algorithm’s decision tree. Comparisons are limiting because each operation performed can lead to most constant branching factor in the decision tree. Any fixed a will lead to a decision tree with at least omega(logn) height. It can be improved that data structures are not limited to comparisons.</p></li><li><p>comparison sorting</p><ul><li>Analysis to lower bound the worst-case running time of any sorting algorithm that only uses comparisons</li></ul><p>sort n items, n! Permutations of the items,  height of decision tree is omega(log(n!)) = omega(nlogn). so run time at least omega(nlogn).</p></li><li><p>Direct access array: use data as index, might cause collisions and interger overflow, but skip comparisons to gain more efficiency.</p><p>Space: u slots to store items;  n items</p><ul><li><p>solution: make it dynamic: let m = O(n)</p><p>need a function that maps item keys to different slots of the direct access array, and no two keys map to the same direct access array index. Then we can support worst-case constant time search.</p></li><li><p>If m &lt; u: collisions occur.</p><ul><li>Solution: 1. Open address. 2. Chaining</li></ul><p>Chaining, a separate data structure that supports the dynamic set interfaces, operations including <strong>find, insert and delete.</strong> It is common to implant using a linked list or dynamic array, but any implementation supporting those operations would work.</p><p>what’s a good hash function? Minimize the frequency of collisions (all items stored in one chain) in order to minimize the maximum size of any chain.</p><ul><li>hash function: the performance of data structures would be independent of the keys we choose to store.</li><li>amortized bounds for dynamic operations<ul><li>Resize</li></ul></li></ul></li><li><p>Problems: n positive integers array A, find duplicates.</p></li><li><p>direct access array sort</p><p>n items, u slots array. (n &lt;= u)</p><ul><li>runtime analysis: insert + initialize &amp; scan: theta(n+u), if u = O(n), then the algorithm is linear.</li><li>Drawbacks: can’t handle duplicate keys and large key ranges</li></ul></li></ul></li></ul><p>Impovement:</p><ul><li><p>Allow duplicates on the basis of direct access array sort while preserving linear runtime property-&gt; counting sort</p></li><li><p>sort keys from a larger integer range: break up integer keys into parts, and then sort each part -&gt; tuple sort</p><ul><li>Example: LSD/MSD radix sort, sort in a certain order.</li></ul><blockquote><p>Then tuple sort uses a stable sorting algorithm as a subroutine to repeatedly sort the objects, first according to the least important key, then the second least important key, all the way up to most important key, thus lexicographically sorting the objects.</p></blockquote></li><li><p>Radix sort: counting sort + tuple sort</p><ul><li>Problems<ul><li>n ints from [-n** 2, n** 3]</li><li>n strings having k English characters</li></ul></li></ul></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> Algorithms </category>
+          
+          <category> 6.006 algorithms </category>
+          
+      </categories>
+      
       
     </entry>
     
@@ -1400,12 +1173,6 @@
       </categories>
       
       
-        <tags>
-            
-            <tag> read </tag>
-            
-        </tags>
-      
     </entry>
     
     
@@ -1426,12 +1193,6 @@
           
       </categories>
       
-      
-        <tags>
-            
-            <tag> 6.004 computation structures </tag>
-            
-        </tags>
       
     </entry>
     
@@ -1454,12 +1215,6 @@
       </categories>
       
       
-        <tags>
-            
-            <tag> 6.031 software construction </tag>
-            
-        </tags>
-      
     </entry>
     
     
@@ -1480,12 +1235,6 @@
           
       </categories>
       
-      
-        <tags>
-            
-            <tag> 6.031 software construction </tag>
-            
-        </tags>
       
     </entry>
     
@@ -1508,12 +1257,6 @@
       </categories>
       
       
-        <tags>
-            
-            <tag> 6.031 software construction </tag>
-            
-        </tags>
-      
     </entry>
     
     
@@ -1534,12 +1277,6 @@
           
       </categories>
       
-      
-        <tags>
-            
-            <tag> 15-445 database </tag>
-            
-        </tags>
       
     </entry>
     
@@ -1562,12 +1299,6 @@
       </categories>
       
       
-        <tags>
-            
-            <tag> 6.037 crash sicp </tag>
-            
-        </tags>
-      
     </entry>
     
     
@@ -1588,12 +1319,6 @@
           
       </categories>
       
-      
-        <tags>
-            
-            <tag> read </tag>
-            
-        </tags>
       
     </entry>
     
@@ -1616,12 +1341,6 @@
       </categories>
       
       
-        <tags>
-            
-            <tag> 6.031 software construction </tag>
-            
-        </tags>
-      
     </entry>
     
     
@@ -1642,12 +1361,6 @@
           
       </categories>
       
-      
-        <tags>
-            
-            <tag> 6.031 software construction </tag>
-            
-        </tags>
       
     </entry>
     
@@ -1670,12 +1383,6 @@
       </categories>
       
       
-        <tags>
-            
-            <tag> 6.031 software construction </tag>
-            
-        </tags>
-      
     </entry>
     
     
@@ -1696,12 +1403,6 @@
           
       </categories>
       
-      
-        <tags>
-            
-            <tag> 6.031 software construction </tag>
-            
-        </tags>
       
     </entry>
     
@@ -1724,12 +1425,6 @@
       </categories>
       
       
-        <tags>
-            
-            <tag> skill </tag>
-            
-        </tags>
-      
     </entry>
     
     
@@ -1750,12 +1445,6 @@
           
       </categories>
       
-      
-        <tags>
-            
-            <tag> read </tag>
-            
-        </tags>
       
     </entry>
     
@@ -1805,15 +1494,7 @@
       </categories>
       
       
-        <tags>
-            
-            <tag> read </tag>
-            
-        </tags>
-      
     </entry>
-    
-    
     
     
     
@@ -1834,13 +1515,9 @@
       </categories>
       
       
-        <tags>
-            
-            <tag> skill </tag>
-            
-        </tags>
-      
     </entry>
+    
+    
     
     
   

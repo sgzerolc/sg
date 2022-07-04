@@ -416,23 +416,27 @@ body dt {
   font-weight: bold;
 }
 body table {
-  width: 100%;
+  width: 100pm;
   border-collapse: collapse;
   text-align: left;
-  font-size: 12px;
-  overflow: auto;
+  font-size: 14px;
   display: block;
+  overflow: auto;
+  background: rgba(158,188,226,0.2);
 }
 body th {
-  padding: 8px;
-  border-bottom: 1px dashed #666;
-  color: rgba(86,124,119,0.8);
+  border-collapse: collapse;
+  text-align: left;
+  padding: 0 20px;
+  color: #000;
   font-weight: bold;
-  font-size: 13px;
+  font-size: 15px;
+  background: rgba(11,127,171,0.5);
 }
 body td {
-  padding: 0 8px;
+  padding: 0 20px;
   border-bottom: none;
+  border-collapse: collapse;
 }
 @font-face {
   font-style: normal;
@@ -1581,8 +1585,8 @@ pre code {
 }
 code {
   padding: 0 5px;
-  border: 1px dotted #666;
   border-radius: 2px;
+  border: 1px dotted #666;
   -webkit-border-radius: 2px;
 }
 .highlight {
@@ -1641,11 +1645,16 @@ code {
 }
 .highlight table {
   width: auto;
+  background: none;
+  border: none;
 }
 .highlight td.gutter {
-  text-align: right;
+  text-align: left;
   opacity: 0.2;
+  background: none;
+  border: none;
 }
 .highlight .line {
+  border: none;
   height: 22px;
 }
