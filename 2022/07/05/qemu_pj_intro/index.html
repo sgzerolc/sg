@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
     <meta name="description" content="As the homepage says, QEMU is a generic and open source machine emulator and virtualizer. The project I’ve been working on is adding zoned device support in virtio-blk emulation[1]. QEMU is a big proj">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Zoned Block Devices in QEMU">
+<meta property="og:title" content="Zoned Block Devices">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/index.html">
 <meta property="og:site_name" content="steins gate zero">
 <meta property="og:description" content="As the homepage says, QEMU is a generic and open source machine emulator and virtualizer. The project I’ve been working on is adding zoned device support in virtio-blk emulation[1]. QEMU is a big proj">
@@ -18,7 +18,7 @@
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/Screenshot-6787937.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/Screenshot-6799625.png">
 <meta property="article:published_time" content="2022-07-04T16:00:00.000Z">
-<meta property="article:modified_time" content="2022-07-05T03:02:56.162Z">
+<meta property="article:modified_time" content="2022-12-30T17:29:10.107Z">
 <meta property="article:author" content="Sam Li">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/Screenshot-4060048.png">
@@ -41,7 +41,7 @@
       
     
     <!-- title -->
-    <title>Zoned Block Devices in QEMU</title>
+    <title>Zoned Block Devices</title>
     <!-- styles -->
     
 <link rel="stylesheet" href="/sg/css/style.css">
@@ -68,8 +68,6 @@
        --><li><a href="/sg/">Home</a></li><!--
      --><!--
        --><li><a href="/sg/about/">About</a></li><!--
-     --><!--
-       --><li><a href="/sg/tags/">Tag</a></li><!--
      --><!--
        --><li><a href="/sg/categories/">Category</a></li><!--
      --><!--
@@ -100,21 +98,21 @@
     <div id="share" style="display: none">
       <ul>
   <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/&text=Zoned Block Devices in QEMU"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/&title=Zoned Block Devices in QEMU"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/&is_video=false&description=Zoned Block Devices in QEMU"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=Zoned Block Devices in QEMU&body=Check out this article: https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/&title=Zoned Block Devices in QEMU"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/&title=Zoned Block Devices in QEMU"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/&title=Zoned Block Devices in QEMU"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/&title=Zoned Block Devices in QEMU"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/&name=Zoned Block Devices in QEMU&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/&t=Zoned Block Devices in QEMU"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/&text=Zoned Block Devices"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/&title=Zoned Block Devices"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/&is_video=false&description=Zoned Block Devices"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Zoned Block Devices&body=Check out this article: https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/&title=Zoned Block Devices"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/&title=Zoned Block Devices"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/&title=Zoned Block Devices"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/&title=Zoned Block Devices"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/&name=Zoned Block Devices&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/&t=Zoned Block Devices"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Brief-introduction-v7"><span class="toc-number">1.</span> <span class="toc-text">Brief introduction</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Zoned-storage-v7"><span class="toc-number">1.1.</span> <span class="toc-text">Zoned storage</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Virtio-blk-device-v7"><span class="toc-number">1.2.</span> <span class="toc-text">Virtio-blk device</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Zone-state-machine-APIs-v7"><span class="toc-number">2.</span> <span class="toc-text">Zone state machine &amp; APIs</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Brief-introduction"><span class="toc-number">1.</span> <span class="toc-text">Brief introduction</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Zoned-storage"><span class="toc-number">1.1.</span> <span class="toc-text">Zoned storage</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Virtio-blk-device"><span class="toc-number">1.2.</span> <span class="toc-text">Virtio-blk device</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Zone-state-machine-APIs"><span class="toc-number">2.</span> <span class="toc-text">Zone state machine &amp; APIs</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -126,7 +124,7 @@
   <header>
     
     <h1 class="posttitle" itemprop="name headline">
-        Zoned Block Devices in QEMU
+        Zoned Block Devices
     </h1>
 
 
@@ -160,7 +158,7 @@
   <div class="content" itemprop="articleBody">
     <p>As the <a target="_blank" rel="noopener" href="https://www.qemu.org/">homepage</a> says, QEMU is a generic and open source machine emulator and virtualizer. The project I’ve been working on is adding zoned device support in virtio-blk emulation<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>.</p>
 <p>QEMU is a big project which looks a bit intimidating at first (and afterward :). It’s also lots of fun investigating different parts to solve problems in the way. Sometimes, I feel like a lousy detective trying to figure out how things fit together. Luckily, my mentors in this project always give me a hand when I am stuck at wrong directions.</p>
-<h2 id="Brief-introduction-v7"><a class="header-anchor" href="#Brief-introduction-v7">¶</a>Brief introduction</h2>
+<h2 id="Brief-introduction"><a class="header-anchor" href="#Brief-introduction">¶</a>Brief introduction</h2>
 <table>
 <thead>
 <tr>
@@ -202,20 +200,20 @@
 </tr>
 </tbody>
 </table>
-<h3 id="Zoned-storage-v7"><a class="header-anchor" href="#Zoned-storage-v7">¶</a>Zoned storage</h3>
+<h3 id="Zoned-storage"><a class="header-anchor" href="#Zoned-storage">¶</a>Zoned storage</h3>
 <p>Imagining the shingle in the roof, SMR writes data in a similar overlapping manner.  BY removing the gaps, more data tracks placing on each magnetic surface reflects in wider write head of design. The recording head will advance partial width of one data track after a write. Such overlapping tracks are grouped into zones. The gaps between zones prevents data overwrite from write head changing from one zone to another. (Ignoring-physics version)</p>
-<p>What we want to take advantage of SMR in the project is the SWR property. For example, if LBA <code>x</code>, <code>x+a</code> is in zone 1, we can’t write <code>x+a</code> after write <code>x</code> because it is potentially under another zone. The area dencity of SMR results in higher disk capacity, better erasure coding, reduing adjacent-track interference exposure. Meanwhile, SMR also supports random read like CMR. Therefore SWR is good fro data detection and recovery.</p>
+<p>What we want to take advantage of SMR in the project is the SWR property. For example, if LBA <code>x</code>, <code>x+a</code> is in zone 1, we can’t write <code>x+a</code> after write <code>x</code> because it is potentially under another zone. The area dencity of SMR results in higher disk capacity, better erasure coding, reducing adjacent-track interference exposure. Meanwhile, SMR also supports random read like CMR. Therefore SWR is good fro data detection and recovery.</p>
 <img src="/sg/2022/07/05/qemu_pj_intro/Screenshot-4060048.png" class="" title="HDD drives">
 <p>The main purpose of zoned storage emulation is to let VM Guest OS see a zoned block device file on the Host OS. However QEMU sees the zoned device as regular block device right now. Meanwhile, I should enable guest driver testing in NVMe ZNS so we can test if our previous works and benchmark it, which would be a nice topic for another blog(once I figure out how benmarking works :)</p>
 <p>The cool vision about this project is to enable zoned storage on a regular file. It means VM Guest OS can see a regular file as zoned block device file, which is helpful for development related to zoned storage on a machine without such support. Whereas I have some doubts about the overhead and design of such improvement. For example, why should we emulate such zoned device if it maybe not offer enough performance for using? Again, another topic saving later.</p>
 <img src="/sg/2022/07/05/qemu_pj_intro/linux-iopath-3ad49009873f1211b8e873f9ba540a38.png" class="" title="Linux Zoned block device support overview">
 <p><sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></p>
-<h3 id="Virtio-blk-device-v7"><a class="header-anchor" href="#Virtio-blk-device-v7">¶</a>Virtio-blk device</h3>
+<h3 id="Virtio-blk-device"><a class="header-anchor" href="#Virtio-blk-device">¶</a>Virtio-blk device</h3>
 <p>Virtio-blk device is a storage controller that presents host’s block devices to the guest. The structure of storage layers is designed for extensibility and performance. There is a BlockDriverState graph involved with block layers. BlockBackend provides a interface connecting block drivers to other part like qemu-io or virtio-blk device. It has a root pointer points to other nodes in the BlockDriverState graph. Format node and filter node are above protocal node. It is good for adding a BlockDriver inside the big project.</p>
 <p>The overview of the emulation part is: the guest os sends a request of zoned commands which contains parameters to its virtio-blk driver. Then virtio-blk device receives the request which is basically a big chunk of memory and transforms it to the QEMU’s struct so that block layers can execute correlated commands on the zoned block device. After that, we can transform the results to the guest’s struct and send it back.</p>
 <p>I haven’t though through the performance of virtio-blk device brings in though. Roughly speaking, zoned block devices can offer better performance than regular one especially above HDD level.</p>
 <img src="/sg/2022/07/05/qemu_pj_intro/Screenshot-6787937.png" class="" title="vm overview"> 
-<h2 id="Zone-state-machine-APIs-v7"><a class="header-anchor" href="#Zone-state-machine-APIs-v7">¶</a>Zone state machine &amp; APIs</h2>
+<h2 id="Zone-state-machine-APIs"><a class="header-anchor" href="#Zone-state-machine-APIs">¶</a>Zone state machine &amp; APIs</h2>
 <p>Zone state machine tracks open zone resource of zoned block devices. Sufficient open zone resource are required for open state in HDD. Zone operations will change states in the write pointer zone models.</p>
 <p>The basic structs of zoned block devices handling is: zone_descriptors, zone_dev, zone_report_struct. Other than the five operations ioctl provides, we would like to add zone append write in the emulation.</p>
 <img src="/sg/2022/07/05/qemu_pj_intro/Screenshot-6799625.png" class="" title="Block I&#x2F;O stack">
@@ -248,8 +246,6 @@
          
           <li><a href="/sg/about/">About</a></li>
          
-          <li><a href="/sg/tags/">Tag</a></li>
-         
           <li><a href="/sg/categories/">Category</a></li>
          
           <li><a href="/sg/archives/">Writing</a></li>
@@ -260,22 +256,22 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Brief-introduction-v7"><span class="toc-number">1.</span> <span class="toc-text">Brief introduction</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Zoned-storage-v7"><span class="toc-number">1.1.</span> <span class="toc-text">Zoned storage</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Virtio-blk-device-v7"><span class="toc-number">1.2.</span> <span class="toc-text">Virtio-blk device</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Zone-state-machine-APIs-v7"><span class="toc-number">2.</span> <span class="toc-text">Zone state machine &amp; APIs</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Brief-introduction"><span class="toc-number">1.</span> <span class="toc-text">Brief introduction</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Zoned-storage"><span class="toc-number">1.1.</span> <span class="toc-text">Zoned storage</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Virtio-blk-device"><span class="toc-number">1.2.</span> <span class="toc-text">Virtio-blk device</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Zone-state-machine-APIs"><span class="toc-number">2.</span> <span class="toc-text">Zone state machine &amp; APIs</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
       <ul>
   <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/&text=Zoned Block Devices in QEMU"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/&title=Zoned Block Devices in QEMU"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/&is_video=false&description=Zoned Block Devices in QEMU"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=Zoned Block Devices in QEMU&body=Check out this article: https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/&title=Zoned Block Devices in QEMU"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/&title=Zoned Block Devices in QEMU"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/&title=Zoned Block Devices in QEMU"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/&title=Zoned Block Devices in QEMU"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/&name=Zoned Block Devices in QEMU&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/&t=Zoned Block Devices in QEMU"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/&text=Zoned Block Devices"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/&title=Zoned Block Devices"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/&is_video=false&description=Zoned Block Devices"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Zoned Block Devices&body=Check out this article: https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/&title=Zoned Block Devices"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/&title=Zoned Block Devices"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/&title=Zoned Block Devices"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/&title=Zoned Block Devices"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/&name=Zoned Block Devices&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/&t=Zoned Block Devices"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -296,7 +292,7 @@
     Copyright &copy;
     
     
-    2022
+    2023
     Sam Li
   </div>
 </footer>

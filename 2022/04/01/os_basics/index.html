@@ -6,19 +6,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="¶OS organizations ¶usercall&amp;syscall System calls: applications see the OS via system calls. ¶trap Xv6 interacts with the devices directly, not the RAM. ¶virtual memory   os booting: 123456kinit();">
+    <meta name="description" content="¶Syscalls System calls: applications see the OS via system calls. ¶Traps Trapframe ¶Virtual memory   os booting: 123456kinit();         &#x2F;&#x2F; physical page allocatorkvminit();       &#x2F;&#x2F; create kernel page">
 <meta property="og:type" content="article">
 <meta property="og:title" content="intro to xv6">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2022/04/01/os_basics/index.html">
 <meta property="og:site_name" content="steins gate zero">
-<meta property="og:description" content="¶OS organizations ¶usercall&amp;syscall System calls: applications see the OS via system calls. ¶trap Xv6 interacts with the devices directly, not the RAM. ¶virtual memory   os booting: 123456kinit();">
+<meta property="og:description" content="¶Syscalls System calls: applications see the OS via system calls. ¶Traps Trapframe ¶Virtual memory   os booting: 123456kinit();         &#x2F;&#x2F; physical page allocatorkvminit();       &#x2F;&#x2F; create kernel page">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/04/01/os_basics/pt.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/04/01/os_basics/kvm.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/04/01/os_basics/Screenshot-8963182.png">
-<meta property="og:image" content="https://sgzerolc.github.io/sg/2022/04/01/os_basics/Screenshot-9574783.png">
 <meta property="article:published_time" content="2022-03-31T16:00:00.000Z">
-<meta property="article:modified_time" content="2022-07-25T07:53:47.418Z">
+<meta property="article:modified_time" content="2022-10-15T14:54:40.552Z">
 <meta property="article:author" content="Sam Li">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://sgzerolc.github.io/sg/2022/04/01/os_basics/pt.png">
@@ -69,8 +68,6 @@
      --><!--
        --><li><a href="/sg/about/">About</a></li><!--
      --><!--
-       --><li><a href="/sg/tags/">Tag</a></li><!--
-     --><!--
        --><li><a href="/sg/categories/">Category</a></li><!--
      --><!--
        --><li><a href="/sg/archives/">Writing</a></li><!--
@@ -114,7 +111,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#OS-organizations"><span class="toc-number">1.</span> <span class="toc-text">OS organizations</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#usercall-syscall"><span class="toc-number">1.1.</span> <span class="toc-text">usercall&amp;syscall</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#trap"><span class="toc-number">1.2.</span> <span class="toc-text">trap</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#virtual-memory"><span class="toc-number">2.</span> <span class="toc-text">virtual memory</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#page-table"><span class="toc-number">2.1.</span> <span class="toc-text">page table</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#page-fault"><span class="toc-number">2.2.</span> <span class="toc-text">page fault</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#interrupts"><span class="toc-number">2.3.</span> <span class="toc-text">interrupts</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#VM-for-applications"><span class="toc-number">2.4.</span> <span class="toc-text">VM for applications</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Parallelism"><span class="toc-number">3.</span> <span class="toc-text">Parallelism</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#lock"><span class="toc-number">3.1.</span> <span class="toc-text">lock</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#thread-switching"><span class="toc-number">3.2.</span> <span class="toc-text">thread switching</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Sleep-wake-up"><span class="toc-number">3.3.</span> <span class="toc-text">Sleep&amp;wake up</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RCU"><span class="toc-number">3.4.</span> <span class="toc-text">RCU</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#file-systems"><span class="toc-number">4.</span> <span class="toc-text">file systems</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#xv6"><span class="toc-number">4.1.</span> <span class="toc-text">xv6</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Network-stack"><span class="toc-number">5.</span> <span class="toc-text">Network stack</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Security"><span class="toc-number">6.</span> <span class="toc-text">Security</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Syscalls"><span class="toc-number">1.</span> <span class="toc-text">Syscalls</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Traps"><span class="toc-number">2.</span> <span class="toc-text">Traps</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Virtual-memory-v2"><span class="toc-number">3.</span> <span class="toc-text">Virtual memory</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#page-table"><span class="toc-number">3.1.</span> <span class="toc-text">page table</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#interrupts"><span class="toc-number">3.2.</span> <span class="toc-text">interrupts</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Parallelism"><span class="toc-number">4.</span> <span class="toc-text">Parallelism</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#lock"><span class="toc-number">4.1.</span> <span class="toc-text">lock</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#threads"><span class="toc-number">4.2.</span> <span class="toc-text">threads</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#case-study-RCU"><span class="toc-number">4.3.</span> <span class="toc-text">case study: RCU</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#File-systems"><span class="toc-number">5.</span> <span class="toc-text">File systems</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#xv6-design"><span class="toc-number">5.1.</span> <span class="toc-text">xv6 design</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#case-study-ext3"><span class="toc-number">5.2.</span> <span class="toc-text">case study: ext3</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Network-stack"><span class="toc-number">6.</span> <span class="toc-text">Network stack</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Security"><span class="toc-number">7.</span> <span class="toc-text">Security</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -158,12 +155,11 @@
   
 
   <div class="content" itemprop="articleBody">
-    <h2 id="OS-organizations"><a class="header-anchor" href="#OS-organizations">¶</a>OS organizations</h2>
-<h3 id="usercall-syscall"><a class="header-anchor" href="#usercall-syscall">¶</a>usercall&amp;syscall</h3>
+    <h2 id="Syscalls"><a class="header-anchor" href="#Syscalls">¶</a>Syscalls</h2>
 <p>System calls: applications see the OS via system calls.</p>
-<h3 id="trap"><a class="header-anchor" href="#trap">¶</a>trap</h3>
-<p>Xv6 interacts with the devices directly, not the RAM.</p>
-<h2 id="virtual-memory"><a class="header-anchor" href="#virtual-memory">¶</a>virtual memory</h2>
+<h2 id="Traps"><a class="header-anchor" href="#Traps">¶</a>Traps</h2>
+<p>Trapframe</p>
+<h2 id="Virtual-memory-v2"><a class="header-anchor" href="#Virtual-memory-v2">¶</a>Virtual memory</h2>
 <ol>
 <li>
 <p>os booting:</p>
@@ -180,28 +176,39 @@
 <li>
 <p>address translation</p>
 <p>RISC-V instructions manipulate virtual addresses; RAM, or physical memory is indexed with physical address. The RISC-V page table hardware provides mapping of virtual address to physical address.</p>
+<ul>
+<li>
 <img src="/sg/2022/04/01/os_basics/pt.png" class="" title="pt">
+</li>
+</ul>
 </li>
 <li>
 <p>kernel address space:</p>
 <ul>
-<li>Xv6 maintains one page table per process(user address space) and single page table for the kernel address space.</li>
-<li>Kernel uses <u>direct mapping</u> to get access to RAM and memory mapped devices.</li>
-<li>Not direct mapped: high-memory mapping
+<li>
+<p>Xv6 maintains one page table per process(user address space) and single page table for the kernel address space.</p>
+</li>
+<li>
+<p>Kernel uses <u>direct mapping</u> to get access to RAM and memory mapped devices.</p>
+</li>
+<li>
+<p>Not direct mapped: high-memory mapping</p>
 <ul>
-<li>trampoline page</li>
-<li>kernel stack pages: have an unmapped guard page with PTE invalid.</li>
+<li>
+<p>trampoline page</p>
+</li>
+<li>
+<p>kernel stack pages: have an unmapped guard page with PTE invalid.</p>
+<img src="/sg/2022/04/01/os_basics/kvm.png" class="" title="kvm">
+</li>
 </ul>
 </li>
 </ul>
-<img src="/sg/2022/04/01/os_basics/kvm.png" class="" title="kvm">
 </li>
 <li>
 <p>user address space</p>
-</li>
-</ol>
 <img src="/sg/2022/04/01/os_basics/Screenshot-8963182.png" class="" title="Screenshot-8963182">
-<ol start="4">
+</li>
 <li>
 <p>process of vm setup</p>
 <ul>
@@ -213,15 +220,7 @@
 </ul>
 </li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"># creating an address space</span><br><span class="line">main()</span><br><span class="line">	-&gt; kvminit()</span><br><span class="line">		-&gt; kvmmap()</span><br><span class="line">			-&gt; mappages()</span><br><span class="line">				-&gt; walk()</span><br><span class="line">	-&gt; kvminithart()</span><br><span class="line">		-&gt; satp/sfence.vma</span><br><span class="line">	-&gt; procinit()</span><br><span class="line">		-&gt; kvminithart()</span><br><span class="line">		</span><br><span class="line"># physical memory allocator</span><br><span class="line">kinit()</span><br><span class="line">	-&gt; freerange()</span><br><span class="line">		-&gt; kfree()</span><br><span class="line">kalloc()</span><br><span class="line"></span><br><span class="line"># sbrk</span><br><span class="line">growproc()</span><br><span class="line">	-&gt; uvmalloc()</span><br><span class="line">		-&gt; kalloc()</span><br><span class="line">		-&gt; mappages()</span><br><span class="line">	-&gt; uvmdealloc()</span><br><span class="line">		-&gt; uvmunmap()</span><br><span class="line"></span><br><span class="line"># exec</span><br><span class="line">exec()</span><br><span class="line">	-&gt; proc_pagetable()</span><br><span class="line">	-&gt; uvmalloc()</span><br><span class="line">	-&gt; loadseg()</span><br><span class="line">		-&gt; walkaddr()</span><br><span class="line">		-&gt; readi()</span><br><span class="line">	</span><br></pre></td></tr></table></figure>
 </li>
-</ol>
-<h3 id="page-fault"><a class="header-anchor" href="#page-fault">¶</a>page fault</h3>
-<ol>
-<li>lazy allocation</li>
-<li>Copy-on-write</li>
-<li>demand paging</li>
-<li>memory mapped file</li>
 </ol>
 <h3 id="interrupts"><a class="header-anchor" href="#interrupts">¶</a>interrupts</h3>
 <ol>
@@ -258,36 +257,94 @@
 </ul>
 </li>
 </ol>
-<h3 id="VM-for-applications"><a class="header-anchor" href="#VM-for-applications">¶</a>VM for applications</h3>
+<p>page fault:</p>
+<ol>
+<li>lazy allocation</li>
+<li>Copy-on-write</li>
+<li>demand paging</li>
+<li>memory mapped file</li>
+</ol>
 <h2 id="Parallelism"><a class="header-anchor" href="#Parallelism">¶</a>Parallelism</h2>
-<p>topic: lock in kernel</p>
 <h3 id="lock"><a class="header-anchor" href="#lock">¶</a>lock</h3>
-<p>what is lock: lock in xv6 guarantees atomicity in critical section.</p>
-<p>why locks: one data stucture are accessed by multiple processes -&gt; race condition</p>
-<p><strong>how to lock?</strong></p>
+<ol>
+<li>
+<p>Xv6 has two locks: spinlocks and sleeplocks</p>
+<ul>
+<li>spinlocks
+<ul>
+<li>disable interrupts: if a lock can be interruptted, then the interrupt acquires the same lock that is being used which leads to dead lock.  -&gt; concurrency in same CPU</li>
+<li>sw vs atomic_swap: sw differs in different CPU settings. It may have one more instruction which disables the atomicity. -&gt; concurrency in different CPU</li>
+</ul>
+</li>
+<li>Sleeplocks -&gt; sleep/wakeup?</li>
+</ul>
+</li>
+<li>
+<p>Why locks: one data stucture are accessed by multiple processes(race condition) -&gt; atomicity in critical section.</p>
+</li>
+<li>
+<p>How? system designers should define orders of locks for the purpose of performance and correctness</p>
+</li>
+</ol>
 <p>Scenario 1: race condition in kfree()</p>
 <p>Attempt 1: corse-grain locking/two processs are accessing one sharing data structure and one of them updates the data.</p>
 <p>scenario 2: rename files: rename(“d1/x”, “d2/y”)</p>
 <p>Attempt 2: lock operations not data structures.</p>
-<p>Problem : system designers should define orders of locks for the purpose of performance and correctness</p>
-<p>details of spinlock:</p>
-<ol>
-<li>disable interrupts: if a lock can be interruptted, then the interrupt acquires the same lock that is being used which leads to dead lock.  -&gt; concurrency in same CPU</li>
-<li>sw vs atomic_swap: sw differs in different CPU settings. It may have one more instruction which disables the atomicity. -&gt; concurrency in different CPU</li>
-</ol>
 <p>Terminology:</p>
 <ol>
-<li>Lock-free program: to achive more parallelism</li>
 <li>Deadlock: unlocking A requires B, unlocking B requires A, A and B are locked. example: deadly embrace</li>
-<li></li>
 </ol>
-<h3 id="thread-switching"><a class="header-anchor" href="#thread-switching">¶</a>thread switching</h3>
-<p>Scheduling:</p>
-<h3 id="Sleep-wake-up"><a class="header-anchor" href="#Sleep-wake-up">¶</a>Sleep&amp;wake up</h3>
-<h3 id="RCU"><a class="header-anchor" href="#RCU">¶</a>RCU</h3>
-<h2 id="file-systems"><a class="header-anchor" href="#file-systems">¶</a>file systems</h2>
-<h3 id="xv6"><a class="header-anchor" href="#xv6">¶</a>xv6</h3>
-<img src="/sg/2022/04/01/os_basics/Screenshot-9574783.png" class="" title="Screenshot-9574783">
+<h3 id="threads"><a class="header-anchor" href="#threads">¶</a>threads</h3>
+<ol>
+<li>
+<p>Why threads? Run parallel programs</p>
+</li>
+<li>
+<p>What: One thread is the state of one serial execution. Thread states include PC, REGS, STACK, [state:runnning, runable, sleeping]</p>
+</li>
+<li>
+<p>How: problems of implementing threads</p>
+<p>Assumption: one core(CPU) one thing -&gt; thread either sleeps or runs on one core</p>
+<ul>
+<li>how to switch between processes(scheduling)</li>
+<li>What to save and restore in switching</li>
+<li>Compute-bound threads: long-running program</li>
+</ul>
+</li>
+</ol>
+<p>Problem1: what if the process runs for a long time?</p>
+<p>-&gt; [Pre-emptive scheduling]  the process is:</p>
+<ol>
+<li>user processes run</li>
+<li>time interrupts make it give up control to kernel</li>
+<li>kernel then yields the CPU</li>
+</ol>
+<p>while cooperative scheduling is user processes explicitly give up control to kernel, like QEMU coroutines.</p>
+<p>Problem2: lost wake-up problem</p>
+<hr>
+<p>Further reading:</p>
+<p>stanford os lab1/cmu dsys thread</p>
+<p>slides from 418 / os exams from 440</p>
+<h3 id="case-study-RCU"><a class="header-anchor" href="#case-study-RCU">¶</a>case study: RCU</h3>
+<h2 id="File-systems"><a class="header-anchor" href="#File-systems">¶</a>File systems</h2>
+<h3 id="xv6-design"><a class="header-anchor" href="#xv6-design">¶</a>xv6 design</h3>
+<p>Xv6 fs addresses four problems of implementing fs:</p>
+<ol>
+<li>fs structure: dir -&gt; file</li>
+<li>crash recovery: logging</li>
+<li>coordination: invariants of a fs?</li>
+<li>in-memory cache</li>
+</ol>
+<p>Layout of xv6 fs:</p>
+<p>||Boot block | super block(mkfs) | log(latest transaction to restore if crushes) | inode(index, block offset) | bit map(blocks in use) || data ||</p>
+<p>kernel/bio.c: Xv6 fs uses buffer caches to store N least recently used blocks of data. Doubly-linked lists are used as buffers.</p>
+<p>problem: Why &lt;= 1 cached buffer per disk sector?</p>
+<p>It means one buffer can only store one sector’s data. If sector x is stored in two buffers, imagine read(sector x): when reading, the data in sector x must be in sync with buffers written to the sector. Now think about which approach is better for handling synchronization?</p>
+<ul>
+<li>approach 1: read x -&gt; (buffer 1, buffer 2 -&gt; )sector x</li>
+<li>approach 2: read x -&gt; buffer 0 -&gt; sector x</li>
+</ul>
+<h3 id="case-study-ext3"><a class="header-anchor" href="#case-study-ext3">¶</a>case study: ext3</h3>
 <h2 id="Network-stack"><a class="header-anchor" href="#Network-stack">¶</a>Network stack</h2>
 <h2 id="Security"><a class="header-anchor" href="#Security">¶</a>Security</h2>
 
@@ -307,8 +364,6 @@
          
           <li><a href="/sg/about/">About</a></li>
          
-          <li><a href="/sg/tags/">Tag</a></li>
-         
           <li><a href="/sg/categories/">Category</a></li>
          
           <li><a href="/sg/archives/">Writing</a></li>
@@ -319,7 +374,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#OS-organizations"><span class="toc-number">1.</span> <span class="toc-text">OS organizations</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#usercall-syscall"><span class="toc-number">1.1.</span> <span class="toc-text">usercall&amp;syscall</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#trap"><span class="toc-number">1.2.</span> <span class="toc-text">trap</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#virtual-memory"><span class="toc-number">2.</span> <span class="toc-text">virtual memory</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#page-table"><span class="toc-number">2.1.</span> <span class="toc-text">page table</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#page-fault"><span class="toc-number">2.2.</span> <span class="toc-text">page fault</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#interrupts"><span class="toc-number">2.3.</span> <span class="toc-text">interrupts</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#VM-for-applications"><span class="toc-number">2.4.</span> <span class="toc-text">VM for applications</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Parallelism"><span class="toc-number">3.</span> <span class="toc-text">Parallelism</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#lock"><span class="toc-number">3.1.</span> <span class="toc-text">lock</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#thread-switching"><span class="toc-number">3.2.</span> <span class="toc-text">thread switching</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Sleep-wake-up"><span class="toc-number">3.3.</span> <span class="toc-text">Sleep&amp;wake up</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RCU"><span class="toc-number">3.4.</span> <span class="toc-text">RCU</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#file-systems"><span class="toc-number">4.</span> <span class="toc-text">file systems</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#xv6"><span class="toc-number">4.1.</span> <span class="toc-text">xv6</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Network-stack"><span class="toc-number">5.</span> <span class="toc-text">Network stack</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Security"><span class="toc-number">6.</span> <span class="toc-text">Security</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Syscalls"><span class="toc-number">1.</span> <span class="toc-text">Syscalls</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Traps"><span class="toc-number">2.</span> <span class="toc-text">Traps</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Virtual-memory-v2"><span class="toc-number">3.</span> <span class="toc-text">Virtual memory</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#page-table"><span class="toc-number">3.1.</span> <span class="toc-text">page table</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#interrupts"><span class="toc-number">3.2.</span> <span class="toc-text">interrupts</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Parallelism"><span class="toc-number">4.</span> <span class="toc-text">Parallelism</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#lock"><span class="toc-number">4.1.</span> <span class="toc-text">lock</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#threads"><span class="toc-number">4.2.</span> <span class="toc-text">threads</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#case-study-RCU"><span class="toc-number">4.3.</span> <span class="toc-text">case study: RCU</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#File-systems"><span class="toc-number">5.</span> <span class="toc-text">File systems</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#xv6-design"><span class="toc-number">5.1.</span> <span class="toc-text">xv6 design</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#case-study-ext3"><span class="toc-number">5.2.</span> <span class="toc-text">case study: ext3</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Network-stack"><span class="toc-number">6.</span> <span class="toc-text">Network stack</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Security"><span class="toc-number">7.</span> <span class="toc-text">Security</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
@@ -355,7 +410,7 @@
     Copyright &copy;
     
     
-    2022
+    2023
     Sam Li
   </div>
 </footer>

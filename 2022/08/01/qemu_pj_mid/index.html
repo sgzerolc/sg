@@ -8,13 +8,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
     <meta name="description" content="Looking back to what I’ve accomplished so far, it is quite a journey. As for the original internship project timeline, I was thinking about the timeline too naively and took no regard of difficulty of">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Zoned Storage Emulation in QEMU">
+<meta property="og:title" content="Zoned Storage Emulation So Far">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2022/08/01/qemu_pj_mid/index.html">
 <meta property="og:site_name" content="steins gate zero">
 <meta property="og:description" content="Looking back to what I’ve accomplished so far, it is quite a journey. As for the original internship project timeline, I was thinking about the timeline too naively and took no regard of difficulty of">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-07-31T16:00:00.000Z">
-<meta property="article:modified_time" content="2022-08-01T19:25:38.004Z">
+<meta property="article:modified_time" content="2022-12-30T17:29:01.092Z">
 <meta property="article:author" content="Sam Li">
 <meta name="twitter:card" content="summary">
     
@@ -36,7 +36,7 @@
       
     
     <!-- title -->
-    <title>Zoned Storage Emulation in QEMU</title>
+    <title>Zoned Storage Emulation So Far</title>
     <!-- styles -->
     
 <link rel="stylesheet" href="/sg/css/style.css">
@@ -63,8 +63,6 @@
        --><li><a href="/sg/">Home</a></li><!--
      --><!--
        --><li><a href="/sg/about/">About</a></li><!--
-     --><!--
-       --><li><a href="/sg/tags/">Tag</a></li><!--
      --><!--
        --><li><a href="/sg/categories/">Category</a></li><!--
      --><!--
@@ -95,21 +93,21 @@
     <div id="share" style="display: none">
       <ul>
   <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://sgzerolc.github.io/sg/2022/08/01/qemu_pj_mid/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://sgzerolc.github.io/sg/2022/08/01/qemu_pj_mid/&text=Zoned Storage Emulation in QEMU"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://sgzerolc.github.io/sg/2022/08/01/qemu_pj_mid/&title=Zoned Storage Emulation in QEMU"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sgzerolc.github.io/sg/2022/08/01/qemu_pj_mid/&is_video=false&description=Zoned Storage Emulation in QEMU"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=Zoned Storage Emulation in QEMU&body=Check out this article: https://sgzerolc.github.io/sg/2022/08/01/qemu_pj_mid/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://sgzerolc.github.io/sg/2022/08/01/qemu_pj_mid/&title=Zoned Storage Emulation in QEMU"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://sgzerolc.github.io/sg/2022/08/01/qemu_pj_mid/&title=Zoned Storage Emulation in QEMU"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://sgzerolc.github.io/sg/2022/08/01/qemu_pj_mid/&title=Zoned Storage Emulation in QEMU"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://sgzerolc.github.io/sg/2022/08/01/qemu_pj_mid/&title=Zoned Storage Emulation in QEMU"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://sgzerolc.github.io/sg/2022/08/01/qemu_pj_mid/&name=Zoned Storage Emulation in QEMU&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://sgzerolc.github.io/sg/2022/08/01/qemu_pj_mid/&t=Zoned Storage Emulation in QEMU"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://sgzerolc.github.io/sg/2022/08/01/qemu_pj_mid/&text=Zoned Storage Emulation So Far"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://sgzerolc.github.io/sg/2022/08/01/qemu_pj_mid/&title=Zoned Storage Emulation So Far"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sgzerolc.github.io/sg/2022/08/01/qemu_pj_mid/&is_video=false&description=Zoned Storage Emulation So Far"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Zoned Storage Emulation So Far&body=Check out this article: https://sgzerolc.github.io/sg/2022/08/01/qemu_pj_mid/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://sgzerolc.github.io/sg/2022/08/01/qemu_pj_mid/&title=Zoned Storage Emulation So Far"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://sgzerolc.github.io/sg/2022/08/01/qemu_pj_mid/&title=Zoned Storage Emulation So Far"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://sgzerolc.github.io/sg/2022/08/01/qemu_pj_mid/&title=Zoned Storage Emulation So Far"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://sgzerolc.github.io/sg/2022/08/01/qemu_pj_mid/&title=Zoned Storage Emulation So Far"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://sgzerolc.github.io/sg/2022/08/01/qemu_pj_mid/&name=Zoned Storage Emulation So Far&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://sgzerolc.github.io/sg/2022/08/01/qemu_pj_mid/&t=Zoned Storage Emulation So Far"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#project-process"><span class="toc-number">1.</span> <span class="toc-text">project process</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zoned-storage-emulation"><span class="toc-number">2.</span> <span class="toc-text">zoned storage emulation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#what"><span class="toc-number">2.1.</span> <span class="toc-text">what</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#how"><span class="toc-number">2.2.</span> <span class="toc-text">how</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#why"><span class="toc-number">2.3.</span> <span class="toc-text">why</span></a></li></ol></li></ol>
+      
     </div>
   </span>
 </div>
@@ -121,7 +119,7 @@
   <header>
     
     <h1 class="posttitle" itemprop="name headline">
-        Zoned Storage Emulation in QEMU
+        Zoned Storage Emulation So Far
     </h1>
 
 
@@ -156,7 +154,6 @@
     <p>Looking back to what I’ve accomplished so far, it is quite a journey. As for the original internship project timeline, I was thinking about the timeline too naively and took no regard of difficulty of certain project task.</p>
 <p>For the rest of the internship, the major goal is to finish the first part of the original proposal - Extending zoned storage emulation support in virtio-blk device - and get it merged. Besides, I think it’s possible to finish part two - Adding support to NVMe ZNS for guest driver testing - before the project ends. Maybe not if unexpected issues appear :)</p>
 <p>If I were starting the project over, I would ask questions earlier rather than get stuck at sth for a really long time. It’s important to ask questions, which is a way to investigate more and find out what is wrong or unknown. I read several PPT slides about the block device and QEMU structure, zoned storage website, and codes in virtio-blk.c etc before the internship begins. It’s not very helpful because I did not know what to ask at first.</p>
-<h2 id="project-process"><a class="header-anchor" href="#project-process">¶</a>project process</h2>
 <p>What I’ve done in last two months is finishing the most of zoned storage emulation, except zone append emulation part. One project task took longer than expected is the zone report emulation. It bothers me that I’ve taken this long to have a simple workable version. At first, I thought it’s a three-week task after talking to my mentors about the developing plan in the first week. However, I have underestimated a lot of details that can mostly be spotted only during the implementations. Going through the major issues in the last several weeks, I found that:</p>
 <ol>
 <li>set up a full guest VM. &lt;1 week&gt;</li>
@@ -165,14 +162,6 @@
 <li>fix the issue of the zoned feature bit &lt;1 week&gt;</li>
 </ol>
 <p>The most interesting I’ve learned so far is to get the device communicate with the guest driver so that the zone report emulation can work. My mentors helped me a lot during the debugging process where I’ve learned incrementally about what happens exactly in both device side and driver side.</p>
-<h2 id="zoned-storage-emulation"><a class="header-anchor" href="#zoned-storage-emulation">¶</a>zoned storage emulation</h2>
-<p>(didn’t think it through…will change it later)</p>
-<h3 id="what"><a class="header-anchor" href="#what">¶</a>what</h3>
-<p>Zoned storage emulation is to emulate zoned block devices on the guests.</p>
-<h3 id="how"><a class="header-anchor" href="#how">¶</a>how</h3>
-<p>One solution is to use the zoned host device for passing through host zoned storage devices as QEMU does.</p>
-<h3 id="why"><a class="header-anchor" href="#why">¶</a>why</h3>
-<p>As mentioned before, Zoned Block Devices (ZBDs) devide the LBA space into block regions called zones that are larger than the LBA size. It can only allow sequential writes, which reduces write amplification in SSDs, leading to higher throughput and increased  capacity.</p>
 
   </div>
 </article>
@@ -190,8 +179,6 @@
          
           <li><a href="/sg/about/">About</a></li>
          
-          <li><a href="/sg/tags/">Tag</a></li>
-         
           <li><a href="/sg/categories/">Category</a></li>
          
           <li><a href="/sg/archives/">Writing</a></li>
@@ -202,22 +189,22 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#project-process"><span class="toc-number">1.</span> <span class="toc-text">project process</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zoned-storage-emulation"><span class="toc-number">2.</span> <span class="toc-text">zoned storage emulation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#what"><span class="toc-number">2.1.</span> <span class="toc-text">what</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#how"><span class="toc-number">2.2.</span> <span class="toc-text">how</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#why"><span class="toc-number">2.3.</span> <span class="toc-text">why</span></a></li></ol></li></ol>
+      
     </div>
 
     <div id="share-footer" style="display: none">
       <ul>
   <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://sgzerolc.github.io/sg/2022/08/01/qemu_pj_mid/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://sgzerolc.github.io/sg/2022/08/01/qemu_pj_mid/&text=Zoned Storage Emulation in QEMU"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://sgzerolc.github.io/sg/2022/08/01/qemu_pj_mid/&title=Zoned Storage Emulation in QEMU"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sgzerolc.github.io/sg/2022/08/01/qemu_pj_mid/&is_video=false&description=Zoned Storage Emulation in QEMU"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=Zoned Storage Emulation in QEMU&body=Check out this article: https://sgzerolc.github.io/sg/2022/08/01/qemu_pj_mid/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://sgzerolc.github.io/sg/2022/08/01/qemu_pj_mid/&title=Zoned Storage Emulation in QEMU"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://sgzerolc.github.io/sg/2022/08/01/qemu_pj_mid/&title=Zoned Storage Emulation in QEMU"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://sgzerolc.github.io/sg/2022/08/01/qemu_pj_mid/&title=Zoned Storage Emulation in QEMU"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://sgzerolc.github.io/sg/2022/08/01/qemu_pj_mid/&title=Zoned Storage Emulation in QEMU"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://sgzerolc.github.io/sg/2022/08/01/qemu_pj_mid/&name=Zoned Storage Emulation in QEMU&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://sgzerolc.github.io/sg/2022/08/01/qemu_pj_mid/&t=Zoned Storage Emulation in QEMU"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://sgzerolc.github.io/sg/2022/08/01/qemu_pj_mid/&text=Zoned Storage Emulation So Far"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://sgzerolc.github.io/sg/2022/08/01/qemu_pj_mid/&title=Zoned Storage Emulation So Far"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sgzerolc.github.io/sg/2022/08/01/qemu_pj_mid/&is_video=false&description=Zoned Storage Emulation So Far"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Zoned Storage Emulation So Far&body=Check out this article: https://sgzerolc.github.io/sg/2022/08/01/qemu_pj_mid/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://sgzerolc.github.io/sg/2022/08/01/qemu_pj_mid/&title=Zoned Storage Emulation So Far"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://sgzerolc.github.io/sg/2022/08/01/qemu_pj_mid/&title=Zoned Storage Emulation So Far"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://sgzerolc.github.io/sg/2022/08/01/qemu_pj_mid/&title=Zoned Storage Emulation So Far"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://sgzerolc.github.io/sg/2022/08/01/qemu_pj_mid/&title=Zoned Storage Emulation So Far"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://sgzerolc.github.io/sg/2022/08/01/qemu_pj_mid/&name=Zoned Storage Emulation So Far&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://sgzerolc.github.io/sg/2022/08/01/qemu_pj_mid/&t=Zoned Storage Emulation So Far"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -238,7 +225,7 @@
     Copyright &copy;
     
     
-    2022
+    2023
     Sam Li
   </div>
 </footer>
