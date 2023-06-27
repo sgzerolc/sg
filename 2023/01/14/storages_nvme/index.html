@@ -14,7 +14,7 @@
 <meta property="og:description" content="Content: NVMeSpecification (Section 2-2.2.1 [p15-p19] + Section 3.3.1 [p79-p83]), NVMe-tutorial (slides 1-11) Recently, I’ve been working on making the metadata for QEMU NVMe ZNS emulation persistent">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-01-13T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-02-08T13:09:55.951Z">
+<meta property="article:modified_time" content="2023-06-18T10:39:45.771Z">
 <meta property="article:author" content="Sam Li">
 <meta name="twitter:card" content="summary">
     
@@ -107,7 +107,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Theory-of-operation"><span class="toc-number">1.</span> <span class="toc-text">Theory of operation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Queue-models-design"><span class="toc-number">2.</span> <span class="toc-text">Queue models design</span></a></li></ol>
+      
     </div>
   </span>
 </div>
@@ -181,17 +181,6 @@
 <p>Stuck at the 4th step. What’s the next step to implement? Found the gap…</p>
 </li>
 </ol>
-<h3 id="Theory-of-operation"><a class="header-anchor" href="#Theory-of-operation">¶</a>Theory of operation</h3>
-<p>It introduced two types of NVMe transport models, memory-based and messaged-based (or mixed). NVMe subsystems require underlying NVMe transport to provide reliable data (command and data) transmission. An NVMe transport is an abstract protocol layer independent of physical connectors. Memory-based transport models use shared memory which is accessed by explicit reads/writes. Message-based transport models use capsule or message to send data between fabric nodes.</p>
-<p><u>An NVMe subsystem</u> is combined with controller of subsystem, non-volatile storage medium and interfaces connecting those two. Controller exposes storage mediums to host softwares through namespaces.  A namespace is a formatted area of NVM.</p>
-<p><u>NVMe command sets</u> divide into three parts, admin, I/O, and fabrics. I/O command sets further divide into NVM, ZNS, and Key-Value. An I/O command set is used with I/O queue pair. Admin command sets are used for controller management. And fabrics command set is for NVMe over Fabrics specific. Commands are 64 bytes in size.</p>
-<p><u>Memory-based transport medel</u>: SQ and CQ are circular buffer with fixed slot size that are associated in memory. Host software puts commands to a SQ and sends it to controller. Then controllers put completion status of commands to a CQ upon execution finished.</p>
-<h3 id="Queue-models-design"><a class="header-anchor" href="#Queue-models-design">¶</a>Queue models design</h3>
-<p>NVMe queue models:</p>
-<p>Memory-based transport queue model:</p>
-<p>Message-based transport queue model:</p>
-<p>Virtqueue models:</p>
-<p>Io_uring queue models:</p>
 <hr class="footnotes-sep">
 <section class="footnotes">
 <ol class="footnotes-list">
@@ -228,7 +217,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Theory-of-operation"><span class="toc-number">1.</span> <span class="toc-text">Theory of operation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Queue-models-design"><span class="toc-number">2.</span> <span class="toc-text">Queue models design</span></a></li></ol>
+      
     </div>
 
     <div id="share-footer" style="display: none">
