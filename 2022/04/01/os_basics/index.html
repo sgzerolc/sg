@@ -6,21 +6,23 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="¶Syscalls System calls: applications see the OS via system calls. ¶Traps Trapframe ¶VM virtual memory   os booting: 123456kinit();         &#x2F;&#x2F; physical page allocatorkvminit();       &#x2F;&#x2F; create kernel p">
+    <meta name="description" content="Design points Interfaces  Process File descriptor -&gt; I&#x2F;O Pipe Fs   Organization Virtual memory techniques  page table interrupts   Parallelism  lock threads case study: RCU   File systems  xv6 d">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Intro to xv6">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2022/04/01/os_basics/index.html">
 <meta property="og:site_name" content="steins gate zero">
-<meta property="og:description" content="¶Syscalls System calls: applications see the OS via system calls. ¶Traps Trapframe ¶VM virtual memory   os booting: 123456kinit();         &#x2F;&#x2F; physical page allocatorkvminit();       &#x2F;&#x2F; create kernel p">
+<meta property="og:description" content="Design points Interfaces  Process File descriptor -&gt; I&#x2F;O Pipe Fs   Organization Virtual memory techniques  page table interrupts   Parallelism  lock threads case study: RCU   File systems  xv6 d">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://sgzerolc.github.io/sg/2022/04/01/os_basics/boot.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/04/01/os_basics/pt.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/04/01/os_basics/kvm.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/04/01/os_basics/Screenshot-8963182.png">
+<meta property="og:image" content="https://sgzerolc.github.io/sg/2022/04/01/os_basics/Screenshot-9679149.png">
 <meta property="article:published_time" content="2022-03-31T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-05-20T01:43:56.592Z">
+<meta property="article:modified_time" content="2023-07-19T03:43:08.664Z">
 <meta property="article:author" content="Sam Li">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://sgzerolc.github.io/sg/2022/04/01/os_basics/pt.png">
+<meta name="twitter:image" content="https://sgzerolc.github.io/sg/2022/04/01/os_basics/boot.png">
     
     
       
@@ -111,7 +113,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Syscalls"><span class="toc-number">1.</span> <span class="toc-text">Syscalls</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Traps"><span class="toc-number">1.1.</span> <span class="toc-text">Traps</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#VM"><span class="toc-number">2.</span> <span class="toc-text">VM</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#page-table"><span class="toc-number">2.1.</span> <span class="toc-text">page table</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#interrupts"><span class="toc-number">2.2.</span> <span class="toc-text">interrupts</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Parallelism"><span class="toc-number">3.</span> <span class="toc-text">Parallelism</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#lock"><span class="toc-number">3.1.</span> <span class="toc-text">lock</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#threads"><span class="toc-number">3.2.</span> <span class="toc-text">threads</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#case-study-RCU"><span class="toc-number">3.3.</span> <span class="toc-text">case study: RCU</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#File-systems"><span class="toc-number">4.</span> <span class="toc-text">File systems</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#xv6-design"><span class="toc-number">4.1.</span> <span class="toc-text">xv6 design</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#case-study-ext3"><span class="toc-number">4.2.</span> <span class="toc-text">case study: ext3</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Network-stack"><span class="toc-number">5.</span> <span class="toc-text">Network stack</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Security"><span class="toc-number">6.</span> <span class="toc-text">Security</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Design points</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Interfaces</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">Process</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">File descriptor -&gt; I&#x2F;O</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.3.</span> <span class="toc-text">Pipe</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.4.</span> <span class="toc-text">Fs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Organization</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Virtual memory techniques</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.1.</span> <span class="toc-text">page table</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.2.</span> <span class="toc-text">interrupts</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Parallelism</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.1.</span> <span class="toc-text">lock</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.2.</span> <span class="toc-text">threads</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.3.</span> <span class="toc-text">case study: RCU</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">File systems</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.1.</span> <span class="toc-text">xv6 design</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.2.</span> <span class="toc-text">case study: ext3</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">Network stack</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">Security</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">Basics</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.1.</span> <span class="toc-text">C</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.2.</span> <span class="toc-text">RISC-V convention</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.3.</span> <span class="toc-text">GDB</span></a></li></ol></li></ol>
     </div>
   </span>
 </div>
@@ -155,11 +157,245 @@
   
 
   <div class="content" itemprop="articleBody">
-    <h2 id="Syscalls"><a class="header-anchor" href="#Syscalls">¶</a>Syscalls</h2>
-<p>System calls: applications see the OS via system calls.</p>
-<h3 id="Traps"><a class="header-anchor" href="#Traps">¶</a>Traps</h3>
-<p>Trapframe</p>
-<h2 id="VM"><a class="header-anchor" href="#VM">¶</a>VM</h2>
+    <div class="toc">
+<!-- toc -->
+<ul>
+<li><a href="#design-points">Design points</a></li>
+<li><a href="#interfaces">Interfaces</a>
+<ul>
+<li><a href="#process">Process</a></li>
+<li><a href="#file-descriptor-i-o">File descriptor -&gt; I/O</a></li>
+<li><a href="#pipe">Pipe</a></li>
+<li><a href="#fs">Fs</a></li>
+</ul>
+</li>
+<li><a href="#organization">Organization</a></li>
+<li><a href="#virtual-memory-techniques">Virtual memory techniques</a>
+<ul>
+<li><a href="#page-table">page table</a></li>
+<li><a href="#interrupts">interrupts</a></li>
+</ul>
+</li>
+<li><a href="#parallelism">Parallelism</a>
+<ul>
+<li><a href="#lock">lock</a></li>
+<li><a href="#threads">threads</a></li>
+<li><a href="#case-study-rcu">case study: RCU</a></li>
+</ul>
+</li>
+<li><a href="#file-systems">File systems</a>
+<ul>
+<li><a href="#xv6-design">xv6 design</a></li>
+<li><a href="#case-study-ext3">case study: ext3</a></li>
+</ul>
+</li>
+<li><a href="#network-stack">Network stack</a></li>
+<li><a href="#security">Security</a></li>
+<li><a href="#basics">Basics</a>
+<ul>
+<li><a href="#c">C</a></li>
+<li><a href="#risc-v-convention">RISC-V convention</a></li>
+<li><a href="#gdb">GDB</a></li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
+</div>
+<h2><span id="pdesign-points">Design points</span></h2>
+<ol>
+<li>Few mechanisms provide enough generality: xv6 provides a Unix-like interface which contains the basic concepts to resolve the tradeoff between supporting many devices and using a simple interface.</li>
+<li>What is one syscall in xv6? Xv6 has one <code>kernel</code> runs programs (<code>process</code>), process in the user space calls (<code>syscall</code>) kernel to provide services.
+<ul>
+<li>Each process has memory which cantains instructions, data and stack. Stacks manages procedure calls.</li>
+<li>Kernel provides services as process, memory, fd, pipes, fs.</li>
+<li>Shell is a command-line user interface. It’s a user program.</li>
+</ul>
+</li>
+<li>Chap1: xv6 provides simplicity and generality for Unix-like os flavour but it does not follow POSIX standard and follow users notion. All xv6 processes run as root. The functionalities it misses are user-level threads, … (Intended to develop this)</li>
+<li>Chap2:
+<ul>
+<li>xv6 runs entire os in kernel. The concept is monolithic though it provides less kernel services than some microkernel.</li>
+<li>xv6’s process has one thread. Modern os supports several threads within a process</li>
+</ul>
+</li>
+</ol>
+<h2><span id="pinterfaces">Interfaces</span></h2>
+<h3><span id="pprocess">Process</span></h3>
+<ol>
+<li>Xv6 time-shares processes by switching the available CPU between the process waiting to execute.</li>
+<li>Xv6 allocates memory for each process implicitly:
+<ul>
+<li><code>fork</code> allocates the enough memory for its child process (copy of the parent’s memory), <code>exec</code> allocates the memory for the executable file</li>
+<li>run-time memory is changed by <code>sbrk(n)</code>, which grows the data memory of process by n.</li>
+</ul>
+</li>
+<li>Xv6 manages processes:
+<ul>
+<li>create: <code>fork</code></li>
+<li>close: <code>exit</code>, <code>wait</code> (wait for the child’s process)</li>
+<li>replace the process memory of calling process with new file img: <code>exec</code></li>
+</ul>
+</li>
+</ol>
+<h3><span id="pfile-descriptor-gt-i-o">File descriptor -&gt; I/O</span></h3>
+<ol>
+<li>
+<p>File descriptors abstract I/O objects like device, file, pipes.</p>
+</li>
+<li>
+<p>Every fd has its own offset. Fds share the offset of the file if the fd is crated by <code>dup</code> or <code>fork</code>. That’s why I/O direction in the shell is easy to implement.</p>
+<ul>
+<li>
+<p><code>fork</code> copies parent’s fd table as well while <code>exec</code> preserves the fd table of calling process. So exec can change the original fd.</p>
+</li>
+<li>
+<p><code>dup</code>: <code>ls existing-file non-existing-file &gt; tmp1 2&gt;&amp;1</code>, &amp;1 means dup(1) which shares err files with output file tmp1, therefore tmp1 would have correct and wrong ones.</p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// cat &lt; input.txt </span></span><br><span class="line"><span class="comment">// Read from stdin</span></span><br><span class="line"><span class="keyword">char</span> *argv[<span class="number">2</span>];</span><br><span class="line">argv[<span class="number">0</span>] = <span class="string">&#x27;cat&#x27;</span>;</span><br><span class="line">argv[<span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">if</span> (fork() == <span class="number">0</span>) &#123;</span><br><span class="line">  close(<span class="number">0</span>);</span><br><span class="line">  open(<span class="string">&quot;input.txt&quot;</span>, O_RDONLY);</span><br><span class="line">  exec(<span class="string">&quot;cat&quot;</span>, argv);</span><br><span class="line">&#125;</span><br><span class="line">  </span><br><span class="line"><span class="comment">// (echo hello; echo world) &gt;output.txt</span></span><br><span class="line"><span class="comment">// fork version: </span></span><br><span class="line"><span class="keyword">if</span> (fork() == <span class="number">0</span>) &#123;</span><br><span class="line">  <span class="comment">// write 1 hello;</span></span><br><span class="line">  <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">  wait(<span class="number">0</span>); </span><br><span class="line">  <span class="comment">// write 1 world</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// dup version:</span></span><br><span class="line">fd = dup(<span class="number">1</span>);</span><br><span class="line">write(<span class="number">1</span>, );</span><br><span class="line">write(fd, );</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>Processes have 3 private fds, 0 for stdin, 1 for stdout, 2 for stderr.</p>
+<ul>
+<li><code>read</code>, <code>write</code>: returns 0 if data r/w completes, &gt; 0 if in the process, &lt; 0 if err occurs</li>
+<li><code>pipe</code>: A pipe is a kernel buffer. It has a pair of fds, one for read and one for write.They share the data read from or written to.</li>
+</ul>
+</li>
+</ol>
+<h3><span id="ppipe">Pipe</span></h3>
+<ol>
+<li>The read on the pipe blocks until it’s improssible to receive new data.</li>
+</ol>
+<p>Pipe[0] read, pipe[1] write.If stdin is associated with either end of pipe, then exec will wait if there is the new data waiting to r/w. So the pipe ends before write/read are alway closed in this chunk.</p>
+   <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// wc &lt; &quot;hello world&quot;</span></span><br><span class="line"><span class="keyword">if</span>(fork() == <span class="number">0</span>) &#123;</span><br><span class="line">	close(<span class="number">0</span>); </span><br><span class="line">	dup(p[<span class="number">0</span>]); <span class="comment">// p[0] donates its data to file descriptor 0</span></span><br><span class="line">	close(p[<span class="number">0</span>]); <span class="comment">// p[0] no longer needed in child since stdin is a copy</span></span><br><span class="line">	close(p[<span class="number">1</span>]);</span><br><span class="line">	exec(<span class="string">&quot;/bin/wc&quot;</span>, argv);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">	close(p[<span class="number">0</span>]);</span><br><span class="line">	write(p[<span class="number">1</span>], <span class="string">&quot;hello world\n&quot;</span>, <span class="number">12</span>);</span><br><span class="line">	close(p[<span class="number">1</span>]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>
+<p>Process tree: <code>grep fork sh.c | wc -l</code></p>
+<p>The child process creates a pipe to connect the left end of the pipe with the right end. Fork + runcmd will then run the cmd of the left end and the right end. The right end of the pipeline can also be a pipe. Therefore a processes tree generates.</p>
+<ul>
+<li><code>echo hi | wc</code></li>
+<li><code>sleep 10 | echo hi</code></li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">case</span> PIPE:</span><br><span class="line">  pcmd = (struct pipecmd*)cmd;</span><br><span class="line">  <span class="keyword">if</span>(pipe(p) &lt; <span class="number">0</span>)</span><br><span class="line">    panic(<span class="string">&quot;pipe&quot;</span>);</span><br><span class="line">  <span class="keyword">if</span>(fork1() == <span class="number">0</span>)&#123;</span><br><span class="line">    ... <span class="comment">//p[1]</span></span><br><span class="line">    runcmd(pcmd-&gt;left);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span>(fork1() == <span class="number">0</span>)&#123;</span><br><span class="line">    ... <span class="comment">//p[0]</span></span><br><span class="line">    runcmd(pcmd-&gt;right);</span><br><span class="line">  &#125;</span><br><span class="line">... <span class="comment">// close pipe ends</span></span><br><span class="line">  wait(<span class="number">0</span>);</span><br><span class="line">  wait(<span class="number">0</span>);</span><br><span class="line">  <span class="keyword">break</span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>Pipe vs temp files: in memory vs in disk</p>
+<ul>
+<li><code>echo hello world | wc</code></li>
+<li><code>echo hello world &gt;/tmp/xyz; wc &lt;/tmp/xyz</code></li>
+</ul>
+</li>
+</ol>
+<h3><span id="pfs">Fs</span></h3>
+<ol>
+<li>
+<p>Fs -&gt; data files -&gt; File/Dir -&gt; filename + inode -&gt; type +length + location + Links -&gt; (filename, reference/to/inode)</p>
+</li>
+<li>
+<p>Find file: path/to/file, <code>/</code> is the root path; relative path.</p>
+</li>
+<li>
+<p>Create file/device file: <code>mkdir</code>, <code>mknod</code>. Mknod associates kernel device with the major and the minor device numbers. The kernel diverts syscalls to the device implementation instead of fs.</p>
+</li>
+<li>
+<p>A file has an underlying file called inode. It cantains metadata.</p>
+<ul>
+<li><code>fstat</code></li>
+</ul>
+</li>
+<li>
+<p>Fs utilities are user-level programs. The command line interfaces can add the same user-level programs to provide such utilities. However,<code>cd</code> is built into the shell because the forked child process cannot change the memory of the parent process.</p>
+</li>
+</ol>
+<h2><span id="porganization">Organization</span></h2>
+<ol>
+<li>
+<p>Os MUST provides time-sharing resources and applicable isolation(interact when required) among processes.</p>
+<ul>
+<li>Fancy terms: <code>multiplexing, isolation, interaction</code></li>
+</ul>
+</li>
+<li>
+<p>Let’s count what does xv6 have:</p>
+<ul>
+<li>1 monolithic kernel</li>
+<li>many processes (the unit of isolation)</li>
+<li>runs on a multi-core RISC-V microprocessor: 64-bit, “LP64” C</li>
+<li>hardwares: RAM, ROM, screen, disk (simulated by qemu -machine virt)</li>
+</ul>
+</li>
+<li>
+<p>Design points:</p>
+<ul>
+<li>Abstract physical resources: Library Vs Outside manager
+<ul>
+<li>Library: Applications access devices like a library. App decides when to leave the process.</li>
+<li>Manager: Os manages who enters/leaves the process and when.</li>
+</ul>
+</li>
+<li>Provide strong isolation: if one process is down, others should not be corrupted by it.
+<ul>
+<li>hw support of CPU when executes instructions: RISC-V provides three modes: <code>machine, supervisor, user</code>.</li>
+<li>privileged instruction - kernel space, user-mode instruction - user space</li>
+<li>A user app invoking kernel service must transit to the kernel space first: RISC-V, <code>ecall</code>, it switches CPU u -&gt; k and enters k at an entry point controlled by k</li>
+</ul>
+</li>
+<li>What part of os runs in supervisor mode:
+<ul>
+<li>Term: <code>monolithic kernel</code>: all. Good to coperate/share and bad side is unsafe.</li>
+<li>Term: <code>microkernel</code>: part. Good side is safe and bad to coperate/share.</li>
+<li>Term: Os running processes as service is called <code>server</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Process provides strong isolation</p>
+<ul>
+<li>mechanisms implementing process: user/super mode flag, address spaces, time-slicing of threads</li>
+<li>hw support: Xv6 manages process memory via page tables (RISC-V support).</li>
+</ul>
+</li>
+<li>
+<p>Process internals:</p>
+<ul>
+<li>
+<p>Process has private memory system/address space. An address space contains user memory starting at va 0. Xv6 uses 38 bits of 39 bits. Max address is 2^38 - 1.</p>
+<p>| user text and data | user stack |  heap| trapframe|trampoline|</p>
+<p>0 ------------------------------------------------------------&gt;                              MAXVA</p>
+</li>
+<li>
+<p>Process has kernel states and user states. Kernel states are its pgtbl, kernel stack, run state.</p>
+</li>
+<li>
+<p>A process has a <u>thread</u> of execution that <u>executes the process’s instructions</u>. Thread state (local variables, function call,return address) is stored on the thread’s stacks.</p>
+</li>
+<li>
+<p>A process has two stacks: u stack, k stack.</p>
+</li>
+<li>
+<p>A process makes sys call by <code>ecall</code>, exit k space by <code>sret</code>.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>I/O path</p>
+<ul>
+<li>
+<p>Initialization: console,  vm stuff (page table,process table, trap vector, interrupt handler, device interrupts), fs stuff (buffer cache, inode cache, file table, hard disk)</p>
+</li>
+<li>
+<p>Boot xv6 and start the first process</p>
+<ul>
+<li>
+<img src="/sg/2022/04/01/os_basics/boot.png" class title="boot">
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h2><span id="pvirtual-memory-techniques">Virtual memory techniques</span></h2>
 <p>virtual memory</p>
 <ol>
 <li>
@@ -169,17 +405,17 @@
 <li>
 <p>Memory allocation</p>
 <p>Real allocator: dynamic allocation-&gt;small chunks</p>
-<p>Xv6 allocator: allocate a big chunk of 4096-byte block</p>
+<p>Xv6 allocator: allocate a 4096-byte block</p>
 </li>
 </ol>
-<h3 id="page-table"><a class="header-anchor" href="#page-table">¶</a>page table</h3>
+<h3><span id="ppage-table">page table</span></h3>
 <ol>
 <li>
 <p>address translation</p>
 <p>RISC-V instructions manipulate virtual addresses; RAM, or physical memory is indexed with physical address. The RISC-V page table hardware provides mapping of virtual address to physical address.</p>
 <ul>
 <li>
-<img src="/sg/2022/04/01/os_basics/pt.png" class="" title="pt">
+<img src="/sg/2022/04/01/os_basics/pt.png" class title="pt">
 </li>
 </ul>
 </li>
@@ -200,7 +436,7 @@
 </li>
 <li>
 <p>kernel stack pages: have an unmapped guard page with PTE invalid.</p>
-<img src="/sg/2022/04/01/os_basics/kvm.png" class="" title="kvm">
+<img src="/sg/2022/04/01/os_basics/kvm.png" class title="kvm">
 </li>
 </ul>
 </li>
@@ -208,7 +444,7 @@
 </li>
 <li>
 <p>user address space</p>
-<img src="/sg/2022/04/01/os_basics/Screenshot-8963182.png" class="" title="Screenshot-8963182">
+<img src="/sg/2022/04/01/os_basics/Screenshot-8963182.png" class title="Screenshot-8963182">
 </li>
 <li>
 <p>process of vm setup</p>
@@ -223,7 +459,7 @@
 </ul>
 </li>
 </ol>
-<h3 id="interrupts"><a class="header-anchor" href="#interrupts">¶</a>interrupts</h3>
+<h3><span id="pinterrupts">interrupts</span></h3>
 <ol>
 <li>
 <p>Drivers’s data structures can divide into two parts, top/bottom.</p>
@@ -265,8 +501,8 @@
 <li>demand paging</li>
 <li>memory mapped file</li>
 </ol>
-<h2 id="Parallelism"><a class="header-anchor" href="#Parallelism">¶</a>Parallelism</h2>
-<h3 id="lock"><a class="header-anchor" href="#lock">¶</a>lock</h3>
+<h2><span id="pparallelism">Parallelism</span></h2>
+<h3><span id="plock">lock</span></h3>
 <ol>
 <li>
 <p>Xv6 has two locks: spinlocks and sleeplocks</p>
@@ -295,7 +531,7 @@
 <ol>
 <li>Deadlock: unlocking A requires B, unlocking B requires A, A and B are locked. example: deadly embrace</li>
 </ol>
-<h3 id="threads"><a class="header-anchor" href="#threads">¶</a>threads</h3>
+<h3><span id="pthreads">threads</span></h3>
 <ol>
 <li>
 <p>Why threads? Run parallel programs</p>
@@ -326,9 +562,9 @@
 <p>Further reading:</p>
 <p>stanford os lab1/cmu dsys thread</p>
 <p>slides from 418 / os exams from 440</p>
-<h3 id="case-study-RCU"><a class="header-anchor" href="#case-study-RCU">¶</a>case study: RCU</h3>
-<h2 id="File-systems"><a class="header-anchor" href="#File-systems">¶</a>File systems</h2>
-<h3 id="xv6-design"><a class="header-anchor" href="#xv6-design">¶</a>xv6 design</h3>
+<h3><span id="pcase-study-rcu">case study: RCU</span></h3>
+<h2><span id="pfile-systems">File systems</span></h2>
+<h3><span id="pxv6-design">xv6 design</span></h3>
 <p>xv6 features:</p>
 <ol>
 <li>an on-disk structure represets naming system</li>
@@ -336,9 +572,68 @@
 <li>coordinate multiple processes</li>
 <li>cache</li>
 </ol>
-<h3 id="case-study-ext3"><a class="header-anchor" href="#case-study-ext3">¶</a>case study: ext3</h3>
-<h2 id="Network-stack"><a class="header-anchor" href="#Network-stack">¶</a>Network stack</h2>
-<h2 id="Security"><a class="header-anchor" href="#Security">¶</a>Security</h2>
+<h3><span id="pcase-study-ext3">case study: ext3</span></h3>
+<h2><span id="pnetwork-stack">Network stack</span></h2>
+<h2><span id="psecurity">Security</span></h2>
+<h2><span id="pbasics">Basics</span></h2>
+<h3><span id="pc">C</span></h3>
+<ol>
+<li>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/8011700/how-do-i-extract-specific-n-bits-of-a-32-bit-unsigned-integer-in-c">bit mask</a>:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Want the last X bits</span></span><br><span class="line"><span class="keyword">unsigned</span>  mask;</span><br><span class="line">mask = (<span class="number">1</span> &lt;&lt; X) - <span class="number">1</span>; <span class="comment">// -1 is like fliping the bit</span></span><br><span class="line">lastXbits = value &amp; mask;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Want X bits in the middle</span></span><br><span class="line"><span class="keyword">unsigned</span>  mask;</span><br><span class="line">mask = ((<span class="number">1</span> &lt;&lt; X) - <span class="number">1</span>) &lt;&lt; startBit;</span><br><span class="line">isolatedXbits = value &amp; mask;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3><span id="prisc-v-convention">RISC-V convention</span></h3>
+<ol>
+<li>
+<p>Unlike high-level programming language, convention is a choice to organize code like naming and line &lt; 80. Assembly is built on convention. Three parts is key to understand assembly: <strong>registers, function calls, and entering/exiting a function (prologue/epilogue)</strong>.</p>
+</li>
+<li>
+<p>Registers</p>
+<ul>
+<li>RISC-V has 32 registers. <code>sp</code> holds the current base of the stack. <code>t</code> for temporary.
+<ul>
+<li>
+<img src="/sg/2022/04/01/os_basics/Screenshot-9679149.png" class title="Screenshot-9679149">
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Calling convention (Understanding RISC-V Calling Convention by Nick Riasanovsky)</p>
+</li>
+<li>
+<p>Stack Frames: stack grows downwards and heap grows upwards</p>
+</li>
+<li>
+<p>Instructions</p>
+<ul>
+<li>
+<p><code>csrr</code>: Read CSR (Control System Register)</p>
+</li>
+<li>
+<p><code>mhartid</code> is Hart ID Register: The mhartid CSR is an MXLEN-bit read-only register containing the integer ID of <u>the hardware thread running the code</u> (Riscv privileged spec 3.1.5)</p>
+   <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">csrr a1 mhartid</span><br><span class="line">csrr rd, csr  -&gt; csrrs rd, csr, x0</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ol>
+<h3><span id="pgdb">GDB</span></h3>
+<ol>
+<li>
+<p><code>si</code>: step i</p>
+</li>
+<li>
+<p><code>layout split</code>: track file</p>
+</li>
+<li>
+<p><code>p</code>: print information</p>
+</li>
+<li>
+<p>A nice blog explains pipe and inter-process communication in details: <a target="_blank" rel="noopener" href="https://www.rozmichelle.com/pipes-forks-dups/">https://www.rozmichelle.com/pipes-forks-dups/</a></p>
+</li>
+</ol>
 
   </div>
 </article>
@@ -366,7 +661,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Syscalls"><span class="toc-number">1.</span> <span class="toc-text">Syscalls</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Traps"><span class="toc-number">1.1.</span> <span class="toc-text">Traps</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#VM"><span class="toc-number">2.</span> <span class="toc-text">VM</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#page-table"><span class="toc-number">2.1.</span> <span class="toc-text">page table</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#interrupts"><span class="toc-number">2.2.</span> <span class="toc-text">interrupts</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Parallelism"><span class="toc-number">3.</span> <span class="toc-text">Parallelism</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#lock"><span class="toc-number">3.1.</span> <span class="toc-text">lock</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#threads"><span class="toc-number">3.2.</span> <span class="toc-text">threads</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#case-study-RCU"><span class="toc-number">3.3.</span> <span class="toc-text">case study: RCU</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#File-systems"><span class="toc-number">4.</span> <span class="toc-text">File systems</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#xv6-design"><span class="toc-number">4.1.</span> <span class="toc-text">xv6 design</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#case-study-ext3"><span class="toc-number">4.2.</span> <span class="toc-text">case study: ext3</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Network-stack"><span class="toc-number">5.</span> <span class="toc-text">Network stack</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Security"><span class="toc-number">6.</span> <span class="toc-text">Security</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Design points</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Interfaces</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">Process</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">File descriptor -&gt; I&#x2F;O</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.3.</span> <span class="toc-text">Pipe</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.4.</span> <span class="toc-text">Fs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Organization</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Virtual memory techniques</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.1.</span> <span class="toc-text">page table</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.2.</span> <span class="toc-text">interrupts</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Parallelism</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.1.</span> <span class="toc-text">lock</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.2.</span> <span class="toc-text">threads</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.3.</span> <span class="toc-text">case study: RCU</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">File systems</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.1.</span> <span class="toc-text">xv6 design</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.2.</span> <span class="toc-text">case study: ext3</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">Network stack</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">Security</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">Basics</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.1.</span> <span class="toc-text">C</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.2.</span> <span class="toc-text">RISC-V convention</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.3.</span> <span class="toc-text">GDB</span></a></li></ol></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">

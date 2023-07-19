@@ -6,12 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="Execution process: the operators are arranged in a tree.  ¶sorting supported feature: ORDER BY, DISTINCT, GROUP BY Problem: can’t guarantee sorting data to fit in memory Approach: external merge sort:">
+    <meta name="description" content="sorting aggregations joins  Nested loop join Sort-merge join Hash join   Query plan  processing models access methods modification queries expression evaluation relational algebra equivalence   Par">
 <meta property="og:type" content="article">
 <meta property="og:title" content="db execution">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2022/03/17/db_execution/index.html">
 <meta property="og:site_name" content="steins gate zero">
-<meta property="og:description" content="Execution process: the operators are arranged in a tree.  ¶sorting supported feature: ORDER BY, DISTINCT, GROUP BY Problem: can’t guarantee sorting data to fit in memory Approach: external merge sort:">
+<meta property="og:description" content="sorting aggregations joins  Nested loop join Sort-merge join Hash join   Query plan  processing models access methods modification queries expression evaluation relational algebra equivalence   Par">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/03/17/db_execution/Screenshot-7600728.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/03/17/db_execution/Screenshot-7652824.png">
@@ -24,7 +24,7 @@
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/03/17/db_execution/Screenshot-7661256.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/03/17/db_execution/Screenshot-7661462.png">
 <meta property="article:published_time" content="2022-03-16T16:00:00.000Z">
-<meta property="article:modified_time" content="2022-06-27T02:13:52.381Z">
+<meta property="article:modified_time" content="2023-07-19T03:24:25.956Z">
 <meta property="article:author" content="Sam Li">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://sgzerolc.github.io/sg/2022/03/17/db_execution/Screenshot-7600728.png">
@@ -118,7 +118,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#sorting"><span class="toc-number">1.</span> <span class="toc-text">sorting</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#aggregations"><span class="toc-number">2.</span> <span class="toc-text">aggregations</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#joins"><span class="toc-number">3.</span> <span class="toc-text">joins</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Nested-loop-join"><span class="toc-number">3.1.</span> <span class="toc-text">Nested loop join</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Sort-merge-join"><span class="toc-number">3.2.</span> <span class="toc-text">Sort-merge join</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hash-join"><span class="toc-number">3.3.</span> <span class="toc-text">Hash join</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Query-plan"><span class="toc-number">4.</span> <span class="toc-text">Query plan</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#processing-models"><span class="toc-number">4.1.</span> <span class="toc-text">processing models</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#access-methods"><span class="toc-number">4.2.</span> <span class="toc-text">access methods</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#modification-queries"><span class="toc-number">4.3.</span> <span class="toc-text">modification queries</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#expression-evaluation"><span class="toc-number">4.4.</span> <span class="toc-text">expression evaluation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#relational-algebra-equivalence"><span class="toc-number">4.5.</span> <span class="toc-text">relational algebra equivalence</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Parallel-execution"><span class="toc-number">5.</span> <span class="toc-text">Parallel execution</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Optimization"><span class="toc-number">6.</span> <span class="toc-text">Optimization</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Cost-estimations"><span class="toc-number">6.1.</span> <span class="toc-text">Cost estimations</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Histograms"><span class="toc-number">6.2.</span> <span class="toc-text">Histograms</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Sampling"><span class="toc-number">7.</span> <span class="toc-text">Sampling</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#plan-enumeration"><span class="toc-number">7.1.</span> <span class="toc-text">plan enumeration</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">sorting</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">aggregations</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">joins</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.1.</span> <span class="toc-text">Nested loop join</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.2.</span> <span class="toc-text">Sort-merge join</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.3.</span> <span class="toc-text">Hash join</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Query plan</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.1.</span> <span class="toc-text">processing models</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.2.</span> <span class="toc-text">access methods</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.3.</span> <span class="toc-text">modification queries</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.4.</span> <span class="toc-text">expression evaluation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.5.</span> <span class="toc-text">relational algebra equivalence</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Parallel execution</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">Optimization</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.1.</span> <span class="toc-text">Cost estimations</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.2.</span> <span class="toc-text">Histograms</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">Sampling</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">7.1.</span> <span class="toc-text">plan enumeration</span></a></li></ol></li></ol>
     </div>
   </span>
 </div>
@@ -162,9 +162,45 @@
   
 
   <div class="content" itemprop="articleBody">
-    <p>Execution process: the operators are arranged in a tree.</p>
-<img src="/sg/2022/03/17/db_execution/Screenshot-7600728.png" class="" title="Screenshot-7600728">
-<h2 id="sorting"><a class="header-anchor" href="#sorting">¶</a>sorting</h2>
+    <div class="toc">
+<!-- toc -->
+<ul>
+<li><a href="#sorting">sorting</a></li>
+<li><a href="#aggregations">aggregations</a></li>
+<li><a href="#joins">joins</a>
+<ul>
+<li><a href="#nested-loop-join">Nested loop join</a></li>
+<li><a href="#sort-merge-join">Sort-merge join</a></li>
+<li><a href="#hash-join">Hash join</a></li>
+</ul>
+</li>
+<li><a href="#query-plan">Query plan</a>
+<ul>
+<li><a href="#processing-models">processing models</a></li>
+<li><a href="#access-methods">access methods</a></li>
+<li><a href="#modification-queries">modification queries</a></li>
+<li><a href="#expression-evaluation">expression evaluation</a></li>
+<li><a href="#relational-algebra-equivalence">relational algebra equivalence</a></li>
+</ul>
+</li>
+<li><a href="#parallel-execution">Parallel execution</a></li>
+<li><a href="#optimization">Optimization</a>
+<ul>
+<li><a href="#cost-estimations">Cost estimations</a></li>
+<li><a href="#histograms">Histograms</a></li>
+</ul>
+</li>
+<li><a href="#sampling">Sampling</a>
+<ul>
+<li><a href="#plan-enumeration">plan enumeration</a></li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
+</div>
+<p>Execution process: the operators are arranged in a tree.</p>
+<img src="/sg/2022/03/17/db_execution/Screenshot-7600728.png" class title="Screenshot-7600728">
+<h2><span id="psorting">sorting</span></h2>
 <p>supported feature: ORDER BY, DISTINCT, GROUP BY</p>
 <p>Problem: can’t guarantee sorting data to fit in memory</p>
 <p>Approach: external merge sort: splits the data set into separate runs, sorts them individually, and then combine into larger sorted runs.</p>
@@ -176,7 +212,7 @@
 </ul>
 </li>
 </ol>
-<img src="/sg/2022/03/17/db_execution/Screenshot-7652824.png" class="" title="Screenshot-7652824">
+<img src="/sg/2022/03/17/db_execution/Screenshot-7652824.png" class title="Screenshot-7652824">
 <ol start="2">
 <li>
 <p>Procedure</p>
@@ -197,7 +233,7 @@
 </li>
 <li>
 <p>Pass:read and write each page in file.</p>
-<img src="/sg/2022/03/17/db_execution/Screenshot-7653767.png" class="" title="Screenshot-7653767">
+<img src="/sg/2022/03/17/db_execution/Screenshot-7653767.png" class title="Screenshot-7653767">
 </li>
 <li>
 <p>Number of passes = 1 + log<sub>2</sub><sup>N</sup></p>
@@ -212,7 +248,7 @@
 </li>
 <li>
 <p>totoal I/O cost: 2N*(# of passes)</p>
-<img src="/sg/2022/03/17/db_execution/Screenshot-7653299.png" class="" title="Screenshot-7653299">
+<img src="/sg/2022/03/17/db_execution/Screenshot-7653299.png" class title="Screenshot-7653299">
 </li>
 <li>
 <p><u>Problem</u>:  the worker blocks on disk I/O -&gt; more buffer pages won’t help in this case</p>
@@ -234,11 +270,11 @@
 <p>optimize sorting by using b+ tree: Retrieve tuples in desired sort order by simply traversing the leaf pages of the tree.</p>
 <p>The point is <strong># of I/O access</strong>.</p>
 <p>Case 1: clustered b+ tree: if the index is a clustered index, traverse the tree</p>
-<img src="/sg/2022/03/17/db_execution/Screenshot-7655087.png" class="" title="Screenshot-7655087">
+<img src="/sg/2022/03/17/db_execution/Screenshot-7655087.png" class title="Screenshot-7655087">
 <p>case 2: unclustered b+ tree: else, don’t do it.</p>
 </li>
 </ol>
-<h2 id="aggregations"><a class="header-anchor" href="#aggregations">¶</a>aggregations</h2>
+<h2><span id="paggregations">aggregations</span></h2>
 <ol>
 <li>
 <p>Aggregations: Collapse values for a single attribute from multiple tuples into a single scalar value.</p>
@@ -250,7 +286,7 @@
 <li>
 <p>Sorting -&gt; ordering query</p>
 <p>optimization: perform filter first: reduce the amount of data requiring to be sorted.</p>
-<img src="/sg/2022/03/17/db_execution/Screenshot-7657643.png" class="" title="Screenshot-7657643">
+<img src="/sg/2022/03/17/db_execution/Screenshot-7657643.png" class title="Screenshot-7657643">
 </li>
 <li>
 <p>Hashing -&gt; no ordering</p>
@@ -268,12 +304,12 @@
 <ol>
 <li>
 <p>hash function: used to split tuples into partitions on disk</p>
-<img src="/sg/2022/03/17/db_execution/Screenshot-7658353.png" class="" title="Screenshot-7658353">
+<img src="/sg/2022/03/17/db_execution/Screenshot-7658353.png" class title="Screenshot-7658353">
 </li>
 <li>
 <p>rehash: Build <strong>in-memory hash table</strong> for each partition and compute the aggregation</p>
 <p>Assume: each partition fits in memory.</p>
-<img src="/sg/2022/03/17/db_execution/Screenshot-7658396.png" class="" title="Screenshot-7658396">
+<img src="/sg/2022/03/17/db_execution/Screenshot-7658396.png" class title="Screenshot-7658396">
 </li>
 </ol>
 </li>
@@ -287,7 +323,7 @@
 </ul>
 </li>
 </ol>
-<h2 id="joins"><a class="header-anchor" href="#joins">¶</a>joins</h2>
+<h2><span id="pjoins">joins</span></h2>
 <ol>
 <li>
 <p>inner equijoin algorithm: joins tables where keys are equal.</p>
@@ -303,11 +339,11 @@
 <ul>
 <li>
 <p>early materialization(data): Copy the values for the attributes in outer and inner tuples into a new output tuple. -&gt; no need to go back in the query plan</p>
-<img src="/sg/2022/03/17/db_execution/Screenshot-7661256.png" class="" title="Screenshot-7661256">
+<img src="/sg/2022/03/17/db_execution/Screenshot-7661256.png" class title="Screenshot-7661256">
 </li>
 <li>
 <p>late materialization( record ids): Only copy the joins keys along with the record ids of the matching tuples -&gt; suits for column store</p>
-<img src="/sg/2022/03/17/db_execution/Screenshot-7661462.png" class="" title="Screenshot-7661462">
+<img src="/sg/2022/03/17/db_execution/Screenshot-7661462.png" class title="Screenshot-7661462">
 </li>
 </ul>
 </li>
@@ -324,7 +360,7 @@
 </ul>
 </li>
 </ol>
-<h3 id="Nested-loop-join"><a class="header-anchor" href="#Nested-loop-join">¶</a>Nested loop join</h3>
+<h3><span id="pnested-loop-join">Nested loop join</span></h3>
 <ol>
 <li>
 <p>Nested loop join: two nested FOR loops that iterate over the tuples in both tables and compares each unique of them.</p>
@@ -349,7 +385,7 @@
 <p>Index NLJ</p>
 </li>
 </ol>
-<h3 id="Sort-merge-join"><a class="header-anchor" href="#Sort-merge-join">¶</a>Sort-merge join</h3>
+<h3><span id="psort-merge-join">Sort-merge join</span></h3>
 <ol>
 <li>
 <p>Sort-merge join: sorts the two tables on their join key(s)</p>
@@ -359,30 +395,30 @@
 <p>Cost analysis: sort + merge</p>
 </li>
 </ol>
-<h3 id="Hash-join"><a class="header-anchor" href="#Hash-join">¶</a>Hash join</h3>
+<h3><span id="phash-join">Hash join</span></h3>
 <ol>
 <li>hash join: use a hash table to split up the tuples into smaller chunks based on their join attribute(s).</li>
 <li>basic hash join</li>
 <li>Grace hash join/Hybrid hash join</li>
 </ol>
-<h2 id="Query-plan"><a class="header-anchor" href="#Query-plan">¶</a>Query plan</h2>
-<h3 id="processing-models"><a class="header-anchor" href="#processing-models">¶</a>processing models</h3>
+<h2><span id="pquery-plan">Query plan</span></h2>
+<h3><span id="pprocessing-models">processing models</span></h3>
 <ol>
 <li>processing model: defines how the system executes a query plan.</li>
 <li>iterator model</li>
 <li>materialization model</li>
 <li>Vectorized/batch model</li>
 </ol>
-<h3 id="access-methods"><a class="header-anchor" href="#access-methods">¶</a>access methods</h3>
-<h3 id="modification-queries"><a class="header-anchor" href="#modification-queries">¶</a>modification queries</h3>
-<h3 id="expression-evaluation"><a class="header-anchor" href="#expression-evaluation">¶</a>expression evaluation</h3>
-<h3 id="relational-algebra-equivalence"><a class="header-anchor" href="#relational-algebra-equivalence">¶</a>relational algebra equivalence</h3>
-<h2 id="Parallel-execution"><a class="header-anchor" href="#Parallel-execution">¶</a>Parallel execution</h2>
-<h2 id="Optimization"><a class="header-anchor" href="#Optimization">¶</a>Optimization</h2>
-<h3 id="Cost-estimations"><a class="header-anchor" href="#Cost-estimations">¶</a>Cost estimations</h3>
-<h3 id="Histograms"><a class="header-anchor" href="#Histograms">¶</a>Histograms</h3>
-<h2 id="Sampling"><a class="header-anchor" href="#Sampling">¶</a>Sampling</h2>
-<h3 id="plan-enumeration"><a class="header-anchor" href="#plan-enumeration">¶</a>plan enumeration</h3>
+<h3><span id="paccess-methods">access methods</span></h3>
+<h3><span id="pmodification-queries">modification queries</span></h3>
+<h3><span id="pexpression-evaluation">expression evaluation</span></h3>
+<h3><span id="prelational-algebra-equivalence">relational algebra equivalence</span></h3>
+<h2><span id="pparallel-execution">Parallel execution</span></h2>
+<h2><span id="poptimization">Optimization</span></h2>
+<h3><span id="pcost-estimations">Cost estimations</span></h3>
+<h3><span id="phistograms">Histograms</span></h3>
+<h2><span id="psampling">Sampling</span></h2>
+<h3><span id="pplan-enumeration">plan enumeration</span></h3>
 
   </div>
 </article>
@@ -410,7 +446,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#sorting"><span class="toc-number">1.</span> <span class="toc-text">sorting</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#aggregations"><span class="toc-number">2.</span> <span class="toc-text">aggregations</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#joins"><span class="toc-number">3.</span> <span class="toc-text">joins</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Nested-loop-join"><span class="toc-number">3.1.</span> <span class="toc-text">Nested loop join</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Sort-merge-join"><span class="toc-number">3.2.</span> <span class="toc-text">Sort-merge join</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hash-join"><span class="toc-number">3.3.</span> <span class="toc-text">Hash join</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Query-plan"><span class="toc-number">4.</span> <span class="toc-text">Query plan</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#processing-models"><span class="toc-number">4.1.</span> <span class="toc-text">processing models</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#access-methods"><span class="toc-number">4.2.</span> <span class="toc-text">access methods</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#modification-queries"><span class="toc-number">4.3.</span> <span class="toc-text">modification queries</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#expression-evaluation"><span class="toc-number">4.4.</span> <span class="toc-text">expression evaluation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#relational-algebra-equivalence"><span class="toc-number">4.5.</span> <span class="toc-text">relational algebra equivalence</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Parallel-execution"><span class="toc-number">5.</span> <span class="toc-text">Parallel execution</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Optimization"><span class="toc-number">6.</span> <span class="toc-text">Optimization</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Cost-estimations"><span class="toc-number">6.1.</span> <span class="toc-text">Cost estimations</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Histograms"><span class="toc-number">6.2.</span> <span class="toc-text">Histograms</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Sampling"><span class="toc-number">7.</span> <span class="toc-text">Sampling</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#plan-enumeration"><span class="toc-number">7.1.</span> <span class="toc-text">plan enumeration</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">sorting</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">aggregations</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">joins</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.1.</span> <span class="toc-text">Nested loop join</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.2.</span> <span class="toc-text">Sort-merge join</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.3.</span> <span class="toc-text">Hash join</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Query plan</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.1.</span> <span class="toc-text">processing models</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.2.</span> <span class="toc-text">access methods</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.3.</span> <span class="toc-text">modification queries</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.4.</span> <span class="toc-text">expression evaluation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.5.</span> <span class="toc-text">relational algebra equivalence</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Parallel execution</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">Optimization</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.1.</span> <span class="toc-text">Cost estimations</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.2.</span> <span class="toc-text">Histograms</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">Sampling</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">7.1.</span> <span class="toc-text">plan enumeration</span></a></li></ol></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">

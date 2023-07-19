@@ -6,15 +6,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="with great amounts of help from Andrew Lin’s 20fall 6.004 class notes, I’ve recently reviewed the course. ¶0 introduction Goal: how to physically implement computation? ¶1 binary representation  binar">
+    <meta name="description" content="0 introduction 1 binary representation 2 assembly 3 procedures    with great amounts of help from Andrew Lin’s 20fall 6.004 class notes, I’ve recently reviewed the course. 0 introduction Goal: how">
 <meta property="og:type" content="article">
 <meta property="og:title" content="1 assembly">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2021/12/28/6.004_assembly/index.html">
 <meta property="og:site_name" content="steins gate zero">
-<meta property="og:description" content="with great amounts of help from Andrew Lin’s 20fall 6.004 class notes, I’ve recently reviewed the course. ¶0 introduction Goal: how to physically implement computation? ¶1 binary representation  binar">
+<meta property="og:description" content="0 introduction 1 binary representation 2 assembly 3 procedures    with great amounts of help from Andrew Lin’s 20fall 6.004 class notes, I’ve recently reviewed the course. 0 introduction Goal: how">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-12-27T16:00:00.000Z">
-<meta property="article:modified_time" content="2022-06-27T02:09:09.345Z">
+<meta property="article:modified_time" content="2023-07-19T03:21:40.874Z">
 <meta property="article:author" content="Sam Li">
 <meta name="twitter:card" content="summary">
     
@@ -107,7 +107,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0-introduction"><span class="toc-number">1.</span> <span class="toc-text">0 introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-binary-representation"><span class="toc-number">2.</span> <span class="toc-text">1 binary representation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-assembly"><span class="toc-number">3.</span> <span class="toc-text">2 assembly</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-procedures"><span class="toc-number">4.</span> <span class="toc-text">3 procedures</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">0 introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">1 binary representation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">2 assembly</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">3 procedures</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -151,24 +151,34 @@
   
 
   <div class="content" itemprop="articleBody">
-    <p>with great amounts of help from Andrew Lin’s 20fall 6.004 class notes, I’ve recently reviewed the course.</p>
-<h2 id="0-introduction"><a class="header-anchor" href="#0-introduction">¶</a>0 introduction</h2>
+    <div class="toc">
+<!-- toc -->
+<ul>
+<li><a href="#0-introduction">0 introduction</a></li>
+<li><a href="#1-binary-representation">1 binary representation</a></li>
+<li><a href="#2-assembly">2 assembly</a></li>
+<li><a href="#3-procedures">3 procedures</a></li>
+</ul>
+<!-- tocstop -->
+</div>
+<p>with great amounts of help from Andrew Lin’s 20fall 6.004 class notes, I’ve recently reviewed the course.</p>
+<h2><span id="p0-introduction">0 introduction</span></h2>
 <p>Goal: how to physically implement computation?</p>
-<h2 id="1-binary-representation"><a class="header-anchor" href="#1-binary-representation">¶</a>1 binary representation</h2>
+<h2><span id="p1-binary-representation">1 binary representation</span></h2>
 <ol>
 <li>binary representations</li>
 <li>modular arithmetic idea: wheel modulo 2**N</li>
 <li>binary encoding</li>
 <li>two’s complement</li>
 </ol>
-<h2 id="2-assembly"><a class="header-anchor" href="#2-assembly">¶</a>2 assembly</h2>
+<h2><span id="p2-assembly">2 assembly</span></h2>
 <ol>
 <li>microprocessor: comprised of: register file, ALU(computation), main memory</li>
 <li>Assembly: comprised of: computation(arithmetic, comparison, logical, shift), load/store, control transfer</li>
 <li>Three-address instructions: reg-imm instructions, reg-reg instructions,…</li>
 <li>see the pattern behind these instructions</li>
 </ol>
-<h2 id="3-procedures"><a class="header-anchor" href="#3-procedures">¶</a>3 procedures</h2>
+<h2><span id="p3-procedures">3 procedures</span></h2>
 <p>Problem: hotw to translate high-level program to RISC-V?</p>
 <ol>
 <li>
@@ -269,7 +279,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0-introduction"><span class="toc-number">1.</span> <span class="toc-text">0 introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-binary-representation"><span class="toc-number">2.</span> <span class="toc-text">1 binary representation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-assembly"><span class="toc-number">3.</span> <span class="toc-text">2 assembly</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-procedures"><span class="toc-number">4.</span> <span class="toc-text">3 procedures</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">0 introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">1 binary representation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">2 assembly</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">3 procedures</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">

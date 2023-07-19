@@ -6,16 +6,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="A revisit in virtulization, 2022&#x2F;04&#x2F;28 ¶concurrency problem: how to handle concurrency problem using yield? And the problems encountered.(from lecture 5) yield(): suspends the running thread, chooses">
+    <meta name="description" content="concurrency virtual machines    concurrency problem: how to handle concurrency problem using yield? And the problems encountered.(from lecture 5) yield(): suspends the running thread, chooses a new">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SD os">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2021/11/15/SD_os/index.html">
 <meta property="og:site_name" content="steins gate zero">
-<meta property="og:description" content="A revisit in virtulization, 2022&#x2F;04&#x2F;28 ¶concurrency problem: how to handle concurrency problem using yield? And the problems encountered.(from lecture 5) yield(): suspends the running thread, chooses">
+<meta property="og:description" content="concurrency virtual machines    concurrency problem: how to handle concurrency problem using yield? And the problems encountered.(from lecture 5) yield(): suspends the running thread, chooses a new">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2021/11/15/SD_os/sc.png">
 <meta property="article:published_time" content="2021-11-14T16:00:00.000Z">
-<meta property="article:modified_time" content="2022-06-27T02:19:12.304Z">
+<meta property="article:modified_time" content="2023-07-19T03:24:42.990Z">
 <meta property="article:author" content="Sam Li">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://sgzerolc.github.io/sg/2021/11/15/SD_os/sc.png">
@@ -109,7 +109,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#concurrency"><span class="toc-number">1.</span> <span class="toc-text">concurrency</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#virtual-machines"><span class="toc-number">2.</span> <span class="toc-text">virtual machines</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">concurrency</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">virtual machines</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -153,15 +153,22 @@
   
 
   <div class="content" itemprop="articleBody">
-    <p>A revisit in virtulization, 2022/04/28</p>
-<h2 id="concurrency"><a class="header-anchor" href="#concurrency">¶</a>concurrency</h2>
+    <div class="toc">
+<!-- toc -->
+<ul>
+<li><a href="#concurrency">concurrency</a></li>
+<li><a href="#virtual-machines">virtual machines</a></li>
+</ul>
+<!-- tocstop -->
+</div>
+<h2><span id="pconcurrency">concurrency</span></h2>
 <p>problem: how to handle concurrency problem using yield? And the problems encountered.(from lecture 5)</p>
 <p>yield(): suspends the running thread, chooses a new thread to run, and resumes the new thread</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">yield</span>(): </span><br><span class="line">  acquire(t_lock) </span><br><span class="line">  // Suspend the running thread </span><br><span class="line">  <span class="built_in">id</span> = cpus[CPU].thread </span><br><span class="line">  threads[<span class="built_in">id</span>].state = RUNNABLE </span><br><span class="line">  threads[<span class="built_in">id</span>].sp = SP </span><br><span class="line">  threads[<span class="built_in">id</span>].ptr = PTR </span><br><span class="line">  // Choose a new thread to run </span><br><span class="line">  do: </span><br><span class="line">    <span class="built_in">id</span> = (<span class="built_in">id</span> + <span class="number">1</span>) mod N </span><br><span class="line">  <span class="keyword">while</span> threads[<span class="built_in">id</span>].state != RUNNABLE </span><br><span class="line">  // Resume the new thread </span><br><span class="line">  SP = threads[<span class="built_in">id</span>].sp </span><br><span class="line">  PTR = threads[<span class="built_in">id</span>].ptr </span><br><span class="line">  threads[<span class="built_in">id</span>].state = RUNNING </span><br><span class="line">  cpus[CPU].thread = <span class="built_in">id</span> </span><br><span class="line">    </span><br><span class="line">  release(t_lock)</span><br></pre></td></tr></table></figure>
-<h2 id="virtual-machines"><a class="header-anchor" href="#virtual-machines">¶</a>virtual machines</h2>
+<h2><span id="pvirtual-machines">virtual machines</span></h2>
 <p>Scenario: running multiple Ones on a single physical machine.</p>
 <p>problem: how to safely share physical hardware?</p>
-<img src="/sg/2021/11/15/SD_os/sc.png" class="" title="截屏2021-11-15 下午10.12.27">
+<img src="/sg/2021/11/15/SD_os/sc.png" class title="截屏2021-11-15 下午10.12.27">
 
   </div>
 </article>
@@ -189,7 +196,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#concurrency"><span class="toc-number">1.</span> <span class="toc-text">concurrency</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#virtual-machines"><span class="toc-number">2.</span> <span class="toc-text">virtual machines</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">concurrency</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">virtual machines</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">

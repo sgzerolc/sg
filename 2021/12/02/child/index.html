@@ -6,12 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="install linux on pc -&gt; set up proxy -&gt; install virtual machine -&gt; install vagrant -&gt; change keyboard mapping -&gt; change bash file setting -&gt; connect to GitHub via ssh ¶安装子系统 安装的是ubunt">
+    <meta name="description" content="install linux on pc -&gt; set up proxy -&gt; install virtual machine -&gt; install vagrant -&gt; change keyboard mapping -&gt; change bash file setting -&gt; connect to GitHub via ssh 安装子系统 安装的是ubuntu">
 <meta property="og:type" content="article">
 <meta property="og:title" content="win10下装子系统ubuntu20.04和设置工作区">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2021/12/02/child/index.html">
 <meta property="og:site_name" content="steins gate zero">
-<meta property="og:description" content="install linux on pc -&gt; set up proxy -&gt; install virtual machine -&gt; install vagrant -&gt; change keyboard mapping -&gt; change bash file setting -&gt; connect to GitHub via ssh ¶安装子系统 安装的是ubunt">
+<meta property="og:description" content="install linux on pc -&gt; set up proxy -&gt; install virtual machine -&gt; install vagrant -&gt; change keyboard mapping -&gt; change bash file setting -&gt; connect to GitHub via ssh 安装子系统 安装的是ubuntu">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-12-02T05:28:54.000Z">
 <meta property="article:modified_time" content="2022-10-15T05:05:56.616Z">
@@ -107,7 +107,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E5%AD%90%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.</span> <span class="toc-text">安装子系统</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E7%BD%91%E7%BB%9C%E4%BB%A3%E7%90%86"><span class="toc-number">2.</span> <span class="toc-text">设置网络代理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85"><span class="toc-number">3.</span> <span class="toc-text">软件安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA"><span class="toc-number">3.1.</span> <span class="toc-text">虚拟机</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Virtual-box"><span class="toc-number">3.1.1.</span> <span class="toc-text">Virtual box</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Vagrant"><span class="toc-number">3.1.2.</span> <span class="toc-text">Vagrant</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IDE"><span class="toc-number">3.2.</span> <span class="toc-text">IDE</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GitHub-%E8%BF%9E%E6%8E%A5"><span class="toc-number">4.</span> <span class="toc-text">GitHub 连接</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%94%AE%E7%9B%98%E6%98%A0%E5%B0%84"><span class="toc-number">5.</span> <span class="toc-text">键盘映射</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">安装子系统</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">设置网络代理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">软件安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.1.</span> <span class="toc-text">虚拟机</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">3.1.1.</span> <span class="toc-text">Virtual box</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">3.1.2.</span> <span class="toc-text">Vagrant</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.2.</span> <span class="toc-text">IDE</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">GitHub 连接</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">键盘映射</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -152,7 +152,7 @@
 
   <div class="content" itemprop="articleBody">
     <p>install linux on pc -&gt; set up proxy -&gt; install virtual machine -&gt; install vagrant -&gt; change keyboard mapping -&gt; change bash file setting -&gt; connect to GitHub via ssh</p>
-<h2 id="安装子系统"><a class="header-anchor" href="#安装子系统">¶</a>安装子系统</h2>
+<h2><span id="pan-zhuang-zi-xi-tong">安装子系统</span></h2>
 <p>安装的是ubuntu20.04 amd版本。</p>
 <p>安装步骤参考<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/363640824">这篇文章</a></p>
 <p>遇到的问题</p>
@@ -173,7 +173,7 @@
 <p>安装的时候先不要联网，基本安装完后再联网更新</p>
 </li>
 </ol>
-<h2 id="设置网络代理"><a class="header-anchor" href="#设置网络代理">¶</a>设置网络代理</h2>
+<h2><span id="pshe-zhi-wang-luo-dai-li">设置网络代理</span></h2>
 <p>参考<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/359755946">linux配置v2ray</a></p>
 <p>遇到的问题</p>
 <ol>
@@ -186,9 +186,9 @@
 <p>对应了6.031中说的排查问题范围的顺序。</p>
 </li>
 </ol>
-<h2 id="软件安装"><a class="header-anchor" href="#软件安装">¶</a>软件安装</h2>
-<h3 id="虚拟机"><a class="header-anchor" href="#虚拟机">¶</a>虚拟机</h3>
-<h4 id="Virtual-box"><a class="header-anchor" href="#Virtual-box">¶</a>Virtual box</h4>
+<h2><span id="pruan-jian-an-zhuang">软件安装</span></h2>
+<h3><span id="pxu-ni-ji">虚拟机</span></h3>
+<h4><span id="pvirtual-box">Virtual box</span></h4>
 <p>刚开始照着官网教程安装（瞎搞），出现了各种问题，按步骤调了下，又出现一个http解析错误，试图改vagrantfile(瞎搞)，最后发现是网络问题。并且virtual box的安装应该只需要(虽然我安装了官网上的各种key认证，但我并不确定这是否是必需的步骤）：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install virtualbox</span><br></pre></td></tr></table></figure>
 <p>瞎搞出现的问题</p>
@@ -208,15 +208,15 @@
 <p>Security boot: 出现UEFI安全错误，重启后按F2进入BIOS界面<a target="_blank" rel="noopener" href="https://askubuntu.com/questions/1105710/installing-virtualbox-your-system-has-uefi-secure-boot-enabled-message">关掉了这个检查</a></p>
 </li>
 </ol>
-<h4 id="Vagrant"><a class="header-anchor" href="#Vagrant">¶</a>Vagrant</h4>
+<h4><span id="pvagrant">Vagrant</span></h4>
 <p>按<a target="_blank" rel="noopener" href="https://www.vagrantup.com/downloads">官网</a>即可。</p>
-<h3 id="IDE"><a class="header-anchor" href="#IDE">¶</a>IDE</h3>
+<h3><span id="pide">IDE</span></h3>
 <p>clion:下载一个包后解压缩，用命令行打开。可参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/feimeng116/article/details/105898892">安装clion</a></p>
 <p>Code: 直接下载deb文件安装</p>
-<h2 id="GitHub-连接"><a class="header-anchor" href="#GitHub-连接">¶</a>GitHub 连接</h2>
+<h2><span id="pgithub-lian-jie">GitHub 连接</span></h2>
 <p><a target="_blank" rel="noopener" href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account">ssh connection</a></p>
 <p>照着提示进行就行了。出现的问题基本都是网络问题，而不是步骤哪错了。</p>
-<h2 id="键盘映射"><a class="header-anchor" href="#键盘映射">¶</a>键盘映射</h2>
+<h2><span id="pjian-pan-ying-she">键盘映射</span></h2>
 <p>查了几篇文章试了试，xmodmap不能很好的解决问题（可能是因为没有重启？？）。</p>
 <p>于是用了<a target="_blank" rel="noopener" href="https://askubuntu.com/questions/363346/how-to-permanently-switch-caps-lock-and-esc">deconf-tools</a>，由于在ubuntu20.04中不支持（？）然后找了<a target="_blank" rel="noopener" href="https://askubuntu.com/questions/1248426/what-has-replaced-dconf-tools-for-ubuntu-20-04?noredirect=1&amp;lq=1">替代方案</a>。</p>
 
@@ -246,7 +246,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E5%AD%90%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.</span> <span class="toc-text">安装子系统</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E7%BD%91%E7%BB%9C%E4%BB%A3%E7%90%86"><span class="toc-number">2.</span> <span class="toc-text">设置网络代理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85"><span class="toc-number">3.</span> <span class="toc-text">软件安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA"><span class="toc-number">3.1.</span> <span class="toc-text">虚拟机</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Virtual-box"><span class="toc-number">3.1.1.</span> <span class="toc-text">Virtual box</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Vagrant"><span class="toc-number">3.1.2.</span> <span class="toc-text">Vagrant</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IDE"><span class="toc-number">3.2.</span> <span class="toc-text">IDE</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GitHub-%E8%BF%9E%E6%8E%A5"><span class="toc-number">4.</span> <span class="toc-text">GitHub 连接</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%94%AE%E7%9B%98%E6%98%A0%E5%B0%84"><span class="toc-number">5.</span> <span class="toc-text">键盘映射</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">安装子系统</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">设置网络代理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">软件安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.1.</span> <span class="toc-text">虚拟机</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">3.1.1.</span> <span class="toc-text">Virtual box</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">3.1.2.</span> <span class="toc-text">Vagrant</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.2.</span> <span class="toc-text">IDE</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">GitHub 连接</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">键盘映射</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">

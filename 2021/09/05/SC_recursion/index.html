@@ -6,15 +6,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="¶R14: recursion 有时候会觉得自己对recursion&#x2F;iteration的了解已经够多了，但不够多总是常态。尤其在应用到不同的场景的时候。 ¶decompostion Choose the right decomposition for a problem. recursion is one method ¶structure of recursive implementation">
+    <meta name="description" content="R14: recursion  decompostion structure of recursive implementations choosing the right recursive subproblem recursive problems vs. recursive data Mutual recursion reentrant code when to use recursi">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SC recursion">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2021/09/05/SC_recursion/index.html">
 <meta property="og:site_name" content="steins gate zero">
-<meta property="og:description" content="¶R14: recursion 有时候会觉得自己对recursion&#x2F;iteration的了解已经够多了，但不够多总是常态。尤其在应用到不同的场景的时候。 ¶decompostion Choose the right decomposition for a problem. recursion is one method ¶structure of recursive implementation">
+<meta property="og:description" content="R14: recursion  decompostion structure of recursive implementations choosing the right recursive subproblem recursive problems vs. recursive data Mutual recursion reentrant code when to use recursi">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-09-04T16:00:00.000Z">
-<meta property="article:modified_time" content="2022-06-27T02:10:55.403Z">
+<meta property="article:modified_time" content="2023-07-19T03:22:35.150Z">
 <meta property="article:author" content="Sam Li">
 <meta name="twitter:card" content="summary">
     
@@ -107,7 +107,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#R14-recursion"><span class="toc-number">1.</span> <span class="toc-text">R14: recursion</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#decompostion"><span class="toc-number">1.1.</span> <span class="toc-text">decompostion</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#structure-of-recursive-implementations"><span class="toc-number">1.2.</span> <span class="toc-text">structure of recursive implementations</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#choosing-the-right-recursive-subproblem"><span class="toc-number">1.3.</span> <span class="toc-text">choosing the right recursive subproblem</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#recursive-problems-vs-recursive-data"><span class="toc-number">1.4.</span> <span class="toc-text">recursive problems vs. recursive data</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mutual-recursion"><span class="toc-number">1.5.</span> <span class="toc-text">Mutual recursion</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#reentrant-code"><span class="toc-number">1.6.</span> <span class="toc-text">reentrant code</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#when-to-use-recursion-rather-than-iteration"><span class="toc-number">1.7.</span> <span class="toc-text">when to use recursion rather than iteration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#common-mistakes-in-recursive-implementations"><span class="toc-number">1.8.</span> <span class="toc-text">common mistakes in recursive implementations</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">R14: recursion</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">decompostion</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">structure of recursive implementations</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.3.</span> <span class="toc-text">choosing the right recursive subproblem</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.4.</span> <span class="toc-text">recursive problems vs. recursive data</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.5.</span> <span class="toc-text">Mutual recursion</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.6.</span> <span class="toc-text">reentrant code</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.7.</span> <span class="toc-text">when to use recursion rather than iteration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.8.</span> <span class="toc-text">common mistakes in recursive implementations</span></a></li></ol></li></ol>
     </div>
   </span>
 </div>
@@ -151,18 +151,36 @@
   
 
   <div class="content" itemprop="articleBody">
-    <h2 id="R14-recursion"><a class="header-anchor" href="#R14-recursion">¶</a>R14: recursion</h2>
+    <div class="toc">
+<!-- toc -->
+<ul>
+<li><a href="#r14-recursion">R14: recursion</a>
+<ul>
+<li><a href="#decompostion">decompostion</a></li>
+<li><a href="#structure-of-recursive-implementations">structure of recursive implementations</a></li>
+<li><a href="#choosing-the-right-recursive-subproblem">choosing the right recursive subproblem</a></li>
+<li><a href="#recursive-problems-vs-recursive-data">recursive problems vs. recursive data</a></li>
+<li><a href="#mutual-recursion">Mutual recursion</a></li>
+<li><a href="#reentrant-code">reentrant code</a></li>
+<li><a href="#when-to-use-recursion-rather-than-iteration">when to use recursion rather than iteration</a></li>
+<li><a href="#common-mistakes-in-recursive-implementations">common mistakes in recursive implementations</a></li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
+</div>
+<h2><span id="pr14-recursion">R14: recursion</span></h2>
 <p>有时候会觉得自己对recursion/iteration的了解已经够多了，但不够多总是常态。尤其在应用到不同的场景的时候。</p>
-<h3 id="decompostion"><a class="header-anchor" href="#decompostion">¶</a>decompostion</h3>
+<h3><span id="pdecompostion">decompostion</span></h3>
 <p>Choose the right decomposition for a problem.</p>
 <p>recursion is one method</p>
-<h3 id="structure-of-recursive-implementations"><a class="header-anchor" href="#structure-of-recursive-implementations">¶</a>structure of recursive implementations</h3>
+<h3><span id="pstructure-of-recursive-implementations">structure of recursive implementations</span></h3>
 <p>helper methods: don’t expose the helper method to your clients.</p>
 <p>base case + recursive case</p>
-<h3 id="choosing-the-right-recursive-subproblem"><a class="header-anchor" href="#choosing-the-right-recursive-subproblem">¶</a>choosing the right recursive subproblem</h3>
+<h3><span id="pchoosing-the-right-recursive-subproblem">choosing the right recursive subproblem</span></h3>
 <p>Think about several ways to break down the problem, and try to write the recursive steps.</p>
 <p>Recursive subproblem can be smaller or simpler in more subtle ways.</p>
-<h3 id="recursive-problems-vs-recursive-data"><a class="header-anchor" href="#recursive-problems-vs-recursive-data">¶</a>recursive problems vs. recursive data</h3>
+<h3><span id="precursive-problems-vs-recursive-data">recursive problems vs. recursive data</span></h3>
 <ul>
 <li>
 <p>recursive problems</p>
@@ -175,19 +193,19 @@
 </ul>
 </li>
 </ul>
-<h3 id="Mutual-recursion"><a class="header-anchor" href="#Mutual-recursion">¶</a>Mutual recursion</h3>
+<h3><span id="pmutual-recursion">Mutual recursion</span></h3>
 <p>return immutable object</p>
-<h3 id="reentrant-code"><a class="header-anchor" href="#reentrant-code">¶</a>reentrant code</h3>
+<h3><span id="preentrant-code">reentrant code</span></h3>
 <ul>
 <li>it can be called again even while a call to it is underway.</li>
 <li>many application scenario: concurrency, callbacks, mutual recursion…</li>
 </ul>
-<h3 id="when-to-use-recursion-rather-than-iteration"><a class="header-anchor" href="#when-to-use-recursion-rather-than-iteration">¶</a>when to use recursion rather than iteration</h3>
+<h3><span id="pwhen-to-use-recursion-rather-than-iteration">when to use recursion rather than iteration</span></h3>
 <p>像递归这样只用考虑输入和输出模式的范式属于函数式编程的一种。它与命令式编程/迭代还有一个主要区别就是可变性(mutablity)，不可避免产生的可变变量在迭代过程中不断改变，导致出现漏洞。但递归相较于迭代的明显的缺点就是需要更多的空间。</p>
 <blockquote>
 <p>building up a stack of recursive calls consumes memory temporarily, and the stack is limited in seze.</p>
 </blockquote>
-<h3 id="common-mistakes-in-recursive-implementations"><a class="header-anchor" href="#common-mistakes-in-recursive-implementations">¶</a>common mistakes in recursive implementations</h3>
+<h3><span id="pcommon-mistakes-in-recursive-implementations">common mistakes in recursive implementations</span></h3>
 <ul>
 <li>base case missing</li>
 <li>recursive step fails to reduce to a smaller subproblem</li>
@@ -221,7 +239,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#R14-recursion"><span class="toc-number">1.</span> <span class="toc-text">R14: recursion</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#decompostion"><span class="toc-number">1.1.</span> <span class="toc-text">decompostion</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#structure-of-recursive-implementations"><span class="toc-number">1.2.</span> <span class="toc-text">structure of recursive implementations</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#choosing-the-right-recursive-subproblem"><span class="toc-number">1.3.</span> <span class="toc-text">choosing the right recursive subproblem</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#recursive-problems-vs-recursive-data"><span class="toc-number">1.4.</span> <span class="toc-text">recursive problems vs. recursive data</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mutual-recursion"><span class="toc-number">1.5.</span> <span class="toc-text">Mutual recursion</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#reentrant-code"><span class="toc-number">1.6.</span> <span class="toc-text">reentrant code</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#when-to-use-recursion-rather-than-iteration"><span class="toc-number">1.7.</span> <span class="toc-text">when to use recursion rather than iteration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#common-mistakes-in-recursive-implementations"><span class="toc-number">1.8.</span> <span class="toc-text">common mistakes in recursive implementations</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">R14: recursion</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">decompostion</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">structure of recursive implementations</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.3.</span> <span class="toc-text">choosing the right recursive subproblem</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.4.</span> <span class="toc-text">recursive problems vs. recursive data</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.5.</span> <span class="toc-text">Mutual recursion</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.6.</span> <span class="toc-text">reentrant code</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.7.</span> <span class="toc-text">when to use recursion rather than iteration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.8.</span> <span class="toc-text">common mistakes in recursive implementations</span></a></li></ol></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">

@@ -6,19 +6,19 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="chapter 5 Enforcing Modularity with Virtualization Problem: how to build a virtual computer? how to build as many computers as we want for running the desired modules? Model: client and service module">
+    <meta name="description" content="Client&#x2F;server organization Virtual links Enforce modularity in memory Application: virtual machine    chapter 5 Enforcing Modularity with Virtualization Problem: how to build a virtual computer? ho">
 <meta property="og:type" content="article">
 <meta property="og:title" content="From Virtualization to Virtual Machines">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2022/09/27/SD_virtulization/index.html">
 <meta property="og:site_name" content="steins gate zero">
-<meta property="og:description" content="chapter 5 Enforcing Modularity with Virtualization Problem: how to build a virtual computer? how to build as many computers as we want for running the desired modules? Model: client and service module">
+<meta property="og:description" content="Client&#x2F;server organization Virtual links Enforce modularity in memory Application: virtual machine    chapter 5 Enforcing Modularity with Virtualization Problem: how to build a virtual computer? ho">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/09/27/SD_virtulization/Screenshot-1835251.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/09/27/SD_virtulization/Screenshot-4268665.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/09/27/SD_virtulization/Screenshot-4283451.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/09/27/SD_virtulization/Screenshot-4281799.png">
 <meta property="article:published_time" content="2022-09-26T16:00:00.000Z">
-<meta property="article:modified_time" content="2022-09-27T13:58:38.265Z">
+<meta property="article:modified_time" content="2023-07-19T03:25:05.206Z">
 <meta property="article:author" content="Sam Li">
 <meta property="article:tag" content="CS books">
 <meta name="twitter:card" content="summary">
@@ -82,7 +82,7 @@
     <span id="actions">
       <ul>
         
-        <li><a class="icon" aria-label="Previous post" href="/sg/2022/11/17/qemu_zbd/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Previous post" href="/sg/2022/10/20/db_b+tr/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
         
         
         <li><a class="icon" aria-label="Next post" href="/sg/2022/08/02/outr_career/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
@@ -113,7 +113,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Client-server-organization"><span class="toc-number">1.</span> <span class="toc-text">Client&#x2F;server organization</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Virtual-links"><span class="toc-number">2.</span> <span class="toc-text">Virtual links</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Enforce-modularity-in-memory"><span class="toc-number">3.</span> <span class="toc-text">Enforce modularity in memory</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Application-virtual-machine"><span class="toc-number">4.</span> <span class="toc-text">Application: virtual machine</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Client&#x2F;server organization</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Virtual links</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Enforce modularity in memory</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Application: virtual machine</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -162,7 +162,17 @@
   
 
   <div class="content" itemprop="articleBody">
-    <p>chapter 5 Enforcing Modularity with Virtualization</p>
+    <div class="toc">
+<!-- toc -->
+<ul>
+<li><a href="#client-server-organization">Client/server organization</a></li>
+<li><a href="#virtual-links">Virtual links</a></li>
+<li><a href="#enforce-modularity-in-memory">Enforce modularity in memory</a></li>
+<li><a href="#application-virtual-machine">Application: virtual machine</a></li>
+</ul>
+<!-- tocstop -->
+</div>
+<p>chapter 5 Enforcing Modularity with Virtualization</p>
 <p>Problem: how to build a virtual computer? how to build as many computers as we want for running the desired modules?</p>
 <p><u>Model</u>: client and service modules connect through network</p>
 <ol>
@@ -170,7 +180,7 @@
 <li>virtual memory -&gt; memory</li>
 <li>thread -&gt; processors</li>
 </ol>
-<h2 id="Client-server-organization"><a class="header-anchor" href="#Client-server-organization">¶</a>Client/server organization</h2>
+<h2><span id="pclient-server-organization">Client/server organization</span></h2>
 <ol>
 <li>
 <p>modularity/isolation offers</p>
@@ -206,8 +216,8 @@
 </li>
 </ol>
 <p>Ex: Editor want to send ‘x’ to File service to store.</p>
-<img src="/sg/2022/09/27/SD_virtulization/Screenshot-1835251.png" class="" title="Screenshot-1835251">
-<h2 id="Virtual-links"><a class="header-anchor" href="#Virtual-links">¶</a>Virtual links</h2>
+<img src="/sg/2022/09/27/SD_virtulization/Screenshot-1835251.png" class title="Screenshot-1835251">
+<h2><span id="pvirtual-links">Virtual links</span></h2>
 <p>Scenario : how to share a bounded buffer between SENDER and RECEIVER?</p>
 <p>Fact: all threads share the same physical memory</p>
 <p>problem: sequence coordination, one event in thread 1 must precede an event in another thread</p>
@@ -258,7 +268,7 @@
 </li>
 <li>
 <p>deadlock: new problem introduced due to locks</p>
-<img src="/sg/2022/09/27/SD_virtulization/Screenshot-4268665.png" class="" title="Screenshot-4268665">
+<img src="/sg/2022/09/27/SD_virtulization/Screenshot-4268665.png" class title="Screenshot-4268665">
 <p>Rule: enumerate all lock usages and ensure that all threads of the program acquire  the locks in the same order.</p>
 </li>
 <li>
@@ -286,10 +296,10 @@
 <p>-&gt; build a hw instruction that is a before-or-after action</p>
 <hr>
 <p>arbiter: how arbiters can fail? 5.2.8</p>
-<h2 id="Enforce-modularity-in-memory"><a class="header-anchor" href="#Enforce-modularity-in-memory">¶</a>Enforce modularity in memory</h2>
+<h2><span id="penforce-modularity-in-memory">Enforce modularity in memory</span></h2>
 <p>Scenario: enforce mudularity on sharing memory which is assumed to have a large address space.</p>
 <p>Invariant: a thread can access only its references.</p>
-<img src="/sg/2022/09/27/SD_virtulization/Screenshot-4283451.png" class="" title="Screenshot-4283451">
+<img src="/sg/2022/09/27/SD_virtulization/Screenshot-4283451.png" class title="Screenshot-4283451">
 <p>Threads need more features:</p>
 <ol>
 <li>one thread needs more than one domains</li>
@@ -300,13 +310,13 @@
 <ul>
 <li>
 <p>cliend thread and server thread share the bounded buffer.</p>
-<img src="/sg/2022/09/27/SD_virtulization/Screenshot-4281799.png" class="" title="Screenshot-4281799">
+<img src="/sg/2022/09/27/SD_virtulization/Screenshot-4281799.png" class title="Screenshot-4281799">
 </li>
 <li>
 <p>the trade-offs involved in implementing parts of the memory manager in software 5.4.4</p>
 </li>
 </ul>
-<h2 id="Application-virtual-machine"><a class="header-anchor" href="#Application-virtual-machine">¶</a>Application: virtual machine</h2>
+<h2><span id="papplication-virtual-machine">Application: virtual machine</span></h2>
 
   </div>
 </article>
@@ -334,7 +344,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Client-server-organization"><span class="toc-number">1.</span> <span class="toc-text">Client&#x2F;server organization</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Virtual-links"><span class="toc-number">2.</span> <span class="toc-text">Virtual links</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Enforce-modularity-in-memory"><span class="toc-number">3.</span> <span class="toc-text">Enforce modularity in memory</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Application-virtual-machine"><span class="toc-number">4.</span> <span class="toc-text">Application: virtual machine</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Client&#x2F;server organization</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Virtual links</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Enforce modularity in memory</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Application: virtual machine</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">

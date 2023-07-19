@@ -6,18 +6,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="DP notion  Characterize the structure of an optimal solution Recursively define the value of an optimal solution based on optimal solutions of subproblems Compute the value of an optimal solution in b">
+    <meta name="description" content="Introduction Basic  Rectangualar blocks Longest Palindromic Seq   Medium  Optimal Search Trees Alternating Coins Game   All-Pairs Shortest Paths    DP notion  Characterize the structure of an optim">
 <meta property="og:type" content="article">
 <meta property="og:title" content="6.046 dynamic programming">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2023/01/25/6.046_dp/index.html">
 <meta property="og:site_name" content="steins gate zero">
-<meta property="og:description" content="DP notion  Characterize the structure of an optimal solution Recursively define the value of an optimal solution based on optimal solutions of subproblems Compute the value of an optimal solution in b">
+<meta property="og:description" content="Introduction Basic  Rectangualar blocks Longest Palindromic Seq   Medium  Optimal Search Trees Alternating Coins Game   All-Pairs Shortest Paths    DP notion  Characterize the structure of an optim">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2023/01/25/6.046_dp/Screenshot-4617420.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2023/01/25/6.046_dp/Screenshot-4619728.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2023/01/25/6.046_dp/Screenshot-4620149.png">
 <meta property="article:published_time" content="2023-01-24T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-02-13T11:10:53.857Z">
+<meta property="article:modified_time" content="2023-07-19T03:29:20.674Z">
 <meta property="article:author" content="Sam Li">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://sgzerolc.github.io/sg/2023/01/25/6.046_dp/Screenshot-4617420.png">
@@ -111,7 +111,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Introduction"><span class="toc-number">1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Basic"><span class="toc-number">2.</span> <span class="toc-text">Basic</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Rectangualar-blocks"><span class="toc-number">2.1.</span> <span class="toc-text">Rectangualar blocks</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Longest-Palindromic-Seq"><span class="toc-number">2.2.</span> <span class="toc-text">Longest Palindromic Seq</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Medium"><span class="toc-number">3.</span> <span class="toc-text">Medium</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Optimal-Search-Trees"><span class="toc-number">3.1.</span> <span class="toc-text">Optimal Search Trees</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Alternating-Coins-Game"><span class="toc-number">3.2.</span> <span class="toc-text">Alternating Coins Game</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#All-Pairs-Shortest-Paths"><span class="toc-number">4.</span> <span class="toc-text">All-Pairs Shortest Paths</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Basic</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">Rectangualar blocks</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">Longest Palindromic Seq</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Medium</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.1.</span> <span class="toc-text">Optimal Search Trees</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.2.</span> <span class="toc-text">Alternating Coins Game</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">All-Pairs Shortest Paths</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -155,20 +155,40 @@
   
 
   <div class="content" itemprop="articleBody">
-    <p><strong>DP notion</strong></p>
+    <div class="toc">
+<!-- toc -->
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#basic">Basic</a>
+<ul>
+<li><a href="#rectangualar-blocks">Rectangualar blocks</a></li>
+<li><a href="#longest-palindromic-seq">Longest Palindromic Seq</a></li>
+</ul>
+</li>
+<li><a href="#medium">Medium</a>
+<ul>
+<li><a href="#optimal-search-trees">Optimal Search Trees</a></li>
+<li><a href="#alternating-coins-game">Alternating Coins Game</a></li>
+</ul>
+</li>
+<li><a href="#all-pairs-shortest-paths">All-Pairs Shortest Paths</a></li>
+</ul>
+<!-- tocstop -->
+</div>
+<p><strong>DP notion</strong></p>
 <ol>
 <li>Characterize the structure of an optimal solution</li>
 <li>Recursively define the value of an optimal solution based on optimal solutions of subproblems</li>
 <li>Compute the value of an optimal solution in bottom-up fashion (recursion &amp; memoization)</li>
 <li>Construct an optimal solution from the computed information</li>
 </ol>
-<h2 id="Introduction"><a class="header-anchor" href="#Introduction">¶</a>Introduction</h2>
+<h2><span id="pintroduction">Introduction</span></h2>
 <p>The main idea of dp: subtract and solve the subproblem, then reuse the results</p>
 <p>Runtime: the number of unique problems+ the amount of merge work</p>
 <p>In the recitation, a simple dp example is to solve the number of unique paths from (1, 1) to (M, N).</p>
 <ul>
 <li>
-<img src="/sg/2023/01/25/6.046_dp/Screenshot-4617420.png" class="" title="Screenshot-4617420">
+<img src="/sg/2023/01/25/6.046_dp/Screenshot-4617420.png" class title="Screenshot-4617420">
 </li>
 <li>Subproblem: To the points on the edge, just one path; to the middle points, path to the left point + path the right point</li>
 <li>Runtime: # subproblems = O(MN)</li>
@@ -180,8 +200,8 @@
 <li>Runtime: O(MN).</li>
 <li>It’s similar to knapsack problems (NP-complete). The linear solution here is due to the size of input is log(N), thereby it’s still exponential.</li>
 </ul>
-<h2 id="Basic"><a class="header-anchor" href="#Basic">¶</a>Basic</h2>
-<h3 id="Rectangualar-blocks"><a class="header-anchor" href="#Rectangualar-blocks">¶</a>Rectangualar blocks</h3>
+<h2><span id="pbasic">Basic</span></h2>
+<h3><span id="prectangualar-blocks">Rectangualar blocks</span></h3>
 <p>problem: A set of n blocks, {1, 2, …, n}, l_i, w_i, h_i. J on top i, require l_j &lt; l_i, w_j &lt; w_i. Rotating not allowed. Find the maximum height.</p>
 <p>? RB(1, 2, …, n)</p>
 <ul>
@@ -195,13 +215,13 @@
 </li>
 <li>
 <p>redefine a compatible set C, then RB(1, 2, …, n) = max{h_i + RB(C_i)}</p>
-<img src="/sg/2023/01/25/6.046_dp/Screenshot-4619728.png" class="" title="Screenshot-4619728">
+<img src="/sg/2023/01/25/6.046_dp/Screenshot-4619728.png" class title="Screenshot-4619728">
 </li>
 <li>
 <p>Runtime: O (n^2), # subproblems = n.</p>
 <ul>
 <li>
-<img src="/sg/2023/01/25/6.046_dp/Screenshot-4620149.png" class="" title="Screenshot-4620149">
+<img src="/sg/2023/01/25/6.046_dp/Screenshot-4620149.png" class title="Screenshot-4620149">
 </li>
 <li>what’s in the compatible sets C? How to find C?
 <ul>
@@ -216,7 +236,7 @@
 <p>Sorted by length and then width {1, …, n}</p>
 <p>RB(1, 2, …, n) = max{(h1 + RB(C_i)), RB(2, …, n)}</p>
 <p>Runtime: O(n), # subproblems = n; + O(nlogn), sort; + O(n^2)/O(nlogn) find C set.</p>
-<h3 id="Longest-Palindromic-Seq"><a class="header-anchor" href="#Longest-Palindromic-Seq">¶</a>Longest Palindromic Seq</h3>
+<h3><span id="plongest-palindromic-seq">Longest Palindromic Seq</span></h3>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">X = <span class="string">&#x27;underqualified&#x27;</span></span><br><span class="line">n = <span class="built_in">len</span>(X)</span><br><span class="line"><span class="type">Dict</span> = [[<span class="number">0</span> <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(n)] <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(n)]</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">L</span>(<span class="params">i, j</span>):</span></span><br><span class="line">	<span class="keyword">if</span> (<span class="type">Dict</span>[i][j] != <span class="number">0</span>):        <span class="comment"># memorization</span></span><br><span class="line">		<span class="keyword">return</span> <span class="type">Dict</span>[i][j]</span><br><span class="line">	<span class="keyword">if</span> i == j:</span><br><span class="line">		<span class="type">Dict</span>[i][j] = <span class="number">1</span></span><br><span class="line">		<span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">	<span class="keyword">if</span> X[i] == X[j]:</span><br><span class="line">		<span class="keyword">if</span> i + <span class="number">1</span> == j:</span><br><span class="line">			<span class="type">Dict</span>[i][j] = <span class="number">2</span></span><br><span class="line">			<span class="keyword">return</span> <span class="number">2</span></span><br><span class="line">		<span class="keyword">else</span>:</span><br><span class="line">			<span class="keyword">return</span> <span class="number">2</span> + L(i+<span class="number">1</span>, j-<span class="number">1</span>)</span><br><span class="line">	<span class="keyword">else</span>:</span><br><span class="line">		<span class="type">Dict</span>[i][j] = <span class="built_in">max</span>(L(i+<span class="number">1</span>, j), L(i, j-<span class="number">1</span>))</span><br><span class="line">		<span class="keyword">return</span> <span class="type">Dict</span>[i][j]</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(L(<span class="number">0</span>, n-<span class="number">1</span>))</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">	<span class="built_in">print</span>(<span class="type">Dict</span>[i])</span><br></pre></td></tr></table></figure>
 <p>Goal: Compute the actual result.</p>
 <p>Problem 1: How to trace backwards to generate output sequence in this case?</p>
@@ -227,10 +247,10 @@
 </li>
 </ul>
 <p>Problem 2: How to write it iteratively?</p>
-<h2 id="Medium"><a class="header-anchor" href="#Medium">¶</a>Medium</h2>
-<h3 id="Optimal-Search-Trees"><a class="header-anchor" href="#Optimal-Search-Trees">¶</a>Optimal Search Trees</h3>
-<h3 id="Alternating-Coins-Game"><a class="header-anchor" href="#Alternating-Coins-Game">¶</a>Alternating Coins Game</h3>
-<h2 id="All-Pairs-Shortest-Paths"><a class="header-anchor" href="#All-Pairs-Shortest-Paths">¶</a>All-Pairs Shortest Paths</h2>
+<h2><span id="pmedium">Medium</span></h2>
+<h3><span id="poptimal-search-trees">Optimal Search Trees</span></h3>
+<h3><span id="palternating-coins-game">Alternating Coins Game</span></h3>
+<h2><span id="pall-pairs-shortest-paths">All-Pairs Shortest Paths</span></h2>
 <p>Different types of algorithms can be used to solve the all-pairs shortest paths problem:</p>
 <ol>
 <li>Dynamic programming</li>
@@ -266,7 +286,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Introduction"><span class="toc-number">1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Basic"><span class="toc-number">2.</span> <span class="toc-text">Basic</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Rectangualar-blocks"><span class="toc-number">2.1.</span> <span class="toc-text">Rectangualar blocks</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Longest-Palindromic-Seq"><span class="toc-number">2.2.</span> <span class="toc-text">Longest Palindromic Seq</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Medium"><span class="toc-number">3.</span> <span class="toc-text">Medium</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Optimal-Search-Trees"><span class="toc-number">3.1.</span> <span class="toc-text">Optimal Search Trees</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Alternating-Coins-Game"><span class="toc-number">3.2.</span> <span class="toc-text">Alternating Coins Game</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#All-Pairs-Shortest-Paths"><span class="toc-number">4.</span> <span class="toc-text">All-Pairs Shortest Paths</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Basic</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">Rectangualar blocks</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">Longest Palindromic Seq</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Medium</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.1.</span> <span class="toc-text">Optimal Search Trees</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.2.</span> <span class="toc-text">Alternating Coins Game</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">All-Pairs Shortest Paths</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">

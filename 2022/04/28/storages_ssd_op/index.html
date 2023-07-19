@@ -6,15 +6,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="¶Nand Flash SSDs ¶basics   Terminology in flash: banks consist of blocks; and blocks consist of pages.  banks&#x2F;planes: consist of a large number of cells blocks: size 128 KB or 256 KB pages: size 4 KB">
+    <meta name="description" content="Nand Flash SSDs  basics performance garbage collection mapping table wear leveling   Disk drive modeling    Nand Flash SSDs basics   Terminology in flash: banks consist of blocks; and blocks consis">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Flash SSD Operations">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2022/04/28/storages_ssd_op/index.html">
 <meta property="og:site_name" content="steins gate zero">
-<meta property="og:description" content="¶Nand Flash SSDs ¶basics   Terminology in flash: banks consist of blocks; and blocks consist of pages.  banks&#x2F;planes: consist of a large number of cells blocks: size 128 KB or 256 KB pages: size 4 KB">
+<meta property="og:description" content="Nand Flash SSDs  basics performance garbage collection mapping table wear leveling   Disk drive modeling    Nand Flash SSDs basics   Terminology in flash: banks consist of blocks; and blocks consis">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-04-27T16:00:00.000Z">
-<meta property="article:modified_time" content="2022-11-16T15:33:39.434Z">
+<meta property="article:modified_time" content="2023-07-19T03:25:25.643Z">
 <meta property="article:author" content="Sam Li">
 <meta name="twitter:card" content="summary">
     
@@ -107,7 +107,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Nand-Flash-SSDs"><span class="toc-number">1.</span> <span class="toc-text">Nand Flash SSDs</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#basics"><span class="toc-number">1.1.</span> <span class="toc-text">basics</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#performance"><span class="toc-number">1.2.</span> <span class="toc-text">performance</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#garbage-collection-v2"><span class="toc-number">1.3.</span> <span class="toc-text">garbage collection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mapping-table"><span class="toc-number">1.4.</span> <span class="toc-text">mapping table</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#wear-leveling"><span class="toc-number">1.5.</span> <span class="toc-text">wear leveling</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Disk-drive-modeling"><span class="toc-number">2.</span> <span class="toc-text">Disk drive modeling</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Nand Flash SSDs</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">basics</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">performance</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.3.</span> <span class="toc-text">garbage collection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.4.</span> <span class="toc-text">mapping table</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.5.</span> <span class="toc-text">wear leveling</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Disk drive modeling</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -151,8 +151,24 @@
   
 
   <div class="content" itemprop="articleBody">
-    <h2 id="Nand-Flash-SSDs"><a class="header-anchor" href="#Nand-Flash-SSDs">¶</a>Nand Flash SSDs</h2>
-<h3 id="basics"><a class="header-anchor" href="#basics">¶</a>basics</h3>
+    <div class="toc">
+<!-- toc -->
+<ul>
+<li><a href="#nand-flash-ssds">Nand Flash SSDs</a>
+<ul>
+<li><a href="#basics">basics</a></li>
+<li><a href="#performance">performance</a></li>
+<li><a href="#garbage-collection">garbage collection</a></li>
+<li><a href="#mapping-table">mapping table</a></li>
+<li><a href="#wear-leveling">wear leveling</a></li>
+</ul>
+</li>
+<li><a href="#disk-drive-modeling">Disk drive modeling</a></li>
+</ul>
+<!-- tocstop -->
+</div>
+<h2><span id="pnand-flash-ssds">Nand Flash SSDs</span></h2>
+<h3><span id="pbasics">basics</span></h3>
 <ol>
 <li>
 <p>Terminology in flash: banks consist of blocks; and blocks consist of pages.</p>
@@ -219,7 +235,7 @@
 </ul>
 </li>
 </ol>
-<h3 id="performance"><a class="header-anchor" href="#performance">¶</a>performance</h3>
+<h3><span id="pperformance">performance</span></h3>
 <p>Performance problem:</p>
 <ol>
 <li>
@@ -257,10 +273,10 @@
 </ul>
 </li>
 </ol>
-<h3 id="garbage-collection-v2"><a class="header-anchor" href="#garbage-collection-v2">¶</a>garbage collection</h3>
-<h3 id="mapping-table"><a class="header-anchor" href="#mapping-table">¶</a>mapping table</h3>
-<h3 id="wear-leveling"><a class="header-anchor" href="#wear-leveling">¶</a>wear leveling</h3>
-<h2 id="Disk-drive-modeling"><a class="header-anchor" href="#Disk-drive-modeling">¶</a>Disk drive modeling</h2>
+<h3><span id="pgarbage-collection">garbage collection</span></h3>
+<h3><span id="pmapping-table">mapping table</span></h3>
+<h3><span id="pwear-leveling">wear leveling</span></h3>
+<h2><span id="pdisk-drive-modeling">Disk drive modeling</span></h2>
 <p>os view of storage device: linear array of logical blocks.</p>
 
   </div>
@@ -289,7 +305,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Nand-Flash-SSDs"><span class="toc-number">1.</span> <span class="toc-text">Nand Flash SSDs</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#basics"><span class="toc-number">1.1.</span> <span class="toc-text">basics</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#performance"><span class="toc-number">1.2.</span> <span class="toc-text">performance</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#garbage-collection-v2"><span class="toc-number">1.3.</span> <span class="toc-text">garbage collection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mapping-table"><span class="toc-number">1.4.</span> <span class="toc-text">mapping table</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#wear-leveling"><span class="toc-number">1.5.</span> <span class="toc-text">wear leveling</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Disk-drive-modeling"><span class="toc-number">2.</span> <span class="toc-text">Disk drive modeling</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Nand Flash SSDs</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">basics</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">performance</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.3.</span> <span class="toc-text">garbage collection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.4.</span> <span class="toc-text">mapping table</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.5.</span> <span class="toc-text">wear leveling</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Disk drive modeling</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">

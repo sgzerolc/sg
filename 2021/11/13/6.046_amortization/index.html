@@ -6,15 +6,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="We have already known amortization in array resizing and hashing with chaining.  amortized bound definition: sum(amortized cost) &gt;&#x3D; sum(actual cost) Ex: 2-3 tree, O(1) amortized cost per create, O(">
+    <meta name="description" content="amortized analysis techniques Union-find    We have already known amortization in array resizing and hashing with chaining.  amortized bound definition: sum(amortized cost) &gt;&#x3D; sum(actual cost) E">
 <meta property="og:type" content="article">
 <meta property="og:title" content="6.046 amortization">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2021/11/13/6.046_amortization/index.html">
 <meta property="og:site_name" content="steins gate zero">
-<meta property="og:description" content="We have already known amortization in array resizing and hashing with chaining.  amortized bound definition: sum(amortized cost) &gt;&#x3D; sum(actual cost) Ex: 2-3 tree, O(1) amortized cost per create, O(">
+<meta property="og:description" content="amortized analysis techniques Union-find    We have already known amortization in array resizing and hashing with chaining.  amortized bound definition: sum(amortized cost) &gt;&#x3D; sum(actual cost) E">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-11-12T16:00:00.000Z">
-<meta property="article:modified_time" content="2022-06-27T02:08:48.327Z">
+<meta property="article:modified_time" content="2023-07-19T03:21:54.677Z">
 <meta property="article:author" content="Sam Li">
 <meta name="twitter:card" content="summary">
     
@@ -79,7 +79,7 @@
         <li><a class="icon" aria-label="Previous post" href="/sg/2021/11/15/recitation_os/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
         
         
-        <li><a class="icon" aria-label="Next post" href="/sg/2021/11/09/6.004_synchronization/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Next post" href="/sg/2021/11/09/6.006-data_structures/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
         
         <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
         <li><a class="icon" aria-label="Share post" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
@@ -107,7 +107,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#amortized-analysis-techniques"><span class="toc-number">1.</span> <span class="toc-text">amortized analysis techniques</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Union-find"><span class="toc-number">2.</span> <span class="toc-text">Union-find</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">amortized analysis techniques</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Union-find</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -151,13 +151,21 @@
   
 
   <div class="content" itemprop="articleBody">
-    <p>We have already known amortization in array resizing and hashing with chaining.</p>
+    <div class="toc">
+<!-- toc -->
+<ul>
+<li><a href="#amortized-analysis-techniques">amortized analysis techniques</a></li>
+<li><a href="#union-find">Union-find</a></li>
+</ul>
+<!-- tocstop -->
+</div>
+<p>We have already known amortization in array resizing and hashing with chaining.</p>
 <blockquote>
 <p><strong>amortized bound</strong> definition: sum(amortized cost) &gt;= sum(actual cost)</p>
 <p>Ex: 2-3 tree, O(1) amortized cost per create, O(lg n*) amortized cost per insert, and 0 amortized cost per delete.</p>
 <p>n*: maximum size of 2-3 tree. 0 amortized cost per delete: because you can’t delete without inserting first.</p>
 </blockquote>
-<h2 id="amortized-analysis-techniques"><a class="header-anchor" href="#amortized-analysis-techniques">¶</a>amortized analysis techniques</h2>
+<h2><span id="pamortized-analysis-techniques">amortized analysis techniques</span></h2>
 <ol>
 <li>
 <p>aggregate method</p>
@@ -197,7 +205,7 @@
 </ul>
 </li>
 </ol>
-<h2 id="Union-find"><a class="header-anchor" href="#Union-find">¶</a>Union-find</h2>
+<h2><span id="punion-find">Union-find</span></h2>
 <p>Problem: how can a simple doubly linked list improve to support fast search and fast union? how this method is different from what is in cs61b disjoint set course?</p>
 
   </div>
@@ -226,7 +234,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#amortized-analysis-techniques"><span class="toc-number">1.</span> <span class="toc-text">amortized analysis techniques</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Union-find"><span class="toc-number">2.</span> <span class="toc-text">Union-find</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">amortized analysis techniques</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Union-find</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">

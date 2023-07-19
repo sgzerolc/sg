@@ -6,12 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="our goal is to build reliable systems from unreliable components. we want to build systems that serve many clients, store a lot of data, perform well, all while keeping availability high.  ¶L14:RAID:">
+    <meta name="description" content="L14:RAID:reliability via replication L15:Transactions: atomicity &amp; isolation L16:Logging(atomicity) L17:two-phase locking(isolation) L18:distributed transactions: two-phase commit(multi-site at">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SD distributed system">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2021/11/20/SD_ds/index.html">
 <meta property="og:site_name" content="steins gate zero">
-<meta property="og:description" content="our goal is to build reliable systems from unreliable components. we want to build systems that serve many clients, store a lot of data, perform well, all while keeping availability high.  ¶L14:RAID:">
+<meta property="og:description" content="L14:RAID:reliability via replication L15:Transactions: atomicity &amp; isolation L16:Logging(atomicity) L17:two-phase locking(isolation) L18:distributed transactions: two-phase commit(multi-site at">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2021/11/20/SD_ds/m.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2021/11/20/SD_ds/6.png">
@@ -23,7 +23,7 @@
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2021/11/20/SD_ds/2.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2021/11/20/SD_ds/3.png">
 <meta property="article:published_time" content="2021-11-19T16:00:00.000Z">
-<meta property="article:modified_time" content="2022-06-27T02:07:20.885Z">
+<meta property="article:modified_time" content="2023-07-19T03:22:09.680Z">
 <meta property="article:author" content="Sam Li">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://sgzerolc.github.io/sg/2021/11/20/SD_ds/m.png">
@@ -117,7 +117,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#L14-RAID-reliability-via-replication"><span class="toc-number">1.</span> <span class="toc-text">L14:RAID:reliability via replication</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#L15-Transactions-atomicity-isolation"><span class="toc-number">2.</span> <span class="toc-text">L15:Transactions: atomicity &amp; isolation</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Atomicity"><span class="toc-number">2.1.</span> <span class="toc-text">Atomicity</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#isolation"><span class="toc-number">2.2.</span> <span class="toc-text">isolation</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#L16-Logging-atomicity"><span class="toc-number">3.</span> <span class="toc-text">L16:Logging(atomicity)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#L17-two-phase-locking-isolation"><span class="toc-number">4.</span> <span class="toc-text">L17:two-phase locking(isolation)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Serializability"><span class="toc-number">4.1.</span> <span class="toc-text">Serializability</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Two-phase-locking"><span class="toc-number">4.2.</span> <span class="toc-text">Two-phase locking</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#L18-distributed-transactions-two-phase-commit-multi-site-atomicity"><span class="toc-number">5.</span> <span class="toc-text">L18:distributed transactions: two-phase commit(multi-site atomicity)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#L19-Replication-replicated-state-machines"><span class="toc-number">6.</span> <span class="toc-text">L19:Replication:replicated state machines</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">L14:RAID:reliability via replication</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">L15:Transactions: atomicity &amp; isolation</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">Atomicity</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">isolation</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">L16:Logging(atomicity)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">L17:two-phase locking(isolation)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">4.1.</span> <span class="toc-text">Serializability</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">4.2.</span> <span class="toc-text">Two-phase locking</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">L18:distributed transactions: two-phase commit(multi-site atomicity)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">L19:Replication:replicated state machines</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -161,10 +161,22 @@
   
 
   <div class="content" itemprop="articleBody">
-    <blockquote>
+    <div class="toc">
+<!-- toc -->
+<ul>
+<li><a href="#l14-raid-reliability-via-replication">L14:RAID:reliability via replication</a></li>
+<li><a href="#l15-transactions-atomicity-isolation">L15:Transactions: atomicity &amp; isolation</a></li>
+<li><a href="#l16-logging-atomicity">L16:Logging(atomicity)</a></li>
+<li><a href="#l17-two-phase-locking-isolation">L17:two-phase locking(isolation)</a></li>
+<li><a href="#l18-distributed-transactions-two-phase-commit-multi-site-atomicity">L18:distributed transactions: two-phase commit(multi-site atomicity)</a></li>
+<li><a href="#l19-replication-replicated-state-machines">L19:Replication:replicated state machines</a></li>
+</ul>
+<!-- tocstop -->
+</div>
+<blockquote>
 <p>our goal is to build reliable systems from unreliable components. we want to build systems that serve many clients, store a lot of data, perform well, all while keeping availability high.</p>
 </blockquote>
-<h3 id="L14-RAID-reliability-via-replication"><a class="header-anchor" href="#L14-RAID-reliability-via-replication">¶</a>L14:RAID:reliability via replication</h3>
+<h3><span id="pl14-raid-reliability-via-replication">L14:RAID:reliability via replication</span></h3>
 <p>Question: how to build fault-tolerant/reliable systems?</p>
 <p>The high-level process of dealing with failures is to identify the faults, detect/contain the faults, and handle the faults. in lecture, we will build a set of abstractions to make that process more manageable.</p>
 <p>How to measure success?</p>
@@ -182,12 +194,12 @@
 <li>RAID 4: make a dedicated parity disk. A xor B = C. We can induce the failed one no matter which one failed.</li>
 <li>RAID 5:  intersperse the parity sectors amongst all N+1 disks to load balance writes.</li>
 </ol>
-<img src="/sg/2021/11/20/SD_ds/m.png" class="" title="截屏2021-11-21 上午9.29.05">
+<img src="/sg/2021/11/20/SD_ds/m.png" class title="截屏2021-11-21 上午9.29.05">
 <p>Review: RAID 不能解决现有的问题，因为现实中不会永远只是单个磁盘崩溃，需要更系统地处理方法。</p>
-<h3 id="L15-Transactions-atomicity-isolation"><a class="header-anchor" href="#L15-Transactions-atomicity-isolation">¶</a>L15:Transactions: atomicity &amp; isolation</h3>
+<h3><span id="pl15-transactions-atomicity-amp-isolation">L15:Transactions: atomicity &amp; isolation</span></h3>
 <p>problem: Possible crash in some point at thousand lines of code.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">transfer (bank_file, account_a, account_b, amount): </span><br><span class="line">    bank = read_accounts(bank_file) </span><br><span class="line">    bank[account_a] = bank[account_a] - amount </span><br><span class="line">    bank[account_b] = bank[account_b] + amount </span><br><span class="line">    write_accounts(tmp_file) </span><br><span class="line">    rename(tmp_file, bank_file)</span><br></pre></td></tr></table></figure>
-<h4 id="Atomicity"><a class="header-anchor" href="#Atomicity">¶</a>Atomicity</h4>
+<h4><span id="patomicity">Atomicity</span></h4>
 <blockquote>
 <p><strong>What is atomicity?</strong></p>
 <ul>
@@ -215,7 +227,7 @@
 <p>Solution2: recover the disk after a crash.</p>
 <p>如果在recover时crash，那么继续recover</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">recover(disk): </span><br><span class="line">    <span class="keyword">for</span> inode <span class="keyword">in</span> disk.inodes: </span><br><span class="line">        inode.refcount = find_all_refs(disk.root_dir, inode) </span><br><span class="line">    <span class="keyword">if</span> exists(tmp_file): </span><br><span class="line">        unlink(tmp_file)</span><br></pre></td></tr></table></figure>
-<h4 id="isolation"><a class="header-anchor" href="#isolation">¶</a>isolation</h4>
+<h4><span id="pisolation">isolation</span></h4>
 <blockquote>
 <p>isolation refers to how and when the effects of one action (A1) are visible to another (A2) where A1 and A2 appear to have executed serially, even if they are actually executed in parallel.</p>
 </blockquote>
@@ -227,7 +239,7 @@
 ​      transfer(A, B, 20)       transfer(B, C, 5)<br>
 ​      withdraw(B, 10)         deposit(A, 5)<br>
 ​      end                   		   end</p>
-<h3 id="L16-Logging-atomicity"><a class="header-anchor" href="#L16-Logging-atomicity">¶</a>L16:Logging(atomicity)</h3>
+<h3><span id="pl16-logging-atomicity">L16:Logging(atomicity)</span></h3>
 <p>Problem 0: how do systems guarantee atomicity and isolation?</p>
 <p>Basic idea: Keep a log of all changes and whether a transaction commits.</p>
 <p>changes include:</p>
@@ -261,10 +273,10 @@
 <p>Improvement 2.2: truncate the log</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">read(var): </span><br><span class="line">  <span class="keyword">if</span> var <span class="keyword">in</span> cache: </span><br><span class="line">    <span class="keyword">return</span> cache[var] </span><br><span class="line">  <span class="keyword">else</span>: </span><br><span class="line">    // may evict others <span class="keyword">from</span> cache to cell storage </span><br><span class="line">    cache[var] = cell_read(var) </span><br><span class="line">    <span class="keyword">return</span> cache[var]</span><br><span class="line">  </span><br><span class="line">write(var, value): </span><br><span class="line">  log.append(current_tid, update, var, </span><br><span class="line">             read(var), value) </span><br><span class="line">  cache[var] = value</span><br><span class="line">  </span><br><span class="line">flush(): // called “occasionally” </span><br><span class="line">  cell_write(var, cache[var]) <span class="keyword">for</span> each var</span><br><span class="line">  </span><br><span class="line">recover(log):   </span><br><span class="line">  commits = &#123;&#125; </span><br><span class="line">  <span class="keyword">for</span> record r <span class="keyword">in</span> log[<span class="built_in">len</span>(log)-<span class="number">1</span>] .. log[<span class="number">0</span>]: </span><br><span class="line">    <span class="keyword">if</span> r.<span class="built_in">type</span> == commit: </span><br><span class="line">      commits.add(r.tid) </span><br><span class="line">    <span class="keyword">if</span> r.<span class="built_in">type</span> == update <span class="keyword">and</span> r.tid <span class="keyword">not</span> <span class="keyword">in</span> commits: </span><br><span class="line">      cell_write(r.var, r.old_val) // undo  </span><br><span class="line">  <span class="keyword">for</span> record r <span class="keyword">in</span> log[<span class="number">0</span>] .. log[<span class="built_in">len</span>(log)-<span class="number">1</span>]: </span><br><span class="line">    <span class="keyword">if</span> r.<span class="built_in">type</span> == UPDATE <span class="keyword">and</span> r.tid <span class="keyword">in</span> commits: </span><br><span class="line">      cell_write(r.var, r.new_value) // redo, improvement <span class="number">2.1</span></span><br></pre></td></tr></table></figure>
 <p>real problem: one single failure in high-scalability system can cause problems as well. like bank system, hospital system…</p>
-<h3 id="L17-two-phase-locking-isolation"><a class="header-anchor" href="#L17-two-phase-locking-isolation">¶</a>L17:two-phase locking(isolation)</h3>
+<h3><span id="pl17-two-phase-locking-isolation">L17:two-phase locking(isolation)</span></h3>
 <p>Problem: We have multiple transactions – T1, T2, …, TN – all of which must be atomic, and all of which can have multiple steps.  We want to schedule the steps of these transactions so that it appears as if they ran sequentially.</p>
 <p>Solution: we need a fine-grained locking. our goal (in lecture) is to run transactions concurrently, but to produce a schedule that is conflict serializable</p>
-<h4 id="Serializability"><a class="header-anchor" href="#Serializability">¶</a>Serializability</h4>
+<h4><span id="pserializability">Serializability</span></h4>
 <p>what type of serializability you want depends on what your application needs/what state do we need/want?</p>
 <p>different type of serializability: <strong>conflict serializability</strong></p>
 <ul>
@@ -276,7 +288,7 @@
 </li>
 </ul>
 <p>Problem: how do we generate conflict-serializable schedules?</p>
-<h4 id="Two-phase-locking"><a class="header-anchor" href="#Two-phase-locking">¶</a>Two-phase locking</h4>
+<h4><span id="ptwo-phase-locking">Two-phase locking</span></h4>
 <ol>
 <li>each shared variable has a lock</li>
 <li>before any operation on a variable, the transaction must acquire the corresponding lock</li>
@@ -293,9 +305,9 @@
 <li>Rules: many readers, one writer.</li>
 </ul>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">T1 </span><br><span class="line">begin acquire(x.reader_lock) </span><br><span class="line">T1<span class="number">.1</span> read(x) </span><br><span class="line">acquire(y.reader_lock) </span><br><span class="line">T1<span class="number">.2</span> tmp = read(y) </span><br><span class="line">acquire(y.writer_lock) </span><br><span class="line">T1<span class="number">.3</span> write(y, tmp+<span class="number">10</span>) </span><br><span class="line">commit release(x.reader_lock) </span><br><span class="line">release(y.reader_lock) </span><br><span class="line">release(y.writer_lock)</span><br><span class="line"></span><br><span class="line">T2 </span><br><span class="line">begin acquire(x.writer_lock) </span><br><span class="line">T2<span class="number">.1</span> write(x, <span class="number">20</span>) </span><br><span class="line">acquire(y.writer_lock) </span><br><span class="line">T2<span class="number">.2</span> write(y, <span class="number">30</span>) </span><br><span class="line">commit release(x.writer_lock) </span><br><span class="line">release(y.writer_lock)</span><br></pre></td></tr></table></figure>
-<h3 id="L18-distributed-transactions-two-phase-commit-multi-site-atomicity"><a class="header-anchor" href="#L18-distributed-transactions-two-phase-commit-multi-site-atomicity">¶</a>L18:distributed transactions: two-phase commit(multi-site atomicity)</h3>
+<h3><span id="pl18-distributed-transactions-two-phase-commit-multi-site-atomicity">L18:distributed transactions: two-phase commit(multi-site atomicity)</span></h3>
 <p>Scenario: Client + coordinator + two servers: one with accounts A-M, the other with accounts N-Z.</p>
-<img src="/sg/2021/11/20/SD_ds/6.png" class="" title="截屏2021-12-07 下午5.26.21">
+<img src="/sg/2021/11/20/SD_ds/6.png" class title="截屏2021-12-07 下午5.26.21">
 <p>Goal: develop a protocol that can provide multi-site atomicity in the face of all sorts of failures(every part of the system can fail)</p>
 <p>Problem: one server committed, the other did not</p>
 <p>Approach: two-phase commit, nodes agree that they’re ready to commit before committing</p>
@@ -307,7 +319,7 @@
 <li>Once all workers are confirmed to be prepared, coordinator will tell them to commit, and tell client that the transaction has committed.</li>
 </ol>
 </blockquote>
-<img src="/sg/2021/11/20/SD_ds/7.png" class="" title="截屏2021-12-07 下午5.33.40">
+<img src="/sg/2021/11/20/SD_ds/7.png" class title="截屏2021-12-07 下午5.33.40">
 <p>知道过程是怎样进行的才能推断失败发生的阶段，然后解决问题。</p>
 <p>basic idea: it’s ok to abort the process before the commit point. Otherwise, it cannot abort, and it needs recovery approach.</p>
 <p><u>question</u>: how things work?</p>
@@ -351,20 +363,20 @@
 <p>Solution: replication.</p>
 <p>approach: single-copy consistency</p>
 <p>Problem -1.1: we need to keep multiple copies of the same pieces of data consistent, and we need to decide what type of consistency we want in different scenarios.</p>
-<h3 id="L19-Replication-replicated-state-machines"><a class="header-anchor" href="#L19-Replication-replicated-state-machines">¶</a>L19:Replication:replicated state machines</h3>
+<h3><span id="pl19-replication-replicated-state-machines">L19:Replication:replicated state machines</span></h3>
 <p>goal:solve problem -1.1 of L18</p>
 <p>Attempt 1: replicate data on two servers</p>
-<img src="/sg/2021/11/20/SD_ds/8.png" class="" title="截屏2021-12-07 下午6.20.50">
+<img src="/sg/2021/11/20/SD_ds/8.png" class title="截屏2021-12-07 下午6.20.50">
 <p>Problem 1: messages can arrive at replicas in different orders resulting in inconsistent state.</p>
-<img src="/sg/2021/11/20/SD_ds/9.png" class="" title="截屏2021-12-07 下午6.24.06">
+<img src="/sg/2021/11/20/SD_ds/9.png" class title="截屏2021-12-07 下午6.24.06">
 <p>Attempt 2: make one replica the primary replica, and have a coordinator in place to help manage failures</p>
-<img src="/sg/2021/11/20/SD_ds/0.png" class="" title="截屏2021-12-07 下午6.28.17">
+<img src="/sg/2021/11/20/SD_ds/0.png" class title="截屏2021-12-07 下午6.28.17">
 <p>Problem 2: network partition splits the communication in half</p>
-<img src="/sg/2021/11/20/SD_ds/1.png" class="" title="截屏2021-12-07 下午6.28.31">
+<img src="/sg/2021/11/20/SD_ds/1.png" class title="截屏2021-12-07 下午6.28.31">
 <p>Attempt 3: use a view server to determine which replica is primary, in hopes that we can deal with network partitions</p>
-<img src="/sg/2021/11/20/SD_ds/2.png" class="" title="截屏2021-12-07 下午6.30.02">
+<img src="/sg/2021/11/20/SD_ds/2.png" class title="截屏2021-12-07 下午6.30.02">
 <p>problem 3.1: network partition prevents S1 from communicating with VS</p>
-<img src="/sg/2021/11/20/SD_ds/3.png" class="" title="截屏2021-12-07 下午6.31.01">
+<img src="/sg/2021/11/20/SD_ds/3.png" class title="截屏2021-12-07 下午6.31.01">
 <p>problem 4: VS fails</p>
 <p>Solution: achive agreement(Raft)</p>
 
@@ -394,7 +406,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#L14-RAID-reliability-via-replication"><span class="toc-number">1.</span> <span class="toc-text">L14:RAID:reliability via replication</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#L15-Transactions-atomicity-isolation"><span class="toc-number">2.</span> <span class="toc-text">L15:Transactions: atomicity &amp; isolation</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Atomicity"><span class="toc-number">2.1.</span> <span class="toc-text">Atomicity</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#isolation"><span class="toc-number">2.2.</span> <span class="toc-text">isolation</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#L16-Logging-atomicity"><span class="toc-number">3.</span> <span class="toc-text">L16:Logging(atomicity)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#L17-two-phase-locking-isolation"><span class="toc-number">4.</span> <span class="toc-text">L17:two-phase locking(isolation)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Serializability"><span class="toc-number">4.1.</span> <span class="toc-text">Serializability</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Two-phase-locking"><span class="toc-number">4.2.</span> <span class="toc-text">Two-phase locking</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#L18-distributed-transactions-two-phase-commit-multi-site-atomicity"><span class="toc-number">5.</span> <span class="toc-text">L18:distributed transactions: two-phase commit(multi-site atomicity)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#L19-Replication-replicated-state-machines"><span class="toc-number">6.</span> <span class="toc-text">L19:Replication:replicated state machines</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">L14:RAID:reliability via replication</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">L15:Transactions: atomicity &amp; isolation</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">Atomicity</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">isolation</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">L16:Logging(atomicity)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">L17:two-phase locking(isolation)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">4.1.</span> <span class="toc-text">Serializability</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">4.2.</span> <span class="toc-text">Two-phase locking</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">L18:distributed transactions: two-phase commit(multi-site atomicity)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">L19:Replication:replicated state machines</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">

@@ -6,17 +6,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="¶20 concurrency &amp; synchronization 前言：翻了一下以前看61c的笔记不禁扶额，写得什么鬼。之前的笔记感觉就是简单概念的堆砌加抄写教授讲授的东西，没有太多的思考，所以才感觉学了和没学一样。不管怎么说，既然现在在学6.004，那么就按照课程设置的标准都搞定。  Scenerio 1: video compression algorithms represent">
+    <meta name="description" content="20 concurrency &amp; synchronization  Synchronous Communication in producer-consumer model   21 system-level communication  communication channel   22 parallel processing    20 concurrency &amp; sy">
 <meta property="og:type" content="article">
 <meta property="og:title" content="5 synchronization">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2021/11/09/6.004_synchronization/index.html">
 <meta property="og:site_name" content="steins gate zero">
-<meta property="og:description" content="¶20 concurrency &amp; synchronization 前言：翻了一下以前看61c的笔记不禁扶额，写得什么鬼。之前的笔记感觉就是简单概念的堆砌加抄写教授讲授的东西，没有太多的思考，所以才感觉学了和没学一样。不管怎么说，既然现在在学6.004，那么就按照课程设置的标准都搞定。  Scenerio 1: video compression algorithms represent">
+<meta property="og:description" content="20 concurrency &amp; synchronization  Synchronous Communication in producer-consumer model   21 system-level communication  communication channel   22 parallel processing    20 concurrency &amp; sy">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2021/11/09/6.004_synchronization/sc1.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2021/11/09/6.004_synchronization/sc2.png">
 <meta property="article:published_time" content="2021-11-08T16:00:00.000Z">
-<meta property="article:modified_time" content="2022-06-27T02:09:01.138Z">
+<meta property="article:modified_time" content="2023-07-19T03:21:44.012Z">
 <meta property="article:author" content="Sam Li">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://sgzerolc.github.io/sg/2021/11/09/6.004_synchronization/sc1.png">
@@ -79,7 +79,7 @@
     <span id="actions">
       <ul>
         
-        <li><a class="icon" aria-label="Previous post" href="/sg/2021/11/13/6.046_amortization/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Previous post" href="/sg/2021/11/09/6.006-data_structures/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
         
         
         <li><a class="icon" aria-label="Next post" href="/sg/2021/11/09/6.046-divide_and_conquer/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
@@ -110,7 +110,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#20-concurrency-synchronization"><span class="toc-number">1.</span> <span class="toc-text">20 concurrency &amp; synchronization</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Synchronous-Communication-in-producer-consumer-model"><span class="toc-number">1.1.</span> <span class="toc-text">Synchronous Communication in producer-consumer model</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#21-system-level-communication"><span class="toc-number">2.</span> <span class="toc-text">21 system-level communication</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#communication-channel"><span class="toc-number">2.1.</span> <span class="toc-text">communication channel</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#22-parallel-processing"><span class="toc-number">3.</span> <span class="toc-text">22 parallel processing</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">20 concurrency &amp; synchronization</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">Synchronous Communication in producer-consumer model</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">21 system-level communication</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">communication channel</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">22 parallel processing</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -154,7 +154,24 @@
   
 
   <div class="content" itemprop="articleBody">
-    <h2 id="20-concurrency-synchronization"><a class="header-anchor" href="#20-concurrency-synchronization">¶</a>20 concurrency &amp; synchronization</h2>
+    <div class="toc">
+<!-- toc -->
+<ul>
+<li><a href="#20-concurrency-synchronization">20 concurrency &amp; synchronization</a>
+<ul>
+<li><a href="#synchronous-communication-in-producer-consumer-model">Synchronous Communication in producer-consumer model</a></li>
+</ul>
+</li>
+<li><a href="#21-system-level-communication">21 system-level communication</a>
+<ul>
+<li><a href="#communication-channel">communication channel</a></li>
+</ul>
+</li>
+<li><a href="#22-parallel-processing">22 parallel processing</a></li>
+</ul>
+<!-- tocstop -->
+</div>
+<h2><span id="p20-concurrency-amp-synchronization">20 concurrency &amp; synchronization</span></h2>
 <p>前言：翻了一下以前看61c的笔记不禁扶额，写得什么鬼。之前的笔记感觉就是简单概念的堆砌加抄写教授讲授的东西，没有太多的思考，所以才感觉学了和没学一样。不管怎么说，既然现在在学6.004，那么就按照课程设置的标准都搞定。</p>
 <blockquote>
 <p>Scenerio 1: video compression algorithms represent each video frame as an array of 8-pixel by 8-pixel macroblocks.</p>
@@ -168,8 +185,8 @@
 <li>Message passing</li>
 </ol>
 <p>goal: synchronization and thread-safe programming</p>
-<h3 id="Synchronous-Communication-in-producer-consumer-model"><a class="header-anchor" href="#Synchronous-Communication-in-producer-consumer-model">¶</a>Synchronous Communication in producer-consumer model</h3>
-<img src="/sg/2021/11/09/6.004_synchronization/sc1.png" class="" title="test">
+<h3><span id="psynchronous-communication-in-producer-consumer-model">Synchronous Communication in producer-consumer model</span></h3>
+<img src="/sg/2021/11/09/6.004_synchronization/sc1.png" class title="test">
 <p>Producer sends char to consumer and consumer receives char.</p>
 <ul>
 <li>
@@ -217,7 +234,7 @@ s = s + 1 (one waiting thread may now be able to proceed)</p>
 </ul>
 <p>scenerio1:single producer + single consumer</p>
 <p>solution: enforce precedence and avoid buffer overflow</p>
-<img src="/sg/2021/11/09/6.004_synchronization/sc2.png" class="" title="testi">
+<img src="/sg/2021/11/09/6.004_synchronization/sc2.png" class title="testi">
 <p>Scenerio2: multiple producers and consumers</p>
 <p>Problem: producers interfere with each other.</p>
 <p>disign: set constraint(mutual exclusion) to critical sections. Only one thread can execute critical sections at the time.</p>
@@ -241,13 +258,13 @@ s = s + 1 (one waiting thread may now be able to proceed)</p>
 <p>solution: Establishing and using a global order for shared resources</p>
 </li>
 </ul>
-<h2 id="21-system-level-communication"><a class="header-anchor" href="#21-system-level-communication">¶</a>21 system-level communication</h2>
+<h2><span id="p21-system-level-communication">21 system-level communication</span></h2>
 <p>computer system technologies: each part has a detailed specification of the functionality and interface. We can still add things together without knowing the details of those implementations for things evolve rapidly.</p>
 <p>Problem: what is  the appropriate interface choices for interconnecting system components?</p>
-<h3 id="communication-channel"><a class="header-anchor" href="#communication-channel">¶</a>communication channel</h3>
+<h3><span id="pcommunication-channel">communication channel</span></h3>
 <p>fact: the synchronous multi-signal channels of earlier systems -&gt; asynchronous point-to-point channels nowadays</p>
 <p>problem 1 : how hard can it be to build a <strong>communication channel</strong>?</p>
-<h2 id="22-parallel-processing"><a class="header-anchor" href="#22-parallel-processing">¶</a>22 parallel processing</h2>
+<h2><span id="p22-parallel-processing">22 parallel processing</span></h2>
 <p>CSI, pipeline, date-parallel, cache coherence</p>
 
   </div>
@@ -276,7 +293,7 @@ s = s + 1 (one waiting thread may now be able to proceed)</p>
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#20-concurrency-synchronization"><span class="toc-number">1.</span> <span class="toc-text">20 concurrency &amp; synchronization</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Synchronous-Communication-in-producer-consumer-model"><span class="toc-number">1.1.</span> <span class="toc-text">Synchronous Communication in producer-consumer model</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#21-system-level-communication"><span class="toc-number">2.</span> <span class="toc-text">21 system-level communication</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#communication-channel"><span class="toc-number">2.1.</span> <span class="toc-text">communication channel</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#22-parallel-processing"><span class="toc-number">3.</span> <span class="toc-text">22 parallel processing</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">20 concurrency &amp; synchronization</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">Synchronous Communication in producer-consumer model</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">21 system-level communication</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">communication channel</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">22 parallel processing</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">

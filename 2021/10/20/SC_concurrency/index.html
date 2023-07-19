@@ -6,15 +6,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="¶R20: concurrency I’ve studied parallelism before however the implementation of locks remains unsolved. The goal of this reading is supposed to deepen the understanding and the process of coding. ¶two">
+    <meta name="description" content="R20: concurrency  two models for concurrent programming basic concepts starting a thread with an anonymous class Shared memory example Message passing example concurrency is hard to debug   R21&amp;amp">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SC concurrency">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2021/10/20/SC_concurrency/index.html">
 <meta property="og:site_name" content="steins gate zero">
-<meta property="og:description" content="¶R20: concurrency I’ve studied parallelism before however the implementation of locks remains unsolved. The goal of this reading is supposed to deepen the understanding and the process of coding. ¶two">
+<meta property="og:description" content="R20: concurrency  two models for concurrent programming basic concepts starting a thread with an anonymous class Shared memory example Message passing example concurrency is hard to debug   R21&amp;amp">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-10-19T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-07-04T10:46:00.968Z">
+<meta property="article:modified_time" content="2023-07-19T03:29:57.211Z">
 <meta property="article:author" content="Sam Li">
 <meta name="twitter:card" content="summary">
     
@@ -107,7 +107,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#R20-concurrency"><span class="toc-number">1.</span> <span class="toc-text">R20: concurrency</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#two-models-for-concurrent-programming"><span class="toc-number">1.1.</span> <span class="toc-text">two models for concurrent programming</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#basic-concepts"><span class="toc-number">1.2.</span> <span class="toc-text">basic concepts</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#starting-a-thread-with-an-anonymous-class"><span class="toc-number">1.3.</span> <span class="toc-text">starting a thread with an anonymous class</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Shared-memory-example"><span class="toc-number">1.4.</span> <span class="toc-text">Shared memory example</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Message-passing-example"><span class="toc-number">1.5.</span> <span class="toc-text">Message passing example</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#concurrency-is-hard-to-debug"><span class="toc-number">1.6.</span> <span class="toc-text">concurrency is hard to debug</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#R21-22-thread-safety"><span class="toc-number">2.</span> <span class="toc-text">R21&amp;22: thread safety</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#what-is-threadsafe"><span class="toc-number">2.1.</span> <span class="toc-text">what is threadsafe?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#how-to-make-a-safety-argument"><span class="toc-number">2.2.</span> <span class="toc-text">how to make a safety argument?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Strategy1-confinement"><span class="toc-number">2.3.</span> <span class="toc-text">Strategy1: confinement</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Strategy2-immutability"><span class="toc-number">2.4.</span> <span class="toc-text">Strategy2: immutability</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Strategy3-using-threadsafe-data-types"><span class="toc-number">2.5.</span> <span class="toc-text">Strategy3:using threadsafe data types</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Strategy4-synchronization"><span class="toc-number">2.6.</span> <span class="toc-text">Strategy4: synchronization</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#R23-queues-message-passing"><span class="toc-number">3.</span> <span class="toc-text">R23: queues &amp; message-passing</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#producer-consumer-design-pattern"><span class="toc-number">3.1.</span> <span class="toc-text">producer-consumer design pattern</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#race-conditions"><span class="toc-number">3.2.</span> <span class="toc-text">race conditions</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#R24-sockets-networking"><span class="toc-number">4.</span> <span class="toc-text">R24: sockets &amp; networking</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Client-server-design-pattern"><span class="toc-number">4.1.</span> <span class="toc-text">Client&#x2F;server design pattern</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sockets-and-streams"><span class="toc-number">4.2.</span> <span class="toc-text">sockets and streams</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Network-sockets"><span class="toc-number">4.2.1.</span> <span class="toc-text">&gt; Network sockets</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#streams"><span class="toc-number">4.2.2.</span> <span class="toc-text">&gt; streams</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#wire-protocols"><span class="toc-number">4.2.3.</span> <span class="toc-text">&gt; wire protocols</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Using-network-sockets-in-Java"><span class="toc-number">4.3.</span> <span class="toc-text">Using network sockets in Java</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">R20: concurrency</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">two models for concurrent programming</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">basic concepts</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.3.</span> <span class="toc-text">starting a thread with an anonymous class</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.4.</span> <span class="toc-text">Shared memory example</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.5.</span> <span class="toc-text">Message passing example</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.6.</span> <span class="toc-text">concurrency is hard to debug</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">R21&amp;22: thread safety</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">what is threadsafe?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">how to make a safety argument?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.3.</span> <span class="toc-text">Strategy1: confinement</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.4.</span> <span class="toc-text">Strategy2: immutability</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.5.</span> <span class="toc-text">Strategy3:using threadsafe data types</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.6.</span> <span class="toc-text">Strategy4: synchronization</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">R23: queues &amp; message-passing</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.1.</span> <span class="toc-text">producer-consumer design pattern</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.2.</span> <span class="toc-text">race conditions</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">R24: sockets &amp; networking</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.1.</span> <span class="toc-text">Client&#x2F;server design pattern</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.2.</span> <span class="toc-text">sockets and streams</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">4.2.1.</span> <span class="toc-text">&gt; Network sockets</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">4.2.2.</span> <span class="toc-text">&gt; streams</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">4.2.3.</span> <span class="toc-text">&gt; wire protocols</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.3.</span> <span class="toc-text">Using network sockets in Java</span></a></li></ol></li></ol>
     </div>
   </span>
 </div>
@@ -151,14 +151,53 @@
   
 
   <div class="content" itemprop="articleBody">
-    <h2 id="R20-concurrency"><a class="header-anchor" href="#R20-concurrency">¶</a>R20: concurrency</h2>
+    <div class="toc">
+<!-- toc -->
+<ul>
+<li><a href="#r20-concurrency">R20: concurrency</a>
+<ul>
+<li><a href="#two-models-for-concurrent-programming">two models for concurrent programming</a></li>
+<li><a href="#basic-concepts">basic concepts</a></li>
+<li><a href="#starting-a-thread-with-an-anonymous-class">starting a thread with an anonymous class</a></li>
+<li><a href="#shared-memory-example">Shared memory example</a></li>
+<li><a href="#message-passing-example">Message passing example</a></li>
+<li><a href="#concurrency-is-hard-to-debug">concurrency is hard to debug</a></li>
+</ul>
+</li>
+<li><a href="#r21-22-thread-safety">R21&amp;22: thread safety</a>
+<ul>
+<li><a href="#what-is-threadsafe">what is threadsafe?</a></li>
+<li><a href="#how-to-make-a-safety-argument">how to make a safety argument?</a></li>
+<li><a href="#strategy1-confinement">Strategy1: confinement</a></li>
+<li><a href="#strategy2-immutability">Strategy2: immutability</a></li>
+<li><a href="#strategy3-using-threadsafe-data-types">Strategy3:using threadsafe data types</a></li>
+<li><a href="#strategy4-synchronization">Strategy4: synchronization</a></li>
+</ul>
+</li>
+<li><a href="#r23-queues-message-passing">R23: queues &amp; message-passing</a>
+<ul>
+<li><a href="#producer-consumer-design-pattern">producer-consumer design pattern</a></li>
+<li><a href="#race-conditions">race conditions</a></li>
+</ul>
+</li>
+<li><a href="#r24-sockets-networking">R24: sockets &amp; networking</a>
+<ul>
+<li><a href="#client-server-design-pattern">Client/server design pattern</a></li>
+<li><a href="#sockets-and-streams">sockets and streams</a></li>
+<li><a href="#using-network-sockets-in-java">Using network sockets in Java</a></li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
+</div>
+<h2><span id="pr20-concurrency">R20: concurrency</span></h2>
 <p>I’ve studied parallelism before however the implementation of locks remains unsolved. The goal of this reading is supposed to deepen the understanding and the process of coding.</p>
-<h3 id="two-models-for-concurrent-programming"><a class="header-anchor" href="#two-models-for-concurrent-programming">¶</a>two models for concurrent programming</h3>
+<h3><span id="ptwo-models-for-concurrent-programming">two models for concurrent programming</span></h3>
 <ol>
 <li>message passing: modules share the same memory space</li>
 <li>shared memory: modules communicate through a communication channel</li>
 </ol>
-<h3 id="basic-concepts"><a class="header-anchor" href="#basic-concepts">¶</a>basic concepts</h3>
+<h3><span id="pbasic-concepts">basic concepts</span></h3>
 <p><strong>Process</strong></p>
 <blockquote>
 <p>A process is an instance of a running program that is <em>isolated</em> from other processes on the same machine. In particular, it has its own private section of the machine’s memory.</p>
@@ -177,26 +216,26 @@
 <ul>
 <li>the processor switches between threads when there are more threads than processors</li>
 </ul>
-<h3 id="starting-a-thread-with-an-anonymous-class"><a class="header-anchor" href="#starting-a-thread-with-an-anonymous-class">¶</a>starting a thread with an anonymous class</h3>
+<h3><span id="pstarting-a-thread-with-an-anonymous-class">starting a thread with an anonymous class</span></h3>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Hello from a thread!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;).start();</span><br><span class="line"></span><br><span class="line"><span class="comment">//named class</span></span><br><span class="line"><span class="comment">/** A comparison function that imposes a total ordering on some objects.</span></span><br><span class="line"><span class="comment"> *  ... */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Comparator</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="comment">/** Compares its two arguments for order.</span></span><br><span class="line"><span class="comment">     *  ...</span></span><br><span class="line"><span class="comment">     *  <span class="doctag">@return</span> a negative integer, zero, or a positive integer if the first</span></span><br><span class="line"><span class="comment">     *          argument is less than, equal to, or greater than the second */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(T o1, T o2)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/** Orders Strings by length (shorter first) and then lexicographically. */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StringLengthComparator</span> <span class="keyword">implements</span> <span class="title">Comparator</span>&lt;<span class="title">String</span>&gt; </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(String s1, String s2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (s1.length() == s2.length()) &#123;</span><br><span class="line">            <span class="keyword">return</span> s1.compareTo(s2);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> s1.length() - s2.length();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">SortedSet&lt;String&gt; strings = <span class="keyword">new</span> TreeSet&lt;&gt;();</span><br><span class="line">strings.addAll(List.of(<span class="string">&quot;yolanda&quot;</span>, <span class="string">&quot;zach&quot;</span>, <span class="string">&quot;alice&quot;</span>, <span class="string">&quot;bob&quot;</span>));</span><br><span class="line"><span class="comment">// strings is &#123; &quot;alice&quot;, &quot;bob&quot;, &quot;yolanda&quot;, &quot;zach&quot; &#125;</span></span><br><span class="line">With a Comparator:</span><br><span class="line"></span><br><span class="line"><span class="comment">// uses StringLengthComparator declared above</span></span><br><span class="line">Comparator&lt;String&gt; compareByLength = <span class="keyword">new</span> StringLengthComparator();</span><br><span class="line">SortedSet&lt;String&gt; strings = <span class="keyword">new</span> TreeSet&lt;&gt;(compareByLength);</span><br><span class="line">strings.addAll(List.of(<span class="string">&quot;yolanda&quot;</span>, <span class="string">&quot;zach&quot;</span>, <span class="string">&quot;alice&quot;</span>, <span class="string">&quot;bob&quot;</span>));</span><br><span class="line"><span class="comment">// strings is &#123; &quot;bob&quot;, &quot;zach&quot;, &quot;alice&quot;, &quot;yolanda&quot; &#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// uses StringLengthComparator declared above</span></span><br><span class="line">SortedSet&lt;String&gt; strings = <span class="keyword">new</span> TreeSet&lt;&gt;(<span class="keyword">new</span> StringLengthComparator());</span><br><span class="line">strings.addAll(List.of(<span class="string">&quot;yolanda&quot;</span>, <span class="string">&quot;zach&quot;</span>, <span class="string">&quot;alice&quot;</span>, <span class="string">&quot;bob&quot;</span>));</span><br><span class="line"><span class="comment">// strings is &#123; &quot;bob&quot;, &quot;zach&quot;, &quot;alice&quot;, &quot;yolanda&quot; &#125;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// no StringLengthComparator class!</span></span><br><span class="line">SortedSet&lt;String&gt; strings = <span class="keyword">new</span> TreeSet&lt;&gt;(<span class="keyword">new</span> Comparator&lt;String&gt;() &#123;</span><br><span class="line">    <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(String s1, String s2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (s1.length() == s2.length()) &#123;</span><br><span class="line">            <span class="keyword">return</span> s1.compareTo(s2);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> s1.length() - s2.length();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line">strings.addAll(List.of(<span class="string">&quot;yolanda&quot;</span>, <span class="string">&quot;zach&quot;</span>, <span class="string">&quot;alice&quot;</span>, <span class="string">&quot;bob&quot;</span>));</span><br><span class="line"><span class="comment">// strings is &#123; &quot;bob&quot;, &quot;zach&quot;, &quot;alice&quot;, &quot;yolanda&quot; &#125;</span></span><br></pre></td></tr></table></figure>
 <p>advantage: one-off implementations</p>
 <p>Disadvantage: a named class is good for needing more than once.</p>
 <p>Never call run() on a thread, or on a runnable that you created for a thread, which uses the same thread.</p>
 <p>Instead, make a new Thread() with an instance of your Runnable, and call start() on the thread to start it.</p>
 <p>junit: test fails if an exception is thrown and not caught by the test code itself.</p>
-<h3 id="Shared-memory-example"><a class="header-anchor" href="#Shared-memory-example">¶</a>Shared memory example</h3>
+<h3><span id="pshared-memory-example">Shared memory example</span></h3>
 <p>Race condition: the correctness of the program depends on the relative timing of events in concurrent computations A and B. “A is in a race with B.”</p>
 <p>It can’t be told what the atomic operations(the individual steps of the computation) will be.</p>
 <p>System.exit(): main() may return while its threads are still running. Use exit to force the process to exit.</p>
-<h3 id="Message-passing-example"><a class="header-anchor" href="#Message-passing-example">¶</a>Message passing example</h3>
+<h3><span id="pmessage-passing-example">Message passing example</span></h3>
 <p>Interleaving of the messages sent to the bank account.</p>
-<h3 id="concurrency-is-hard-to-debug"><a class="header-anchor" href="#concurrency-is-hard-to-debug">¶</a>concurrency is hard to debug</h3>
+<h3><span id="pconcurrency-is-hard-to-debug">concurrency is hard to debug</span></h3>
 <p>问题可能存在于多个程序，os？网络？cpu?</p>
 <p>问题很难再现，想想吧，相同的问题位置，出错的地方确不同或者不会发生。</p>
 <p>并且print-debug失效，因为它们相比于运行的程序的操作要慢100倍～1000倍。当使用print时，足够的时间改变操作的时间。</p>
 <p>Nondeterministic behavior causation?</p>
-<h2 id="R21-22-thread-safety"><a class="header-anchor" href="#R21-22-thread-safety">¶</a>R21&amp;22: thread safety</h2>
-<h3 id="what-is-threadsafe"><a class="header-anchor" href="#what-is-threadsafe">¶</a>what is threadsafe?</h3>
+<h2><span id="pr21-amp-22-thread-safety">R21&amp;22: thread safety</span></h2>
+<h3><span id="pwhat-is-threadsafe">what is threadsafe?</span></h3>
 <blockquote>
 <p>if it behaves correctly when used from multiple threads, regardless of how those threads are executed, and without demanding additional coordination from the calling code.</p>
 <ul>
@@ -205,15 +244,15 @@
 <li>And “without additional coordination” means that the data type can’t put preconditions on its caller related to timing, like “you can’t call <code>get()</code> while <code>set()</code> is in progress.”</li>
 </ul>
 </blockquote>
-<h3 id="how-to-make-a-safety-argument"><a class="header-anchor" href="#how-to-make-a-safety-argument">¶</a>how to make a safety argument?</h3>
+<h3><span id="phow-to-make-a-safety-argument">how to make a safety argument?</span></h3>
 <p>how to make code safe in concurrent programming?</p>
 <p>Don’t share data between threads (by confinement, immutability, threadsafe data types).</p>
 <p>The difficult one is how to implement a threadsafe type.</p>
-<h3 id="Strategy1-confinement"><a class="header-anchor" href="#Strategy1-confinement">¶</a>Strategy1: confinement</h3>
+<h3><span id="pstrategy1-confinement">Strategy1: confinement</span></h3>
 <p>idea: Avoid races on reassignable references and mutable data by keeping those confined to a single thread.</p>
 <p>Shared mutable state is the root cause of a race condition.</p>
 <p>don’t use global variables: static variables are accessible to all threads therefore can be changed. While local variables are confined to single thread.</p>
-<h3 id="Strategy2-immutability"><a class="header-anchor" href="#Strategy2-immutability">¶</a>Strategy2: immutability</h3>
+<h3><span id="pstrategy2-immutability">Strategy2: immutability</span></h3>
 <p>keep the data immutable and variables unreassignable.</p>
 <blockquote>
 <p>Threadsafe immutability:</p>
@@ -224,7 +263,7 @@
 <li>no mutation whatsoever of mutable objects in the rep – not even <a target="_blank" rel="noopener" href="https://web.mit.edu/6.031/www/sp21/classes/11-abstraction-functions-rep-invariants/#beneficent_mutation">beneficent mutation</a></li>
 </ul>
 </blockquote>
-<h3 id="Strategy3-using-threadsafe-data-types"><a class="header-anchor" href="#Strategy3-using-threadsafe-data-types">¶</a>Strategy3:using threadsafe data types</h3>
+<h3><span id="pstrategy3-using-threadsafe-data-types">Strategy3:using threadsafe data types</span></h3>
 <p>Store shared data in existing threadsafe data types.</p>
 <p>threadsafe collections:</p>
 <p>wrapper methods that make collections threadsafe while still mutable</p>
@@ -238,7 +277,7 @@
 </li>
 <li>Atomic operations aren’t enough to prevent races</li>
 </ul>
-<h3 id="Strategy4-synchronization"><a class="header-anchor" href="#Strategy4-synchronization">¶</a>Strategy4: synchronization</h3>
+<h3><span id="pstrategy4-synchronization">Strategy4: synchronization</span></h3>
 <p><u>The correctness of a concurrrent program should not depend on accidents of timing.</u></p>
 <p>Problem: bugs in concurrent programming</p>
 <blockquote>
@@ -263,7 +302,7 @@
 </li>
 </ol>
 </blockquote>
-<h2 id="R23-queues-message-passing"><a class="header-anchor" href="#R23-queues-message-passing">¶</a>R23: queues &amp; message-passing</h2>
+<h2><span id="pr23-queues-amp-message-passing">R23: queues &amp; message-passing</span></h2>
 <p>主要用java讲了个queue&amp;message-passing的例子。内容：</p>
 <ol>
 <li>与shared memory system对比，message-passing使两个thread间有独立性，出错的概率更小。</li>
@@ -271,7 +310,7 @@
 <li>实例： 放在冰箱里有一些饮料，一些人需要拿饮料。(代码在本地文件夹中)</li>
 </ol>
 <p>相当于6.004的sychronization另外的一个例子。</p>
-<h3 id="producer-consumer-design-pattern"><a class="header-anchor" href="#producer-consumer-design-pattern">¶</a>producer-consumer design pattern</h3>
+<h3><span id="pproducer-consumer-design-pattern">producer-consumer design pattern</span></h3>
 <p>problem: how to implement message passing with in single process?</p>
 <p>Design: producer-consumer design pattern</p>
 <p>Problem: how to stop the process?</p>
@@ -282,7 +321,7 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">drinksRequested : FridgeRequest → int</span><br><span class="line">shouldStop : FridgeRequest → boolean</span><br></pre></td></tr></table></figure>
 <p>and when we want to stop the fridge, we enqueue a <code>FridgeRequest</code> where <code>shouldStop</code> returns <code>true</code>.</p>
 <p>Approach3:signal a thread that it should stop working by calling that thread’s <a target="_blank" rel="noopener" href="http://docs.oracle.com/en/java/javase/15/docs/api/java.base/java/lang/Thread.html#interrupt()"><code>interrupt()</code></a> method</p>
-<h3 id="race-conditions"><a class="header-anchor" href="#race-conditions">¶</a>race conditions</h3>
+<h3><span id="prace-conditions">race conditions</span></h3>
 <p>prevent deadlock:</p>
 <ol>
 <li>
@@ -293,13 +332,13 @@
 <p>problem: what do you do when that exception is thrown?</p>
 </li>
 </ol>
-<h2 id="R24-sockets-networking"><a class="header-anchor" href="#R24-sockets-networking">¶</a>R24: sockets &amp; networking</h2>
+<h2><span id="pr24-sockets-amp-networking">R24: sockets &amp; networking</span></h2>
 <p>compared to producer-consumer pattern, client-server pattern abstracts the communication over the network using the sockets.</p>
-<h3 id="Client-server-design-pattern"><a class="header-anchor" href="#Client-server-design-pattern">¶</a>Client/server design pattern</h3>
+<h3><span id="pclient-server-design-pattern">Client/server design pattern</span></h3>
 <blockquote>
 <p>In this pattern there are two kinds of processes: clients and servers. A client initiates the communication by connecting to a server. The client sends requests to the server, and the server sends replies back. Finally, the client disconnects. A server might handle connections from many clients concurrently, and clients might also connect to multiple servers.</p>
 </blockquote>
-<h3 id="sockets-and-streams"><a class="header-anchor" href="#sockets-and-streams">¶</a>sockets and streams</h3>
+<h3><span id="psockets-and-streams">sockets and streams</span></h3>
 <p>Basic concepts related to network communication, and to input/output. (I/O refers to communication into and out of a process.)</p>
 <ul>
 <li>
@@ -312,7 +351,7 @@
 <p>Port numbers</p>
 </li>
 </ul>
-<h4 id="Network-sockets"><a class="header-anchor" href="#Network-sockets">¶</a>&gt; Network sockets</h4>
+<h4><span id="p-gt-network-sockets">&gt; Network sockets</span></h4>
 <p>A <a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/Network_socket"><strong>socket</strong></a> represents one end of the connection between client and server.</p>
 <ul>
 <li>listening socket：used by a server process to wait for connections from remote clients.</li>
@@ -327,14 +366,14 @@
 <p>细节上的区别：在实际的socket连接中，当用户请求被listening socket接收，服务器重新产生一个新的connected socket来管理连接，而保留着listening socker继续接受用户请求。</p>
 </li>
 </ul>
-<h4 id="streams"><a class="header-anchor" href="#streams">¶</a>&gt; streams</h4>
+<h4><span id="p-gt-streams">&gt; streams</span></h4>
 <ul>
 <li>buffers</li>
 <li>Byte streams</li>
 <li>character streams</li>
 <li>Blocking</li>
 </ul>
-<h4 id="wire-protocols"><a class="header-anchor" href="#wire-protocols">¶</a>&gt; wire protocols</h4>
+<h4><span id="p-gt-wire-protocols">&gt; wire protocols</span></h4>
 <blockquote>
 <p>A <strong>protocol</strong> is a set of messages that can be exchanged by two communicating parties.</p>
 <p>A <strong>wire protocol</strong> in particular is a set of messages represented as byte sequences, like <code>hello world</code> and <code>bye</code> (assuming we’ve agreed on a way to encode those characters into bytes).</p>
@@ -352,7 +391,7 @@
 </ul>
 <p><strong>Design a wire protocol</strong></p>
 <p>use same <a target="_blank" rel="noopener" href="http://web.mit.edu/6.031/www/sp21/classes/24-sockets-networking/#designing_a_wire_protocol">strategy</a> as designing ADT</p>
-<h3 id="Using-network-sockets-in-Java"><a class="header-anchor" href="#Using-network-sockets-in-Java">¶</a>Using network sockets in Java</h3>
+<h3><span id="pusing-network-sockets-in-java">Using network sockets in Java</span></h3>
 <ul>
 <li>client</li>
 <li>server</li>
@@ -389,7 +428,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#R20-concurrency"><span class="toc-number">1.</span> <span class="toc-text">R20: concurrency</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#two-models-for-concurrent-programming"><span class="toc-number">1.1.</span> <span class="toc-text">two models for concurrent programming</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#basic-concepts"><span class="toc-number">1.2.</span> <span class="toc-text">basic concepts</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#starting-a-thread-with-an-anonymous-class"><span class="toc-number">1.3.</span> <span class="toc-text">starting a thread with an anonymous class</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Shared-memory-example"><span class="toc-number">1.4.</span> <span class="toc-text">Shared memory example</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Message-passing-example"><span class="toc-number">1.5.</span> <span class="toc-text">Message passing example</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#concurrency-is-hard-to-debug"><span class="toc-number">1.6.</span> <span class="toc-text">concurrency is hard to debug</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#R21-22-thread-safety"><span class="toc-number">2.</span> <span class="toc-text">R21&amp;22: thread safety</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#what-is-threadsafe"><span class="toc-number">2.1.</span> <span class="toc-text">what is threadsafe?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#how-to-make-a-safety-argument"><span class="toc-number">2.2.</span> <span class="toc-text">how to make a safety argument?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Strategy1-confinement"><span class="toc-number">2.3.</span> <span class="toc-text">Strategy1: confinement</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Strategy2-immutability"><span class="toc-number">2.4.</span> <span class="toc-text">Strategy2: immutability</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Strategy3-using-threadsafe-data-types"><span class="toc-number">2.5.</span> <span class="toc-text">Strategy3:using threadsafe data types</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Strategy4-synchronization"><span class="toc-number">2.6.</span> <span class="toc-text">Strategy4: synchronization</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#R23-queues-message-passing"><span class="toc-number">3.</span> <span class="toc-text">R23: queues &amp; message-passing</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#producer-consumer-design-pattern"><span class="toc-number">3.1.</span> <span class="toc-text">producer-consumer design pattern</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#race-conditions"><span class="toc-number">3.2.</span> <span class="toc-text">race conditions</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#R24-sockets-networking"><span class="toc-number">4.</span> <span class="toc-text">R24: sockets &amp; networking</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Client-server-design-pattern"><span class="toc-number">4.1.</span> <span class="toc-text">Client&#x2F;server design pattern</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sockets-and-streams"><span class="toc-number">4.2.</span> <span class="toc-text">sockets and streams</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Network-sockets"><span class="toc-number">4.2.1.</span> <span class="toc-text">&gt; Network sockets</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#streams"><span class="toc-number">4.2.2.</span> <span class="toc-text">&gt; streams</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#wire-protocols"><span class="toc-number">4.2.3.</span> <span class="toc-text">&gt; wire protocols</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Using-network-sockets-in-Java"><span class="toc-number">4.3.</span> <span class="toc-text">Using network sockets in Java</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">R20: concurrency</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">two models for concurrent programming</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">basic concepts</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.3.</span> <span class="toc-text">starting a thread with an anonymous class</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.4.</span> <span class="toc-text">Shared memory example</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.5.</span> <span class="toc-text">Message passing example</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.6.</span> <span class="toc-text">concurrency is hard to debug</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">R21&amp;22: thread safety</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">what is threadsafe?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">how to make a safety argument?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.3.</span> <span class="toc-text">Strategy1: confinement</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.4.</span> <span class="toc-text">Strategy2: immutability</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.5.</span> <span class="toc-text">Strategy3:using threadsafe data types</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.6.</span> <span class="toc-text">Strategy4: synchronization</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">R23: queues &amp; message-passing</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.1.</span> <span class="toc-text">producer-consumer design pattern</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.2.</span> <span class="toc-text">race conditions</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">R24: sockets &amp; networking</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.1.</span> <span class="toc-text">Client&#x2F;server design pattern</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.2.</span> <span class="toc-text">sockets and streams</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">4.2.1.</span> <span class="toc-text">&gt; Network sockets</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">4.2.2.</span> <span class="toc-text">&gt; streams</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">4.2.3.</span> <span class="toc-text">&gt; wire protocols</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.3.</span> <span class="toc-text">Using network sockets in Java</span></a></li></ol></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">

@@ -6,12 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="目标：对计算机网络的网络层到应用层有最基本的了解。包括TCP和UDP、IP和应用层分别提供了什么保证，没有提供什么保证；我们能通过他们达到什么目的；我们如何使用他们。  general goal: on the Internet, we have to solve all of the “normal” networking problems (addressing, routing,transp">
+    <meta name="description" content="introduction Routing(hard to scale version) Routing at scale:BGP TCP In-network resource management  A1:Queue management A2:Delay-based scheduling A3:Bandwidth-based scheduling Discussion      目标：对">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SD network">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2021/11/17/SD_network/index.html">
 <meta property="og:site_name" content="steins gate zero">
-<meta property="og:description" content="目标：对计算机网络的网络层到应用层有最基本的了解。包括TCP和UDP、IP和应用层分别提供了什么保证，没有提供什么保证；我们能通过他们达到什么目的；我们如何使用他们。  general goal: on the Internet, we have to solve all of the “normal” networking problems (addressing, routing,transp">
+<meta property="og:description" content="introduction Routing(hard to scale version) Routing at scale:BGP TCP In-network resource management  A1:Queue management A2:Delay-based scheduling A3:Bandwidth-based scheduling Discussion      目标：对">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2021/11/17/SD_network/sc.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2021/11/17/SD_network/sc1.png">
@@ -19,7 +19,7 @@
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2021/11/17/SD_network/sc3.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2021/11/17/SD_network/sc4.png">
 <meta property="article:published_time" content="2021-11-16T16:00:00.000Z">
-<meta property="article:modified_time" content="2022-11-08T01:34:02.455Z">
+<meta property="article:modified_time" content="2023-07-19T03:25:18.762Z">
 <meta property="article:author" content="Sam Li">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://sgzerolc.github.io/sg/2021/11/17/SD_network/sc.png">
@@ -113,7 +113,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#introduction-v2"><span class="toc-number">1.</span> <span class="toc-text">introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Routing-hard-to-scale-version"><span class="toc-number">2.</span> <span class="toc-text">Routing(hard to scale version)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Routing-at-scale-BGP"><span class="toc-number">3.</span> <span class="toc-text">Routing at scale:BGP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP"><span class="toc-number">4.</span> <span class="toc-text">TCP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#In-network-resource-management"><span class="toc-number">5.</span> <span class="toc-text">In-network resource management</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#A1-Queue-management"><span class="toc-number">5.1.</span> <span class="toc-text">A1:Queue management</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#A2-Delay-based-scheduling"><span class="toc-number">5.2.</span> <span class="toc-text">A2:Delay-based scheduling</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#A3-Bandwidth-based-scheduling"><span class="toc-number">5.3.</span> <span class="toc-text">A3:Bandwidth-based scheduling</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Discussion"><span class="toc-number">5.4.</span> <span class="toc-text">Discussion</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Routing(hard to scale version)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Routing at scale:BGP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">TCP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">In-network resource management</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.1.</span> <span class="toc-text">A1:Queue management</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.2.</span> <span class="toc-text">A2:Delay-based scheduling</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.3.</span> <span class="toc-text">A3:Bandwidth-based scheduling</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.4.</span> <span class="toc-text">Discussion</span></a></li></ol></li></ol>
     </div>
   </span>
 </div>
@@ -157,14 +157,32 @@
   
 
   <div class="content" itemprop="articleBody">
-    <p>目标：对计算机网络的网络层到应用层有最基本的了解。包括TCP和UDP、IP和应用层分别提供了什么保证，没有提供什么保证；我们能通过他们达到什么目的；我们如何使用他们。</p>
+    <div class="toc">
+<!-- toc -->
+<ul>
+<li><a href="#introduction">introduction</a></li>
+<li><a href="#routing-hard-to-scale-version">Routing(hard to scale version)</a></li>
+<li><a href="#routing-at-scale-bgp">Routing at scale:BGP</a></li>
+<li><a href="#tcp">TCP</a></li>
+<li><a href="#in-network-resource-management">In-network resource management</a>
+<ul>
+<li><a href="#a1-queue-management">A1:Queue management</a></li>
+<li><a href="#a2-delay-based-scheduling">A2:Delay-based scheduling</a></li>
+<li><a href="#a3-bandwidth-based-scheduling">A3:Bandwidth-based scheduling</a></li>
+<li><a href="#discussion">Discussion</a></li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
+</div>
+<p>目标：对计算机网络的网络层到应用层有最基本的了解。包括TCP和UDP、IP和应用层分别提供了什么保证，没有提供什么保证；我们能通过他们达到什么目的；我们如何使用他们。</p>
 <blockquote>
 <p>general goal: on the Internet, we have to solve all of the “normal” networking problems (addressing, routing,transport) at massive scale, while supporting a diverse group of applications and competing economic interests.</p>
 </blockquote>
-<h2 id="introduction-v2"><a class="header-anchor" href="#introduction-v2">¶</a>introduction</h2>
+<h2><span id="pintroduction">introduction</span></h2>
 <p>we can build network starting from link. Once the network is set up, we need to consider of transport. Finally, we need to think about the practical use in real life, which generates the traffic.</p>
 <p><strong>Changes</strong></p>
-<img src="/sg/2021/11/17/SD_network/sc.png" class="" title="截屏2021-11-17 下午3.37.43">
+<img src="/sg/2021/11/17/SD_network/sc.png" class title="截屏2021-11-17 下午3.37.43">
 <ol>
 <li>
 <p>make the internet flexible -&gt; layered model in 1978</p>
@@ -199,7 +217,7 @@
 <li>address space depletion: IPv4 -&gt; IPv6</li>
 <li>congestion control</li>
 </ol>
-<h2 id="Routing-hard-to-scale-version"><a class="header-anchor" href="#Routing-hard-to-scale-version">¶</a>Routing(hard to scale version)</h2>
+<h2><span id="prouting-hard-to-scale-version">Routing(hard to scale version)</span></h2>
 <p>Problems: For every node X, after the routing protocol is run, X’s routing table should contain a <em>minimum-cost route</em> to every other reachable node.</p>
 <p>Concept:</p>
 <ul>
@@ -221,14 +239,14 @@
 <li>Link-state routing</li>
 <li>Distance-vector routing</li>
 </ol>
-<img src="/sg/2021/11/17/SD_network/sc1.png" class="" title="截屏2021-11-17 下午4.19.25">
+<img src="/sg/2021/11/17/SD_network/sc1.png" class title="截屏2021-11-17 下午4.19.25">
 <p>Summary: they are good for very small networks but not good enough for scaling to the size of the internet.</p>
-<h2 id="Routing-at-scale-BGP"><a class="header-anchor" href="#Routing-at-scale-BGP">¶</a>Routing at scale:BGP</h2>
+<h2><span id="prouting-at-scale-bgp">Routing at scale:BGP</span></h2>
 <p><em>Concept</em></p>
 <p>BGP: border gateway protocol</p>
 <p>policy routing: switches make routing decisions based on some set of policies set by a human.  Routing protocol must disseminate enough information to enable those policies.</p>
 <hr>
-<img src="/sg/2021/11/17/SD_network/sc2.png" class="" title="截屏2021-11-21 下午12.18.49">
+<img src="/sg/2021/11/17/SD_network/sc2.png" class title="截屏2021-11-21 下午12.18.49">
 <p>Problem: why BGP can scale while link state and distance vector can’t?</p>
 <p>BGP relationships: customer/provider, peers</p>
 <p>Export policies</p>
@@ -239,7 +257,7 @@
 <li>Scale</li>
 <li>Secure</li>
 </ul>
-<h2 id="TCP"><a class="header-anchor" href="#TCP">¶</a>TCP</h2>
+<h2><span id="ptcp">TCP</span></h2>
 <p><em>Concept</em>: reliable transport&amp;congestion control</p>
 <p>arguments: Sequence numbers, acknowledgements,timeouts</p>
 <hr>
@@ -248,7 +266,7 @@
 <ul>
 <li>Approach 1: sliding-window protocol</li>
 </ul>
-<img src="/sg/2021/11/17/SD_network/sc3.png" class="" title="截屏2021-12-05 下午6.33.00">
+<img src="/sg/2021/11/17/SD_network/sc3.png" class title="截屏2021-12-05 下午6.33.00">
 <p><u>problem 1</u>: how to decide W? (Drops,delay, bandwidth bottleneck)</p>
 <p><em>assumption</em>: infinite offered load</p>
 <p><u>Improvement 1</u>: congestion control</p>
@@ -267,7 +285,7 @@
 <ul>
 <li>issue 2: TCP doesn’t react to congestion until it’s already happening.  -&gt; next lecture</li>
 </ul>
-<h2 id="In-network-resource-management"><a class="header-anchor" href="#In-network-resource-management">¶</a>In-network resource management</h2>
+<h2><span id="pin-network-resource-management">In-network resource management</span></h2>
 <p>TCP have issues that:</p>
 <p>problem 1: long delays when routers have too much buffering</p>
 <p>problem 2: Doesn’t work well in some scenarios (DCTCP)</p>
@@ -275,7 +293,7 @@
 <p>Goal: solve problem 3: transient queues.</p>
 <p>Idea: manipulate switches to get flexibility.</p>
 <p>consideration: we need to think about what the method allows a switch to do? Example protocols? How the protocol works? Pros/cons of each protocol.</p>
-<h3 id="A1-Queue-management"><a class="header-anchor" href="#A1-Queue-management">¶</a>A1:Queue management</h3>
+<h3><span id="pa1-queue-management">A1:Queue management</span></h3>
 <ol>
 <li>
 <p>drop tail</p>
@@ -287,24 +305,24 @@
 <p>explicit congestion notification</p>
 </li>
 </ol>
-<h3 id="A2-Delay-based-scheduling"><a class="header-anchor" href="#A2-Delay-based-scheduling">¶</a>A2:Delay-based scheduling</h3>
+<h3><span id="pa2-delay-based-scheduling">A2:Delay-based scheduling</span></h3>
 <ol>
 <li>priority queueing</li>
 </ol>
-<h3 id="A3-Bandwidth-based-scheduling"><a class="header-anchor" href="#A3-Bandwidth-based-scheduling">¶</a>A3:Bandwidth-based scheduling</h3>
+<h3><span id="pa3-bandwidth-based-scheduling">A3:Bandwidth-based scheduling</span></h3>
 <ol>
 <li>Round-robin</li>
 <li>weighted round-robin</li>
 <li>deficit round-robin</li>
 </ol>
-<h3 id="Discussion"><a class="header-anchor" href="#Discussion">¶</a>Discussion</h3>
+<h3><span id="pdiscussion">Discussion</span></h3>
 <p>let’s think about three ideas in lecture:</p>
 <ol>
 <li>Traffic differentiation</li>
 <li>Queue-management</li>
 <li>In-network resource-management</li>
 </ol>
-<img src="/sg/2021/11/17/SD_network/sc4.png" class="" title="截屏2021-12-05 下午6.48.52">
+<img src="/sg/2021/11/17/SD_network/sc4.png" class title="截屏2021-12-05 下午6.48.52">
 
   </div>
 </article>
@@ -332,7 +350,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#introduction-v2"><span class="toc-number">1.</span> <span class="toc-text">introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Routing-hard-to-scale-version"><span class="toc-number">2.</span> <span class="toc-text">Routing(hard to scale version)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Routing-at-scale-BGP"><span class="toc-number">3.</span> <span class="toc-text">Routing at scale:BGP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP"><span class="toc-number">4.</span> <span class="toc-text">TCP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#In-network-resource-management"><span class="toc-number">5.</span> <span class="toc-text">In-network resource management</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#A1-Queue-management"><span class="toc-number">5.1.</span> <span class="toc-text">A1:Queue management</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#A2-Delay-based-scheduling"><span class="toc-number">5.2.</span> <span class="toc-text">A2:Delay-based scheduling</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#A3-Bandwidth-based-scheduling"><span class="toc-number">5.3.</span> <span class="toc-text">A3:Bandwidth-based scheduling</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Discussion"><span class="toc-number">5.4.</span> <span class="toc-text">Discussion</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Routing(hard to scale version)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Routing at scale:BGP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">TCP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">In-network resource management</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.1.</span> <span class="toc-text">A1:Queue management</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.2.</span> <span class="toc-text">A2:Delay-based scheduling</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.3.</span> <span class="toc-text">A3:Bandwidth-based scheduling</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.4.</span> <span class="toc-text">Discussion</span></a></li></ol></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">

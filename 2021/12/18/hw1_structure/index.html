@@ -6,19 +6,19 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="¶ps2   看题：when all but one is special means only one is not special.   set view and sequence view of data structures   Sequences maintain a collection of items in an extrinsic order, where each item s">
+    <meta name="description" content="ps2 ps3 ps4  binary tree heap problem set   recitation  AVL tree Principle of algorithm   Reminder  olc      ps2   看题：when all but one is special means only one is not special.   set view and seque">
 <meta property="og:type" content="article">
 <meta property="og:title" content="hw1 data structures">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2021/12/18/hw1_structure/index.html">
 <meta property="og:site_name" content="steins gate zero">
-<meta property="og:description" content="¶ps2   看题：when all but one is special means only one is not special.   set view and sequence view of data structures   Sequences maintain a collection of items in an extrinsic order, where each item s">
+<meta property="og:description" content="ps2 ps3 ps4  binary tree heap problem set   recitation  AVL tree Principle of algorithm   Reminder  olc      ps2   看题：when all but one is special means only one is not special.   set view and seque">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2021/12/18/hw1_structure/sc.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2021/12/18/hw1_structure/sc2.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2021/12/18/hw1_structure/sc3.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2021/12/18/hw1_structure/sc4.png">
 <meta property="article:published_time" content="2021-12-17T16:00:00.000Z">
-<meta property="article:modified_time" content="2022-06-27T02:13:18.771Z">
+<meta property="article:modified_time" content="2023-07-19T03:23:59.956Z">
 <meta property="article:author" content="Sam Li">
 <meta property="article:tag" content="hw">
 <meta name="twitter:card" content="summary">
@@ -113,7 +113,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#ps2"><span class="toc-number">1.</span> <span class="toc-text">ps2</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ps3"><span class="toc-number">2.</span> <span class="toc-text">ps3</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ps4"><span class="toc-number">3.</span> <span class="toc-text">ps4</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#binary-tree"><span class="toc-number">3.1.</span> <span class="toc-text">binary tree</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#heap"><span class="toc-number">3.2.</span> <span class="toc-text">heap</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#problem-set"><span class="toc-number">3.3.</span> <span class="toc-text">problem set</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#recitation"><span class="toc-number">4.</span> <span class="toc-text">recitation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#AVL-tree"><span class="toc-number">4.1.</span> <span class="toc-text">AVL tree</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Principle-of-algorithm"><span class="toc-number">4.2.</span> <span class="toc-text">Principle of algorithm</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reminder"><span class="toc-number">5.</span> <span class="toc-text">Reminder</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#olc"><span class="toc-number">5.1.</span> <span class="toc-text">olc</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">ps2</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">ps3</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">ps4</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.1.</span> <span class="toc-text">binary tree</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.2.</span> <span class="toc-text">heap</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.3.</span> <span class="toc-text">problem set</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">recitation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.1.</span> <span class="toc-text">AVL tree</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.2.</span> <span class="toc-text">Principle of algorithm</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Reminder</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.1.</span> <span class="toc-text">olc</span></a></li></ol></li></ol>
     </div>
   </span>
 </div>
@@ -162,7 +162,33 @@
   
 
   <div class="content" itemprop="articleBody">
-    <h2 id="ps2"><a class="header-anchor" href="#ps2">¶</a>ps2</h2>
+    <div class="toc">
+<!-- toc -->
+<ul>
+<li><a href="#ps2">ps2</a></li>
+<li><a href="#ps3">ps3</a></li>
+<li><a href="#ps4">ps4</a>
+<ul>
+<li><a href="#binary-tree">binary tree</a></li>
+<li><a href="#heap">heap</a></li>
+<li><a href="#problem-set">problem set</a></li>
+</ul>
+</li>
+<li><a href="#recitation">recitation</a>
+<ul>
+<li><a href="#avl-tree">AVL tree</a></li>
+<li><a href="#principle-of-algorithm">Principle of algorithm</a></li>
+</ul>
+</li>
+<li><a href="#reminder">Reminder</a>
+<ul>
+<li><a href="#olc">olc</a></li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
+</div>
+<h2><span id="pps2">ps2</span></h2>
 <ol>
 <li>
 <p>看题：when all but one is special means only one is not special.</p>
@@ -186,7 +212,7 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">merge_sort</span>(<span class="params">Arr</span>):</span></span><br><span class="line">	size = <span class="built_in">len</span>(Arr)</span><br><span class="line">	<span class="keyword">if</span> size == <span class="number">1</span>:</span><br><span class="line">		<span class="keyword">return</span> Arr</span><br><span class="line">	mid = size//<span class="number">2</span></span><br><span class="line">	Left = merge_sort(Arr[:mid])</span><br><span class="line">	Right = merge_sort(Arr[mid:])</span><br><span class="line">	i,j = <span class="number">0</span>,<span class="number">0</span></span><br><span class="line">	start = <span class="number">0</span></span><br><span class="line">	<span class="keyword">while</span> start &lt; size:</span><br><span class="line">		<span class="keyword">if</span> j &gt;= <span class="built_in">len</span>(Right) <span class="keyword">or</span> (i &lt; <span class="built_in">len</span>(Left) <span class="keyword">and</span> Left[i] &lt; Right[j]): <span class="comment"># offbyone error</span></span><br><span class="line">			Arr[start] = Left[i]</span><br><span class="line">			i += <span class="number">1</span></span><br><span class="line">		<span class="keyword">else</span>:</span><br><span class="line">			Arr[start] = Right[j]</span><br><span class="line">			j += <span class="number">1</span></span><br><span class="line">		start += <span class="number">1</span></span><br><span class="line">	<span class="keyword">return</span> Arr <span class="comment"># missing return value</span></span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<h2 id="ps3"><a class="header-anchor" href="#ps3">¶</a>ps3</h2>
+<h2><span id="pps3">ps3</span></h2>
 <ol>
 <li>
 <p>How to use hash tables(its set operations) to implementing sequence operations?</p>
@@ -217,7 +243,7 @@
 <li>Store variable <u>first</u> = key of first item(index 0)</li>
 <li>Hashing(map negative index to positive)</li>
 <li>
-<img src="/sg/2021/12/18/hw1_structure/sc.png" class="" title="sc">
+<img src="/sg/2021/12/18/hw1_structure/sc.png" class title="sc">
 </li>
 </ul>
 </li>
@@ -275,8 +301,8 @@
 <p>copy detection problem</p>
 </li>
 </ol>
-<h2 id="ps4"><a class="header-anchor" href="#ps4">¶</a>ps4</h2>
-<h3 id="binary-tree"><a class="header-anchor" href="#binary-tree">¶</a>binary tree</h3>
+<h2><span id="pps4">ps4</span></h2>
+<h3><span id="pbinary-tree">binary tree</span></h3>
 <p>Problem 1: why we need a binary tree to store items?</p>
 <p>ans: Compared with linked list which takes O(n) time to traverse all the items, we use binary serach instead. The traverse now takes O(hight of the tree) = O(logn) time.</p>
 <p>Design:</p>
@@ -313,7 +339,7 @@
 </li>
 </ol>
 <p>the difference between BST and AVL is: AVL maintains balance: AVL will check skew of every node in the traverse order to decide rotation operations; BST mains binary search.(AVL can use binary search as well)</p>
-<h3 id="heap"><a class="header-anchor" href="#heap">¶</a>heap</h3>
+<h3><span id="pheap">heap</span></h3>
 <p>Build heap in linear time:</p>
 <ul>
 <li>
@@ -322,9 +348,9 @@
 <p>problem: the order of swapping</p>
 </li>
 </ul>
-<img src="/sg/2021/12/18/hw1_structure/sc2.png" class="" title="sc2">
+<img src="/sg/2021/12/18/hw1_structure/sc2.png" class title="sc2">
 <p>heap doesn’t support ordering.</p>
-<h3 id="problem-set"><a class="header-anchor" href="#problem-set">¶</a>problem set</h3>
+<h3><span id="pproblem-set">problem set</span></h3>
 <ol>
 <li>
 <p>n items, k largest one list. O(logn) space to write, O(nlog(logn)) runnning time.</p>
@@ -353,7 +379,7 @@
 <ul>
 <li>That’s why we don’t save bid directly in the dictionary, in which case we save the time in updating the dictionary every time we change the bidder’s bid.</li>
 </ul>
-<img src="/sg/2021/12/18/hw1_structure/sc3.png" class="" title="sc3">
+<img src="/sg/2021/12/18/hw1_structure/sc3.png" class title="sc3">
 </li>
 <li>
 <p>It seems right but where goes wrong?</p>
@@ -362,14 +388,14 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># fixed version</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">subtree_max_in_range</span>(<span class="params">A, d1, d2</span>):</span></span><br><span class="line">    temp = <span class="literal">None</span></span><br><span class="line">    <span class="comment"># ------------------------------------ #</span></span><br><span class="line">    <span class="keyword">if</span> A.max_date &lt;= d2 <span class="keyword">and</span> A.min_date &gt;= d1:</span><br><span class="line">        <span class="keyword">return</span> A.max_temp</span><br><span class="line">    <span class="keyword">if</span> A.max_date &lt; d1 <span class="keyword">or</span> A.min_date &gt; d2:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">    <span class="keyword">if</span> d1 &lt;= A.item.key &lt;= d2:</span><br><span class="line">        temp = A.item.temp</span><br><span class="line">    <span class="keyword">if</span> A.left:</span><br><span class="line">        l_temp = A.left.subtree_max_in_range(d1, d2)</span><br><span class="line">        <span class="keyword">if</span> l_temp:</span><br><span class="line">            <span class="keyword">if</span> temp:</span><br><span class="line">                temp = <span class="built_in">max</span>(l_temp, temp)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                temp = l_temp</span><br><span class="line">    <span class="keyword">if</span> A.right:</span><br><span class="line">        r_temp = A.right.subtree_max_in_range(d1, d2)</span><br><span class="line">        <span class="keyword">if</span> r_temp:</span><br><span class="line">            <span class="keyword">if</span> temp:</span><br><span class="line">                temp = <span class="built_in">max</span>(r_temp, temp)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                temp = r_temp</span><br><span class="line">    <span class="comment"># ------------------------------------ #</span></span><br><span class="line">    <span class="keyword">return</span> temp</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<h2 id="recitation"><a class="header-anchor" href="#recitation">¶</a>recitation</h2>
-<h3 id="AVL-tree"><a class="header-anchor" href="#AVL-tree">¶</a>AVL tree</h3>
+<h2><span id="precitation">recitation</span></h2>
+<h3><span id="pavl-tree">AVL tree</span></h3>
 <p>full binary tree guarantees the height of O(logn)</p>
 <p>Build a AVL tree with fewer nodes as possible -&gt; prove h = O(logn)</p>
 <p>why rotations -&gt; balance -&gt; tree search</p>
 <p>Rotation:</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">rotateRight(A):</span><br><span class="line">	<span class="comment"># A&#x27;s original parent e; A could be e&#x27;s left/right child =&gt; B</span></span><br><span class="line">	B.p = e</span><br><span class="line">	<span class="keyword">if</span> e.r == A <span class="comment"># pointer comparison</span></span><br><span class="line">		e.r = B</span><br><span class="line">	<span class="keyword">else</span>:</span><br><span class="line">		e.l = B</span><br><span class="line">	<span class="comment"># A&#x27;s original left child B =&gt; A is B&#x27;s right child</span></span><br><span class="line">	B.r = A</span><br><span class="line">	(A.p = B)</span><br><span class="line">	<span class="comment"># B&#x27;s original right child c =&gt; A&#x27;s left child</span></span><br><span class="line">	A.l = c</span><br><span class="line">	(c.p = A)</span><br></pre></td></tr></table></figure>
-<h3 id="Principle-of-algorithm"><a class="header-anchor" href="#Principle-of-algorithm">¶</a>Principle of algorithm</h3>
+<h3><span id="pprinciple-of-algorithm">Principle of algorithm</span></h3>
 <p><u>thghout process matters</u>: take 30-60 minutes to think about a problem</p>
 <p><u>problem 0</u>: shifted array, find e in N sorted items shifted length of k,</p>
 <ul>
@@ -420,10 +446,10 @@
 </li>
 <li>
 <p>binary search in two halves recursively</p>
-<img src="/sg/2021/12/18/hw1_structure/sc4.png" class="" title="sc4">
+<img src="/sg/2021/12/18/hw1_structure/sc4.png" class title="sc4">
 </li>
 </ol>
-<h2 id="Reminder"><a class="header-anchor" href="#Reminder">¶</a>Reminder</h2>
+<h2><span id="preminder">Reminder</span></h2>
 <ol>
 <li>
 <p>two-finger algorithm:</p>
@@ -454,7 +480,7 @@
 <p>Worst-case, expected, amortized(dynamic operations)</p>
 </li>
 </ol>
-<h3 id="olc"><a class="header-anchor" href="#olc">¶</a>olc</h3>
+<h3><span id="polc">olc</span></h3>
 <p>First we should decide which view:</p>
 <ul>
 <li>ordered or not -&gt; sequence/set view</li>
@@ -487,7 +513,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#ps2"><span class="toc-number">1.</span> <span class="toc-text">ps2</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ps3"><span class="toc-number">2.</span> <span class="toc-text">ps3</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ps4"><span class="toc-number">3.</span> <span class="toc-text">ps4</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#binary-tree"><span class="toc-number">3.1.</span> <span class="toc-text">binary tree</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#heap"><span class="toc-number">3.2.</span> <span class="toc-text">heap</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#problem-set"><span class="toc-number">3.3.</span> <span class="toc-text">problem set</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#recitation"><span class="toc-number">4.</span> <span class="toc-text">recitation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#AVL-tree"><span class="toc-number">4.1.</span> <span class="toc-text">AVL tree</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Principle-of-algorithm"><span class="toc-number">4.2.</span> <span class="toc-text">Principle of algorithm</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reminder"><span class="toc-number">5.</span> <span class="toc-text">Reminder</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#olc"><span class="toc-number">5.1.</span> <span class="toc-text">olc</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">ps2</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">ps3</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">ps4</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.1.</span> <span class="toc-text">binary tree</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.2.</span> <span class="toc-text">heap</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.3.</span> <span class="toc-text">problem set</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">recitation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.1.</span> <span class="toc-text">AVL tree</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.2.</span> <span class="toc-text">Principle of algorithm</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Reminder</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.1.</span> <span class="toc-text">olc</span></a></li></ol></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">

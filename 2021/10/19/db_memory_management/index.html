@@ -6,12 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="storage: Goal: Provide an illusion that it has sufficient memory, avoid large stalls due to expensive disk access, maximize sequential access due to principle of locality. Problem: why not use the os">
+    <meta name="description" content="Disk manager  Where to store data? how to organize the data inside of the page? what is the data? workloads types data storage models   buffer pool manager  What is buffer pool? buffer pool optimiz">
 <meta property="og:type" content="article">
 <meta property="og:title" content="db memory management">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/index.html">
 <meta property="og:site_name" content="steins gate zero">
-<meta property="og:description" content="storage: Goal: Provide an illusion that it has sufficient memory, avoid large stalls due to expensive disk access, maximize sequential access due to principle of locality. Problem: why not use the os">
+<meta property="og:description" content="Disk manager  Where to store data? how to organize the data inside of the page? what is the data? workloads types data storage models   buffer pool manager  What is buffer pool? buffer pool optimiz">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/Screenshot-7504622.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/Screenshot-7504676.png">
@@ -31,7 +31,7 @@
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/Screenshot-7507190.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/Screenshot-7507995.png">
 <meta property="article:published_time" content="2021-10-18T16:00:00.000Z">
-<meta property="article:modified_time" content="2022-06-27T02:13:44.851Z">
+<meta property="article:modified_time" content="2023-07-19T03:24:19.171Z">
 <meta property="article:author" content="Sam Li">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/Screenshot-7504622.png">
@@ -125,7 +125,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Disk-manager"><span class="toc-number">1.</span> <span class="toc-text">Disk manager</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Where-to-store-data"><span class="toc-number">1.1.</span> <span class="toc-text">Where to store data?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#how-to-organize-the-data-inside-of-the-page"><span class="toc-number">1.2.</span> <span class="toc-text">how to organize the data inside of the page?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#what-is-the-data"><span class="toc-number">1.3.</span> <span class="toc-text">what is the data?</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#tuple-layout"><span class="toc-number">1.3.1.</span> <span class="toc-text">&gt; tuple layout</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#data-representations"><span class="toc-number">1.3.2.</span> <span class="toc-text">&gt; data representations</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#workloads-types"><span class="toc-number">1.4.</span> <span class="toc-text">workloads types</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#data-storage-models"><span class="toc-number">1.5.</span> <span class="toc-text">data storage models</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#buffer-pool-manager"><span class="toc-number">2.</span> <span class="toc-text">buffer pool manager</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#What-is-buffer-pool"><span class="toc-number">2.1.</span> <span class="toc-text">What is buffer pool?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#buffer-pool-optimizations"><span class="toc-number">2.2.</span> <span class="toc-text">buffer pool optimizations</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#os-page-cache"><span class="toc-number">2.3.</span> <span class="toc-text">os page cache</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Buffer-Replacement-Policies"><span class="toc-number">2.4.</span> <span class="toc-text">Buffer Replacement Policies</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#dirty-pages"><span class="toc-number">2.5.</span> <span class="toc-text">dirty pages</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#other-memory-pool"><span class="toc-number">2.6.</span> <span class="toc-text">other memory pool</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Disk manager</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">Where to store data?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">how to organize the data inside of the page?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.3.</span> <span class="toc-text">what is the data?</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.3.1.</span> <span class="toc-text">&gt; tuple layout</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.3.2.</span> <span class="toc-text">&gt; data representations</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.4.</span> <span class="toc-text">workloads types</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.5.</span> <span class="toc-text">data storage models</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">buffer pool manager</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">What is buffer pool?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">buffer pool optimizations</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.3.</span> <span class="toc-text">os page cache</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.4.</span> <span class="toc-text">Buffer Replacement Policies</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.5.</span> <span class="toc-text">dirty pages</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.6.</span> <span class="toc-text">other memory pool</span></a></li></ol></li></ol>
     </div>
   </span>
 </div>
@@ -169,14 +169,39 @@
   
 
   <div class="content" itemprop="articleBody">
-    <p>storage: Goal:</p>
+    <div class="toc">
+<!-- toc -->
+<ul>
+<li><a href="#disk-manager">Disk manager</a>
+<ul>
+<li><a href="#where-to-store-data">Where to store data?</a></li>
+<li><a href="#how-to-organize-the-data-inside-of-the-page">how to organize the data inside of the page?</a></li>
+<li><a href="#what-is-the-data">what is the data?</a></li>
+<li><a href="#workloads-types">workloads types</a></li>
+<li><a href="#data-storage-models">data storage models</a></li>
+</ul>
+</li>
+<li><a href="#buffer-pool-manager">buffer pool manager</a>
+<ul>
+<li><a href="#what-is-buffer-pool">What is buffer pool?</a></li>
+<li><a href="#buffer-pool-optimizations">buffer pool optimizations</a></li>
+<li><a href="#os-page-cache">os page cache</a></li>
+<li><a href="#buffer-replacement-policies">Buffer Replacement Policies</a></li>
+<li><a href="#dirty-pages">dirty pages</a></li>
+<li><a href="#other-memory-pool">other memory pool</a></li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
+</div>
+<p>storage: Goal:</p>
 <p>Provide an illusion that it has sufficient memory, avoid large stalls due to expensive disk access, maximize sequential access due to principle of locality.</p>
 <p>Problem: why not use the os for moving the files’ pages in and out of memory?</p>
-<p>Answer: OS doesn’t care about what the file is while DBMS sees the difference of queries.<img src="/sg/2021/10/19/db_memory_management/Screenshot-7504622.png" class="" title="Screenshot-7504622"></p>
-<h2 id="Disk-manager"><a class="header-anchor" href="#Disk-manager">¶</a>Disk manager</h2>
+<p>Answer: OS doesn’t care about what the file is while DBMS sees the difference of queries.<img src="/sg/2021/10/19/db_memory_management/Screenshot-7504622.png" class title="Screenshot-7504622"></p>
+<h2><span id="pdisk-manager">Disk manager</span></h2>
 <p><u>Problem: how the DBMS represents the database in files on disk?</u></p>
-<img src="/sg/2021/10/19/db_memory_management/Screenshot-7504676.png" class="" title="Screenshot-7504676">
-<h3 id="Where-to-store-data"><a class="header-anchor" href="#Where-to-store-data">¶</a>Where to store data?</h3>
+<img src="/sg/2021/10/19/db_memory_management/Screenshot-7504676.png" class title="Screenshot-7504676">
+<h3><span id="pwhere-to-store-data">Where to store data?</span></h3>
 <p>Fixed-size db pages.</p>
 <blockquote>
 <p>Storage manager: organize files as a collection of pages.</p>
@@ -198,19 +223,19 @@ page to disk when the system crashes.</p>
 <ol>
 <li>
 <p>Linked list: sequenctial scan</p>
-<img src="/sg/2021/10/19/db_memory_management/Screenshot-7504738.png" class="" title="Screenshot-7504738">
+<img src="/sg/2021/10/19/db_memory_management/Screenshot-7504738.png" class title="Screenshot-7504738">
 </li>
 <li>
 <p>Page directory: translation</p>
-<img src="/sg/2021/10/19/db_memory_management/Screenshot-7504759.png" class="" title="Screenshot-7504759">
+<img src="/sg/2021/10/19/db_memory_management/Screenshot-7504759.png" class title="Screenshot-7504759">
 </li>
 </ol>
-<h3 id="how-to-organize-the-data-inside-of-the-page"><a class="header-anchor" href="#how-to-organize-the-data-inside-of-the-page">¶</a>how to organize the data inside of the page?</h3>
+<h3><span id="phow-to-organize-the-data-inside-of-the-page">how to organize the data inside of the page?</span></h3>
 <ol>
 <li>
 <p>Slotted-pages</p>
 <p>Header + slot array + tuples</p>
-<img src="/sg/2021/10/19/db_memory_management/Screenshot-7504840.png" class="" title="Screenshot-7504840">
+<img src="/sg/2021/10/19/db_memory_management/Screenshot-7504840.png" class title="Screenshot-7504840">
 <blockquote>
 <p>To add a tuple, the slot array will grow from the beginning to the end, and the data of the tuples will grow from end to the beginning. The page is considered full when the slot array and the tuple data meet.</p>
 </blockquote>
@@ -224,24 +249,24 @@ page to disk when the system crashes.</p>
 <ul>
 <li>
 <p>build index</p>
-<img src="/sg/2021/10/19/db_memory_management/Screenshot-7504932.png" class="" title="Screenshot-7504932">
+<img src="/sg/2021/10/19/db_memory_management/Screenshot-7504932.png" class title="Screenshot-7504932">
 </li>
 <li>
 <p>Compact the log</p>
 <p>Concerns: write amplification</p>
-<img src="/sg/2021/10/19/db_memory_management/Screenshot-7505078.png" class="" title="Screenshot-7505078">
+<img src="/sg/2021/10/19/db_memory_management/Screenshot-7505078.png" class title="Screenshot-7505078">
 </li>
 </ul>
 </li>
 </ul>
 </li>
 </ol>
-<h3 id="what-is-the-data"><a class="header-anchor" href="#what-is-the-data">¶</a>what is the data?</h3>
+<h3><span id="pwhat-is-the-data">what is the data?</span></h3>
 <p>System catalog tracks the schema.</p>
-<h4 id="tuple-layout"><a class="header-anchor" href="#tuple-layout">¶</a>&gt; tuple layout</h4>
+<h4><span id="p-gt-tuple-layout">&gt; tuple layout</span></h4>
 <p>header:Meta-data about the tuple + data + unique identifier(page_id + (offset/slot))</p>
 <p>Denormalize tuple data: when two tables are related,  they can be pre-joined and it results in one table under the cost of update while it makes reads faster.</p>
-<h4 id="data-representations"><a class="header-anchor" href="#data-representations">¶</a>&gt; data representations</h4>
+<h4><span id="p-gt-data-representations">&gt; data representations</span></h4>
 <p>The data in a tuple is essentially just byte arrays. It is up to the DBMS to know how to interpret those bytes to derive the values for attributes. A data representation scheme is how a DBMS stores the bytes for a value.</p>
 <p>Five high level datatypes in tuples:</p>
 <ol>
@@ -282,9 +307,9 @@ page to disk when the system crashes.</p>
 <p>Examples: TIME, DATE, TIMESTAMP</p>
 </li>
 </ol>
-<h3 id="workloads-types"><a class="header-anchor" href="#workloads-types">¶</a>workloads types</h3>
+<h3><span id="pworkloads-types">workloads types</span></h3>
 <p>workloads: general nature of requests a system will have to handle.</p>
-<img src="/sg/2021/10/19/db_memory_management/Screenshot-7505252.png" class="" title="Screenshot-7505252">
+<img src="/sg/2021/10/19/db_memory_management/Screenshot-7505252.png" class title="Screenshot-7505252">
 <ol>
 <li>
 <p>OLTP:online transaction processing: simple queries; more writes than reads</p>
@@ -296,7 +321,7 @@ page to disk when the system crashes.</p>
 <p>HTAP: hybrid transaction + analytical processing</p>
 </li>
 </ol>
-<h3 id="data-storage-models"><a class="header-anchor" href="#data-storage-models">¶</a>data storage models</h3>
+<h3><span id="pdata-storage-models">data storage models</span></h3>
 <p>assume n-ary storage model in class.</p>
 <ol>
 <li>
@@ -306,7 +331,7 @@ contiguously in a page -&gt; row store</p>
 <li>pro: scanning the entire tuple</li>
 <li>con: not good for scanning large portions of the table/a subset of the attributes</li>
 </ul>
-<img src="/sg/2021/10/19/db_memory_management/Screenshot-7505628.png" class="" title="Screenshot-7505628">
+<img src="/sg/2021/10/19/db_memory_management/Screenshot-7505628.png" class title="Screenshot-7505628">
 </li>
 <li>
 <p>decomposition storage model(DSM): stores the values of a single attribute for all tuples contiguously in a page -&gt; column store</p>
@@ -314,34 +339,34 @@ contiguously in a page -&gt; row store</p>
 <li>pro: scan portiosn of the table; query processing; data compression</li>
 <li>con: because of tuple splitting/stitching, slow for point queries, inserts, updates, deletes</li>
 </ul>
-<img src="/sg/2021/10/19/db_memory_management/Screenshot-7505878.png" class="" title="Screenshot-7505878">
+<img src="/sg/2021/10/19/db_memory_management/Screenshot-7505878.png" class title="Screenshot-7505878">
 <ul>
 <li>
 <p>tuple indentification: put the tuples back together when using a column store</p>
 <ul>
 <li>
 <p>Fixed-length offsets</p>
-<img src="/sg/2021/10/19/db_memory_management/Screenshot-7506226.png" class="" title="Screenshot-7506226">
+<img src="/sg/2021/10/19/db_memory_management/Screenshot-7506226.png" class title="Screenshot-7506226">
 </li>
 <li>
 <p>Embedded tuple ids</p>
-<img src="/sg/2021/10/19/db_memory_management/Screenshot-7506243.png" class="" title="Screenshot-7506243">
+<img src="/sg/2021/10/19/db_memory_management/Screenshot-7506243.png" class title="Screenshot-7506243">
 </li>
 </ul>
 </li>
 </ul>
 </li>
 </ol>
-<h2 id="buffer-pool-manager"><a class="header-anchor" href="#buffer-pool-manager">¶</a>buffer pool manager</h2>
+<h2><span id="pbuffer-pool-manager">buffer pool manager</span></h2>
 <p><u>Problem: how the DBMS manages its memory and move data back-and-forth from disk?</u></p>
 <p>Two goals of db storage is spatial control and temporal control.</p>
 <ul>
 <li>keep pages that are used together often as physically close together as possible on disk.</li>
 <li>minimize the number of stalls from having to read data from disk.</li>
 </ul>
-<h3 id="What-is-buffer-pool"><a class="header-anchor" href="#What-is-buffer-pool">¶</a>What is buffer pool?</h3>
+<h3><span id="pwhat-is-buffer-pool">What is buffer pool?</span></h3>
 <p>The buffer pool is an in-memory cache of pages read from disk. It is essentially a large memory region allocated inside of the database to store pages that are fetched from disk.</p>
-<img src="/sg/2021/10/19/db_memory_management/Screenshot-7506613.png" class="" title="Screenshot-7506613">
+<img src="/sg/2021/10/19/db_memory_management/Screenshot-7506613.png" class title="Screenshot-7506613">
 <ol>
 <li>
 <p>memory organization.</p>
@@ -378,7 +403,7 @@ fying it).</li>
 </ul>
 </li>
 </ol>
-<h3 id="buffer-pool-optimizations"><a class="header-anchor" href="#buffer-pool-optimizations">¶</a>buffer pool optimizations</h3>
+<h3><span id="pbuffer-pool-optimizations">buffer pool optimizations</span></h3>
 <ol>
 <li>
 <p>multiple buffer pools</p>
@@ -400,18 +425,18 @@ fying it).</li>
 </li>
 <li>
 <p>approach 1: sequential scans</p>
-<img src="/sg/2021/10/19/db_memory_management/Screenshot-7506974.png" class="" title="Screenshot-7506974">
+<img src="/sg/2021/10/19/db_memory_management/Screenshot-7506974.png" class title="Screenshot-7506974">
 </li>
 <li>
 <p>approach 2: index scans</p>
-<img src="/sg/2021/10/19/db_memory_management/Screenshot-7507037.png" class="" title="Screenshot-7507037">
+<img src="/sg/2021/10/19/db_memory_management/Screenshot-7507037.png" class title="Screenshot-7507037">
 </li>
 </ul>
 </li>
 <li>
 <p>Scan-sharing: scanning the same data</p>
 <p>Q2 will attach to Q1 and keep scanning as Q1 moves. When Q1 stops, Q2 continues to scan until meet the attaching point.</p>
-<img src="/sg/2021/10/19/db_memory_management/Screenshot-7507190.png" class="" title="Screenshot-7507190">
+<img src="/sg/2021/10/19/db_memory_management/Screenshot-7507190.png" class title="Screenshot-7507190">
 </li>
 <li>
 <p>Buffer pool bypass: access pages in disk directly</p>
@@ -420,10 +445,10 @@ fying it).</li>
 </ul>
 </li>
 </ol>
-<h3 id="os-page-cache"><a class="header-anchor" href="#os-page-cache">¶</a>os page cache</h3>
+<h3><span id="pos-page-cache">os page cache</span></h3>
 <p>another way to access data</p>
 <p>os maintains its own file system cache.</p>
-<h3 id="Buffer-Replacement-Policies"><a class="header-anchor" href="#Buffer-Replacement-Policies">¶</a>Buffer Replacement Policies</h3>
+<h3><span id="pbuffer-replacement-policies">Buffer Replacement Policies</span></h3>
 <p>Problem: When the DBMS needs to free up a frame to make room for a new page, it must decide which page to evict from the buffer pool.</p>
 <ol>
 <li>
@@ -431,7 +456,7 @@ fying it).</li>
 </li>
 <li>
 <p>CLOCK: use reference bit in each page instead of timestamps in LRU</p>
-<img src="/sg/2021/10/19/db_memory_management/Screenshot-7507995.png" class="" title="Screenshot-7507995">
+<img src="/sg/2021/10/19/db_memory_management/Screenshot-7507995.png" class title="Screenshot-7507995">
 </li>
 </ol>
 <p>Con: susceptible to sequential flooding. Buffer pool’s content are corrupted due to a sequential scan</p>
@@ -441,14 +466,14 @@ fying it).</li>
 <li>localization per query: evict on a per transaction/query basis.</li>
 <li>Priority hints: based on the context of each page during query execution</li>
 </ol>
-<h3 id="dirty-pages"><a class="header-anchor" href="#dirty-pages">¶</a>dirty pages</h3>
+<h3><span id="pdirty-pages">dirty pages</span></h3>
 <p>Approaches:</p>
 <ol>
 <li>Fast evictions: drop dirty pages</li>
 <li>Slow evictions: write back</li>
 <li>background writing: the DBMS can periodically walk through the page table and write dirty pages to disk. When a dirty page is safely written, the DBMS can either evict the page or just unset the dirty flag</li>
 </ol>
-<h3 id="other-memory-pool"><a class="header-anchor" href="#other-memory-pool">¶</a>other memory pool</h3>
+<h3><span id="pother-memory-pool">other memory pool</span></h3>
 <ol>
 <li>Sorting + join buffers</li>
 <li>query caches</li>
@@ -483,7 +508,7 @@ fying it).</li>
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Disk-manager"><span class="toc-number">1.</span> <span class="toc-text">Disk manager</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Where-to-store-data"><span class="toc-number">1.1.</span> <span class="toc-text">Where to store data?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#how-to-organize-the-data-inside-of-the-page"><span class="toc-number">1.2.</span> <span class="toc-text">how to organize the data inside of the page?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#what-is-the-data"><span class="toc-number">1.3.</span> <span class="toc-text">what is the data?</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#tuple-layout"><span class="toc-number">1.3.1.</span> <span class="toc-text">&gt; tuple layout</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#data-representations"><span class="toc-number">1.3.2.</span> <span class="toc-text">&gt; data representations</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#workloads-types"><span class="toc-number">1.4.</span> <span class="toc-text">workloads types</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#data-storage-models"><span class="toc-number">1.5.</span> <span class="toc-text">data storage models</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#buffer-pool-manager"><span class="toc-number">2.</span> <span class="toc-text">buffer pool manager</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#What-is-buffer-pool"><span class="toc-number">2.1.</span> <span class="toc-text">What is buffer pool?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#buffer-pool-optimizations"><span class="toc-number">2.2.</span> <span class="toc-text">buffer pool optimizations</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#os-page-cache"><span class="toc-number">2.3.</span> <span class="toc-text">os page cache</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Buffer-Replacement-Policies"><span class="toc-number">2.4.</span> <span class="toc-text">Buffer Replacement Policies</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#dirty-pages"><span class="toc-number">2.5.</span> <span class="toc-text">dirty pages</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#other-memory-pool"><span class="toc-number">2.6.</span> <span class="toc-text">other memory pool</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Disk manager</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">Where to store data?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">how to organize the data inside of the page?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.3.</span> <span class="toc-text">what is the data?</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.3.1.</span> <span class="toc-text">&gt; tuple layout</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.3.2.</span> <span class="toc-text">&gt; data representations</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.4.</span> <span class="toc-text">workloads types</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.5.</span> <span class="toc-text">data storage models</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">buffer pool manager</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">What is buffer pool?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">buffer pool optimizations</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.3.</span> <span class="toc-text">os page cache</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.4.</span> <span class="toc-text">Buffer Replacement Policies</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.5.</span> <span class="toc-text">dirty pages</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.6.</span> <span class="toc-text">other memory pool</span></a></li></ol></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">

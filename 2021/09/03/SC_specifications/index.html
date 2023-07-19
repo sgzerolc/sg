@@ -6,15 +6,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="¶R6: specifications ¶Behavioral equivalence whether it could be substituted with one implementation for the other 1234static int find(...)&amp;#123;	&#x2F;&#x2F;requires: ........	&#x2F;&#x2F;effects:&amp;#125; ¶Specifications ¶">
+    <meta name="description" content="R6: specifications  Behavioral equivalence Specifications do not allow null references Include emptiness ~ testing ~ mutating exceptions   R7: design specifications  Deterministic vs. underdetermin">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SC specifications">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2021/09/03/SC_specifications/index.html">
 <meta property="og:site_name" content="steins gate zero">
-<meta property="og:description" content="¶R6: specifications ¶Behavioral equivalence whether it could be substituted with one implementation for the other 1234static int find(...)&amp;#123;	&#x2F;&#x2F;requires: ........	&#x2F;&#x2F;effects:&amp;#125; ¶Specifications ¶">
+<meta property="og:description" content="R6: specifications  Behavioral equivalence Specifications do not allow null references Include emptiness ~ testing ~ mutating exceptions   R7: design specifications  Deterministic vs. underdetermin">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-09-02T16:00:00.000Z">
-<meta property="article:modified_time" content="2022-06-27T02:10:52.019Z">
+<meta property="article:modified_time" content="2023-07-19T03:22:32.124Z">
 <meta property="article:author" content="Sam Li">
 <meta name="twitter:card" content="summary">
     
@@ -107,7 +107,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#R6-specifications"><span class="toc-number">1.</span> <span class="toc-text">R6: specifications</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Behavioral-equivalence"><span class="toc-number">1.1.</span> <span class="toc-text">Behavioral equivalence</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Specifications"><span class="toc-number">1.2.</span> <span class="toc-text">Specifications</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#why"><span class="toc-number">1.2.1.</span> <span class="toc-text">why</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#structure"><span class="toc-number">1.2.2.</span> <span class="toc-text">structure</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#in-java"><span class="toc-number">1.2.3.</span> <span class="toc-text">in java</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#do-not-allow-null-references"><span class="toc-number">1.3.</span> <span class="toc-text">do not allow null references</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Include-emptiness"><span class="toc-number">1.4.</span> <span class="toc-text">Include emptiness</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#testing"><span class="toc-number">1.5.</span> <span class="toc-text">~ testing</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mutating"><span class="toc-number">1.6.</span> <span class="toc-text">~ mutating</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#exceptions"><span class="toc-number">1.7.</span> <span class="toc-text">exceptions</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#R7-design-specifications"><span class="toc-number">2.</span> <span class="toc-text">R7: design specifications</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Deterministic-vs-underdetermined-specs"><span class="toc-number">2.1.</span> <span class="toc-text">Deterministic vs. underdetermined specs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Declarative-vs-operational-specs"><span class="toc-number">2.2.</span> <span class="toc-text">Declarative vs. operational specs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#stronger-vs-weaker-specs"><span class="toc-number">2.3.</span> <span class="toc-text">stronger vs. weaker specs</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">R6: specifications</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">Behavioral equivalence</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">Specifications</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.2.1.</span> <span class="toc-text">why</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.2.2.</span> <span class="toc-text">structure</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.2.3.</span> <span class="toc-text">in java</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.3.</span> <span class="toc-text">do not allow null references</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.4.</span> <span class="toc-text">Include emptiness</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.5.</span> <span class="toc-text">~ testing</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.6.</span> <span class="toc-text">~ mutating</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.7.</span> <span class="toc-text">exceptions</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">R7: design specifications</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">Deterministic vs. underdetermined specs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">Declarative vs. operational specs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.3.</span> <span class="toc-text">stronger vs. weaker specs</span></a></li></ol></li></ol>
     </div>
   </span>
 </div>
@@ -151,12 +151,36 @@
   
 
   <div class="content" itemprop="articleBody">
-    <h2 id="R6-specifications"><a class="header-anchor" href="#R6-specifications">¶</a>R6: specifications</h2>
-<h3 id="Behavioral-equivalence"><a class="header-anchor" href="#Behavioral-equivalence">¶</a>Behavioral equivalence</h3>
+    <div class="toc">
+<!-- toc -->
+<ul>
+<li><a href="#r6-specifications">R6: specifications</a>
+<ul>
+<li><a href="#behavioral-equivalence">Behavioral equivalence</a></li>
+<li><a href="#specifications">Specifications</a></li>
+<li><a href="#do-not-allow-null-references">do not allow null references</a></li>
+<li><a href="#include-emptiness">Include emptiness</a></li>
+<li><a href="#testing">~ testing</a></li>
+<li><a href="#mutating">~ mutating</a></li>
+<li><a href="#exceptions">exceptions</a></li>
+</ul>
+</li>
+<li><a href="#r7-design-specifications">R7: design specifications</a>
+<ul>
+<li><a href="#deterministic-vs-underdetermined-specs">Deterministic vs. underdetermined specs</a></li>
+<li><a href="#declarative-vs-operational-specs">Declarative vs. operational specs</a></li>
+<li><a href="#stronger-vs-weaker-specs">stronger vs. weaker specs</a></li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
+</div>
+<h2><span id="pr6-specifications">R6: specifications</span></h2>
+<h3><span id="pbehavioral-equivalence">Behavioral equivalence</span></h3>
 <p>whether it could be substituted with one implementation for the other</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">find</span><span class="params">(...)</span></span>&#123;</span><br><span class="line">	<span class="comment">//requires: ........</span></span><br><span class="line">	<span class="comment">//effects:</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="Specifications"><a class="header-anchor" href="#Specifications">¶</a>Specifications</h3>
-<h4 id="why"><a class="header-anchor" href="#why">¶</a>why</h4>
+<h3><span id="pspecifications">Specifications</span></h3>
+<h4><span id="pwhy">why</span></h4>
 <ul>
 <li>Acts as firewall</li>
 <li>Connect / separate client and implementer
@@ -170,7 +194,7 @@
 </ul>
 </li>
 </ul>
-<h4 id="structure"><a class="header-anchor" href="#structure">¶</a>structure</h4>
+<h4><span id="pstructure">structure</span></h4>
 <ul>
 <li>Composition
 <ul>
@@ -198,12 +222,12 @@
 </ul>
 </li>
 </ul>
-<h4 id="in-java"><a class="header-anchor" href="#in-java">¶</a>in java</h4>
+<h4><span id="pin-java">in java</span></h4>
 <ul>
 <li>javadoc</li>
 </ul>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@param p</span><br><span class="line">@param q</span><br><span class="line">@return</span><br><span class="line">@throw</span><br></pre></td></tr></table></figure>
-<h3 id="do-not-allow-null-references"><a class="header-anchor" href="#do-not-allow-null-references">¶</a>do not allow null references</h3>
+<h3><span id="pdo-not-allow-null-references">do not allow null references</span></h3>
 <ul>
 <li>syntactically illigal
 <ul>
@@ -220,7 +244,7 @@
 </li>
 </ul>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Map.get(key) <span class="keyword">return</span> when the key is not found in the map: </span><br><span class="line">Optional&lt;T&gt;</span><br></pre></td></tr></table></figure>
-<h3 id="Include-emptiness"><a class="header-anchor" href="#Include-emptiness">¶</a>Include emptiness</h3>
+<h3><span id="pinclude-emptiness">Include emptiness</span></h3>
 <ul>
 <li>
 <p>difference between null and emptiness</p>
@@ -229,17 +253,17 @@
 <p>empty values are alway allowed as parameter or return values.</p>
 </li>
 </ul>
-<h3 id="testing"><a class="header-anchor" href="#testing">¶</a>~ testing</h3>
+<h3><span id="p-testing">~ testing</span></h3>
 <ul>
 <li>Black box tests need follow specification</li>
 <li>Glass box test must follow spec too.</li>
 </ul>
-<h3 id="mutating"><a class="header-anchor" href="#mutating">¶</a>~ mutating</h3>
+<h3><span id="p-mutating">~ mutating</span></h3>
 <ul>
 <li>describe side-effects-changes to mutable objects-in the postcondition</li>
 <li>Mutation is disallowed unless stated otherwise</li>
 </ul>
-<h3 id="exceptions"><a class="header-anchor" href="#exceptions">¶</a>exceptions</h3>
+<h3><span id="pexceptions">exceptions</span></h3>
 <ul>
 <li>Function
 <ul>
@@ -251,14 +275,14 @@
 <li>exception hierarchy</li>
 <li>declare exceptions in specs</li>
 </ul>
-<h2 id="R7-design-specifications"><a class="header-anchor" href="#R7-design-specifications">¶</a>R7: design specifications</h2>
+<h2><span id="pr7-design-specifications">R7: design specifications</span></h2>
 <p>Three dimensions for comparing specs</p>
 <ul>
 <li>deterministic</li>
 <li>declarative</li>
 <li>strong</li>
 </ul>
-<h3 id="Deterministic-vs-underdetermined-specs"><a class="header-anchor" href="#Deterministic-vs-underdetermined-specs">¶</a>Deterministic vs. underdetermined specs</h3>
+<h3><span id="pdeterministic-vs-underdetermined-specs">Deterministic vs. underdetermined specs</span></h3>
 <ul>
 <li>deterministic: one final state for the same input.</li>
 <li>undetermined: multiple valid outputs for the same input
@@ -267,12 +291,12 @@
 </ul>
 </li>
 </ul>
-<h3 id="Declarative-vs-operational-specs"><a class="header-anchor" href="#Declarative-vs-operational-specs">¶</a>Declarative vs. operational specs</h3>
+<h3><span id="pdeclarative-vs-operational-specs">Declarative vs. operational specs</span></h3>
 <ul>
 <li>Operational : steps that the method performs</li>
 <li>Delcarative : properties of the final outcome, and how it related to the initial state</li>
 </ul>
-<h3 id="stronger-vs-weaker-specs"><a class="header-anchor" href="#stronger-vs-weaker-specs">¶</a>stronger vs. weaker specs</h3>
+<h3><span id="pstronger-vs-weaker-specs">stronger vs. weaker specs</span></h3>
 <p>a spec S2 is stronger than a spec S1 if the set of implementations that satisfy S2 is a strict subset of those that match S1.</p>
 <blockquote>
 <p>Rule: S2 is stronger than a spec S1 iff</p>
@@ -316,7 +340,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#R6-specifications"><span class="toc-number">1.</span> <span class="toc-text">R6: specifications</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Behavioral-equivalence"><span class="toc-number">1.1.</span> <span class="toc-text">Behavioral equivalence</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Specifications"><span class="toc-number">1.2.</span> <span class="toc-text">Specifications</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#why"><span class="toc-number">1.2.1.</span> <span class="toc-text">why</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#structure"><span class="toc-number">1.2.2.</span> <span class="toc-text">structure</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#in-java"><span class="toc-number">1.2.3.</span> <span class="toc-text">in java</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#do-not-allow-null-references"><span class="toc-number">1.3.</span> <span class="toc-text">do not allow null references</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Include-emptiness"><span class="toc-number">1.4.</span> <span class="toc-text">Include emptiness</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#testing"><span class="toc-number">1.5.</span> <span class="toc-text">~ testing</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mutating"><span class="toc-number">1.6.</span> <span class="toc-text">~ mutating</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#exceptions"><span class="toc-number">1.7.</span> <span class="toc-text">exceptions</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#R7-design-specifications"><span class="toc-number">2.</span> <span class="toc-text">R7: design specifications</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Deterministic-vs-underdetermined-specs"><span class="toc-number">2.1.</span> <span class="toc-text">Deterministic vs. underdetermined specs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Declarative-vs-operational-specs"><span class="toc-number">2.2.</span> <span class="toc-text">Declarative vs. operational specs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#stronger-vs-weaker-specs"><span class="toc-number">2.3.</span> <span class="toc-text">stronger vs. weaker specs</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">R6: specifications</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">Behavioral equivalence</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">Specifications</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.2.1.</span> <span class="toc-text">why</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.2.2.</span> <span class="toc-text">structure</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.2.3.</span> <span class="toc-text">in java</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.3.</span> <span class="toc-text">do not allow null references</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.4.</span> <span class="toc-text">Include emptiness</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.5.</span> <span class="toc-text">~ testing</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.6.</span> <span class="toc-text">~ mutating</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.7.</span> <span class="toc-text">exceptions</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">R7: design specifications</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">Deterministic vs. underdetermined specs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">Declarative vs. operational specs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.3.</span> <span class="toc-text">stronger vs. weaker specs</span></a></li></ol></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">

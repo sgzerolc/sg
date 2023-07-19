@@ -6,12 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="¶17 virtual memory Fact:DRAM accessing hard disk is much more slower(100,000) than cache accessing main main memory. Problem: Enormous miss penalty of secondary storage Solution&#x2F;Goal: the miss rate sh">
+    <meta name="description" content="17 virtual memory  Virtual memory Virtual machine   18 virtualizing the processor  build a VM 进程如何复用cpu？ interrupts to time-sharing exception handling Communicate with os   19 devices and interrupt">
 <meta property="og:type" content="article">
 <meta property="og:title" content="4 virtual memory">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2021/11/04/6.004-vm/index.html">
 <meta property="og:site_name" content="steins gate zero">
-<meta property="og:description" content="¶17 virtual memory Fact:DRAM accessing hard disk is much more slower(100,000) than cache accessing main main memory. Problem: Enormous miss penalty of secondary storage Solution&#x2F;Goal: the miss rate sh">
+<meta property="og:description" content="17 virtual memory  Virtual memory Virtual machine   18 virtualizing the processor  build a VM 进程如何复用cpu？ interrupts to time-sharing exception handling Communicate with os   19 devices and interrupt">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2021/11/04/6.004-vm/sc1.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2021/11/04/6.004-vm/sc2.png">
@@ -21,7 +21,7 @@
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2021/11/04/6.004-vm/sc6.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2021/11/04/6.004-vm/sc7.png">
 <meta property="article:published_time" content="2021-11-03T16:00:00.000Z">
-<meta property="article:modified_time" content="2022-06-27T02:08:56.539Z">
+<meta property="article:modified_time" content="2023-07-19T03:21:47.807Z">
 <meta property="article:author" content="Sam Li">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://sgzerolc.github.io/sg/2021/11/04/6.004-vm/sc1.png">
@@ -115,7 +115,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#17-virtual-memory"><span class="toc-number">1.</span> <span class="toc-text">17 virtual memory</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Virtual-memory"><span class="toc-number">1.1.</span> <span class="toc-text">Virtual memory</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#MMU-translate-VA-to-PA"><span class="toc-number">1.1.1.</span> <span class="toc-text">&gt; MMU:translate VA to PA</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Where-to-store-page-map"><span class="toc-number">1.1.2.</span> <span class="toc-text">&gt; Where to store page map:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#sum-up-MMU-address-translation"><span class="toc-number">1.1.3.</span> <span class="toc-text">&gt; sum up: MMU address translation</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Virtual-machine"><span class="toc-number">1.2.</span> <span class="toc-text">Virtual machine</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#18-virtualizing-the-processor"><span class="toc-number">2.</span> <span class="toc-text">18 virtualizing the processor</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#build-a-VM"><span class="toc-number">2.1.</span> <span class="toc-text">build a VM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E5%A6%82%E4%BD%95%E5%A4%8D%E7%94%A8cpu%EF%BC%9F"><span class="toc-number">2.2.</span> <span class="toc-text">进程如何复用cpu？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#interrupts-to-time-sharing"><span class="toc-number">2.3.</span> <span class="toc-text">interrupts to time-sharing</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#exception-handling"><span class="toc-number">2.4.</span> <span class="toc-text">exception handling</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Communicate-with-os"><span class="toc-number">2.5.</span> <span class="toc-text">Communicate with os</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#19-devices-and-interrupts"><span class="toc-number">3.</span> <span class="toc-text">19 devices and interrupts</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Interrupt-based-asynch-I-O"><span class="toc-number">3.1.</span> <span class="toc-text">Interrupt-based asynch I&#x2F;O</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Implementations-of-ReadKey"><span class="toc-number">3.2.</span> <span class="toc-text">Implementations of ReadKey</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Time-sharing-can%E2%80%99t-meet-with-ddl"><span class="toc-number">3.3.</span> <span class="toc-text">Time-sharing can’t meet with ddl</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#the-need-for-real-time"><span class="toc-number">3.4.</span> <span class="toc-text">the need for real time</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Real-time-scenarios"><span class="toc-number">3.5.</span> <span class="toc-text">Real-time scenarios</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Stragegy0-first-come-first-served-scenario"><span class="toc-number">3.5.1.</span> <span class="toc-text">&gt; Stragegy0:  first-come-first-served scenario.</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Strategy1-%E2%80%9Cnonpreemptive%E2%80%9D-%E2%80%9Cweak%E2%80%9D-priority-system"><span class="toc-number">3.5.2.</span> <span class="toc-text">&gt; Strategy1: “nonpreemptive” &#x2F; “weak” priority system.</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Strategy2-the-need-for-preemption"><span class="toc-number">3.5.3.</span> <span class="toc-text">&gt; Strategy2: the need for preemption</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#recurring-interrupts"><span class="toc-number">3.5.4.</span> <span class="toc-text">&gt; recurring interrupts</span></a></li></ol></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">17 virtual memory</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">Virtual memory</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.1.1.</span> <span class="toc-text">&gt; MMU:translate VA to PA</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.1.2.</span> <span class="toc-text">&gt; Where to store page map:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.1.3.</span> <span class="toc-text">&gt; sum up: MMU address translation</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">Virtual machine</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">18 virtualizing the processor</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">build a VM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">进程如何复用cpu？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.3.</span> <span class="toc-text">interrupts to time-sharing</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.4.</span> <span class="toc-text">exception handling</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.5.</span> <span class="toc-text">Communicate with os</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">19 devices and interrupts</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.1.</span> <span class="toc-text">Interrupt-based asynch I&#x2F;O</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.2.</span> <span class="toc-text">Implementations of ReadKey</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.3.</span> <span class="toc-text">Time-sharing can’t meet with ddl</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.4.</span> <span class="toc-text">the need for real time</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.5.</span> <span class="toc-text">Real-time scenarios</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">3.5.1.</span> <span class="toc-text">&gt; Stragegy0:  first-come-first-served scenario.</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">3.5.2.</span> <span class="toc-text">&gt; Strategy1: “nonpreemptive” &#x2F; “weak” priority system.</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">3.5.3.</span> <span class="toc-text">&gt; Strategy2: the need for preemption</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">3.5.4.</span> <span class="toc-text">&gt; recurring interrupts</span></a></li></ol></li></ol></li></ol>
     </div>
   </span>
 </div>
@@ -159,7 +159,37 @@
   
 
   <div class="content" itemprop="articleBody">
-    <h2 id="17-virtual-memory"><a class="header-anchor" href="#17-virtual-memory">¶</a>17 virtual memory</h2>
+    <div class="toc">
+<!-- toc -->
+<ul>
+<li><a href="#17-virtual-memory">17 virtual memory</a>
+<ul>
+<li><a href="#virtual-memory">Virtual memory</a></li>
+<li><a href="#virtual-machine">Virtual machine</a></li>
+</ul>
+</li>
+<li><a href="#18-virtualizing-the-processor">18 virtualizing the processor</a>
+<ul>
+<li><a href="#build-a-vm">build a VM</a></li>
+<li><a href="#jin-cheng-ru-he-fu-yong-cpu">进程如何复用cpu？</a></li>
+<li><a href="#interrupts-to-time-sharing">interrupts to time-sharing</a></li>
+<li><a href="#exception-handling">exception handling</a></li>
+<li><a href="#communicate-with-os">Communicate with os</a></li>
+</ul>
+</li>
+<li><a href="#19-devices-and-interrupts">19 devices and interrupts</a>
+<ul>
+<li><a href="#interrupt-based-asynch-i-o">Interrupt-based asynch I/O</a></li>
+<li><a href="#implementations-of-readkey">Implementations of ReadKey</a></li>
+<li><a href="#time-sharing-can-t-meet-with-ddl">Time-sharing can’t meet with ddl</a></li>
+<li><a href="#the-need-for-real-time">the need for real time</a></li>
+<li><a href="#real-time-scenarios">Real-time scenarios</a></li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
+</div>
+<h2><span id="p17-virtual-memory">17 virtual memory</span></h2>
 <p>Fact:DRAM accessing hard disk is much more slower(100,000) than cache accessing main main memory.</p>
 <p>Problem: Enormous miss penalty of secondary storage</p>
 <p>Solution/Goal: the miss rate should be very small compared to the rate of executing instructions.(decrease miss ratio)</p>
@@ -179,7 +209,7 @@
 </blockquote>
 </li>
 </ol>
-<h3 id="Virtual-memory"><a class="header-anchor" href="#Virtual-memory">¶</a>Virtual memory</h3>
+<h3><span id="pvirtual-memory">Virtual memory</span></h3>
 <p>Fact: we only need to ensure the current working set of a program is actually resident in main memory. Locations not currently being used could live in secondary storage until needed.</p>
 <p>Goal:</p>
 <ul>
@@ -200,7 +230,7 @@
 <p>ease memory management, protect multiple contexts from each other.</p>
 </li>
 </ul>
-<h4 id="MMU-translate-VA-to-PA"><a class="header-anchor" href="#MMU-translate-VA-to-PA">¶</a>&gt; MMU:translate VA to PA</h4>
+<h4><span id="p-gt-mmu-translate-va-to-pa">&gt; MMU:translate VA to PA</span></h4>
 <p>Solution: two part: VAtoPA + PageFault</p>
 <ul>
 <li>use hw(MMU) to implement VtoP, use sw(page fault exception handler of CPU) to handle exceptional cases</li>
@@ -226,7 +256,7 @@
 </li>
 </ol>
 <p>Arithmetic: page map(v, m, p)</p>
-<h4 id="Where-to-store-page-map"><a class="header-anchor" href="#Where-to-store-page-map">¶</a>&gt; Where to store page map:</h4>
+<h4><span id="p-gt-where-to-store-page-map">&gt; Where to store page map:</span></h4>
 <ol>
 <li>
 <p>store in RAM(main memory): RAM-resident page maps</p>
@@ -257,9 +287,9 @@
 </ul>
 </li>
 </ol>
-<h4 id="sum-up-MMU-address-translation"><a class="header-anchor" href="#sum-up-MMU-address-translation">¶</a>&gt; sum up: MMU address translation</h4>
-<img src="/sg/2021/11/04/6.004-vm/sc1.png" class="" title="截屏2021-11-01 上午10.15.13">
-<h3 id="Virtual-machine"><a class="header-anchor" href="#Virtual-machine">¶</a>Virtual machine</h3>
+<h4><span id="p-gt-sum-up-mmu-address-translation">&gt; sum up: MMU address translation</span></h4>
+<img src="/sg/2021/11/04/6.004-vm/sc1.png" class title="截屏2021-11-01 上午10.15.13">
+<h3><span id="pvirtual-machine">Virtual machine</span></h3>
 <p>Fact:</p>
 <blockquote>
 <p>context: a mapping of VA to PA</p>
@@ -288,10 +318,10 @@
 </ul>
 <p>several part to consider: MMU time on HIT, flush cache after context switch</p>
 <p>…to be continued this part</p>
-<h2 id="18-virtualizing-the-processor"><a class="header-anchor" href="#18-virtualizing-the-processor">¶</a>18 virtualizing the processor</h2>
+<h2><span id="p18-virtualizing-the-processor">18 virtualizing the processor</span></h2>
 <p>回顾一下虚拟内存，简单来说它提供给每个运行的程序一个拥有计算机所有内存地址空间的幻想。它通过内存控制单元实现从虚拟地址到物理地址的转换，用虚拟地址查询页表，而用页表来记录物理地址，完成查询。</p>
 <p>由于访问硬盘的延迟比主存储器（main memory）慢的多，通过TLB（一种缓存器）来记录活跃的虚拟地址到物理地址的转换。</p>
-<h3 id="build-a-VM"><a class="header-anchor" href="#build-a-VM">¶</a>build a VM</h3>
+<h3><span id="pbuild-a-vm">build a VM</span></h3>
 <p>把正在运行的程序抽象成进程，一个进程包含它运行所需要的所有资源(CPU,I/O device, MMU,virtual address space)…</p>
 <p>有一个特别的优先的进程叫kernel。OS为各种进程提供服务，比如访问文件中的数据，建立网络连接，管理UI。从不同用户模式的进程切换，OS需要保存现在运行的进程状态，保存在主存储器中或二级存储器中。</p>
 <p>Problem: share one physical machine between all the virtual machines.  As if each process was running on its own “virtual machine” that works independently of other virtual machines for other processes.(OS’s job)</p>
@@ -310,15 +340,15 @@
 <li>additional information about the process’ input and output activities, such as where it has reached in reading or writing files in the file system, the status and buffers associated with open network connections, pending events from the user interface (<em>e.g.</em>, keyboard characters and mouse clicks), and so on.</li>
 </ul>
 </blockquote>
-<h3 id="进程如何复用cpu？"><a class="header-anchor" href="#进程如何复用cpu？">¶</a>进程如何复用cpu？</h3>
+<h3><span id="pjin-cheng-ru-he-fu-yong-cpu">进程如何复用cpu？</span></h3>
 <p>time-multiplexing of the cpu = timesharing</p>
 <p>OS从运行进程0到运行进程1：</p>
-<img src="/sg/2021/11/04/6.004-vm/sc2.png" class="" title="截屏2021-11-02 上午1.06.21">
+<img src="/sg/2021/11/04/6.004-vm/sc2.png" class title="截屏2021-11-02 上午1.06.21">
 <ul>
 <li>运行进程0 -&gt; 停止运行0，将控制转移回OS kernel，保存当前地址（PC+4）-&gt; 保存进程0的状态并且加载进程1的状态 -&gt; 回到进程1 -&gt; 运行进程1。</li>
 <li>第2步和第4步是不同的trap handler。</li>
 </ul>
-<h3 id="interrupts-to-time-sharing"><a class="header-anchor" href="#interrupts-to-time-sharing">¶</a>interrupts to time-sharing</h3>
+<h3><span id="pinterrupts-to-time-sharing">interrupts to time-sharing</span></h3>
 <p>中断处理:handler</p>
 <ul>
 <li>
@@ -359,7 +389,7 @@
 <li>
 <p>目标是用时间中断器来更新os中记录现在时间的值。定时器定期中断用户模式程序，以在操作系统中运行时钟中断处理程序代码，然后继续用户模式程序的运行。对A来说，中断仿佛没有发生。如果A需要访问时间，则需要向os做出提出相应的服务要求。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">//Handler(C)</span><br><span class="line">long TimeOfDay;</span><br><span class="line">Struct Mstate &#123;&#125; UserMstate;</span><br><span class="line">Clock_Handler()&#123;&#125;</span><br><span class="line"></span><br><span class="line">//Interrupt stub(assymbly)</span><br><span class="line">Clock_h:</span><br><span class="line">	save the values of all registers into the UserMState;</span><br><span class="line">	set up the kernel-mode stack;</span><br><span class="line">	call clock_handler;</span><br><span class="line">	reload registers;</span><br><span class="line">	decrement the XP register value;</span><br><span class="line">	return to the app;</span><br></pre></td></tr></table></figure>
-<img src="/sg/2021/11/04/6.004-vm/sc3.png" class="" title="截屏2021-11-02 上午10.46.46">
+<img src="/sg/2021/11/04/6.004-vm/sc3.png" class title="截屏2021-11-02 上午10.46.46">
 </li>
 </ul>
 </li>
@@ -395,10 +425,10 @@
 </ul>
 </li>
 </ul>
-<h3 id="exception-handling"><a class="header-anchor" href="#exception-handling">¶</a>exception handling</h3>
+<h3><span id="pexception-handling">exception handling</span></h3>
 <p>problem: how to deal with “illegal” opcodes?</p>
 <p>…跳过了硬件，汇编的部分</p>
-<h3 id="Communicate-with-os"><a class="header-anchor" href="#Communicate-with-os">¶</a>Communicate with os</h3>
+<h3><span id="pcommunicate-with-os">Communicate with os</span></h3>
 <p>Problem: how user-mode programs communicate with OS code?</p>
 <p>当os在运行其他进程时，用户程序该如何将控制转移回os？</p>
 <p>Solution:</p>
@@ -407,10 +437,10 @@
 <li>Implementation: use illegal instructions to cause an exception, and OS recognize the instruction as a user-mode SVCs</li>
 </ul>
 <p>…跳过了汇编部分</p>
-<h2 id="19-devices-and-interrupts"><a class="header-anchor" href="#19-devices-and-interrupts">¶</a>19 devices and interrupts</h2>
+<h2><span id="p19-devices-and-interrupts">19 devices and interrupts</span></h2>
 <p>Problem 1: how the OS interacts with the devices themselves?</p>
 <p>Problem 2: how supervisor calls access the kernel buffers in response to requests from user-mode processes?</p>
-<h3 id="Interrupt-based-asynch-I-O"><a class="header-anchor" href="#Interrupt-based-asynch-I-O">¶</a>Interrupt-based asynch I/O</h3>
+<h3><span id="pinterrupt-based-asynch-i-o">Interrupt-based asynch I/O</span></h3>
 <p>操作系统中有很多输入/输出设备，以键盘输入为例，用户在键盘上打字，引起键盘向cpu发起中断请求。中断停止当前程序的运行而执行这个特别的输入输出事件。当内核中的缓存用完后会发生什么？</p>
 <p>早先的处理方式是丢弃收到的键盘输入的字符，提示用户之前输入的已作废。</p>
 <p>后来用户模式的程序执行ReadKey() SVC，要求OS返回下一个字母到R0寄存器中，然后遵循SVC继续执行指令。</p>
@@ -447,7 +477,7 @@
 <p>键盘处理还需要识别键的状态是按下还是释放，然后将字符转换成ASCII码，并且需要处理特殊的按键组合。</p>
 </li>
 </ul>
-<h3 id="Implementations-of-ReadKey"><a class="header-anchor" href="#Implementations-of-ReadKey">¶</a>Implementations of ReadKey</h3>
+<h3><span id="pimplementations-of-readkey">Implementations of ReadKey</span></h3>
 <p>Goal: the associated supervisor call that lets user programs read characters.</p>
 <p>Attempt1: 直接写</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ReadKey_h()&#123;</span><br><span class="line">  <span class="keyword">int</span> kbdnum = ProcTbl[Cur].DPYNum;</span><br><span class="line">  <span class="keyword">while</span> (BufferEmpty(kbdnum))&#123;</span><br><span class="line">    <span class="comment">/* busy wait loop*/</span></span><br><span class="line">  &#125;</span><br><span class="line">	UserMState.Reqs[<span class="number">0</span>] = ReadInputBuffer (kbdnum) ;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -514,7 +544,7 @@
 <p>The effect is that once a process goes to sleep() WAITING for an event, it’s not considered for execution again until the event occurs and wakeup() marks the process as ACTIVE.</p>
 </blockquote>
 <p>Example: which handler &amp; os? 像个解谜游戏。根据handler和os的特点来排除。</p>
-<h3 id="Time-sharing-can’t-meet-with-ddl"><a class="header-anchor" href="#Time-sharing-can’t-meet-with-ddl">¶</a>Time-sharing can’t meet with ddl</h3>
+<h3><span id="ptime-sharing-can-t-meet-with-ddl">Time-sharing can’t meet with ddl</span></h3>
 <p>Problem: asynchronous world.</p>
 <p>Solution: I/O: separate “event handling” from “event processing”.</p>
 <ul>
@@ -525,7 +555,7 @@
 <p>Time-sharing system: 在单个硬件系统上通过快速在进程间切换伪造并行的假象，为每个程序提供了在独立的虚拟机上运行的幻想。</p>
 <p>downside: processing throughput is more variable</p>
 </blockquote>
-<h3 id="the-need-for-real-time"><a class="header-anchor" href="#the-need-for-real-time">¶</a>the need for real time</h3>
+<h3><span id="pthe-need-for-real-time">the need for real time</span></h3>
 <ul>
 <li>
 <p>what’s the largest L such that Lmax+S=D?</p>
@@ -534,7 +564,7 @@
 </blockquote>
 </li>
 </ul>
-<img src="/sg/2021/11/04/6.004-vm/sc4.png" class="" title="截屏2021-11-04 上午12.10.58">
+<img src="/sg/2021/11/04/6.004-vm/sc4.png" class title="截屏2021-11-04 上午12.10.58">
 <ul>
 <li>
 <p>What factors contribute to interrupt latency?</p>
@@ -564,11 +594,11 @@
 </ul>
 </li>
 </ul>
-<h3 id="Real-time-scenarios"><a class="header-anchor" href="#Real-time-scenarios">¶</a>Real-time scenarios</h3>
+<h3><span id="preal-time-scenarios">Real-time scenarios</span></h3>
 <p>scenario: scheduling of multiple devices: long-running handlers have a huge impact on the worst-case latency seen by the other devices.</p>
-<h4 id="Stragegy0-first-come-first-served-scenario"><a class="header-anchor" href="#Stragegy0-first-come-first-served-scenario">¶</a>&gt; Stragegy0:  first-come-first-served scenario.</h4>
+<h4><span id="p-gt-stragegy0-first-come-first-served-scenario">&gt; Stragegy0:  first-come-first-served scenario.</span></h4>
 <p>Problems: reducing the worst-case latencies</p>
-<h4 id="Strategy1-“nonpreemptive”-“weak”-priority-system"><a class="header-anchor" href="#Strategy1-“nonpreemptive”-“weak”-priority-system">¶</a>&gt; Strategy1: “nonpreemptive” / “weak” priority system.</h4>
+<h4><span id="p-gt-strategy1-nonpreemptive-weak-priority-system">&gt; Strategy1: “nonpreemptive” / “weak” priority system.</span></h4>
 <ul>
 <li>
 <p>assign priorities to the pending requests and to serve the requests in priority order</p>
@@ -606,21 +636,21 @@
 <blockquote>
 <p>Scenario: suppose disk requests have a 800 us deadline in order to guarantee the best throughput from the disk subsystem. Since the disk handler service time is 500 us, the maximum allowable latency between a disk request and starting to execute the disk service routine is 300 us.</p>
 </blockquote>
-<img src="/sg/2021/11/04/6.004-vm/sc5.png" class="" title="截屏2021-11-04 下午12.57.13">
+<img src="/sg/2021/11/04/6.004-vm/sc5.png" class title="截屏2021-11-04 下午12.57.13">
 </li>
 </ul>
-<h4 id="Strategy2-the-need-for-preemption"><a class="header-anchor" href="#Strategy2-the-need-for-preemption">¶</a>&gt; Strategy2: the need for preemption</h4>
+<h4><span id="p-gt-strategy2-the-need-for-preemption">&gt; Strategy2: the need for preemption</span></h4>
 <p>-&gt;a preemptive priority system/“strong” priority system</p>
 <p>怎么处理strategy1中的场景问题？</p>
 <p>设定新的优先级排序为：disk &gt; printer&gt; keyboard，改变的是当请求发出时立刻执行当前程序而不等待更低优先级程序的完成。在强优先级系统中，优先级和ddl非常相关，所以一定能在限期完成请求；而在弱优先系统中，优先级按照服务需要完成的时间划分，所以在考虑中断延迟时需要考虑其他服务的中断延迟时间。</p>
 <p>…跳过了硬件实现部分…</p>
-<h4 id="recurring-interrupts"><a class="header-anchor" href="#recurring-interrupts">¶</a>&gt; recurring interrupts</h4>
+<h4><span id="p-gt-recurring-interrupts">&gt; recurring interrupts</span></h4>
 <p>Consider interrupts which recur at bounded rates:</p>
-<img src="/sg/2021/11/04/6.004-vm/sc6.png" class="" title="截屏2021-11-04 下午1.16.28">
+<img src="/sg/2021/11/04/6.004-vm/sc6.png" class title="截屏2021-11-04 下午1.16.28">
 <p>Keyboard handler doesn’t complete until 3 ms after its request was received.</p>
 <p>由于只要有优先级高于键盘的请求，就必须先执行那个程序。所以在实时系统中用ddl作为约束而不是延迟时间的长短。</p>
 <p>面临的问题：当键盘ddl在3ms之前时，强优先系统仍然无法达到实时条件的限制，这时说明在紧张的ddl下没有足够的cpu周期达到对服务的重复要求。</p>
-<img src="/sg/2021/11/04/6.004-vm/sc7.png" class="" title="截屏2021-11-04 下午5.37.03">
+<img src="/sg/2021/11/04/6.004-vm/sc7.png" class title="截屏2021-11-04 下午5.37.03">
 <p>calculations of recurring interrupts</p>
 <ul>
 <li>
@@ -664,7 +694,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#17-virtual-memory"><span class="toc-number">1.</span> <span class="toc-text">17 virtual memory</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Virtual-memory"><span class="toc-number">1.1.</span> <span class="toc-text">Virtual memory</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#MMU-translate-VA-to-PA"><span class="toc-number">1.1.1.</span> <span class="toc-text">&gt; MMU:translate VA to PA</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Where-to-store-page-map"><span class="toc-number">1.1.2.</span> <span class="toc-text">&gt; Where to store page map:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#sum-up-MMU-address-translation"><span class="toc-number">1.1.3.</span> <span class="toc-text">&gt; sum up: MMU address translation</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Virtual-machine"><span class="toc-number">1.2.</span> <span class="toc-text">Virtual machine</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#18-virtualizing-the-processor"><span class="toc-number">2.</span> <span class="toc-text">18 virtualizing the processor</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#build-a-VM"><span class="toc-number">2.1.</span> <span class="toc-text">build a VM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E5%A6%82%E4%BD%95%E5%A4%8D%E7%94%A8cpu%EF%BC%9F"><span class="toc-number">2.2.</span> <span class="toc-text">进程如何复用cpu？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#interrupts-to-time-sharing"><span class="toc-number">2.3.</span> <span class="toc-text">interrupts to time-sharing</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#exception-handling"><span class="toc-number">2.4.</span> <span class="toc-text">exception handling</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Communicate-with-os"><span class="toc-number">2.5.</span> <span class="toc-text">Communicate with os</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#19-devices-and-interrupts"><span class="toc-number">3.</span> <span class="toc-text">19 devices and interrupts</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Interrupt-based-asynch-I-O"><span class="toc-number">3.1.</span> <span class="toc-text">Interrupt-based asynch I&#x2F;O</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Implementations-of-ReadKey"><span class="toc-number">3.2.</span> <span class="toc-text">Implementations of ReadKey</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Time-sharing-can%E2%80%99t-meet-with-ddl"><span class="toc-number">3.3.</span> <span class="toc-text">Time-sharing can’t meet with ddl</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#the-need-for-real-time"><span class="toc-number">3.4.</span> <span class="toc-text">the need for real time</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Real-time-scenarios"><span class="toc-number">3.5.</span> <span class="toc-text">Real-time scenarios</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Stragegy0-first-come-first-served-scenario"><span class="toc-number">3.5.1.</span> <span class="toc-text">&gt; Stragegy0:  first-come-first-served scenario.</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Strategy1-%E2%80%9Cnonpreemptive%E2%80%9D-%E2%80%9Cweak%E2%80%9D-priority-system"><span class="toc-number">3.5.2.</span> <span class="toc-text">&gt; Strategy1: “nonpreemptive” &#x2F; “weak” priority system.</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Strategy2-the-need-for-preemption"><span class="toc-number">3.5.3.</span> <span class="toc-text">&gt; Strategy2: the need for preemption</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#recurring-interrupts"><span class="toc-number">3.5.4.</span> <span class="toc-text">&gt; recurring interrupts</span></a></li></ol></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">17 virtual memory</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">Virtual memory</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.1.1.</span> <span class="toc-text">&gt; MMU:translate VA to PA</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.1.2.</span> <span class="toc-text">&gt; Where to store page map:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.1.3.</span> <span class="toc-text">&gt; sum up: MMU address translation</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">Virtual machine</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">18 virtualizing the processor</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">build a VM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">进程如何复用cpu？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.3.</span> <span class="toc-text">interrupts to time-sharing</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.4.</span> <span class="toc-text">exception handling</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.5.</span> <span class="toc-text">Communicate with os</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">19 devices and interrupts</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.1.</span> <span class="toc-text">Interrupt-based asynch I&#x2F;O</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.2.</span> <span class="toc-text">Implementations of ReadKey</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.3.</span> <span class="toc-text">Time-sharing can’t meet with ddl</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.4.</span> <span class="toc-text">the need for real time</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.5.</span> <span class="toc-text">Real-time scenarios</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">3.5.1.</span> <span class="toc-text">&gt; Stragegy0:  first-come-first-served scenario.</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">3.5.2.</span> <span class="toc-text">&gt; Strategy1: “nonpreemptive” &#x2F; “weak” priority system.</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">3.5.3.</span> <span class="toc-text">&gt; Strategy2: the need for preemption</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">3.5.4.</span> <span class="toc-text">&gt; recurring interrupts</span></a></li></ol></li></ol></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">

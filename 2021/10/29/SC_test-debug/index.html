@@ -6,15 +6,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="everything is hard. ¶R3 测试 Goal: systematic testing 验证包括：  formal reasoning:verification caonstructs a formal proof that a program is correct. code review: have others read your code Testing  ¶测试很难👀">
+    <meta name="description" content="R3 测试  测试很难👀 测试优先编程 系统式编程 测试方法 总结   R9: 避免调试  声明   R13: debugging  复现问题 科学实验法寻找问题 1.研究数据 2.提出假设 3.实验 4.重复 修复问题 Tips 总结      everything is hard. R3 测试 Goal: systematic testing 验证包括：  formal reasoni">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SC test&amp;debug">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2021/10/29/SC_test-debug/index.html">
 <meta property="og:site_name" content="steins gate zero">
-<meta property="og:description" content="everything is hard. ¶R3 测试 Goal: systematic testing 验证包括：  formal reasoning:verification caonstructs a formal proof that a program is correct. code review: have others read your code Testing  ¶测试很难👀">
+<meta property="og:description" content="R3 测试  测试很难👀 测试优先编程 系统式编程 测试方法 总结   R9: 避免调试  声明   R13: debugging  复现问题 科学实验法寻找问题 1.研究数据 2.提出假设 3.实验 4.重复 修复问题 Tips 总结      everything is hard. R3 测试 Goal: systematic testing 验证包括：  formal reasoni">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-10-28T16:00:00.000Z">
-<meta property="article:modified_time" content="2022-06-27T02:10:47.914Z">
+<meta property="article:modified_time" content="2023-07-19T03:22:29.232Z">
 <meta property="article:author" content="Sam Li">
 <meta name="twitter:card" content="summary">
     
@@ -107,7 +107,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#R3-%E6%B5%8B%E8%AF%95"><span class="toc-number">1.</span> <span class="toc-text">R3 测试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E5%BE%88%E9%9A%BE%F0%9F%91%80"><span class="toc-number">1.1.</span> <span class="toc-text">测试很难👀</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E4%BC%98%E5%85%88%E7%BC%96%E7%A8%8B"><span class="toc-number">1.2.</span> <span class="toc-text">测试优先编程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E5%BC%8F%E7%BC%96%E7%A8%8B"><span class="toc-number">1.3.</span> <span class="toc-text">系统式编程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%86%E5%8C%BA%E9%80%89%E6%8B%A9%E6%B5%8B%E8%AF%95%E6%A0%B7%E4%BE%8B"><span class="toc-number">1.3.1.</span> <span class="toc-text">&gt; 分区选择测试样例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%87%AA%E5%8A%A8%E5%8C%96%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95-JUnit"><span class="toc-number">1.3.2.</span> <span class="toc-text">&gt; 自动化单元测试: JUnit</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AE%B0%E5%BD%95%E6%B5%8B%E8%AF%95%E6%96%B9%E6%A1%88"><span class="toc-number">1.3.3.</span> <span class="toc-text">&gt; 记录测试方案</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E6%96%B9%E6%B3%95"><span class="toc-number">1.4.</span> <span class="toc-text">测试方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%8E%BB%E7%92%83%E7%AE%B1%E5%92%8C%E9%BB%91%E7%AE%B1%E6%B5%8B%E8%AF%95"><span class="toc-number">1.4.1.</span> <span class="toc-text">&gt; 玻璃箱和黑箱测试</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A6%86%E7%9B%96%E5%BA%A6"><span class="toc-number">1.4.2.</span> <span class="toc-text">&gt; 覆盖度</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8D%95%E5%85%83%E5%92%8C%E9%9B%86%E6%88%90%E6%B5%8B%E8%AF%95"><span class="toc-number">1.4.3.</span> <span class="toc-text">&gt; 单元和集成测试</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%87%AA%E5%8A%A8%E5%8C%96%E5%9B%9E%E5%BD%92%E6%B5%8B%E8%AF%95"><span class="toc-number">1.4.4.</span> <span class="toc-text">&gt; 自动化回归测试</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.5.</span> <span class="toc-text">总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#R9-%E9%81%BF%E5%85%8D%E8%B0%83%E8%AF%95"><span class="toc-number">2.</span> <span class="toc-text">R9: 避免调试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A3%B0%E6%98%8E"><span class="toc-number">2.1.</span> <span class="toc-text">声明</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#R13-debugging"><span class="toc-number">3.</span> <span class="toc-text">R13: debugging</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%8D%E7%8E%B0%E9%97%AE%E9%A2%98"><span class="toc-number">3.1.</span> <span class="toc-text">复现问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A7%91%E5%AD%A6%E5%AE%9E%E9%AA%8C%E6%B3%95%E5%AF%BB%E6%89%BE%E9%97%AE%E9%A2%98"><span class="toc-number">3.2.</span> <span class="toc-text">科学实验法寻找问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E7%A0%94%E7%A9%B6%E6%95%B0%E6%8D%AE"><span class="toc-number">3.3.</span> <span class="toc-text">1.研究数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%8F%90%E5%87%BA%E5%81%87%E8%AE%BE"><span class="toc-number">3.4.</span> <span class="toc-text">2.提出假设</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%AE%9E%E9%AA%8C"><span class="toc-number">3.5.</span> <span class="toc-text">3.实验</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E9%87%8D%E5%A4%8D"><span class="toc-number">3.6.</span> <span class="toc-text">4.重复</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E5%A4%8D%E9%97%AE%E9%A2%98"><span class="toc-number">3.7.</span> <span class="toc-text">修复问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Tips"><span class="toc-number">3.8.</span> <span class="toc-text">Tips</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93-v2"><span class="toc-number">3.9.</span> <span class="toc-text">总结</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">R3 测试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">测试很难👀</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">测试优先编程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.3.</span> <span class="toc-text">系统式编程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.3.1.</span> <span class="toc-text">&gt; 分区选择测试样例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.3.2.</span> <span class="toc-text">&gt; 自动化单元测试: JUnit</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.3.3.</span> <span class="toc-text">&gt; 记录测试方案</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.4.</span> <span class="toc-text">测试方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.4.1.</span> <span class="toc-text">&gt; 玻璃箱和黑箱测试</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.4.2.</span> <span class="toc-text">&gt; 覆盖度</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.4.3.</span> <span class="toc-text">&gt; 单元和集成测试</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.4.4.</span> <span class="toc-text">&gt; 自动化回归测试</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.5.</span> <span class="toc-text">总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">R9: 避免调试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">声明</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">R13: debugging</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.1.</span> <span class="toc-text">复现问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.2.</span> <span class="toc-text">科学实验法寻找问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.3.</span> <span class="toc-text">1.研究数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.4.</span> <span class="toc-text">2.提出假设</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.5.</span> <span class="toc-text">3.实验</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.6.</span> <span class="toc-text">4.重复</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.7.</span> <span class="toc-text">修复问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.8.</span> <span class="toc-text">Tips</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.9.</span> <span class="toc-text">总结</span></a></li></ol></li></ol>
     </div>
   </span>
 </div>
@@ -151,8 +151,41 @@
   
 
   <div class="content" itemprop="articleBody">
-    <p>everything is hard.</p>
-<h2 id="R3-测试"><a class="header-anchor" href="#R3-测试">¶</a>R3 测试</h2>
+    <div class="toc">
+<!-- toc -->
+<ul>
+<li><a href="#r3-ce-shi">R3 测试</a>
+<ul>
+<li><a href="#ce-shi-hen-nan">测试很难👀</a></li>
+<li><a href="#ce-shi-you-xian-bian-cheng">测试优先编程</a></li>
+<li><a href="#xi-tong-shi-bian-cheng">系统式编程</a></li>
+<li><a href="#ce-shi-fang-fa">测试方法</a></li>
+<li><a href="#zong-jie">总结</a></li>
+</ul>
+</li>
+<li><a href="#r9-bi-mian-diao-shi">R9: 避免调试</a>
+<ul>
+<li><a href="#sheng-ming">声明</a></li>
+</ul>
+</li>
+<li><a href="#r13-debugging">R13: debugging</a>
+<ul>
+<li><a href="#fu-xian-wen-ti">复现问题</a></li>
+<li><a href="#ke-xue-shi-yan-fa-xun-zhao-wen-ti">科学实验法寻找问题</a></li>
+<li><a href="#1-yan-jiu-shu-ju">1.研究数据</a></li>
+<li><a href="#2-ti-chu-jia-she">2.提出假设</a></li>
+<li><a href="#3-shi-yan">3.实验</a></li>
+<li><a href="#4-chong-fu">4.重复</a></li>
+<li><a href="#xiu-fu-wen-ti">修复问题</a></li>
+<li><a href="#tips">Tips</a></li>
+<li><a href="#zong-jie-1">总结</a></li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
+</div>
+<p>everything is hard.</p>
+<h2><span id="pr3-ce-shi">R3 测试</span></h2>
 <p>Goal: systematic testing</p>
 <p>验证包括：</p>
 <ul>
@@ -160,7 +193,7 @@
 <li>code review: have others read your code</li>
 <li>Testing</li>
 </ul>
-<h3 id="测试很难👀"><a class="header-anchor" href="#测试很难👀">¶</a>测试很难👀</h3>
+<h3><span id="pce-shi-hen-nan">测试很难👀</span></h3>
 <ul>
 <li>暴力测试很难进行</li>
 <li>haphazard testing(just try it and see if it works)如果程序的错误不明显很难被随意选择的测试例子发现，而假如那么明显程序中只会含有更多错误
@@ -170,7 +203,7 @@
 </li>
 <li>Random or statistical testing：软件测试在可能的输入项中是不连续和离散的。</li>
 </ul>
-<h3 id="测试优先编程"><a class="header-anchor" href="#测试优先编程">¶</a>测试优先编程</h3>
+<h3><span id="pce-shi-you-xian-bian-cheng">测试优先编程</span></h3>
 <ul>
 <li>terms: module, spec, implementation, test case, test suite</li>
 <li>Steps
@@ -182,14 +215,14 @@
 </li>
 <li>先写测试。拖到最后测试找bug会很痛苦😖</li>
 </ul>
-<h3 id="系统式编程"><a class="header-anchor" href="#系统式编程">¶</a>系统式编程</h3>
+<h3><span id="pxi-tong-shi-bian-cheng">系统式编程</span></h3>
 <p>Goal</p>
 <ul>
 <li>correct: 当运行时通过所有测试</li>
 <li>thorough：有漏洞时报错</li>
 <li>Small</li>
 </ul>
-<h4 id="分区选择测试样例"><a class="header-anchor" href="#分区选择测试样例">¶</a>&gt; 分区选择测试样例</h4>
+<h4><span id="p-gt-fen-qu-xuan-ze-ce-shi-yang-li">&gt; 分区选择测试样例</span></h4>
 <ul>
 <li>
 <p>divide the input space into subdomains, which form a partition</p>
@@ -227,7 +260,7 @@
 </ul>
 </li>
 </ul>
-<h4 id="自动化单元测试-JUnit"><a class="header-anchor" href="#自动化单元测试-JUnit">¶</a>&gt; 自动化单元测试: JUnit</h4>
+<h4><span id="p-gt-zi-dong-hua-dan-yuan-ce-shi-junit">&gt; 自动化单元测试: JUnit</span></h4>
 <ul>
 <li>
 <p>Unit test: tests for every individual module</p>
@@ -240,14 +273,14 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">assertTrue(..., <span class="string">&quot;...&quot;</span>);</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<h4 id="记录测试方案"><a class="header-anchor" href="#记录测试方案">¶</a>&gt; 记录测试方案</h4>
+<h4><span id="p-gt-ji-lu-ce-shi-fang-an">&gt; 记录测试方案</span></h4>
 <ul>
 <li>document the partitions and subdomains at the top of test class</li>
 <li>For each test case: comment which subdomains it covers</li>
 </ul>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Multiply</span> </span>&#123;</span><br><span class="line">  <span class="comment">/*</span></span><br><span class="line"><span class="comment">   * Testing strategy</span></span><br><span class="line"><span class="comment">   *</span></span><br><span class="line"><span class="comment">   * cover the cartesian product of these partitions:</span></span><br><span class="line"><span class="comment">   *   partition on a: positive, negative, 0</span></span><br><span class="line"><span class="comment">   *   partition on b: positive, negative, 0</span></span><br><span class="line"><span class="comment">   *   partition on a: 1, !=1</span></span><br><span class="line"><span class="comment">   *   partition on b: 1, !=1</span></span><br><span class="line"><span class="comment">   *   partition on a: small (fits in a long value), or large (doesn&#x27;t fit)</span></span><br><span class="line"><span class="comment">   *   partition on b: small, large</span></span><br><span class="line"><span class="comment">   * </span></span><br><span class="line"><span class="comment">   * cover the subdomains of these partitions:</span></span><br><span class="line"><span class="comment">   *   partition on signs of a and b:</span></span><br><span class="line"><span class="comment">   *      both positive</span></span><br><span class="line"><span class="comment">   *      both negative</span></span><br><span class="line"><span class="comment">   *      different signs</span></span><br><span class="line"><span class="comment">   *      one or both are 0</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">    <span class="comment">// covers a is positive, b is negative, </span></span><br><span class="line">  <span class="comment">//        a fits in long value, b fits in long value,</span></span><br><span class="line">  <span class="comment">//        a and b have different signs</span></span><br><span class="line">  <span class="meta">@Test</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testDifferentSigns</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      assertEquals(BigInteger.valueOf(-<span class="number">146</span>), BigInteger.valueOf(<span class="number">73</span>).multiply(BigInteger.valueOf(-<span class="number">2</span>)));</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// covers a = 1, b != 1, a and b have same sign</span></span><br><span class="line">  <span class="meta">@Test</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testIdentity</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      assertEquals(BigInteger.valueOf(<span class="number">33</span>), BigInteger.valueOf(<span class="number">1</span>).multiply(BigInteger.valueOf(<span class="number">33</span>)));</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-<h3 id="测试方法"><a class="header-anchor" href="#测试方法">¶</a>测试方法</h3>
-<h4 id="玻璃箱和黑箱测试"><a class="header-anchor" href="#玻璃箱和黑箱测试">¶</a>&gt; 玻璃箱和黑箱测试</h4>
+<h3><span id="pce-shi-fang-fa">测试方法</span></h3>
+<h4><span id="p-gt-bo-li-xiang-he-hei-xiang-ce-shi">&gt; 玻璃箱和黑箱测试</span></h4>
 <ul>
 <li>
 <p>Goal: full test cases</p>
@@ -260,7 +293,7 @@
 </ul>
 </li>
 </ul>
-<h4 id="覆盖度"><a class="header-anchor" href="#覆盖度">¶</a>&gt; 覆盖度</h4>
+<h4><span id="p-gt-fu-gai-du">&gt; 覆盖度</span></h4>
 <ul>
 <li>statement coverage: every statement
 <ul>
@@ -270,7 +303,7 @@
 <li>Branch coverage: if/while/…, both the true and false direction</li>
 <li>path coverage:combinations of branches</li>
 </ul>
-<h4 id="单元和集成测试"><a class="header-anchor" href="#单元和集成测试">¶</a>&gt; 单元和集成测试</h4>
+<h4><span id="p-gt-dan-yuan-he-ji-cheng-ce-shi">&gt; 单元和集成测试</span></h4>
 <ul>
 <li>Unit test a single module in isolation</li>
 <li>integration test tests a combination of modules</li>
@@ -280,7 +313,7 @@
 </ul>
 </li>
 </ul>
-<h4 id="自动化回归测试"><a class="header-anchor" href="#自动化回归测试">¶</a>&gt; 自动化回归测试</h4>
+<h4><span id="p-gt-zi-dong-hua-hui-gui-ce-shi">&gt; 自动化回归测试</span></h4>
 <ul>
 <li>
 <p>Regression test: test new changes to the code against existing test cases</p>
@@ -302,7 +335,7 @@
 <p>Automate regeression test: use in combination</p>
 </li>
 </ul>
-<h3 id="总结"><a class="header-anchor" href="#总结">¶</a>总结</h3>
+<h3><span id="pzong-jie">总结</span></h3>
 <p>迭代式测试优先编程：</p>
 <ol>
 <li>Practice</li>
@@ -321,7 +354,7 @@
 <li>Complex test suite: 选择少部分重要的写一个小的测试集，再写一个简单的实现通过测试，迭代</li>
 <li>tricky implementation： 先暴力写个解法通过测试以确定真的理解了spec和测试。then move on to the harder implementation.</li>
 </ul>
-<h2 id="R9-避免调试"><a class="header-anchor" href="#R9-避免调试">¶</a>R9: 避免调试</h2>
+<h2><span id="pr9-bi-mian-diao-shi">R9: 避免调试</span></h2>
 <p>first defense: make bugs impossible</p>
 <ul>
 <li>by immutability</li>
@@ -373,7 +406,7 @@
 </ul>
 </li>
 </ul>
-<h3 id="声明"><a class="header-anchor" href="#声明">¶</a>声明</h3>
+<h3><span id="psheng-ming">声明</span></h3>
 <blockquote>
 <p>java tips:<strong>A serious problem with Java assertions is that assertions are off by default.</strong></p>
 <p>由于assertion需要额外的时间消耗检视数据，所以在运行时关掉但在测试时最好打开以定位可能的程序设计错误。</p>
@@ -404,19 +437,19 @@
 <p>conditional statements cover all the possible cases: instead, throw an exception in the illegal cases when checking</p>
 </li>
 </ul>
-<h2 id="R13-debugging"><a class="header-anchor" href="#R13-debugging">¶</a>R13: debugging</h2>
+<h2><span id="pr13-debugging">R13: debugging</span></h2>
 <p>learn the systematic debugging techniques.</p>
-<h3 id="复现问题"><a class="header-anchor" href="#复现问题">¶</a>复现问题</h3>
+<h3><span id="pfu-xian-wen-ti">复现问题</span></h3>
 <p>Have a test case for the bug, and make this test work.</p>
 <blockquote>
 <p>First work on <u>reducing the size of the buggy input</u> to something manageable that still exhibits the same (or very similar) bug.</p>
 </blockquote>
-<h3 id="科学实验法寻找问题"><a class="header-anchor" href="#科学实验法寻找问题">¶</a>科学实验法寻找问题</h3>
+<h3><span id="pke-xue-shi-yan-fa-xun-zhao-wen-ti">科学实验法寻找问题</span></h3>
 <p>Problem: where is the bug?</p>
 <p>scientific methods:</p>
-<h3 id="1-研究数据"><a class="header-anchor" href="#1-研究数据">¶</a>1.研究数据</h3>
+<h3><span id="p1-yan-jiu-shu-ju">1.研究数据</span></h3>
 <p>查看测试输入导致的问题，检查错误结果，失败声明，和stack traces</p>
-<h3 id="2-提出假设"><a class="header-anchor" href="#2-提出假设">¶</a>2.提出假设</h3>
+<h3><span id="p2-ti-chu-jia-she">2.提出假设</span></h3>
 <p>think about your program as a flow of data, or steps in an algorithm, and try to rule out whole sections of the program at once. Binary search can help minimize the search space.</p>
 <ul>
 <li>
@@ -435,7 +468,7 @@
 <p>比如在db pj0 autograder导致的一系列问题，实际上是对smart pointer的部分使用不熟。</p>
 </li>
 </ul>
-<h3 id="3-实验"><a class="header-anchor" href="#3-实验">¶</a>3.实验</h3>
+<h3><span id="p3-shi-yan">3.实验</span></h3>
 <p>Make a prediction and test it. The best experiment is a probe.</p>
 <ul>
 <li>
@@ -495,7 +528,7 @@
 <p>你可能只是掩盖了错误而不是找到了真正的问题所在。我觉得我在db pj1遇到的就是这样。</p>
 </li>
 </ul>
-<h3 id="4-重复"><a class="header-anchor" href="#4-重复">¶</a>4.重复</h3>
+<h3><span id="p4-chong-fu">4.重复</span></h3>
 <p>重复以上步骤，如果假设正确缩小产生错误的可能区域，假设错误修改假设以适应观察。</p>
 <ul>
 <li>
@@ -513,7 +546,7 @@
 <li><em>Observations.</em> What actually happened when you did the experiment?</li>
 </ul>
 </blockquote>
-<h3 id="修复问题"><a class="header-anchor" href="#修复问题">¶</a>修复问题</h3>
+<h3><span id="pxiu-fu-wen-ti">修复问题</span></h3>
 <p>直到你找到问题并理解导致原因时，再修改代码。</p>
 <p>先问问题是哪种类型的：</p>
 <ul>
@@ -545,7 +578,7 @@
 </blockquote>
 </li>
 </ul>
-<h3 id="Tips"><a class="header-anchor" href="#Tips">¶</a>Tips</h3>
+<h3><span id="ptips">Tips</span></h3>
 <ul>
 <li>
 <p>Keep an audit trail: 当进行了很多次科学实验的循环（肉眼调试）找bug</p>
@@ -591,7 +624,7 @@
 <p>Sleep on it. Trade latency for efficiency</p>
 </li>
 </ul>
-<h3 id="总结-v2"><a class="header-anchor" href="#总结-v2">¶</a>总结</h3>
+<h3><span id="pzong-jie">总结</span></h3>
 <blockquote>
 <p>In this reading, we looked at how to debug systematically:</p>
 <ul>
@@ -632,7 +665,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#R3-%E6%B5%8B%E8%AF%95"><span class="toc-number">1.</span> <span class="toc-text">R3 测试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E5%BE%88%E9%9A%BE%F0%9F%91%80"><span class="toc-number">1.1.</span> <span class="toc-text">测试很难👀</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E4%BC%98%E5%85%88%E7%BC%96%E7%A8%8B"><span class="toc-number">1.2.</span> <span class="toc-text">测试优先编程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E5%BC%8F%E7%BC%96%E7%A8%8B"><span class="toc-number">1.3.</span> <span class="toc-text">系统式编程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%86%E5%8C%BA%E9%80%89%E6%8B%A9%E6%B5%8B%E8%AF%95%E6%A0%B7%E4%BE%8B"><span class="toc-number">1.3.1.</span> <span class="toc-text">&gt; 分区选择测试样例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%87%AA%E5%8A%A8%E5%8C%96%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95-JUnit"><span class="toc-number">1.3.2.</span> <span class="toc-text">&gt; 自动化单元测试: JUnit</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AE%B0%E5%BD%95%E6%B5%8B%E8%AF%95%E6%96%B9%E6%A1%88"><span class="toc-number">1.3.3.</span> <span class="toc-text">&gt; 记录测试方案</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E6%96%B9%E6%B3%95"><span class="toc-number">1.4.</span> <span class="toc-text">测试方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%8E%BB%E7%92%83%E7%AE%B1%E5%92%8C%E9%BB%91%E7%AE%B1%E6%B5%8B%E8%AF%95"><span class="toc-number">1.4.1.</span> <span class="toc-text">&gt; 玻璃箱和黑箱测试</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A6%86%E7%9B%96%E5%BA%A6"><span class="toc-number">1.4.2.</span> <span class="toc-text">&gt; 覆盖度</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8D%95%E5%85%83%E5%92%8C%E9%9B%86%E6%88%90%E6%B5%8B%E8%AF%95"><span class="toc-number">1.4.3.</span> <span class="toc-text">&gt; 单元和集成测试</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%87%AA%E5%8A%A8%E5%8C%96%E5%9B%9E%E5%BD%92%E6%B5%8B%E8%AF%95"><span class="toc-number">1.4.4.</span> <span class="toc-text">&gt; 自动化回归测试</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.5.</span> <span class="toc-text">总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#R9-%E9%81%BF%E5%85%8D%E8%B0%83%E8%AF%95"><span class="toc-number">2.</span> <span class="toc-text">R9: 避免调试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A3%B0%E6%98%8E"><span class="toc-number">2.1.</span> <span class="toc-text">声明</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#R13-debugging"><span class="toc-number">3.</span> <span class="toc-text">R13: debugging</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%8D%E7%8E%B0%E9%97%AE%E9%A2%98"><span class="toc-number">3.1.</span> <span class="toc-text">复现问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A7%91%E5%AD%A6%E5%AE%9E%E9%AA%8C%E6%B3%95%E5%AF%BB%E6%89%BE%E9%97%AE%E9%A2%98"><span class="toc-number">3.2.</span> <span class="toc-text">科学实验法寻找问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E7%A0%94%E7%A9%B6%E6%95%B0%E6%8D%AE"><span class="toc-number">3.3.</span> <span class="toc-text">1.研究数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%8F%90%E5%87%BA%E5%81%87%E8%AE%BE"><span class="toc-number">3.4.</span> <span class="toc-text">2.提出假设</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%AE%9E%E9%AA%8C"><span class="toc-number">3.5.</span> <span class="toc-text">3.实验</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E9%87%8D%E5%A4%8D"><span class="toc-number">3.6.</span> <span class="toc-text">4.重复</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E5%A4%8D%E9%97%AE%E9%A2%98"><span class="toc-number">3.7.</span> <span class="toc-text">修复问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Tips"><span class="toc-number">3.8.</span> <span class="toc-text">Tips</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93-v2"><span class="toc-number">3.9.</span> <span class="toc-text">总结</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">R3 测试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">测试很难👀</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">测试优先编程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.3.</span> <span class="toc-text">系统式编程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.3.1.</span> <span class="toc-text">&gt; 分区选择测试样例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.3.2.</span> <span class="toc-text">&gt; 自动化单元测试: JUnit</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.3.3.</span> <span class="toc-text">&gt; 记录测试方案</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.4.</span> <span class="toc-text">测试方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.4.1.</span> <span class="toc-text">&gt; 玻璃箱和黑箱测试</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.4.2.</span> <span class="toc-text">&gt; 覆盖度</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.4.3.</span> <span class="toc-text">&gt; 单元和集成测试</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.4.4.</span> <span class="toc-text">&gt; 自动化回归测试</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.5.</span> <span class="toc-text">总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">R9: 避免调试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">声明</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">R13: debugging</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.1.</span> <span class="toc-text">复现问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.2.</span> <span class="toc-text">科学实验法寻找问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.3.</span> <span class="toc-text">1.研究数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.4.</span> <span class="toc-text">2.提出假设</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.5.</span> <span class="toc-text">3.实验</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.6.</span> <span class="toc-text">4.重复</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.7.</span> <span class="toc-text">修复问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.8.</span> <span class="toc-text">Tips</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.9.</span> <span class="toc-text">总结</span></a></li></ol></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">

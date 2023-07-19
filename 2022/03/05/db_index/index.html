@@ -6,12 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="DBMS’s execution engine needs to access pages before doing operation on those. Design decisions when implementing data structures for the DBMS:  Data organization: memory layout and information to sto">
+    <meta name="description" content="hash tables  Static hashing schema Dynamic hashing schema   b+ tree  Overview disign choices optimizations   Index  Trie index radix tree inverted index   concurrency control  Locks vs. latches Lat">
 <meta property="og:type" content="article">
 <meta property="og:title" content="db index">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2022/03/05/db_index/index.html">
 <meta property="og:site_name" content="steins gate zero">
-<meta property="og:description" content="DBMS’s execution engine needs to access pages before doing operation on those. Design decisions when implementing data structures for the DBMS:  Data organization: memory layout and information to sto">
+<meta property="og:description" content="hash tables  Static hashing schema Dynamic hashing schema   b+ tree  Overview disign choices optimizations   Index  Trie index radix tree inverted index   concurrency control  Locks vs. latches Lat">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/03/05/db_index/Screenshot-7503728.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/03/05/db_index/Screenshot-7504450.png">
@@ -55,7 +55,7 @@
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/03/05/db_index/Screenshot-7595952.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/03/05/db_index/Screenshot-7597088.png">
 <meta property="article:published_time" content="2022-03-04T16:00:00.000Z">
-<meta property="article:modified_time" content="2022-06-27T02:13:48.655Z">
+<meta property="article:modified_time" content="2023-07-19T03:24:22.671Z">
 <meta property="article:author" content="Sam Li">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://sgzerolc.github.io/sg/2022/03/05/db_index/Screenshot-7503728.png">
@@ -149,7 +149,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#hash-tables"><span class="toc-number">1.</span> <span class="toc-text">hash tables</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Static-hashing-schema"><span class="toc-number">1.1.</span> <span class="toc-text">Static hashing schema</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dynamic-hashing-schema"><span class="toc-number">1.2.</span> <span class="toc-text">Dynamic hashing schema</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#b-tree"><span class="toc-number">2.</span> <span class="toc-text">b+ tree</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Overview"><span class="toc-number">2.1.</span> <span class="toc-text">Overview</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#disign-choices"><span class="toc-number">2.2.</span> <span class="toc-text">disign choices</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#optimizations"><span class="toc-number">2.3.</span> <span class="toc-text">optimizations</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Index"><span class="toc-number">3.</span> <span class="toc-text">Index</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Trie-index"><span class="toc-number">3.1.</span> <span class="toc-text">Trie index</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#radix-tree"><span class="toc-number">3.2.</span> <span class="toc-text">radix tree</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#inverted-index"><span class="toc-number">3.3.</span> <span class="toc-text">inverted index</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#concurrency-control"><span class="toc-number">4.</span> <span class="toc-text">concurrency control</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Locks-vs-latches"><span class="toc-number">4.1.</span> <span class="toc-text">Locks vs. latches</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Latch-designs"><span class="toc-number">4.2.</span> <span class="toc-text">Latch designs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Practice"><span class="toc-number">4.3.</span> <span class="toc-text">Practice</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">hash tables</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">Static hashing schema</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">Dynamic hashing schema</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">b+ tree</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">Overview</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">disign choices</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.3.</span> <span class="toc-text">optimizations</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Index</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.1.</span> <span class="toc-text">Trie index</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.2.</span> <span class="toc-text">radix tree</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.3.</span> <span class="toc-text">inverted index</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">concurrency control</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.1.</span> <span class="toc-text">Locks vs. latches</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.2.</span> <span class="toc-text">Latch designs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.3.</span> <span class="toc-text">Practice</span></a></li></ol></li></ol>
     </div>
   </span>
 </div>
@@ -193,14 +193,47 @@
   
 
   <div class="content" itemprop="articleBody">
-    <p>DBMS’s execution engine needs to access pages before doing operation on those.</p>
+    <div class="toc">
+<!-- toc -->
+<ul>
+<li><a href="#hash-tables">hash tables</a>
+<ul>
+<li><a href="#static-hashing-schema">Static hashing schema</a></li>
+<li><a href="#dynamic-hashing-schema">Dynamic hashing schema</a></li>
+</ul>
+</li>
+<li><a href="#b-tree">b+ tree</a>
+<ul>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#disign-choices">disign choices</a></li>
+<li><a href="#optimizations">optimizations</a></li>
+</ul>
+</li>
+<li><a href="#index">Index</a>
+<ul>
+<li><a href="#trie-index">Trie index</a></li>
+<li><a href="#radix-tree">radix tree</a></li>
+<li><a href="#inverted-index">inverted index</a></li>
+</ul>
+</li>
+<li><a href="#concurrency-control">concurrency control</a>
+<ul>
+<li><a href="#locks-vs-latches">Locks vs. latches</a></li>
+<li><a href="#latch-designs">Latch designs</a></li>
+<li><a href="#practice">Practice</a></li>
+</ul>
+</li>
+</ul>
+<!-- tocstop -->
+</div>
+<p>DBMS’s execution engine needs to access pages before doing operation on those.</p>
 <p>Design decisions when implementing data structures for the DBMS:</p>
 <ol>
 <li>Data organization: memory layout and information to store -&gt; access</li>
 <li>Concurrency: multiple threads to access without causing problems -&gt; efficient access</li>
 </ol>
 <p>There are two types of data structures:hash table, trees.</p>
-<h2 id="hash-tables"><a class="header-anchor" href="#hash-tables">¶</a>hash tables</h2>
+<h2><span id="phash-tables">hash tables</span></h2>
 <ol>
 <li>
 <p>Complexity: space: O(n); runtime: amortized O(1) lookup</p>
@@ -217,7 +250,7 @@
 </ul>
 </li>
 </ol>
-<h3 id="Static-hashing-schema"><a class="header-anchor" href="#Static-hashing-schema">¶</a>Static hashing schema</h3>
+<h3><span id="pstatic-hashing-schema">Static hashing schema</span></h3>
 <p>The size of the hash table is fixed. DBMS has to rebuild a larger hash tables if it runs out of storage space.</p>
 <p>Assume: knowing the number of elements it wants to store.</p>
 <ol>
@@ -226,7 +259,7 @@
 <ul>
 <li>
 <p>collision: linearly seach the adjacent slots until an open one is found</p>
-<img src="/sg/2022/03/05/db_index/Screenshot-7503728.png" class="" title="Screenshot-7503728">
+<img src="/sg/2022/03/05/db_index/Screenshot-7503728.png" class title="Screenshot-7503728">
 </li>
 <li>
 <p>Non-unique keys: the same key may be associated with multiple different values or tuples</p>
@@ -240,11 +273,11 @@
 <ul>
 <li>
 <p>approach 1: tombstone: instead of deletion, replace it with magic entry indicating to keep scanning for future lookups.</p>
-<img src="/sg/2022/03/05/db_index/Screenshot-7504450.png" class="" title="Screenshot-7504450">
+<img src="/sg/2022/03/05/db_index/Screenshot-7504450.png" class title="Screenshot-7504450">
 </li>
 <li>
 <p>Approach 2: movement:  shift the adjacent data after deleting an entry to fill the now empty slot.</p>
-<img src="/sg/2022/03/05/db_index/Screenshot-7504407.png" class="" title="Screenshot-7504407">
+<img src="/sg/2022/03/05/db_index/Screenshot-7504407.png" class title="Screenshot-7504407">
 </li>
 </ul>
 </li>
@@ -253,20 +286,20 @@
 <li>
 <p>Robin Hood Hashing: steals slots from “rich” keys and give them to “poor” keys</p>
 <p>Each key tracks the number of positions they are from where its <em>optimal position</em> in the table</p>
-<img src="/sg/2022/03/05/db_index/Screenshot-7509790.png" class="" title="Screenshot-7509790">
+<img src="/sg/2022/03/05/db_index/Screenshot-7509790.png" class title="Screenshot-7509790">
 </li>
 <li>
 <p>Cuckoo Hashing: Use multiple hash tables with different hash function seeds.</p>
-<img src="/sg/2022/03/05/db_index/Screenshot-7510112.png" class="" title="Screenshot-7510112">
-<img src="/sg/2022/03/05/db_index/Screenshot-7510099.png" class="" title="Screenshot-7510099">
+<img src="/sg/2022/03/05/db_index/Screenshot-7510112.png" class title="Screenshot-7510112">
+<img src="/sg/2022/03/05/db_index/Screenshot-7510099.png" class title="Screenshot-7510099">
 </li>
 </ol>
-<h3 id="Dynamic-hashing-schema"><a class="header-anchor" href="#Dynamic-hashing-schema">¶</a>Dynamic hashing schema</h3>
+<h3><span id="pdynamic-hashing-schema">Dynamic hashing schema</span></h3>
 <p>property: Dynamic hash tables resize themselves on demand</p>
 <ol>
 <li>
 <p>Chained hashing: linked list to handle collisions</p>
-<img src="/sg/2022/03/05/db_index/Screenshot-7510352.png" class="" title="Screenshot-7510352">
+<img src="/sg/2022/03/05/db_index/Screenshot-7510352.png" class title="Screenshot-7510352">
 </li>
 <li>
 <p>extendible hashing: splits buckets in case of letting chains to grow forever</p>
@@ -274,8 +307,8 @@
 <p>problem 1: what to split: data movement: move data within the buckets of the <em>split chain</em>; all other buckets are left untouched.</p>
 <p>problem 2: when to split: if the bucket is full, splits the bucket and reshuffle its elements.</p>
 <p>observe: the changed pointers to slots are on the split chain.</p>
-<img src="/sg/2022/03/05/db_index/Screenshot-7510635.png" class="" title="Screenshot-7510635">
-<img src="/sg/2022/03/05/db_index/Screenshot-7510667.png" class="" title="Screenshot-7510667">
+<img src="/sg/2022/03/05/db_index/Screenshot-7510635.png" class title="Screenshot-7510635">
+<img src="/sg/2022/03/05/db_index/Screenshot-7510667.png" class title="Screenshot-7510667">
 </li>
 <li>
 <p>linear hashing: maintains a split pointer that keeps track of the next bucket to split instead of immediately splitting a bucket when it overflows.</p>
@@ -291,23 +324,23 @@
 </li>
 <li>
 <p>Deletion: reverse of insertion: pointers move backwards -&gt; when buckets are empty</p>
-<img src="/sg/2022/03/05/db_index/Screenshot-7511632.png" class="" title="Screenshot-7511632">
-<img src="/sg/2022/03/05/db_index/Screenshot-7513367.png" class="" title="Screenshot-7513367">
+<img src="/sg/2022/03/05/db_index/Screenshot-7511632.png" class title="Screenshot-7511632">
+<img src="/sg/2022/03/05/db_index/Screenshot-7513367.png" class title="Screenshot-7513367">
 </li>
 </ul>
 </li>
 </ol>
 <p>​</p>
-<h2 id="b-tree"><a class="header-anchor" href="#b-tree">¶</a>b+ tree</h2>
+<h2><span id="pb-tree">b+ tree</span></h2>
 <ol>
 <li>table index: index of a table’s attributes. The table is stored in the sort order specified by the primary key. Can be either heap- or index-organized storage</li>
 <li>Trade-off on the number of indexes to create per database: storage overhead Vs. maintenance overhead</li>
 </ol>
-<h3 id="Overview"><a class="header-anchor" href="#Overview">¶</a>Overview</h3>
+<h3><span id="poverview">Overview</span></h3>
 <ol>
 <li>
 <p>b+ tree: a self-balancing tree data structure that keeps data sorted and allows searches, sequential access, insertion, and deletions in O(log(n)). Good at read/write large blocks of data.</p>
-<img src="/sg/2022/03/05/db_index/Screenshot-7514359.png" class="" title="Screenshot-7514359">
+<img src="/sg/2022/03/05/db_index/Screenshot-7514359.png" class title="Screenshot-7514359">
 </li>
 <li>
 <p>difference with b tree: b+ tree stores values only in leaf nodes; b tree store values in all nodes.</p>
@@ -317,7 +350,7 @@
 <ol>
 <li>
 <p>Key-value pair: inner node: store pointers; leaf node: values.</p>
-<img src="/sg/2022/03/05/db_index/Screenshot-7515275.png" class="" title="Screenshot-7515275">
+<img src="/sg/2022/03/05/db_index/Screenshot-7515275.png" class title="Screenshot-7515275">
 <ul>
 <li>Leaf node values have two approaches: 1) record IDs: pointers to the location of tuple; 2) tuple data: store the actual contents of the tuple in each node</li>
 </ul>
@@ -351,14 +384,14 @@
 <li>
 <p>Non-unique indexes</p>
 <p>like hash tables: 1) duplicate keys, 2)store value lists.</p>
-<img src="/sg/2022/03/05/db_index/Screenshot-7517327.png" class="" title="Screenshot-7517327">
+<img src="/sg/2022/03/05/db_index/Screenshot-7517327.png" class title="Screenshot-7517327">
 </li>
 <li>
 <p>duplicate keys approaches</p>
 <ul>
 <li>
 <p>Append record IDs</p>
-<img src="/sg/2022/03/05/db_index/Screenshot-7517457.png" class="" title="Screenshot-7517457">
+<img src="/sg/2022/03/05/db_index/Screenshot-7517457.png" class title="Screenshot-7517457">
 </li>
 <li>
 <p>overflow leafnodes: Allow leaf nodes to spill into overflow nodes that contain<br>
@@ -366,26 +399,26 @@ the duplicate keys.</p>
 <ul>
 <li>complex to maintain</li>
 </ul>
-<img src="/sg/2022/03/05/db_index/Screenshot-7517477.png" class="" title="Screenshot-7517477">
+<img src="/sg/2022/03/05/db_index/Screenshot-7517477.png" class title="Screenshot-7517477">
 </li>
 </ul>
 </li>
 <li>
 <p>Clustered indexes: If a table does not contain a primary key, the DBMS will automatically make a hidden row id primary key</p>
 <p>(think about VEB tree)</p>
-<img src="/sg/2022/03/05/db_index/Screenshot-7517887.png" class="" title="Screenshot-7517887">
+<img src="/sg/2022/03/05/db_index/Screenshot-7517887.png" class title="Screenshot-7517887">
 <p>Sorting:</p>
 <ol>
 <li>heap clustering: tuples are sorted in the heap’s pages using the order specified by a clustering index. DBMS can jump directly to the pages if clustering index’s attributes are used to access tuples</li>
 </ol>
-<img src="/sg/2022/03/05/db_index/Screenshot-7517956.png" class="" title="Screenshot-7517956">
+<img src="/sg/2022/03/05/db_index/Screenshot-7517956.png" class title="Screenshot-7517956">
 <ol start="2">
 <li>index scan page sorting: sort all the tuples that it needs based on their page id.</li>
 </ol>
-<img src="/sg/2022/03/05/db_index/Screenshot-7517996.png" class="" title="Screenshot-7517996">
+<img src="/sg/2022/03/05/db_index/Screenshot-7517996.png" class title="Screenshot-7517996">
 </li>
 </ol>
-<h3 id="disign-choices"><a class="header-anchor" href="#disign-choices">¶</a>disign choices</h3>
+<h3><span id="pdisign-choices">disign choices</span></h3>
 <ol>
 <li>
 <p>node size</p>
@@ -429,7 +462,7 @@ the duplicate keys.</p>
 <ul>
 <li>unlike approach 1, a4 stores the dictionary index that needs small space not the key pointers, which allows storing prefix alongside of the index.</li>
 </ul>
-<img src="/sg/2022/03/05/db_index/Screenshot-7569559.png" class="" title="Screenshot-7569559">
+<img src="/sg/2022/03/05/db_index/Screenshot-7569559.png" class title="Screenshot-7569559">
 </li>
 </ul>
 </li>
@@ -445,28 +478,28 @@ the duplicate keys.</p>
 <li>
 <p>A3: interpolation: Approximate location of desired key based on known distribution of keys -&gt; infeasible: limited applicability to keys with certain properties and complexity, only seen in academic use</p>
 <p>take advantage of metadata(max, min ,avg …) and infer approximate location</p>
-<img src="/sg/2022/03/05/db_index/Screenshot-7578914.png" class="" title="Screenshot-7578914">
+<img src="/sg/2022/03/05/db_index/Screenshot-7578914.png" class title="Screenshot-7578914">
 </li>
 </ul>
 </li>
 </ol>
-<h3 id="optimizations"><a class="header-anchor" href="#optimizations">¶</a>optimizations</h3>
+<h3><span id="poptimizations">optimizations</span></h3>
 <ol>
 <li>
 <p>Prefix compression: extract prefix and store unique suffix for each key -&gt; keys in the same node have overlapping prefix</p>
-<img src="/sg/2022/03/05/db_index/Screenshot-7578988.png" class="" title="Screenshot-7578988">
+<img src="/sg/2022/03/05/db_index/Screenshot-7578988.png" class title="Screenshot-7578988">
 </li>
 <li>
 <p>duplication: write key once and maintain a list of record ids with the key -&gt; non-unique keys</p>
 <p>~ MVCC</p>
-<img src="/sg/2022/03/05/db_index/Screenshot-7579194.png" class="" title="Screenshot-7579194">
+<img src="/sg/2022/03/05/db_index/Screenshot-7579194.png" class title="Screenshot-7579194">
 </li>
 <li>
 <p>suffix truncation:  only storing the minimum differentiating prefix of each key at a given inner node.  -&gt; No need to search the entire key</p>
 <ul>
 <li>leave few redundant digits: fault tolerance -&gt; indeterminable insertion/deletion  due to an identical prefix</li>
 </ul>
-<img src="/sg/2022/03/05/db_index/Screenshot-7579249.png" class="" title="Screenshot-7579249">
+<img src="/sg/2022/03/05/db_index/Screenshot-7579249.png" class title="Screenshot-7579249">
 </li>
 <li>
 <p>bulk insert: sort the keys and build the index from the bottom up -&gt; fastest way to build a new b+ tree</p>
@@ -474,14 +507,14 @@ the duplicate keys.</p>
 <li>Trade-off: leaving vacancy or not when packing the leaves depends on context</li>
 </ul>
 <p>Keys: 3, 7, 9, 13, 6, 1; sorted keys: 1, 3, 6, 7, 9, 13</p>
-<img src="/sg/2022/03/05/db_index/Screenshot-7579810.png" class="" title="Screenshot-7579810">
+<img src="/sg/2022/03/05/db_index/Screenshot-7579810.png" class title="Screenshot-7579810">
 </li>
 <li>
 <p>Pointer swizzling: store raw pointers instead of page ids for pinned page in the buffer pool  -&gt; reduce expensive buffer pool fetches</p>
-<img src="/sg/2022/03/05/db_index/Screenshot-7580430.png" class="" title="Screenshot-7580430">
+<img src="/sg/2022/03/05/db_index/Screenshot-7580430.png" class title="Screenshot-7580430">
 </li>
 </ol>
-<h2 id="Index"><a class="header-anchor" href="#Index">¶</a>Index</h2>
+<h2><span id="pindex">Index</span></h2>
 <ol>
 <li>
 <p>what is index: provide fast access to data items.</p>
@@ -494,11 +527,11 @@ the duplicate keys.</p>
 </li>
 <li>
 <p>partial indexes: Create an index on a subset of the entire table. -&gt; reduce full page fetches overhead</p>
-<img src="/sg/2022/03/05/db_index/Screenshot-7581006.png" class="" title="Screenshot-7581006">
+<img src="/sg/2022/03/05/db_index/Screenshot-7581006.png" class title="Screenshot-7581006">
 </li>
 <li>
 <p>covering indexes(index-only scans): locate data records in the table and not to return data -&gt; reduces contention on the DBMS’s buffer pool resources</p>
-<img src="/sg/2022/03/05/db_index/Screenshot-7581138.png" class="" title="Screenshot-7581138">
+<img src="/sg/2022/03/05/db_index/Screenshot-7581138.png" class title="Screenshot-7581138">
 </li>
 <li>
 <p>index include columns: Embed additional columns in indexes<br>
@@ -506,16 +539,16 @@ to support index-only queries.</p>
 <ul>
 <li>Extra columns are only stored in the leaf nodes and are not part of the search key</li>
 </ul>
-<img src="/sg/2022/03/05/db_index/Screenshot-7581440.png" class="" title="Screenshot-7581440">
+<img src="/sg/2022/03/05/db_index/Screenshot-7581440.png" class title="Screenshot-7581440">
 </li>
 <li>
 <p>Function/expression indexes: use expressions when declaring an index. store the output of a function or expression as the key instead of the original value. -&gt; ? which queries can use that index</p>
-<img src="/sg/2022/03/05/db_index/Screenshot-7581987.png" class="" title="Screenshot-7581987">
+<img src="/sg/2022/03/05/db_index/Screenshot-7581987.png" class title="Screenshot-7581987">
 </li>
 </ul>
 </li>
 </ol>
-<h3 id="Trie-index"><a class="header-anchor" href="#Trie-index">¶</a>Trie index</h3>
+<h3><span id="ptrie-index">Trie index</span></h3>
 <ol>
 <li>
 <p>make oberservations: the inner node keys in a B+Tree cannot tell you whether or not a key exists in the index -&gt; at least one buffer pool page miss per level in the tree</p>
@@ -532,18 +565,18 @@ to support index-only queries.</p>
 <li>
 <p>Fan-out of node, height of tree</p>
 <p>图中：空表示该值不存在，指针指向下一个位置，使用0/1的二进制表示</p>
-<img src="/sg/2022/03/05/db_index/Screenshot-7584309.png" class="" title="Screenshot-7584309">
+<img src="/sg/2022/03/05/db_index/Screenshot-7584309.png" class title="Screenshot-7584309">
 </li>
 </ul>
 </li>
 </ul>
 </li>
 </ol>
-<h3 id="radix-tree"><a class="header-anchor" href="#radix-tree">¶</a>radix tree</h3>
+<h3><span id="pradix-tree">radix tree</span></h3>
 <p>variant of trie index. Omit all nodes with only a single child.</p>
-<img src="/sg/2022/03/05/db_index/Screenshot-7584321.png" class="" title="Screenshot-7584321">
-<img src="/sg/2022/03/05/db_index/Screenshot-7584401.png" class="" title="Screenshot-7584401">
-<h3 id="inverted-index"><a class="header-anchor" href="#inverted-index">¶</a>inverted index</h3>
+<img src="/sg/2022/03/05/db_index/Screenshot-7584321.png" class title="Screenshot-7584321">
+<img src="/sg/2022/03/05/db_index/Screenshot-7584401.png" class title="Screenshot-7584401">
+<h3><span id="pinverted-index">inverted index</span></h3>
 <ol>
 <li>
 <p>make observations: Tree indexs above are useful for point and range queries; not good for keyword searches</p>
@@ -568,7 +601,7 @@ to support index-only queries.</p>
 </ul>
 </li>
 </ol>
-<h2 id="concurrency-control"><a class="header-anchor" href="#concurrency-control">¶</a>concurrency control</h2>
+<h2><span id="pconcurrency-control">concurrency control</span></h2>
 <ol>
 <li>make observations: multi-threads world means that cpu cores and disk I/O stalls matters.</li>
 <li>come up with a protocol: a protocol needs criteria
@@ -578,7 +611,7 @@ to support index-only queries.</p>
 </ul>
 </li>
 </ol>
-<h3 id="Locks-vs-latches"><a class="header-anchor" href="#Locks-vs-latches">¶</a>Locks vs. latches</h3>
+<h3><span id="plocks-vs-latches">Locks vs. latches</span></h3>
 <ol>
 <li>Locks: protects the contents of a database (e.g., tuples, tables, databases) from other transactions -&gt; object view</li>
 <li>Latches: protects critical sections the DBMS’s internal data structures (e.g., data structure, regions of memory) from other threads -&gt; operation view
@@ -588,7 +621,7 @@ to support index-only queries.</p>
 </ul>
 </li>
 </ol>
-<h3 id="Latch-designs"><a class="header-anchor" href="#Latch-designs">¶</a>Latch designs</h3>
+<h3><span id="platch-designs">Latch designs</span></h3>
 <p>latch takes advantage of CPU’s atomic compare-and-swap(CAS) instruction. A thread can check the contents of a memory location to see whether it has a certain value.</p>
 <p>Definition: <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/15059958/what-is-a-scalable-lock">scalability</a> of latches means if latches perform well when there is a lot of contention.</p>
 <p>Approaches:</p>
@@ -619,7 +652,7 @@ to support index-only queries.</p>
 <li>
 <p>Reader-writer locks</p>
 <p>based on two modes of latches, keep track of reads and writes.</p>
-<img src="/sg/2022/03/05/db_index/Screenshot-7590990.png" class="" title="Screenshot-7590990">
+<img src="/sg/2022/03/05/db_index/Screenshot-7590990.png" class title="Screenshot-7590990">
 <ul>
 <li>
 <p>pro: concurrent reads</p>
@@ -630,7 +663,7 @@ to support index-only queries.</p>
 </ul>
 </li>
 </ol>
-<h3 id="Practice"><a class="header-anchor" href="#Practice">¶</a>Practice</h3>
+<h3><span id="ppractice">Practice</span></h3>
 <ol>
 <li>
 <p>Hash table</p>
@@ -643,12 +676,12 @@ to support index-only queries.</p>
 </li>
 <li>
 <p>approach 1: page latches</p>
-<img src="/sg/2022/03/05/db_index/Screenshot-7591456.png" class="" title="Screenshot-7591456">
-<img src="/sg/2022/03/05/db_index/Screenshot-7591517.png" class="" title="Screenshot-7591517">
+<img src="/sg/2022/03/05/db_index/Screenshot-7591456.png" class title="Screenshot-7591456">
+<img src="/sg/2022/03/05/db_index/Screenshot-7591517.png" class title="Screenshot-7591517">
 </li>
 <li>
 <p>approach 2: slot latches</p>
-<img src="/sg/2022/03/05/db_index/Screenshot-7591600.png" class="" title="Screenshot-7591600">
+<img src="/sg/2022/03/05/db_index/Screenshot-7591600.png" class title="Screenshot-7591600">
 </li>
 </ul>
 </li>
@@ -657,7 +690,7 @@ to support index-only queries.</p>
 <p>Observation 1: several way to access b+ tree(top-down/sibling pointers/…) -&gt; come up with a protocol to allow multiple threads to read and update a b+ tree</p>
 <p>Problem 1: modify same node at the same time</p>
 <p><u>Problem 2</u>: one thread traversing the tree while another thread splits/merges nodes</p>
-<img src="/sg/2022/03/05/db_index/Screenshot-7594900.png" class="" title="Screenshot-7594900">
+<img src="/sg/2022/03/05/db_index/Screenshot-7594900.png" class title="Screenshot-7594900">
 <ul>
 <li>
 <p>Solution: latch crabbing/coupling protocol -&gt; top-down direction</p>
@@ -680,8 +713,8 @@ to support index-only queries.</p>
 </li>
 <li>
 <p>Insert/delete: If latched child is safe, release latches on all its ancestors</p>
-<p>Delete 38:<img src="/sg/2022/03/05/db_index/Screenshot-7595740.png" class="" title="Screenshot-7595740"></p>
-<p>Insert 25:<img src="/sg/2022/03/05/db_index/Screenshot-7595952.png" class="" title="Screenshot-7595952"></p>
+<p>Delete 38:<img src="/sg/2022/03/05/db_index/Screenshot-7595740.png" class title="Screenshot-7595740"></p>
+<p>Insert 25:<img src="/sg/2022/03/05/db_index/Screenshot-7595952.png" class title="Screenshot-7595952"></p>
 </li>
 </ul>
 </li>
@@ -699,7 +732,7 @@ to support index-only queries.</p>
 <ul>
 <li>
 <p>observation: threads acquire locks in two directions at the same time</p>
-<img src="/sg/2022/03/05/db_index/Screenshot-7597088.png" class="" title="Screenshot-7597088">
+<img src="/sg/2022/03/05/db_index/Screenshot-7597088.png" class title="Screenshot-7597088">
 </li>
 </ul>
 <p>Problem 4: delayed parent updates</p>
@@ -733,7 +766,7 @@ to support index-only queries.</p>
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#hash-tables"><span class="toc-number">1.</span> <span class="toc-text">hash tables</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Static-hashing-schema"><span class="toc-number">1.1.</span> <span class="toc-text">Static hashing schema</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dynamic-hashing-schema"><span class="toc-number">1.2.</span> <span class="toc-text">Dynamic hashing schema</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#b-tree"><span class="toc-number">2.</span> <span class="toc-text">b+ tree</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Overview"><span class="toc-number">2.1.</span> <span class="toc-text">Overview</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#disign-choices"><span class="toc-number">2.2.</span> <span class="toc-text">disign choices</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#optimizations"><span class="toc-number">2.3.</span> <span class="toc-text">optimizations</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Index"><span class="toc-number">3.</span> <span class="toc-text">Index</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Trie-index"><span class="toc-number">3.1.</span> <span class="toc-text">Trie index</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#radix-tree"><span class="toc-number">3.2.</span> <span class="toc-text">radix tree</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#inverted-index"><span class="toc-number">3.3.</span> <span class="toc-text">inverted index</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#concurrency-control"><span class="toc-number">4.</span> <span class="toc-text">concurrency control</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Locks-vs-latches"><span class="toc-number">4.1.</span> <span class="toc-text">Locks vs. latches</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Latch-designs"><span class="toc-number">4.2.</span> <span class="toc-text">Latch designs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Practice"><span class="toc-number">4.3.</span> <span class="toc-text">Practice</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">hash tables</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">Static hashing schema</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">Dynamic hashing schema</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">b+ tree</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">Overview</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">disign choices</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.3.</span> <span class="toc-text">optimizations</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Index</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.1.</span> <span class="toc-text">Trie index</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.2.</span> <span class="toc-text">radix tree</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.3.</span> <span class="toc-text">inverted index</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">concurrency control</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.1.</span> <span class="toc-text">Locks vs. latches</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.2.</span> <span class="toc-text">Latch designs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.3.</span> <span class="toc-text">Practice</span></a></li></ol></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
