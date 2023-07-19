@@ -182,7 +182,7 @@
 <li>Compute the value of an optimal solution in bottom-up fashion (recursion &amp; memoization)</li>
 <li>Construct an optimal solution from the computed information</li>
 </ol>
-<h2><span id="pintroduction">Introduction</span></h2>
+<h2><span id="introduction">Introduction</span><a href="#introduction" class="header-anchor">¶</a></h2>
 <p>The main idea of dp: subtract and solve the subproblem, then reuse the results</p>
 <p>Runtime: the number of unique problems+ the amount of merge work</p>
 <p>In the recitation, a simple dp example is to solve the number of unique paths from (1, 1) to (M, N).</p>
@@ -200,8 +200,8 @@
 <li>Runtime: O(MN).</li>
 <li>It’s similar to knapsack problems (NP-complete). The linear solution here is due to the size of input is log(N), thereby it’s still exponential.</li>
 </ul>
-<h2><span id="pbasic">Basic</span></h2>
-<h3><span id="prectangualar-blocks">Rectangualar blocks</span></h3>
+<h2><span id="basic">Basic</span><a href="#basic" class="header-anchor">¶</a></h2>
+<h3><span id="rectangualar-blocks">Rectangualar blocks</span><a href="#rectangualar-blocks" class="header-anchor">¶</a></h3>
 <p>problem: A set of n blocks, {1, 2, …, n}, l_i, w_i, h_i. J on top i, require l_j &lt; l_i, w_j &lt; w_i. Rotating not allowed. Find the maximum height.</p>
 <p>? RB(1, 2, …, n)</p>
 <ul>
@@ -236,7 +236,7 @@
 <p>Sorted by length and then width {1, …, n}</p>
 <p>RB(1, 2, …, n) = max{(h1 + RB(C_i)), RB(2, …, n)}</p>
 <p>Runtime: O(n), # subproblems = n; + O(nlogn), sort; + O(n^2)/O(nlogn) find C set.</p>
-<h3><span id="plongest-palindromic-seq">Longest Palindromic Seq</span></h3>
+<h3><span id="longest-palindromic-seq">Longest Palindromic Seq</span><a href="#longest-palindromic-seq" class="header-anchor">¶</a></h3>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">X = <span class="string">&#x27;underqualified&#x27;</span></span><br><span class="line">n = <span class="built_in">len</span>(X)</span><br><span class="line"><span class="type">Dict</span> = [[<span class="number">0</span> <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(n)] <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(n)]</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">L</span>(<span class="params">i, j</span>):</span></span><br><span class="line">	<span class="keyword">if</span> (<span class="type">Dict</span>[i][j] != <span class="number">0</span>):        <span class="comment"># memorization</span></span><br><span class="line">		<span class="keyword">return</span> <span class="type">Dict</span>[i][j]</span><br><span class="line">	<span class="keyword">if</span> i == j:</span><br><span class="line">		<span class="type">Dict</span>[i][j] = <span class="number">1</span></span><br><span class="line">		<span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">	<span class="keyword">if</span> X[i] == X[j]:</span><br><span class="line">		<span class="keyword">if</span> i + <span class="number">1</span> == j:</span><br><span class="line">			<span class="type">Dict</span>[i][j] = <span class="number">2</span></span><br><span class="line">			<span class="keyword">return</span> <span class="number">2</span></span><br><span class="line">		<span class="keyword">else</span>:</span><br><span class="line">			<span class="keyword">return</span> <span class="number">2</span> + L(i+<span class="number">1</span>, j-<span class="number">1</span>)</span><br><span class="line">	<span class="keyword">else</span>:</span><br><span class="line">		<span class="type">Dict</span>[i][j] = <span class="built_in">max</span>(L(i+<span class="number">1</span>, j), L(i, j-<span class="number">1</span>))</span><br><span class="line">		<span class="keyword">return</span> <span class="type">Dict</span>[i][j]</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(L(<span class="number">0</span>, n-<span class="number">1</span>))</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">	<span class="built_in">print</span>(<span class="type">Dict</span>[i])</span><br></pre></td></tr></table></figure>
 <p>Goal: Compute the actual result.</p>
 <p>Problem 1: How to trace backwards to generate output sequence in this case?</p>
@@ -247,10 +247,10 @@
 </li>
 </ul>
 <p>Problem 2: How to write it iteratively?</p>
-<h2><span id="pmedium">Medium</span></h2>
-<h3><span id="poptimal-search-trees">Optimal Search Trees</span></h3>
-<h3><span id="palternating-coins-game">Alternating Coins Game</span></h3>
-<h2><span id="pall-pairs-shortest-paths">All-Pairs Shortest Paths</span></h2>
+<h2><span id="medium">Medium</span><a href="#medium" class="header-anchor">¶</a></h2>
+<h3><span id="optimal-search-trees">Optimal Search Trees</span><a href="#optimal-search-trees" class="header-anchor">¶</a></h3>
+<h3><span id="alternating-coins-game">Alternating Coins Game</span><a href="#alternating-coins-game" class="header-anchor">¶</a></h3>
+<h2><span id="all-pairs-shortest-paths">All-Pairs Shortest Paths</span><a href="#all-pairs-shortest-paths" class="header-anchor">¶</a></h2>
 <p>Different types of algorithms can be used to solve the all-pairs shortest paths problem:</p>
 <ol>
 <li>Dynamic programming</li>

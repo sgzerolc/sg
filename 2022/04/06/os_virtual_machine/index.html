@@ -174,19 +174,19 @@
 <!-- tocstop -->
 </div>
 <p>After taking a glance at QEMU, I decide to review this lecture to gain more understandings of virtual machine.</p>
-<h2><span id="pwhat-and-why">what and why</span></h2>
+<h2><span id="what-and-why">what and why</span><a href="#what-and-why" class="header-anchor">¶</a></h2>
 <ol>
 <li>Virtual machine: simulation of a computer</li>
 <li>Why: we want run lots of guest service in one physical machine</li>
 </ol>
-<h2><span id="ptrap-and-emulate">Trap and emulate</span></h2>
-<h3><span id="pprocedure">procedure</span></h3>
+<h2><span id="trap-and-emulate">Trap and emulate</span><a href="#trap-and-emulate" class="header-anchor">¶</a></h2>
+<h3><span id="procedure">procedure</span><a href="#procedure" class="header-anchor">¶</a></h3>
 <ul>
 <li>
 <img src="/sg/2022/04/06/os_virtual_machine/Screenshot-9333584.png" class title="Screenshot-9333584">
 </li>
 </ul>
-<h3><span id="ppage-table">Page table</span></h3>
+<h3><span id="page-table">Page table</span><a href="#page-table" class="header-anchor">¶</a></h3>
 <p>Shadow page table in VMM</p>
 <ul>
 <li>
@@ -195,19 +195,19 @@
 </ul>
 <p>Problem: It can’t be allowed that guest pgtbl satp escapes and modifies host pgtbl</p>
 <p>To prevent guest escaping from VMM, guest can’t run in host supervisor mode. VMM will modify virtual state to provide illusions for guests.</p>
-<h3><span id="pdevice">device</span></h3>
+<h3><span id="device">device</span><a href="#device" class="header-anchor">¶</a></h3>
 <ol>
 <li>emulation: trap and emulate</li>
 <li>Virtual device: device interface is designed to decrease trap times, which saves houndreds of CPU cycles</li>
 <li>Pass-through: NIC</li>
 </ol>
-<h2><span id="phardware-support">hardware support</span></h2>
+<h2><span id="hardware-support">hardware support</span><a href="#hardware-support" class="header-anchor">¶</a></h2>
 <ul>
 <li>
 <img src="/sg/2022/04/06/os_virtual_machine/hs.png" class title="hardware_support">
 </li>
 </ul>
-<h2><span id="ppaper-view">Paper view</span></h2>
+<h2><span id="paper-view">Paper view</span><a href="#paper-view" class="header-anchor">¶</a></h2>
 <p>Paper: <a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.828/2020/readings/belay-dune.pdf">Dune: Safe User-level Access to Privileged CPU Features</a></p>
 <p>what</p>
 <ul>

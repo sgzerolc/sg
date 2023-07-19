@@ -168,7 +168,7 @@
 </ul>
 <!-- tocstop -->
 </div>
-<h3><span id="pprocedures-as-building-blocks">procedures as building blocks</span></h3>
+<h3><span id="procedures-as-building-blocks">procedures as building blocks</span><a href="#procedures-as-building-blocks" class="header-anchor">¶</a></h3>
 <ul>
 <li>
 <p>Primitives: numbers, strings, booleans</p>
@@ -193,7 +193,7 @@
 </ul>
 </li>
 </ul>
-<h3><span id="precursion">recursion</span></h3>
+<h3><span id="recursion">recursion</span><a href="#recursion" class="header-anchor">¶</a></h3>
 <ul>
 <li>
 <p>Recursion vs. iteration</p>
@@ -208,7 +208,7 @@
 </ul>
 </li>
 </ul>
-<h3><span id="pprocedural-abstraction">procedural abstraction</span></h3>
+<h3><span id="procedural-abstraction">procedural abstraction</span><a href="#procedural-abstraction" class="header-anchor">¶</a></h3>
 <ul>
 <li>Type of a procedure is a contract: 输入和输出的类型是确定的，如果输出不是此类型，那么：the behavior is undefined</li>
 <li>patterns across procedures</li>
@@ -216,7 +216,7 @@
 <li>一个方程可以合在一起写，也可以分开写。</li>
 </ul>
 <figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;argument&quot;</span></span><br><span class="line">(<span class="name"><span class="builtin-name">define</span></span> (<span class="name">sum</span> term a next b)</span><br><span class="line">  (<span class="name"><span class="builtin-name">if</span></span> (<span class="name"><span class="builtin-name">&gt;</span></span> a b)</span><br><span class="line">      <span class="number">0</span></span><br><span class="line">      (<span class="name"><span class="builtin-name">+</span></span> (<span class="name">term</span> a) (<span class="name">sum</span> term (<span class="name">next</span> a) next b))))</span><br><span class="line">(<span class="name"><span class="builtin-name">define</span></span> (<span class="name">new-sum-integers</span> a b)</span><br><span class="line">  (<span class="name">sum</span> (<span class="name"><span class="builtin-name">lambda</span></span> (x) x) a (<span class="name"><span class="builtin-name">lambda</span></span> (x) (<span class="name"><span class="builtin-name">+</span></span> x <span class="number">1</span>) b))</span><br><span class="line">  </span><br><span class="line"><span class="string">&quot;return procedures&quot;</span></span><br><span class="line">(<span class="name"><span class="builtin-name">define</span></span> incrementby (<span class="name"><span class="builtin-name">lambda</span></span> (n) ...))</span><br><span class="line"></span><br><span class="line">(<span class="name"><span class="builtin-name">define</span></span> add1 (<span class="name">incrementby</span> <span class="number">1</span>)) <span class="comment">;;type: number -&gt; (number -&gt; number)</span></span><br></pre></td></tr></table></figure>
-<h3><span id="pdata-abstraction">Data abstraction</span></h3>
+<h3><span id="data-abstraction">Data abstraction</span><a href="#data-abstraction" class="header-anchor">¶</a></h3>
 <ul>
 <li>types</li>
 <li>Compound data
@@ -250,7 +250,7 @@
 </li>
 </ul>
 <figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">cons</span></span> &lt;a&gt; &lt;b&gt;) -&gt; &lt;p&gt; <span class="comment">;;cons:construct</span></span><br><span class="line">(<span class="name"><span class="builtin-name">car</span></span> &lt;p&gt;) -&gt; &lt;a-val&gt;</span><br><span class="line">(<span class="name"><span class="builtin-name">cdr</span></span> &lt;p&gt;) -&gt; &lt;b-val&gt;</span><br></pre></td></tr></table></figure>
-<h3><span id="psymbols">Symbols</span></h3>
+<h3><span id="symbols">Symbols</span><a href="#symbols" class="header-anchor">¶</a></h3>
 <ul>
 <li>Data types in scheme
 <ul>
@@ -292,8 +292,8 @@
 </li>
 </ul>
 <figure class="highlight scheme"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name"><span class="builtin-name">define</span></span> (<span class="name">make-point</span> x y)</span><br><span class="line">  (<span class="name"><span class="builtin-name">list</span></span> <span class="symbol">&#x27;point</span> x y))</span><br><span class="line"></span><br><span class="line">(<span class="name"><span class="builtin-name">define</span></span> (<span class="name">point?</span> thing)</span><br><span class="line">  (<span class="name"><span class="builtin-name">and</span></span> (<span class="name"><span class="builtin-name">pair?</span></span> thing)</span><br><span class="line">       (<span class="name"><span class="builtin-name">eq?</span></span> (<span class="name"><span class="builtin-name">car</span></span> thing) <span class="symbol">&#x27;point</span>)))</span><br><span class="line"></span><br><span class="line">(<span class="name"><span class="builtin-name">define</span></span> (<span class="name"><span class="builtin-name">...</span></span>)</span><br><span class="line">  (<span class="name"><span class="builtin-name">if</span></span> (<span class="name">point?</span> thing)</span><br><span class="line">      (<span class="name">....</span>)</span><br><span class="line">      (<span class="name">.....</span>))</span><br><span class="line">  (<span class="name"><span class="builtin-name">if</span></span> (<span class="name"><span class="builtin-name">not</span></span> (<span class="name">point?</span> pt)) <span class="comment">;;非需要的类型，更好地说明错误在哪</span></span><br><span class="line">      .....))</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h3><span id="pmutation-and-the-environment-model">mutation and the environment model</span></h3>
-<h4><span id="pdata-mutation">Data mutation</span></h4>
+<h3><span id="mutation-and-the-environment-model">mutation and the environment model</span><a href="#mutation-and-the-environment-model" class="header-anchor">¶</a></h3>
+<h4><span id="data-mutation">Data mutation</span><a href="#data-mutation" class="header-anchor">¶</a></h4>
 <ul>
 <li>
 <p>Mutators</p>
@@ -346,7 +346,7 @@
 </ul>
 </li>
 </ul>
-<h4><span id="penvironment-model">environment model</span></h4>
+<h4><span id="environment-model">environment model</span><a href="#environment-model" class="header-anchor">¶</a></h4>
 <p>New model of mutation for closures</p>
 <ul>
 <li>
@@ -397,8 +397,8 @@
 <p>people make rules to allow computer following, not themselves. (没想到是这样的EM)</p>
 </li>
 </ul>
-<h3><span id="pinterpretation-and-evaluation">interpretation and evaluation</span></h3>
-<h4><span id="pinterpretation-and-interpreter">interpretation and interpreter</span></h4>
+<h3><span id="interpretation-and-evaluation">interpretation and evaluation</span><a href="#interpretation-and-evaluation" class="header-anchor">¶</a></h3>
+<h4><span id="interpretation-and-interpreter">interpretation and interpreter</span><a href="#interpretation-and-interpreter" class="header-anchor">¶</a></h4>
 <ul>
 <li>interpreter
 <ul>
@@ -414,10 +414,10 @@
 </ul>
 </li>
 </ul>
-<h3><span id="pdebugging">debugging</span></h3>
-<h3><span id="planguage-design-and-implementation">Language design and implementation</span></h3>
-<h3><span id="pcontinuations-lazy-evaluation-and-streams">Continuations, lazy evaluation, and streams</span></h3>
-<h3><span id="pconcurrency-garbage-collection-6-001-in-perspective-and-the-lambda-calculus">Concurrency, garbage collection, 6.001 in perspective, and the Lambda Calculus</span></h3>
+<h3><span id="debugging">debugging</span><a href="#debugging" class="header-anchor">¶</a></h3>
+<h3><span id="language-design-and-implementation">Language design and implementation</span><a href="#language-design-and-implementation" class="header-anchor">¶</a></h3>
+<h3><span id="continuations-lazy-evaluation-and-streams">Continuations, lazy evaluation, and streams</span><a href="#continuations-lazy-evaluation-and-streams" class="header-anchor">¶</a></h3>
+<h3><span id="concurrency-garbage-collection-6-001-in-perspective-and-the-lambda-calculus">Concurrency, garbage collection, 6.001 in perspective, and the Lambda Calculus</span><a href="#concurrency-garbage-collection-6-001-in-perspective-and-the-lambda-calculus" class="header-anchor">¶</a></h3>
 
   </div>
 </article>

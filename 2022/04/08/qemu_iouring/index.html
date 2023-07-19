@@ -6,12 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="Qemu structures brief introducation API Implementation    Qemu structures    Terminology Concept     Protocols file system, block device, NBD, Ceph, gluster   virtio behave like a memory-mapped reg">
+    <meta name="description" content="Qemu structures brief introducation API Implementation    Qemu structures¶    Terminology Concept     Protocols file system, block device, NBD, Ceph, gluster   virtio behave like a memory-mapped re">
 <meta property="og:type" content="article">
 <meta property="og:title" content="IO_uring&#39;s API and Implementation in QEMU">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2022/04/08/qemu_iouring/index.html">
 <meta property="og:site_name" content="steins gate zero">
-<meta property="og:description" content="Qemu structures brief introducation API Implementation    Qemu structures    Terminology Concept     Protocols file system, block device, NBD, Ceph, gluster   virtio behave like a memory-mapped reg">
+<meta property="og:description" content="Qemu structures brief introducation API Implementation    Qemu structures¶    Terminology Concept     Protocols file system, block device, NBD, Ceph, gluster   virtio behave like a memory-mapped re">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/04/08/qemu_iouring/Screenshot.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/04/08/qemu_iouring/Screenshot-9477410.png">
@@ -170,7 +170,7 @@
 </ul>
 <!-- tocstop -->
 </div>
-<h2><span id="pqemu-structures">Qemu structures</span></h2>
+<h2><span id="qemu-structures">Qemu structures</span><a href="#qemu-structures" class="header-anchor">¶</a></h2>
 <table>
 <thead>
 <tr>
@@ -217,7 +217,7 @@
 <img src="/sg/2022/04/08/qemu_iouring/Screenshot.png" class title="Screenshot">
 <p>I/O path in VM<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>: host view of qemu is like additional RAM(a big chunk of memory and that’s it)</p>
 <img src="/sg/2022/04/08/qemu_iouring/Screenshot-9477410.png" class title="Screenshot-9477410">
-<h2><span id="pbrief-introducation">brief introducation</span></h2>
+<h2><span id="brief-introducation">brief introducation</span><a href="#brief-introducation" class="header-anchor">¶</a></h2>
 <p>Terminology in QEMU’s event loop:</p>
 <table>
 <thead>
@@ -283,8 +283,8 @@
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">QEMUBH</span> &#123;</span></span><br><span class="line">    AioContext *ctx;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *name;</span><br><span class="line">    QEMUBHFunc *cb;</span><br><span class="line">    <span class="keyword">void</span> *opaque;</span><br><span class="line">    QSLIST_ENTRY(QEMUBH) next; <span class="comment">// point to next eleent</span></span><br><span class="line">    <span class="keyword">unsigned</span> flags;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">AioContext</span> &#123;</span></span><br><span class="line">    BHList bh_list;</span><br><span class="line">    QSIMPLEQ_HEAD(, BHListSlice) bh_slice_list;</span><br><span class="line">		...</span><br><span class="line">    QSLIST_HEAD(, Coroutine) scheduled_coroutines;</span><br><span class="line">    QEMUBH *co_schedule_bh;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ThreadPool</span> *<span class="title">thread_pool</span>;</span></span><br><span class="line">		...</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<h2><span id="papi">API</span></h2>
-<h2><span id="pimplementation">Implementation</span></h2>
+<h2><span id="api">API</span><a href="#api" class="header-anchor">¶</a></h2>
+<h2><span id="implementation">Implementation</span><a href="#implementation" class="header-anchor">¶</a></h2>
 <hr class="footnotes-sep">
 <section class="footnotes">
 <ol class="footnotes-list">

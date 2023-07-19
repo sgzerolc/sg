@@ -169,18 +169,18 @@
 </ul>
 <!-- tocstop -->
 </div>
-<h2><span id="pr14-recursion">R14: recursion</span></h2>
+<h2><span id="r14-recursion">R14: recursion</span><a href="#r14-recursion" class="header-anchor">¶</a></h2>
 <p>有时候会觉得自己对recursion/iteration的了解已经够多了，但不够多总是常态。尤其在应用到不同的场景的时候。</p>
-<h3><span id="pdecompostion">decompostion</span></h3>
+<h3><span id="decompostion">decompostion</span><a href="#decompostion" class="header-anchor">¶</a></h3>
 <p>Choose the right decomposition for a problem.</p>
 <p>recursion is one method</p>
-<h3><span id="pstructure-of-recursive-implementations">structure of recursive implementations</span></h3>
+<h3><span id="structure-of-recursive-implementations">structure of recursive implementations</span><a href="#structure-of-recursive-implementations" class="header-anchor">¶</a></h3>
 <p>helper methods: don’t expose the helper method to your clients.</p>
 <p>base case + recursive case</p>
-<h3><span id="pchoosing-the-right-recursive-subproblem">choosing the right recursive subproblem</span></h3>
+<h3><span id="choosing-the-right-recursive-subproblem">choosing the right recursive subproblem</span><a href="#choosing-the-right-recursive-subproblem" class="header-anchor">¶</a></h3>
 <p>Think about several ways to break down the problem, and try to write the recursive steps.</p>
 <p>Recursive subproblem can be smaller or simpler in more subtle ways.</p>
-<h3><span id="precursive-problems-vs-recursive-data">recursive problems vs. recursive data</span></h3>
+<h3><span id="recursive-problems-vs-recursive-data">recursive problems vs. recursive data</span><a href="#recursive-problems-vs-recursive-data" class="header-anchor">¶</a></h3>
 <ul>
 <li>
 <p>recursive problems</p>
@@ -193,19 +193,19 @@
 </ul>
 </li>
 </ul>
-<h3><span id="pmutual-recursion">Mutual recursion</span></h3>
+<h3><span id="mutual-recursion">Mutual recursion</span><a href="#mutual-recursion" class="header-anchor">¶</a></h3>
 <p>return immutable object</p>
-<h3><span id="preentrant-code">reentrant code</span></h3>
+<h3><span id="reentrant-code">reentrant code</span><a href="#reentrant-code" class="header-anchor">¶</a></h3>
 <ul>
 <li>it can be called again even while a call to it is underway.</li>
 <li>many application scenario: concurrency, callbacks, mutual recursion…</li>
 </ul>
-<h3><span id="pwhen-to-use-recursion-rather-than-iteration">when to use recursion rather than iteration</span></h3>
+<h3><span id="when-to-use-recursion-rather-than-iteration">when to use recursion rather than iteration</span><a href="#when-to-use-recursion-rather-than-iteration" class="header-anchor">¶</a></h3>
 <p>像递归这样只用考虑输入和输出模式的范式属于函数式编程的一种。它与命令式编程/迭代还有一个主要区别就是可变性(mutablity)，不可避免产生的可变变量在迭代过程中不断改变，导致出现漏洞。但递归相较于迭代的明显的缺点就是需要更多的空间。</p>
 <blockquote>
 <p>building up a stack of recursive calls consumes memory temporarily, and the stack is limited in seze.</p>
 </blockquote>
-<h3><span id="pcommon-mistakes-in-recursive-implementations">common mistakes in recursive implementations</span></h3>
+<h3><span id="common-mistakes-in-recursive-implementations">common mistakes in recursive implementations</span><a href="#common-mistakes-in-recursive-implementations" class="header-anchor">¶</a></h3>
 <ul>
 <li>base case missing</li>
 <li>recursive step fails to reduce to a smaller subproblem</li>

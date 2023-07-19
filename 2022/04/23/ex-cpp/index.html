@@ -6,12 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="Ps0 Sec 1 Ps1: a debugging memory allocator    Ps0 seems nice. Sec 1   can’t call ++it when it &#x3D;&#x3D; container.end(), otherwise segmentation fault.   Prefer ++i than i++ 12345i &#x3D; 1;j &#x3D; ++i; &#x2F;&#x2F;(i is 2,">
+    <meta name="description" content="Ps0 Sec 1 Ps1: a debugging memory allocator    Ps0¶ seems nice. Sec 1¶   can’t call ++it when it &#x3D;&#x3D; container.end(), otherwise segmentation fault.   Prefer ++i than i++ 12345i &#x3D; 1;j &#x3D; ++i; &#x2F;&#x2F;(i is">
 <meta property="og:type" content="article">
 <meta property="og:title" content="C++ Programming Excercises in CSAPP">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2022/04/23/ex-cpp/index.html">
 <meta property="og:site_name" content="steins gate zero">
-<meta property="og:description" content="Ps0 Sec 1 Ps1: a debugging memory allocator    Ps0 seems nice. Sec 1   can’t call ++it when it &#x3D;&#x3D; container.end(), otherwise segmentation fault.   Prefer ++i than i++ 12345i &#x3D; 1;j &#x3D; ++i; &#x2F;&#x2F;(i is 2,">
+<meta property="og:description" content="Ps0 Sec 1 Ps1: a debugging memory allocator    Ps0¶ seems nice. Sec 1¶   can’t call ++it when it &#x3D;&#x3D; container.end(), otherwise segmentation fault.   Prefer ++i than i++ 12345i &#x3D; 1;j &#x3D; ++i; &#x2F;&#x2F;(i is">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/04/23/ex-cpp/Screenshot-3286619.png">
 <meta property="article:published_time" content="2022-04-22T16:00:00.000Z">
@@ -168,9 +168,9 @@
 </ul>
 <!-- tocstop -->
 </div>
-<h2><span id="pps0">Ps0</span></h2>
+<h2><span id="ps0">Ps0</span><a href="#ps0" class="header-anchor">¶</a></h2>
 <p>seems nice.</p>
-<h2><span id="psec-1">Sec 1</span></h2>
+<h2><span id="sec-1">Sec 1</span><a href="#sec-1" class="header-anchor">¶</a></h2>
 <ol>
 <li>
 <p>can’t call ++it when it == container.end(), otherwise segmentation fault.</p>
@@ -180,7 +180,7 @@
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">i = <span class="number">1</span>;</span><br><span class="line">j = ++i; <span class="comment">//(i is 2, j is 2)</span></span><br><span class="line">   </span><br><span class="line">i = <span class="number">1</span>;</span><br><span class="line">j = i++; <span class="comment">// (i is 2, j is 1)</span></span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<h2><span id="pps1-a-debugging-memory-allocator">Ps1: a debugging memory allocator</span></h2>
+<h2><span id="ps1-a-debugging-memory-allocator">Ps1: a debugging memory allocator</span><a href="#ps1-a-debugging-memory-allocator" class="header-anchor">¶</a></h2>
 <p>Context:</p>
 <ol>
 <li>malloc is not perfect and can fail due to various reasons such as size was too big/memory is exhausted/…</li>

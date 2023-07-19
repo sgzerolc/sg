@@ -175,12 +175,12 @@
 </ul>
 <!-- tocstop -->
 </div>
-<h2><span id="pr6-specifications">R6: specifications</span></h2>
-<h3><span id="pbehavioral-equivalence">Behavioral equivalence</span></h3>
+<h2><span id="r6-specifications">R6: specifications</span><a href="#r6-specifications" class="header-anchor">¶</a></h2>
+<h3><span id="behavioral-equivalence">Behavioral equivalence</span><a href="#behavioral-equivalence" class="header-anchor">¶</a></h3>
 <p>whether it could be substituted with one implementation for the other</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">find</span><span class="params">(...)</span></span>&#123;</span><br><span class="line">	<span class="comment">//requires: ........</span></span><br><span class="line">	<span class="comment">//effects:</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3><span id="pspecifications">Specifications</span></h3>
-<h4><span id="pwhy">why</span></h4>
+<h3><span id="specifications">Specifications</span><a href="#specifications" class="header-anchor">¶</a></h3>
+<h4><span id="why">why</span><a href="#why" class="header-anchor">¶</a></h4>
 <ul>
 <li>Acts as firewall</li>
 <li>Connect / separate client and implementer
@@ -194,7 +194,7 @@
 </ul>
 </li>
 </ul>
-<h4><span id="pstructure">structure</span></h4>
+<h4><span id="structure">structure</span><a href="#structure" class="header-anchor">¶</a></h4>
 <ul>
 <li>Composition
 <ul>
@@ -222,12 +222,12 @@
 </ul>
 </li>
 </ul>
-<h4><span id="pin-java">in java</span></h4>
+<h4><span id="in-java">in java</span><a href="#in-java" class="header-anchor">¶</a></h4>
 <ul>
 <li>javadoc</li>
 </ul>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@param p</span><br><span class="line">@param q</span><br><span class="line">@return</span><br><span class="line">@throw</span><br></pre></td></tr></table></figure>
-<h3><span id="pdo-not-allow-null-references">do not allow null references</span></h3>
+<h3><span id="do-not-allow-null-references">do not allow null references</span><a href="#do-not-allow-null-references" class="header-anchor">¶</a></h3>
 <ul>
 <li>syntactically illigal
 <ul>
@@ -244,7 +244,7 @@
 </li>
 </ul>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Map.get(key) <span class="keyword">return</span> when the key is not found in the map: </span><br><span class="line">Optional&lt;T&gt;</span><br></pre></td></tr></table></figure>
-<h3><span id="pinclude-emptiness">Include emptiness</span></h3>
+<h3><span id="include-emptiness">Include emptiness</span><a href="#include-emptiness" class="header-anchor">¶</a></h3>
 <ul>
 <li>
 <p>difference between null and emptiness</p>
@@ -253,17 +253,17 @@
 <p>empty values are alway allowed as parameter or return values.</p>
 </li>
 </ul>
-<h3><span id="p-testing">~ testing</span></h3>
+<h3><span id="testing">~ testing</span><a href="#testing" class="header-anchor">¶</a></h3>
 <ul>
 <li>Black box tests need follow specification</li>
 <li>Glass box test must follow spec too.</li>
 </ul>
-<h3><span id="p-mutating">~ mutating</span></h3>
+<h3><span id="mutating">~ mutating</span><a href="#mutating" class="header-anchor">¶</a></h3>
 <ul>
 <li>describe side-effects-changes to mutable objects-in the postcondition</li>
 <li>Mutation is disallowed unless stated otherwise</li>
 </ul>
-<h3><span id="pexceptions">exceptions</span></h3>
+<h3><span id="exceptions">exceptions</span><a href="#exceptions" class="header-anchor">¶</a></h3>
 <ul>
 <li>Function
 <ul>
@@ -275,14 +275,14 @@
 <li>exception hierarchy</li>
 <li>declare exceptions in specs</li>
 </ul>
-<h2><span id="pr7-design-specifications">R7: design specifications</span></h2>
+<h2><span id="r7-design-specifications">R7: design specifications</span><a href="#r7-design-specifications" class="header-anchor">¶</a></h2>
 <p>Three dimensions for comparing specs</p>
 <ul>
 <li>deterministic</li>
 <li>declarative</li>
 <li>strong</li>
 </ul>
-<h3><span id="pdeterministic-vs-underdetermined-specs">Deterministic vs. underdetermined specs</span></h3>
+<h3><span id="deterministic-vs-underdetermined-specs">Deterministic vs. underdetermined specs</span><a href="#deterministic-vs-underdetermined-specs" class="header-anchor">¶</a></h3>
 <ul>
 <li>deterministic: one final state for the same input.</li>
 <li>undetermined: multiple valid outputs for the same input
@@ -291,12 +291,12 @@
 </ul>
 </li>
 </ul>
-<h3><span id="pdeclarative-vs-operational-specs">Declarative vs. operational specs</span></h3>
+<h3><span id="declarative-vs-operational-specs">Declarative vs. operational specs</span><a href="#declarative-vs-operational-specs" class="header-anchor">¶</a></h3>
 <ul>
 <li>Operational : steps that the method performs</li>
 <li>Delcarative : properties of the final outcome, and how it related to the initial state</li>
 </ul>
-<h3><span id="pstronger-vs-weaker-specs">stronger vs. weaker specs</span></h3>
+<h3><span id="stronger-vs-weaker-specs">stronger vs. weaker specs</span><a href="#stronger-vs-weaker-specs" class="header-anchor">¶</a></h3>
 <p>a spec S2 is stronger than a spec S1 if the set of implementations that satisfy S2 is a strict subset of those that match S1.</p>
 <blockquote>
 <p>Rule: S2 is stronger than a spec S1 iff</p>

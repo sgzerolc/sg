@@ -82,10 +82,10 @@
     <span id="actions">
       <ul>
         
-        <li><a class="icon" aria-label="Previous post" href="/sg/2021/11/09/6.004_synchronization/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Previous post" href="/sg/2021/11/09/6.006-data_structures/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
         
         
-        <li><a class="icon" aria-label="Next post" href="/sg/2021/11/07/dark/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Next post" href="/sg/2021/11/09/6.004_synchronization/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
         
         <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
         <li><a class="icon" aria-label="Share post" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
@@ -186,27 +186,27 @@
 </ul>
 <!-- tocstop -->
 </div>
-<h2><span id="pinterval-scheduling">Interval scheduling</span></h2>
+<h2><span id="interval-scheduling">Interval scheduling</span><a href="#interval-scheduling" class="header-anchor">¶</a></h2>
 <img src="/sg/2021/11/09/6.046-divide_and_conquer/Screenshot-7925628.png" class title="Screenshot-7925628">
-<h2><span id="pconvex-hull">Convex hull</span></h2>
+<h2><span id="convex-hull">Convex hull</span><a href="#convex-hull" class="header-anchor">¶</a></h2>
 <img src="/sg/2021/11/09/6.046-divide_and_conquer/Screenshot-7925587.png" class title="Screenshot-7925587">
-<h2><span id="pmedian-finding">Median finding</span></h2>
+<h2><span id="median-finding">Median finding</span><a href="#median-finding" class="header-anchor">¶</a></h2>
 <p>Runtime: O($n^2$)</p>
 <img src="/sg/2021/11/09/6.046-divide_and_conquer/Screenshot-7925566.png" class title="Screenshot-7925566">
-<h2><span id="pr1-methods">R1: methods</span></h2>
-<h3><span id="psmarter-is">smarter IS</span></h3>
+<h2><span id="r1-methods">R1: methods</span><a href="#r1-methods" class="header-anchor">¶</a></h2>
+<h3><span id="smarter-is">smarter IS</span><a href="#smarter-is" class="header-anchor">¶</a></h3>
 <p>recursion tree: reduce the runtime to O(logn)</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">M[j] = max(w(j) + M[p(j)], M[j - 1]) for j=1 to n</span><br></pre></td></tr></table></figure>
-<h3><span id="pstrassen-s-algorithm">Strassen’s algorithm</span></h3>
+<h3><span id="strassen-s-algorithm">Strassen’s algorithm</span><a href="#strassen-s-algorithm" class="header-anchor">¶</a></h3>
 <ol>
 <li>multiplication runs much slower than addition</li>
 <li>Strassen’s only uses 7 multiplications instead of 8</li>
 </ol>
-<h3><span id="pmaster-theorem">Master theorem</span></h3>
+<h3><span id="master-theorem">Master theorem</span><a href="#master-theorem" class="header-anchor">¶</a></h3>
 <ol>
 <li>Old stuff of 6.006</li>
 </ol>
-<h2><span id="pfast-fourier-transform">Fast Fourier Transform</span></h2>
+<h2><span id="fast-fourier-transform">Fast Fourier Transform</span><a href="#fast-fourier-transform" class="header-anchor">¶</a></h2>
 <ol>
 <li>
 <p>polynomial representations</p>
@@ -224,7 +224,7 @@
 <img src="/sg/2021/11/09/6.046-divide_and_conquer/Screenshot-7930623.png" class title="Screenshot-7930623">
 </li>
 </ol>
-<h3><span id="ppolynomial-multiplication">Polynomial multiplication</span></h3>
+<h3><span id="polynomial-multiplication">Polynomial multiplication</span><a href="#polynomial-multiplication" class="header-anchor">¶</a></h3>
 <ol>
 <li>
 <p>a divide and conquer algorithm: Divide into even and odd coefficients</p>
@@ -237,7 +237,7 @@
 <img src="/sg/2021/11/09/6.046-divide_and_conquer/Screenshot-7931842.png" class title="Screenshot-7931842">
 </li>
 </ol>
-<h3><span id="pfft">FFT</span></h3>
+<h3><span id="fft">FFT</span><a href="#fft" class="header-anchor">¶</a></h3>
 <ol>
 <li>
 <p>FFT: O(nlgn) divide and conquer algorithm for DFT</p>
@@ -259,15 +259,15 @@ A* is the resulting samples.</p>
 </ul>
 </li>
 </ol>
-<h3><span id="papplication">application</span></h3>
+<h3><span id="application">application</span><a href="#application" class="header-anchor">¶</a></h3>
 <ol>
 <li>audio processing</li>
 </ol>
-<h2><span id="pvan-emade-boas-tree">Van Emade Boas Tree</span></h2>
+<h2><span id="van-emade-boas-tree">Van Emade Boas Tree</span><a href="#van-emade-boas-tree" class="header-anchor">¶</a></h2>
 <p>problem: why use b tree instead of bst in practice?</p>
 <p>答案与内存层级有关。通常的算法中我们假定从内存中直接获取数据，而实际上计算机的基本内存结构包括：cpu与缓存器间的高速通道，缓存与磁盘中的低速通道。每次访问磁盘获取数据的花费都很大，所以我们需要减少磁盘的访问，因而引入了缓存器。然后我们需要将需要的内存块从磁盘带到缓存中，当块的大小与cache line size相同时，能更大的利用访问的花费。</p>
 <p>二叉树的存储方式是逐层存储的，一个分支对应一个数据。而b tree可以将整个块存储在同个分支，这样能更快的带出需要的内存块而不需要逐次访问磁盘。</p>
-<h3><span id="pstructure">Structure</span></h3>
+<h3><span id="structure">Structure</span><a href="#structure" class="header-anchor">¶</a></h3>
 <ol>
 <li>
 <p>B represents branching factor, which is related to cache line length. ex:in 2-3 tree: B = 2</p>
@@ -291,7 +291,7 @@ A* is the resulting samples.</p>
 </ul>
 </li>
 </ol>
-<h3><span id="panalysis">Analysis</span></h3>
+<h3><span id="analysis">Analysis</span><a href="#analysis" class="header-anchor">¶</a></h3>
 <p>We want to maintain n elements in the range {0, 1, 2, . . . , u − 1} and perform Insert, Delete and Successor operations in O(log log u) time.</p>
 <p>Intuition: binary search on the levels of tree.</p>
 <p>Improvements: how a very simple data structure become vEB tree?</p>

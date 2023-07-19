@@ -189,7 +189,7 @@
 </ul>
 <!-- tocstop -->
 </div>
-<h2><span id="p17-virtual-memory">17 virtual memory</span></h2>
+<h2><span id="17-virtual-memory">17 virtual memory</span><a href="#17-virtual-memory" class="header-anchor">¶</a></h2>
 <p>Fact:DRAM accessing hard disk is much more slower(100,000) than cache accessing main main memory.</p>
 <p>Problem: Enormous miss penalty of secondary storage</p>
 <p>Solution/Goal: the miss rate should be very small compared to the rate of executing instructions.(decrease miss ratio)</p>
@@ -209,7 +209,7 @@
 </blockquote>
 </li>
 </ol>
-<h3><span id="pvirtual-memory">Virtual memory</span></h3>
+<h3><span id="virtual-memory">Virtual memory</span><a href="#virtual-memory" class="header-anchor">¶</a></h3>
 <p>Fact: we only need to ensure the current working set of a program is actually resident in main memory. Locations not currently being used could live in secondary storage until needed.</p>
 <p>Goal:</p>
 <ul>
@@ -230,7 +230,7 @@
 <p>ease memory management, protect multiple contexts from each other.</p>
 </li>
 </ul>
-<h4><span id="p-gt-mmu-translate-va-to-pa">&gt; MMU:translate VA to PA</span></h4>
+<h4><span id="gt-mmu-translate-va-to-pa">&gt; MMU:translate VA to PA</span><a href="#gt-mmu-translate-va-to-pa" class="header-anchor">¶</a></h4>
 <p>Solution: two part: VAtoPA + PageFault</p>
 <ul>
 <li>use hw(MMU) to implement VtoP, use sw(page fault exception handler of CPU) to handle exceptional cases</li>
@@ -256,7 +256,7 @@
 </li>
 </ol>
 <p>Arithmetic: page map(v, m, p)</p>
-<h4><span id="p-gt-where-to-store-page-map">&gt; Where to store page map:</span></h4>
+<h4><span id="gt-where-to-store-page-map">&gt; Where to store page map:</span><a href="#gt-where-to-store-page-map" class="header-anchor">¶</a></h4>
 <ol>
 <li>
 <p>store in RAM(main memory): RAM-resident page maps</p>
@@ -287,9 +287,9 @@
 </ul>
 </li>
 </ol>
-<h4><span id="p-gt-sum-up-mmu-address-translation">&gt; sum up: MMU address translation</span></h4>
+<h4><span id="gt-sum-up-mmu-address-translation">&gt; sum up: MMU address translation</span><a href="#gt-sum-up-mmu-address-translation" class="header-anchor">¶</a></h4>
 <img src="/sg/2021/11/04/6.004-vm/sc1.png" class title="截屏2021-11-01 上午10.15.13">
-<h3><span id="pvirtual-machine">Virtual machine</span></h3>
+<h3><span id="virtual-machine">Virtual machine</span><a href="#virtual-machine" class="header-anchor">¶</a></h3>
 <p>Fact:</p>
 <blockquote>
 <p>context: a mapping of VA to PA</p>
@@ -318,10 +318,10 @@
 </ul>
 <p>several part to consider: MMU time on HIT, flush cache after context switch</p>
 <p>…to be continued this part</p>
-<h2><span id="p18-virtualizing-the-processor">18 virtualizing the processor</span></h2>
+<h2><span id="18-virtualizing-the-processor">18 virtualizing the processor</span><a href="#18-virtualizing-the-processor" class="header-anchor">¶</a></h2>
 <p>回顾一下虚拟内存，简单来说它提供给每个运行的程序一个拥有计算机所有内存地址空间的幻想。它通过内存控制单元实现从虚拟地址到物理地址的转换，用虚拟地址查询页表，而用页表来记录物理地址，完成查询。</p>
 <p>由于访问硬盘的延迟比主存储器（main memory）慢的多，通过TLB（一种缓存器）来记录活跃的虚拟地址到物理地址的转换。</p>
-<h3><span id="pbuild-a-vm">build a VM</span></h3>
+<h3><span id="build-a-vm">build a VM</span><a href="#build-a-vm" class="header-anchor">¶</a></h3>
 <p>把正在运行的程序抽象成进程，一个进程包含它运行所需要的所有资源(CPU,I/O device, MMU,virtual address space)…</p>
 <p>有一个特别的优先的进程叫kernel。OS为各种进程提供服务，比如访问文件中的数据，建立网络连接，管理UI。从不同用户模式的进程切换，OS需要保存现在运行的进程状态，保存在主存储器中或二级存储器中。</p>
 <p>Problem: share one physical machine between all the virtual machines.  As if each process was running on its own “virtual machine” that works independently of other virtual machines for other processes.(OS’s job)</p>
@@ -340,7 +340,7 @@
 <li>additional information about the process’ input and output activities, such as where it has reached in reading or writing files in the file system, the status and buffers associated with open network connections, pending events from the user interface (<em>e.g.</em>, keyboard characters and mouse clicks), and so on.</li>
 </ul>
 </blockquote>
-<h3><span id="pjin-cheng-ru-he-fu-yong-cpu">进程如何复用cpu？</span></h3>
+<h3><span id="jin-cheng-ru-he-fu-yong-cpu">进程如何复用cpu？</span><a href="#jin-cheng-ru-he-fu-yong-cpu" class="header-anchor">¶</a></h3>
 <p>time-multiplexing of the cpu = timesharing</p>
 <p>OS从运行进程0到运行进程1：</p>
 <img src="/sg/2021/11/04/6.004-vm/sc2.png" class title="截屏2021-11-02 上午1.06.21">
@@ -348,7 +348,7 @@
 <li>运行进程0 -&gt; 停止运行0，将控制转移回OS kernel，保存当前地址（PC+4）-&gt; 保存进程0的状态并且加载进程1的状态 -&gt; 回到进程1 -&gt; 运行进程1。</li>
 <li>第2步和第4步是不同的trap handler。</li>
 </ul>
-<h3><span id="pinterrupts-to-time-sharing">interrupts to time-sharing</span></h3>
+<h3><span id="interrupts-to-time-sharing">interrupts to time-sharing</span><a href="#interrupts-to-time-sharing" class="header-anchor">¶</a></h3>
 <p>中断处理:handler</p>
 <ul>
 <li>
@@ -425,10 +425,10 @@
 </ul>
 </li>
 </ul>
-<h3><span id="pexception-handling">exception handling</span></h3>
+<h3><span id="exception-handling">exception handling</span><a href="#exception-handling" class="header-anchor">¶</a></h3>
 <p>problem: how to deal with “illegal” opcodes?</p>
 <p>…跳过了硬件，汇编的部分</p>
-<h3><span id="pcommunicate-with-os">Communicate with os</span></h3>
+<h3><span id="communicate-with-os">Communicate with os</span><a href="#communicate-with-os" class="header-anchor">¶</a></h3>
 <p>Problem: how user-mode programs communicate with OS code?</p>
 <p>当os在运行其他进程时，用户程序该如何将控制转移回os？</p>
 <p>Solution:</p>
@@ -437,10 +437,10 @@
 <li>Implementation: use illegal instructions to cause an exception, and OS recognize the instruction as a user-mode SVCs</li>
 </ul>
 <p>…跳过了汇编部分</p>
-<h2><span id="p19-devices-and-interrupts">19 devices and interrupts</span></h2>
+<h2><span id="19-devices-and-interrupts">19 devices and interrupts</span><a href="#19-devices-and-interrupts" class="header-anchor">¶</a></h2>
 <p>Problem 1: how the OS interacts with the devices themselves?</p>
 <p>Problem 2: how supervisor calls access the kernel buffers in response to requests from user-mode processes?</p>
-<h3><span id="pinterrupt-based-asynch-i-o">Interrupt-based asynch I/O</span></h3>
+<h3><span id="interrupt-based-asynch-i-o">Interrupt-based asynch I/O</span><a href="#interrupt-based-asynch-i-o" class="header-anchor">¶</a></h3>
 <p>操作系统中有很多输入/输出设备，以键盘输入为例，用户在键盘上打字，引起键盘向cpu发起中断请求。中断停止当前程序的运行而执行这个特别的输入输出事件。当内核中的缓存用完后会发生什么？</p>
 <p>早先的处理方式是丢弃收到的键盘输入的字符，提示用户之前输入的已作废。</p>
 <p>后来用户模式的程序执行ReadKey() SVC，要求OS返回下一个字母到R0寄存器中，然后遵循SVC继续执行指令。</p>
@@ -477,7 +477,7 @@
 <p>键盘处理还需要识别键的状态是按下还是释放，然后将字符转换成ASCII码，并且需要处理特殊的按键组合。</p>
 </li>
 </ul>
-<h3><span id="pimplementations-of-readkey">Implementations of ReadKey</span></h3>
+<h3><span id="implementations-of-readkey">Implementations of ReadKey</span><a href="#implementations-of-readkey" class="header-anchor">¶</a></h3>
 <p>Goal: the associated supervisor call that lets user programs read characters.</p>
 <p>Attempt1: 直接写</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ReadKey_h()&#123;</span><br><span class="line">  <span class="keyword">int</span> kbdnum = ProcTbl[Cur].DPYNum;</span><br><span class="line">  <span class="keyword">while</span> (BufferEmpty(kbdnum))&#123;</span><br><span class="line">    <span class="comment">/* busy wait loop*/</span></span><br><span class="line">  &#125;</span><br><span class="line">	UserMState.Reqs[<span class="number">0</span>] = ReadInputBuffer (kbdnum) ;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -544,7 +544,7 @@
 <p>The effect is that once a process goes to sleep() WAITING for an event, it’s not considered for execution again until the event occurs and wakeup() marks the process as ACTIVE.</p>
 </blockquote>
 <p>Example: which handler &amp; os? 像个解谜游戏。根据handler和os的特点来排除。</p>
-<h3><span id="ptime-sharing-can-t-meet-with-ddl">Time-sharing can’t meet with ddl</span></h3>
+<h3><span id="time-sharing-can-t-meet-with-ddl">Time-sharing can’t meet with ddl</span><a href="#time-sharing-can-t-meet-with-ddl" class="header-anchor">¶</a></h3>
 <p>Problem: asynchronous world.</p>
 <p>Solution: I/O: separate “event handling” from “event processing”.</p>
 <ul>
@@ -555,7 +555,7 @@
 <p>Time-sharing system: 在单个硬件系统上通过快速在进程间切换伪造并行的假象，为每个程序提供了在独立的虚拟机上运行的幻想。</p>
 <p>downside: processing throughput is more variable</p>
 </blockquote>
-<h3><span id="pthe-need-for-real-time">the need for real time</span></h3>
+<h3><span id="the-need-for-real-time">the need for real time</span><a href="#the-need-for-real-time" class="header-anchor">¶</a></h3>
 <ul>
 <li>
 <p>what’s the largest L such that Lmax+S=D?</p>
@@ -594,11 +594,11 @@
 </ul>
 </li>
 </ul>
-<h3><span id="preal-time-scenarios">Real-time scenarios</span></h3>
+<h3><span id="real-time-scenarios">Real-time scenarios</span><a href="#real-time-scenarios" class="header-anchor">¶</a></h3>
 <p>scenario: scheduling of multiple devices: long-running handlers have a huge impact on the worst-case latency seen by the other devices.</p>
-<h4><span id="p-gt-stragegy0-first-come-first-served-scenario">&gt; Stragegy0:  first-come-first-served scenario.</span></h4>
+<h4><span id="gt-stragegy0-first-come-first-served-scenario">&gt; Stragegy0:  first-come-first-served scenario.</span><a href="#gt-stragegy0-first-come-first-served-scenario" class="header-anchor">¶</a></h4>
 <p>Problems: reducing the worst-case latencies</p>
-<h4><span id="p-gt-strategy1-nonpreemptive-weak-priority-system">&gt; Strategy1: “nonpreemptive” / “weak” priority system.</span></h4>
+<h4><span id="gt-strategy1-nonpreemptive-weak-priority-system">&gt; Strategy1: “nonpreemptive” / “weak” priority system.</span><a href="#gt-strategy1-nonpreemptive-weak-priority-system" class="header-anchor">¶</a></h4>
 <ul>
 <li>
 <p>assign priorities to the pending requests and to serve the requests in priority order</p>
@@ -639,12 +639,12 @@
 <img src="/sg/2021/11/04/6.004-vm/sc5.png" class title="截屏2021-11-04 下午12.57.13">
 </li>
 </ul>
-<h4><span id="p-gt-strategy2-the-need-for-preemption">&gt; Strategy2: the need for preemption</span></h4>
+<h4><span id="gt-strategy2-the-need-for-preemption">&gt; Strategy2: the need for preemption</span><a href="#gt-strategy2-the-need-for-preemption" class="header-anchor">¶</a></h4>
 <p>-&gt;a preemptive priority system/“strong” priority system</p>
 <p>怎么处理strategy1中的场景问题？</p>
 <p>设定新的优先级排序为：disk &gt; printer&gt; keyboard，改变的是当请求发出时立刻执行当前程序而不等待更低优先级程序的完成。在强优先级系统中，优先级和ddl非常相关，所以一定能在限期完成请求；而在弱优先系统中，优先级按照服务需要完成的时间划分，所以在考虑中断延迟时需要考虑其他服务的中断延迟时间。</p>
 <p>…跳过了硬件实现部分…</p>
-<h4><span id="p-gt-recurring-interrupts">&gt; recurring interrupts</span></h4>
+<h4><span id="gt-recurring-interrupts">&gt; recurring interrupts</span><a href="#gt-recurring-interrupts" class="header-anchor">¶</a></h4>
 <p>Consider interrupts which recur at bounded rates:</p>
 <img src="/sg/2021/11/04/6.004-vm/sc6.png" class title="截屏2021-11-04 下午1.16.28">
 <p>Keyboard handler doesn’t complete until 3 ms after its request was received.</p>

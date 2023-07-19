@@ -6,12 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="concurrency virtual machines    concurrency problem: how to handle concurrency problem using yield? And the problems encountered.(from lecture 5) yield(): suspends the running thread, chooses a new">
+    <meta name="description" content="concurrency virtual machines    concurrency¶ problem: how to handle concurrency problem using yield? And the problems encountered.(from lecture 5) yield(): suspends the running thread, chooses a ne">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SD os">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2021/11/15/SD_os/index.html">
 <meta property="og:site_name" content="steins gate zero">
-<meta property="og:description" content="concurrency virtual machines    concurrency problem: how to handle concurrency problem using yield? And the problems encountered.(from lecture 5) yield(): suspends the running thread, chooses a new">
+<meta property="og:description" content="concurrency virtual machines    concurrency¶ problem: how to handle concurrency problem using yield? And the problems encountered.(from lecture 5) yield(): suspends the running thread, chooses a ne">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2021/11/15/SD_os/sc.png">
 <meta property="article:published_time" content="2021-11-14T16:00:00.000Z">
@@ -161,11 +161,11 @@
 </ul>
 <!-- tocstop -->
 </div>
-<h2><span id="pconcurrency">concurrency</span></h2>
+<h2><span id="concurrency">concurrency</span><a href="#concurrency" class="header-anchor">¶</a></h2>
 <p>problem: how to handle concurrency problem using yield? And the problems encountered.(from lecture 5)</p>
 <p>yield(): suspends the running thread, chooses a new thread to run, and resumes the new thread</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">yield</span>(): </span><br><span class="line">  acquire(t_lock) </span><br><span class="line">  // Suspend the running thread </span><br><span class="line">  <span class="built_in">id</span> = cpus[CPU].thread </span><br><span class="line">  threads[<span class="built_in">id</span>].state = RUNNABLE </span><br><span class="line">  threads[<span class="built_in">id</span>].sp = SP </span><br><span class="line">  threads[<span class="built_in">id</span>].ptr = PTR </span><br><span class="line">  // Choose a new thread to run </span><br><span class="line">  do: </span><br><span class="line">    <span class="built_in">id</span> = (<span class="built_in">id</span> + <span class="number">1</span>) mod N </span><br><span class="line">  <span class="keyword">while</span> threads[<span class="built_in">id</span>].state != RUNNABLE </span><br><span class="line">  // Resume the new thread </span><br><span class="line">  SP = threads[<span class="built_in">id</span>].sp </span><br><span class="line">  PTR = threads[<span class="built_in">id</span>].ptr </span><br><span class="line">  threads[<span class="built_in">id</span>].state = RUNNING </span><br><span class="line">  cpus[CPU].thread = <span class="built_in">id</span> </span><br><span class="line">    </span><br><span class="line">  release(t_lock)</span><br></pre></td></tr></table></figure>
-<h2><span id="pvirtual-machines">virtual machines</span></h2>
+<h2><span id="virtual-machines">virtual machines</span><a href="#virtual-machines" class="header-anchor">¶</a></h2>
 <p>Scenario: running multiple Ones on a single physical machine.</p>
 <p>problem: how to safely share physical hardware?</p>
 <img src="/sg/2021/11/15/SD_os/sc.png" class title="截屏2021-11-15 下午10.12.27">

@@ -193,8 +193,8 @@
 </ul>
 <!-- tocstop -->
 </div>
-<h2><span id="plab1-unix-utilities">Lab1 unix utilities</span></h2>
-<h3><span id="pprimes">primes</span></h3>
+<h2><span id="lab1-unix-utilities">Lab1 unix utilities</span><a href="#lab1-unix-utilities" class="header-anchor">¶</a></h2>
+<h3><span id="primes">primes</span><a href="#primes" class="header-anchor">¶</a></h3>
 <p>Problem: run commands in pipeline</p>
 <p>Few gaps I didn’t think straight for the first time:</p>
 <ul>
@@ -218,7 +218,7 @@
 <p>Leaves of the process tree: hang because read blocks somehow.</p>
 </li>
 </ul>
-<h3><span id="pfind">find</span></h3>
+<h3><span id="find">find</span><a href="#find" class="header-anchor">¶</a></h3>
 <p>c basics: <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/18481740/pointer-expressions-ptr-ptr-and-ptr">++, pointer</a></p>
 <ul>
 <li>
@@ -234,26 +234,26 @@
 <p>“++i” is known as the pre-increment operator, which increments the value of ‘i’ immediately and returns the incremented value. On the other hand, “i++” is known as the post-increment operator, which increments the value of ‘i’ but returns the original value that ‘i’ held before being incremented (from codeforce answers).</p>
 </li>
 </ul>
-<h3><span id="pxargs">xargs</span></h3>
+<h3><span id="xargs">xargs</span><a href="#xargs" class="header-anchor">¶</a></h3>
 <p>c basics: <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/8824057/pointer-to-string-array-in-c">string array</a></p>
 <ul>
 <li>r/w in low level, read char to lines</li>
 <li>int getline(char line[], int lim); int readlines(char *lineptr[], int maxlines);</li>
 </ul>
 <p>Btw, the “many $” sentence is an explanation not a bug.</p>
-<h2><span id="plab2-syscalls">Lab2 syscalls</span></h2>
-<h3><span id="ptrace">trace</span></h3>
+<h2><span id="lab2-syscalls">Lab2 syscalls</span><a href="#lab2-syscalls" class="header-anchor">¶</a></h2>
+<h3><span id="trace">trace</span><a href="#trace" class="header-anchor">¶</a></h3>
 <p>Problem: what is trace?</p>
 <p>Trace is a user call helping to track one particular syscall in the execution process.</p>
 <p>Problem: what’s the relation between sys_call and sys_proc?</p>
-<h3><span id="psysinfo">sysinfo</span></h3>
+<h3><span id="sysinfo">sysinfo</span><a href="#sysinfo" class="header-anchor">¶</a></h3>
 <p>It’s easy to overlook the spelling error. One bracket makes you question about everything:)</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (copyout(myproc()-&gt;pagetable, addr, (<span class="keyword">char</span> *)&amp;info, <span class="keyword">sizeof</span>(info) &lt; <span class="number">0</span>); <span class="comment">// off-by-one-bracket error</span></span><br><span class="line"><span class="keyword">if</span> (copyout(myproc()-&gt;pagetable, addr, (<span class="keyword">char</span> *)&amp;info, <span class="keyword">sizeof</span>(info)) &lt; <span class="number">0</span>);  <span class="comment">// correct one</span></span><br></pre></td></tr></table></figure>
-<h2><span id="plab3-page-tables">Lab3 page tables</span></h2>
+<h2><span id="lab3-page-tables">Lab3 page tables</span><a href="#lab3-page-tables" class="header-anchor">¶</a></h2>
 <p>Goal: allow the kernel to directly dereference user pointers</p>
-<h3><span id="pprint-pt">print pt</span></h3>
+<h3><span id="print-pt">print pt</span><a href="#print-pt" class="header-anchor">¶</a></h3>
 <p>You can’t write it without knowing the page table implementation in xv6. At first, it needs a simple and straightforward solution and then optimize it. I was thinking about using iteration or recursion, which took a while.</p>
-<h3><span id="pkernel-page-table">kernel page table</span></h3>
+<h3><span id="kernel-page-table">kernel page table</span><a href="#kernel-page-table" class="header-anchor">¶</a></h3>
 <p>problem: page table set up: panic</p>
 <ul>
 <li>When to start paging?</li>
@@ -283,7 +283,7 @@
 <ol>
 <li>Allocproc sets up one process’s kernel stack</li>
 </ol>
-<h3><span id="pcopyin">copyin</span></h3>
+<h3><span id="copyin">copyin</span><a href="#copyin" class="header-anchor">¶</a></h3>
 <p>Task: add user mappings to user process’s kernel page table</p>
 <p>Problem:</p>
 <ol>
@@ -296,14 +296,14 @@
 </ol>
 <p>Predictions:</p>
 <p>Observations:</p>
-<h2><span id="plab4">Lab4</span></h2>
-<h2><span id="plab5">Lab5</span></h2>
-<h2><span id="plab6">Lab6</span></h2>
-<h2><span id="plab7">Lab7</span></h2>
-<h2><span id="plab8">Lab8</span></h2>
-<h2><span id="plab9-fs">Lab9 fs</span></h2>
-<h2><span id="plab10-mmap">Lab10 mmap</span></h2>
-<h2><span id="ptool">Tool</span></h2>
+<h2><span id="lab4">Lab4</span><a href="#lab4" class="header-anchor">¶</a></h2>
+<h2><span id="lab5">Lab5</span><a href="#lab5" class="header-anchor">¶</a></h2>
+<h2><span id="lab6">Lab6</span><a href="#lab6" class="header-anchor">¶</a></h2>
+<h2><span id="lab7">Lab7</span><a href="#lab7" class="header-anchor">¶</a></h2>
+<h2><span id="lab8">Lab8</span><a href="#lab8" class="header-anchor">¶</a></h2>
+<h2><span id="lab9-fs">Lab9 fs</span><a href="#lab9-fs" class="header-anchor">¶</a></h2>
+<h2><span id="lab10-mmap">Lab10 mmap</span><a href="#lab10-mmap" class="header-anchor">¶</a></h2>
+<h2><span id="tool">Tool</span><a href="#tool" class="header-anchor">¶</a></h2>
 <p>Qemu 5.1<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup>, Mac m1, Riscv-toolchain 10.1</p>
 <p>6.s081 20fall labs</p>
 <img src="/sg/2022/05/20/os_xv6/step-by-step-debugging.png" class title="step-by-step-debugging">

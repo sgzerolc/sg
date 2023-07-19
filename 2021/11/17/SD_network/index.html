@@ -179,7 +179,7 @@
 <blockquote>
 <p>general goal: on the Internet, we have to solve all of the “normal” networking problems (addressing, routing,transport) at massive scale, while supporting a diverse group of applications and competing economic interests.</p>
 </blockquote>
-<h2><span id="pintroduction">introduction</span></h2>
+<h2><span id="introduction">introduction</span><a href="#introduction" class="header-anchor">¶</a></h2>
 <p>we can build network starting from link. Once the network is set up, we need to consider of transport. Finally, we need to think about the practical use in real life, which generates the traffic.</p>
 <p><strong>Changes</strong></p>
 <img src="/sg/2021/11/17/SD_network/sc.png" class title="截屏2021-11-17 下午3.37.43">
@@ -217,7 +217,7 @@
 <li>address space depletion: IPv4 -&gt; IPv6</li>
 <li>congestion control</li>
 </ol>
-<h2><span id="prouting-hard-to-scale-version">Routing(hard to scale version)</span></h2>
+<h2><span id="routing-hard-to-scale-version">Routing(hard to scale version)</span><a href="#routing-hard-to-scale-version" class="header-anchor">¶</a></h2>
 <p>Problems: For every node X, after the routing protocol is run, X’s routing table should contain a <em>minimum-cost route</em> to every other reachable node.</p>
 <p>Concept:</p>
 <ul>
@@ -241,7 +241,7 @@
 </ol>
 <img src="/sg/2021/11/17/SD_network/sc1.png" class title="截屏2021-11-17 下午4.19.25">
 <p>Summary: they are good for very small networks but not good enough for scaling to the size of the internet.</p>
-<h2><span id="prouting-at-scale-bgp">Routing at scale:BGP</span></h2>
+<h2><span id="routing-at-scale-bgp">Routing at scale:BGP</span><a href="#routing-at-scale-bgp" class="header-anchor">¶</a></h2>
 <p><em>Concept</em></p>
 <p>BGP: border gateway protocol</p>
 <p>policy routing: switches make routing decisions based on some set of policies set by a human.  Routing protocol must disseminate enough information to enable those policies.</p>
@@ -257,7 +257,7 @@
 <li>Scale</li>
 <li>Secure</li>
 </ul>
-<h2><span id="ptcp">TCP</span></h2>
+<h2><span id="tcp">TCP</span><a href="#tcp" class="header-anchor">¶</a></h2>
 <p><em>Concept</em>: reliable transport&amp;congestion control</p>
 <p>arguments: Sequence numbers, acknowledgements,timeouts</p>
 <hr>
@@ -285,7 +285,7 @@
 <ul>
 <li>issue 2: TCP doesn’t react to congestion until it’s already happening.  -&gt; next lecture</li>
 </ul>
-<h2><span id="pin-network-resource-management">In-network resource management</span></h2>
+<h2><span id="in-network-resource-management">In-network resource management</span><a href="#in-network-resource-management" class="header-anchor">¶</a></h2>
 <p>TCP have issues that:</p>
 <p>problem 1: long delays when routers have too much buffering</p>
 <p>problem 2: Doesn’t work well in some scenarios (DCTCP)</p>
@@ -293,7 +293,7 @@
 <p>Goal: solve problem 3: transient queues.</p>
 <p>Idea: manipulate switches to get flexibility.</p>
 <p>consideration: we need to think about what the method allows a switch to do? Example protocols? How the protocol works? Pros/cons of each protocol.</p>
-<h3><span id="pa1-queue-management">A1:Queue management</span></h3>
+<h3><span id="a1-queue-management">A1:Queue management</span><a href="#a1-queue-management" class="header-anchor">¶</a></h3>
 <ol>
 <li>
 <p>drop tail</p>
@@ -305,17 +305,17 @@
 <p>explicit congestion notification</p>
 </li>
 </ol>
-<h3><span id="pa2-delay-based-scheduling">A2:Delay-based scheduling</span></h3>
+<h3><span id="a2-delay-based-scheduling">A2:Delay-based scheduling</span><a href="#a2-delay-based-scheduling" class="header-anchor">¶</a></h3>
 <ol>
 <li>priority queueing</li>
 </ol>
-<h3><span id="pa3-bandwidth-based-scheduling">A3:Bandwidth-based scheduling</span></h3>
+<h3><span id="a3-bandwidth-based-scheduling">A3:Bandwidth-based scheduling</span><a href="#a3-bandwidth-based-scheduling" class="header-anchor">¶</a></h3>
 <ol>
 <li>Round-robin</li>
 <li>weighted round-robin</li>
 <li>deficit round-robin</li>
 </ol>
-<h3><span id="pdiscussion">Discussion</span></h3>
+<h3><span id="discussion">Discussion</span><a href="#discussion" class="header-anchor">¶</a></h3>
 <p>let’s think about three ideas in lecture:</p>
 <ol>
 <li>Traffic differentiation</li>

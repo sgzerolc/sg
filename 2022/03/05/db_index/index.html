@@ -233,7 +233,7 @@
 <li>Concurrency: multiple threads to access without causing problems -&gt; efficient access</li>
 </ol>
 <p>There are two types of data structures:hash table, trees.</p>
-<h2><span id="phash-tables">hash tables</span></h2>
+<h2><span id="hash-tables">hash tables</span><a href="#hash-tables" class="header-anchor">¶</a></h2>
 <ol>
 <li>
 <p>Complexity: space: O(n); runtime: amortized O(1) lookup</p>
@@ -250,7 +250,7 @@
 </ul>
 </li>
 </ol>
-<h3><span id="pstatic-hashing-schema">Static hashing schema</span></h3>
+<h3><span id="static-hashing-schema">Static hashing schema</span><a href="#static-hashing-schema" class="header-anchor">¶</a></h3>
 <p>The size of the hash table is fixed. DBMS has to rebuild a larger hash tables if it runs out of storage space.</p>
 <p>Assume: knowing the number of elements it wants to store.</p>
 <ol>
@@ -294,7 +294,7 @@
 <img src="/sg/2022/03/05/db_index/Screenshot-7510099.png" class title="Screenshot-7510099">
 </li>
 </ol>
-<h3><span id="pdynamic-hashing-schema">Dynamic hashing schema</span></h3>
+<h3><span id="dynamic-hashing-schema">Dynamic hashing schema</span><a href="#dynamic-hashing-schema" class="header-anchor">¶</a></h3>
 <p>property: Dynamic hash tables resize themselves on demand</p>
 <ol>
 <li>
@@ -331,12 +331,12 @@
 </li>
 </ol>
 <p>​</p>
-<h2><span id="pb-tree">b+ tree</span></h2>
+<h2><span id="b-tree">b+ tree</span><a href="#b-tree" class="header-anchor">¶</a></h2>
 <ol>
 <li>table index: index of a table’s attributes. The table is stored in the sort order specified by the primary key. Can be either heap- or index-organized storage</li>
 <li>Trade-off on the number of indexes to create per database: storage overhead Vs. maintenance overhead</li>
 </ol>
-<h3><span id="poverview">Overview</span></h3>
+<h3><span id="overview">Overview</span><a href="#overview" class="header-anchor">¶</a></h3>
 <ol>
 <li>
 <p>b+ tree: a self-balancing tree data structure that keeps data sorted and allows searches, sequential access, insertion, and deletions in O(log(n)). Good at read/write large blocks of data.</p>
@@ -418,7 +418,7 @@ the duplicate keys.</p>
 <img src="/sg/2022/03/05/db_index/Screenshot-7517996.png" class title="Screenshot-7517996">
 </li>
 </ol>
-<h3><span id="pdisign-choices">disign choices</span></h3>
+<h3><span id="disign-choices">disign choices</span><a href="#disign-choices" class="header-anchor">¶</a></h3>
 <ol>
 <li>
 <p>node size</p>
@@ -483,7 +483,7 @@ the duplicate keys.</p>
 </ul>
 </li>
 </ol>
-<h3><span id="poptimizations">optimizations</span></h3>
+<h3><span id="optimizations">optimizations</span><a href="#optimizations" class="header-anchor">¶</a></h3>
 <ol>
 <li>
 <p>Prefix compression: extract prefix and store unique suffix for each key -&gt; keys in the same node have overlapping prefix</p>
@@ -514,7 +514,7 @@ the duplicate keys.</p>
 <img src="/sg/2022/03/05/db_index/Screenshot-7580430.png" class title="Screenshot-7580430">
 </li>
 </ol>
-<h2><span id="pindex">Index</span></h2>
+<h2><span id="index">Index</span><a href="#index" class="header-anchor">¶</a></h2>
 <ol>
 <li>
 <p>what is index: provide fast access to data items.</p>
@@ -548,7 +548,7 @@ to support index-only queries.</p>
 </ul>
 </li>
 </ol>
-<h3><span id="ptrie-index">Trie index</span></h3>
+<h3><span id="trie-index">Trie index</span><a href="#trie-index" class="header-anchor">¶</a></h3>
 <ol>
 <li>
 <p>make oberservations: the inner node keys in a B+Tree cannot tell you whether or not a key exists in the index -&gt; at least one buffer pool page miss per level in the tree</p>
@@ -572,11 +572,11 @@ to support index-only queries.</p>
 </ul>
 </li>
 </ol>
-<h3><span id="pradix-tree">radix tree</span></h3>
+<h3><span id="radix-tree">radix tree</span><a href="#radix-tree" class="header-anchor">¶</a></h3>
 <p>variant of trie index. Omit all nodes with only a single child.</p>
 <img src="/sg/2022/03/05/db_index/Screenshot-7584321.png" class title="Screenshot-7584321">
 <img src="/sg/2022/03/05/db_index/Screenshot-7584401.png" class title="Screenshot-7584401">
-<h3><span id="pinverted-index">inverted index</span></h3>
+<h3><span id="inverted-index">inverted index</span><a href="#inverted-index" class="header-anchor">¶</a></h3>
 <ol>
 <li>
 <p>make observations: Tree indexs above are useful for point and range queries; not good for keyword searches</p>
@@ -601,7 +601,7 @@ to support index-only queries.</p>
 </ul>
 </li>
 </ol>
-<h2><span id="pconcurrency-control">concurrency control</span></h2>
+<h2><span id="concurrency-control">concurrency control</span><a href="#concurrency-control" class="header-anchor">¶</a></h2>
 <ol>
 <li>make observations: multi-threads world means that cpu cores and disk I/O stalls matters.</li>
 <li>come up with a protocol: a protocol needs criteria
@@ -611,7 +611,7 @@ to support index-only queries.</p>
 </ul>
 </li>
 </ol>
-<h3><span id="plocks-vs-latches">Locks vs. latches</span></h3>
+<h3><span id="locks-vs-latches">Locks vs. latches</span><a href="#locks-vs-latches" class="header-anchor">¶</a></h3>
 <ol>
 <li>Locks: protects the contents of a database (e.g., tuples, tables, databases) from other transactions -&gt; object view</li>
 <li>Latches: protects critical sections the DBMS’s internal data structures (e.g., data structure, regions of memory) from other threads -&gt; operation view
@@ -621,7 +621,7 @@ to support index-only queries.</p>
 </ul>
 </li>
 </ol>
-<h3><span id="platch-designs">Latch designs</span></h3>
+<h3><span id="latch-designs">Latch designs</span><a href="#latch-designs" class="header-anchor">¶</a></h3>
 <p>latch takes advantage of CPU’s atomic compare-and-swap(CAS) instruction. A thread can check the contents of a memory location to see whether it has a certain value.</p>
 <p>Definition: <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/15059958/what-is-a-scalable-lock">scalability</a> of latches means if latches perform well when there is a lot of contention.</p>
 <p>Approaches:</p>
@@ -663,7 +663,7 @@ to support index-only queries.</p>
 </ul>
 </li>
 </ol>
-<h3><span id="ppractice">Practice</span></h3>
+<h3><span id="practice">Practice</span><a href="#practice" class="header-anchor">¶</a></h3>
 <ol>
 <li>
 <p>Hash table</p>

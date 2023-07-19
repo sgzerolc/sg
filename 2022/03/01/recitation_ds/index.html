@@ -6,12 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="GFS Mapreduce ZFS consistency guarantees  Design process Baseball example Some thinking Reference   Raft    本文主要记录对分布式系统部分的设计细节和实现部分相关问题的想法。 GFS GFS: machine failures 简单来说，GFS是一个使用拷贝的文件系统，它的结构包含con">
+    <meta name="description" content="GFS Mapreduce ZFS consistency guarantees  Design process Baseball example Some thinking Reference   Raft    本文主要记录对分布式系统部分的设计细节和实现部分相关问题的想法。 GFS¶ GFS: machine failures 简单来说，GFS是一个使用拷贝的文件系统，它的结构包含co">
 <meta property="og:type" content="article">
 <meta property="og:title" content="recitation ds">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2022/03/01/recitation_ds/index.html">
 <meta property="og:site_name" content="steins gate zero">
-<meta property="og:description" content="GFS Mapreduce ZFS consistency guarantees  Design process Baseball example Some thinking Reference   Raft    本文主要记录对分布式系统部分的设计细节和实现部分相关问题的想法。 GFS GFS: machine failures 简单来说，GFS是一个使用拷贝的文件系统，它的结构包含con">
+<meta property="og:description" content="GFS Mapreduce ZFS consistency guarantees  Design process Baseball example Some thinking Reference   Raft    本文主要记录对分布式系统部分的设计细节和实现部分相关问题的想法。 GFS¶ GFS: machine failures 简单来说，GFS是一个使用拷贝的文件系统，它的结构包含co">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/03/01/recitation_ds/Screenshot-6119783-6131431.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/03/01/recitation_ds/Screenshot-6115963.png">
@@ -181,17 +181,17 @@
 <!-- tocstop -->
 </div>
 <p>本文主要记录对分布式系统部分的设计细节和实现部分相关问题的想法。</p>
-<h2><span id="pgfs">GFS</span></h2>
+<h2><span id="gfs">GFS</span><a href="#gfs" class="header-anchor">¶</a></h2>
 <p>GFS: machine failures</p>
 <p>简单来说，GFS是一个使用拷贝的文件系统，它的结构包含controller, chunk server, client。这些角色的交互来完成拷贝的功能，以防止大集群中某个机器的崩溃。它和unix文件系统的区别在于，GFS更能适用有很大工作量写入写出读入读出的情况（有数百TB计的存储量的数千磁盘在数千机器上的大集群收到数百用户并行的访问）</p>
-<h2><span id="pmapreduce">Mapreduce</span></h2>
-<h2><span id="pzfs">ZFS</span></h2>
-<h2><span id="pconsistency-guarantees">consistency guarantees</span></h2>
+<h2><span id="mapreduce">Mapreduce</span><a href="#mapreduce" class="header-anchor">¶</a></h2>
+<h2><span id="zfs">ZFS</span><a href="#zfs" class="header-anchor">¶</a></h2>
+<h2><span id="consistency-guarantees">consistency guarantees</span><a href="#consistency-guarantees" class="header-anchor">¶</a></h2>
 <p>What: Consistency guarantee is a contract between the data provider and clients. It can affect a system in three aspects: consistency, performance and availability.</p>
 <p>How: A system designer should understand the particular kind of need of clients and how the system operates to decide which consistency guarantee.</p>
 <p>Why: It matters because the system can be the best version for client’s needs, faster without loss of correctness.</p>
 <img src="/sg/2022/03/01/recitation_ds/Screenshot-6119783-6131431.png" class title="Screenshot-6119783">
-<h3><span id="pdesign-process">Design process</span></h3>
+<h3><span id="design-process">Design process</span><a href="#design-process" class="header-anchor">¶</a></h3>
 <blockquote>
 <p>Data availability is a term used by computer storage manufacturers and storage service providers to describe <strong>how data should be available at a required level of performance in situations ranging from normal through disastrous</strong>.</p>
 </blockquote>
@@ -199,7 +199,7 @@
 <p>The consitency and performance have inverse correlation. In other words, if the data is more consistent, it means the server which updates the data needs to pass on the new data to every other servers. One server crashed would cause the wrong data got transferred. Therefore strong consistency model has excellent consistency and poor permanence and vice versa.</p>
 <p>The four intermediate consistency models can get higher performance than strong consistency due to partial correctness of the data. They don’t need the data in every server is consistent at the same time giving the specific applications providing. Bounded staleness has poor availability as the strong consistency for the same reason of requiremet for time. The server can not guarantee the correctness in specific time.</p>
 <img src="/sg/2022/03/01/recitation_ds/Screenshot-6115963.png" class title="Screenshot-6115963">
-<h3><span id="pbaseball-example">Baseball example</span></h3>
+<h3><span id="baseball-example">Baseball example</span><a href="#baseball-example" class="header-anchor">¶</a></h3>
 <p>A baseball game example: minimal consistency of read operation in a simple data store(replicated storage systems) containing only two teams’ scores.</p>
 <ol>
 <li>Official scorekeeper: the scorekeep is the only person to write the data. They need the most updated scores so that strong consistency seems the appropriate one. However they are the only server to write the data and pass on to others. Therefore read my writes would be sufficient.</li>
@@ -211,7 +211,7 @@
 </ol>
 <img src="/sg/2022/03/01/recitation_ds/Screenshot-6121625-6131431.png" class title="Screenshot-6121625">
 <img src="/sg/2022/03/01/recitation_ds/Screenshot-6121560-6131431.png" class title="Screenshot-6121560">
-<h3><span id="psome-thinking">Some thinking</span></h3>
+<h3><span id="some-thinking">Some thinking</span><a href="#some-thinking" class="header-anchor">¶</a></h3>
 <ol>
 <li>
 <p>?? What systems need weaker consistency</p>
@@ -223,9 +223,9 @@
 <p>To decide on a particular consistency model, I think it requires a thorough study of current target customers and future costs it may bring giving the current design goal. Different cloud storage providers have made different decisions. Amazon S3 uses eventual consistency to improve the performance and availibility. It gains more availibility with the proliferation of geo-replicated services.  However Azure aims for specific organizations which needs strong consistency for correctness. I think they are targeting different customer bases.</p>
 </li>
 </ol>
-<h3><span id="preference">Reference</span></h3>
+<h3><span id="reference">Reference</span><a href="#reference" class="header-anchor">¶</a></h3>
 <p>[1] :   <a target="_blank" rel="noopener" href="https://stackshare.io/stackups/amazon-s3-vs-microsoft-azure#:~:text=Amazon%20S3%20belongs%20to%20%22Cloud,you%20can%20store%20is%20unlimited.">Amazon S3 vs Microsoft Azure</a></p>
-<h2><span id="praft">Raft</span></h2>
+<h2><span id="raft">Raft</span><a href="#raft" class="header-anchor">¶</a></h2>
 
   </div>
 </article>

@@ -172,12 +172,12 @@
 </ul>
 <!-- tocstop -->
 </div>
-<h2><span id="pr4-code-review">R4: code review</span></h2>
+<h2><span id="r4-code-review">R4: code review</span><a href="#r4-code-review" class="header-anchor">¶</a></h2>
 <ul>
 <li>code review: read and discuss code written by others</li>
 <li>General principles of good coding: things you can look for in every code review(与编程语言和目的无关的)</li>
 </ul>
-<h3><span id="pcode-review">code review</span></h3>
+<h3><span id="code-review">code review</span><a href="#code-review" class="header-anchor">¶</a></h3>
 <ul>
 <li>Purpose
 <ul>
@@ -196,12 +196,12 @@
 </ul>
 </li>
 </ul>
-<h3><span id="pdry-don-t-repeat-yourself">DRY: don’t repeat yourself</span></h3>
+<h3><span id="dry-don-t-repeat-yourself">DRY: don’t repeat yourself</span><a href="#dry-don-t-repeat-yourself" class="header-anchor">¶</a></h3>
 <ul>
 <li>avoid duplication</li>
 </ul>
-<h3><span id="pcomments-where-needed">Comments where needed</span></h3>
-<h4><span id="p-gt-where-to-comment">&gt; where to comment</span></h4>
+<h3><span id="comments-where-needed">Comments where needed</span><a href="#comments-where-needed" class="header-anchor">¶</a></h3>
+<h4><span id="gt-where-to-comment">&gt; where to comment</span><a href="#gt-where-to-comment" class="header-anchor">¶</a></h4>
 <ul>
 <li>Specifications document assumptions</li>
 <li>Specify the provenance of code that was copied from elsewhere
@@ -223,7 +223,7 @@
 </ul>
 </li>
 </ul>
-<h4><span id="p-gt-where-not-comment">&gt; where not comment</span></h4>
+<h4><span id="gt-where-not-comment">&gt; where not comment</span><a href="#gt-where-not-comment" class="header-anchor">¶</a></h4>
 <ul>
 <li>direct transliterations of code into English
 <ul>
@@ -231,14 +231,14 @@
 </ul>
 </li>
 </ul>
-<h3><span id="pfail-fast">Fail fast</span></h3>
+<h3><span id="fail-fast">Fail fast</span><a href="#fail-fast" class="header-anchor">¶</a></h3>
 <p>code should reveal its bugs earlier as possible</p>
 <ul>
 <li>static checking</li>
 <li>Dynamic checking</li>
 <li>…</li>
 </ul>
-<h3><span id="pavoid-magic-numbers">avoid magic numbers</span></h3>
+<h3><span id="avoid-magic-numbers">avoid magic numbers</span><a href="#avoid-magic-numbers" class="header-anchor">¶</a></h3>
 <p>Magic numbers：一串莫名其妙的数字</p>
 <ul>
 <li>do not hardcode; reason
@@ -256,10 +256,10 @@
 </ul>
 </li>
 </ul>
-<h3><span id="pone-purpose-for-each-variable">one purpose for each variable</span></h3>
+<h3><span id="one-purpose-for-each-variable">one purpose for each variable</span><a href="#one-purpose-for-each-variable" class="header-anchor">¶</a></h3>
 <p>Don’t reuse variables/parameters. (我之前还不太习惯用太多变量名)</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//final: variables can&#x27;t be reassigned.</span></span><br></pre></td></tr></table></figure>
-<h3><span id="puse-good-names">use good names</span></h3>
+<h3><span id="use-good-names">use good names</span><a href="#use-good-names" class="header-anchor">¶</a></h3>
 <ul>
 <li>
 <p>what to do</p>
@@ -282,7 +282,7 @@
 </ul>
 </li>
 </ul>
-<h3><span id="puse-whitespace-to-help-the-reader">Use whitespace to help the reader</span></h3>
+<h3><span id="use-whitespace-to-help-the-reader">Use whitespace to help the reader</span><a href="#use-whitespace-to-help-the-reader" class="header-anchor">¶</a></h3>
 <ul>
 <li>don’t use tab for indentation; use space instead
 <ul>
@@ -291,7 +291,7 @@
 </ul>
 </li>
 </ul>
-<h3><span id="pdon-t-use-global-variables">don’t use global variables</span></h3>
+<h3><span id="don-t-use-global-variables">don’t use global variables</span><a href="#don-t-use-global-variables" class="header-anchor">¶</a></h3>
 <ul>
 <li>Global variable: accessible and changeable from anywhere in the program
 <ul>
@@ -319,12 +319,12 @@
 </ul>
 </li>
 </ul>
-<h3><span id="pmethods-should-return-results-not-print-them">Methods should return results, not print them</span></h3>
+<h3><span id="methods-should-return-results-not-print-them">Methods should return results, not print them</span><a href="#methods-should-return-results-not-print-them" class="header-anchor">¶</a></h3>
 <ul>
 <li>except debugging output: aim to debugging the design</li>
 </ul>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">System.out <span class="comment">//sends result to the console</span></span><br></pre></td></tr></table></figure>
-<h3><span id="pavoid-special-case-code">avoid special-case code</span></h3>
+<h3><span id="avoid-special-case-code">avoid special-case code</span><a href="#avoid-special-case-code" class="header-anchor">¶</a></h3>
 <ul>
 <li>Resits to handle special cases separately
 <ul>

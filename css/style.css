@@ -813,7 +813,8 @@ body {
   padding-right: 2rem;
   max-width: 20em;
   max-height: calc(95vh - 7rem);
-  text-align: right;
+  text-align: left;
+  display: none;
 }
 #header-post #toc a:hover {
   color: rgba(86,124,119,0.4);

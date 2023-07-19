@@ -6,12 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="Paper:Ethernet  Background Design choice Implementation performance measure protocols   Paper: RON  General goal Design goal Design conclusion   Paper: DCTCP Paper: end to end    Paper:Ethernet Eth">
+    <meta name="description" content="Paper:Ethernet  Background Design choice Implementation performance measure protocols   Paper: RON  General goal Design goal Design conclusion   Paper: DCTCP Paper: end to end    Paper:Ethernet¶ Et">
 <meta property="og:type" content="article">
 <meta property="og:title" content="recitation network">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2021/11/29/recitation_network/index.html">
 <meta property="og:site_name" content="steins gate zero">
-<meta property="og:description" content="Paper:Ethernet  Background Design choice Implementation performance measure protocols   Paper: RON  General goal Design goal Design conclusion   Paper: DCTCP Paper: end to end    Paper:Ethernet Eth">
+<meta property="og:description" content="Paper:Ethernet  Background Design choice Implementation performance measure protocols   Paper: RON  General goal Design goal Design conclusion   Paper: DCTCP Paper: end to end    Paper:Ethernet¶ Et">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2021/11/29/recitation_network/trans.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2021/11/29/recitation_network/ethernet.png">
@@ -190,9 +190,9 @@
 </ul>
 <!-- tocstop -->
 </div>
-<h2><span id="ppaper-ethernet">Paper:Ethernet</span></h2>
+<h2><span id="paper-ethernet">Paper:Ethernet</span><a href="#paper-ethernet" class="header-anchor">¶</a></h2>
 <p>Ethernet: Distributed Packet Switching for Local Computer Networks</p>
-<h3><span id="pbackground">Background</span></h3>
+<h3><span id="background">Background</span><a href="#background" class="header-anchor">¶</a></h3>
 <ol>
 <li>
 <p>demands of computer-computer interconnection grow</p>
@@ -206,9 +206,9 @@
 </ul>
 </li>
 </ol>
-<h3><span id="pdesign-choice">Design choice</span></h3>
+<h3><span id="design-choice">Design choice</span><a href="#design-choice" class="header-anchor">¶</a></h3>
 <p>Problem 1: distribute control of the communications facility among the communicating computers</p>
-<h4><span id="pchoice"><strong>Choice</strong></span></h4>
+<h4><span id="choice"><strong>Choice</strong></span><a href="#choice" class="header-anchor">¶</a></h4>
 <ol>
 <li>
 <p>Topology: an unrooted tree is better than a star network in distributed interconnections.</p>
@@ -239,16 +239,16 @@
 </li>
 </ol>
 <p><strong>Alternatives of design choice</strong></p>
-<h3><span id="pimplementation">Implementation</span></h3>
+<h3><span id="implementation">Implementation</span><a href="#implementation" class="header-anchor">¶</a></h3>
 <img src="/sg/2021/11/29/recitation_network/ethernet.png" class title="ethernet">
 <img src="/sg/2021/11/29/recitation_network/cca.png" class title="cca">
-<h3><span id="pperformance-measure">performance measure</span></h3>
+<h3><span id="performance-measure">performance measure</span><a href="#performance-measure" class="header-anchor">¶</a></h3>
 <p>Acquisition probability, waiting time, efficiency</p>
-<h3><span id="pprotocols">protocols</span></h3>
+<h3><span id="protocols">protocols</span><a href="#protocols" class="header-anchor">¶</a></h3>
 <p>What does the term “layering” mean in the context of networking?</p>
 <p>Why do we use a layered model?</p>
 <p>How do you imagine that layered model is reflected in actual packets?</p>
-<h2><span id="ppaper-ron">Paper: RON</span></h2>
+<h2><span id="paper-ron">Paper: RON</span><a href="#paper-ron" class="header-anchor">¶</a></h2>
 <blockquote>
 <p>Resilient overlay networks: an application-layer overlay on top of the existing internet routing substrate.</p>
 </blockquote>
@@ -256,7 +256,7 @@
 <p>BGP 可扩展性同时造成的问题：端到端通信的容错性减少，导致网络延迟发生和延迟时间加长（几十分钟的程度）。这也让现有的网络非常脆弱，会由于各种问题而崩溃。</p>
 <p>因为BGP出于可扩展性和政策执行的考虑，隐藏了许多拓扑细节，几乎没有关于交通状况的信息，并且在出现潜在问题时抑制路由更新以防止大规模振荡。</p>
 <p>解决方法是在应用层上分布一层重叠的节点来完成连接。底层网络节点的变化不会扰动到上层，由此来解决可扩展性带来的问题。</p>
-<h3><span id="pgeneral-goal">General goal</span></h3>
+<h3><span id="general-goal">General goal</span><a href="#general-goal" class="header-anchor">¶</a></h3>
 <ol>
 <li>
 <p>Main goal: enable a group of nodes to communicate in the face of problem1</p>
@@ -279,21 +279,21 @@
 <p>provide a <u>framework</u> for the implementation <u>of expressive routing policies</u>, which govern the choice of paths in the network</p>
 </li>
 </ol>
-<h3><span id="pdesign-goal">Design goal</span></h3>
+<h3><span id="design-goal">Design goal</span><a href="#design-goal" class="header-anchor">¶</a></h3>
 <p>更准确的描述设计目标：</p>
-<h4><span id="p1-fast-failure-detection-and-recovery">1 Fast failure detection and recovery</span></h4>
+<h4><span id="1-fast-failure-detection-and-recovery">1 Fast failure detection and recovery</span><a href="#1-fast-failure-detection-and-recovery" class="header-anchor">¶</a></h4>
 <p>评估failure造成的影响。现有的BGP-4找到合适的线路通信经常会遇到failures。failure可以分为link failures和path failures。它们在应用中常表现为两种形式：outages or performance failures。outage对网络造成的影响能达到几个数量级（比如TCP degrades, average packet loss rate over a sustained period of several minutes）；而performance failures的影响则没有那么极端，仍在同等数量级下。</p>
 <p>因此我们希望RON能够做到检测快和恢复快。</p>
-<h4><span id="p2-tighter-integration-with-applications">2 Tighter integration with applications</span></h4>
+<h4><span id="2-tighter-integration-with-applications">2 Tighter integration with applications</span><a href="#2-tighter-integration-with-applications" class="header-anchor">¶</a></h4>
 <p>fact: Failures and faults are application-specific notions.</p>
 <p>根据应用场景的不同而制定的标准（metrics）来选择合适的网络线路。理想的情况下，最合适的线路应该满足多种标准。</p>
 <p>这里不同标准在实际应用之间的衡量（trade-offs）是设计考虑的重点。</p>
-<h4><span id="p3-expressive-policy-routing">3 expressive policy routing</span></h4>
+<h4><span id="3-expressive-policy-routing">3 expressive policy routing</span><a href="#3-expressive-policy-routing" class="header-anchor">¶</a></h4>
 <p>RON’s powerful end-points allow fine-grained policy routing.</p>
 <p>打个比方就就是地图精度更高了，路径规划也就越准确。</p>
-<h3><span id="pdesign">Design</span></h3>
+<h3><span id="design">Design</span><a href="#design" class="header-anchor">¶</a></h3>
 <img src="/sg/2021/11/29/recitation_network/ron.png" class title="ron">
-<h4><span id="p1-software-architecture">1 Software architecture</span></h4>
+<h4><span id="1-software-architecture">1 Software architecture</span><a href="#1-software-architecture" class="header-anchor">¶</a></h4>
 <ul>
 <li>
 <p>RON client: forwarder, conduits</p>
@@ -316,7 +316,7 @@
 </ul>
 </li>
 </ul>
-<h4><span id="p2-routing-and-path-selection">2 routing and path selection</span></h4>
+<h4><span id="2-routing-and-path-selection">2 routing and path selection</span><a href="#2-routing-and-path-selection" class="header-anchor">¶</a></h4>
 <ul>
 <li>
 <p>Routing = building up the forwarding tables -&gt; choose paths for packets</p>
@@ -368,7 +368,7 @@
 </li>
 </ol>
 <img src="/sg/2021/11/29/recitation_network/pt.png" class title="pt">
-<h4><span id="p3-policy-routing">3 policy routing</span></h4>
+<h4><span id="3-policy-routing">3 policy routing</span><a href="#3-policy-routing" class="header-anchor">¶</a></h4>
 <ol>
 <li>Classification：查找信息</li>
 <li>routing table formation：计算最短路径</li>
@@ -384,19 +384,19 @@
 <p>更灵活地制定规则</p>
 </li>
 </ol>
-<h4><span id="p4-data-forwarding">4 data forwarding</span></h4>
+<h4><span id="4-data-forwarding">4 data forwarding</span><a href="#4-data-forwarding" class="header-anchor">¶</a></h4>
 <img src="/sg/2021/11/29/recitation_network/df1.png" class title="df1">
 <img src="/sg/2021/11/29/recitation_network/df2.png" class title="df2">
-<h4><span id="p5-bootstrap-and-membership-management">5 Bootstrap and membership management</span></h4>
-<h3><span id="pconclusion">conclusion</span></h3>
-<h2><span id="ppaper-dctcp">Paper: DCTCP</span></h2>
+<h4><span id="5-bootstrap-and-membership-management">5 Bootstrap and membership management</span><a href="#5-bootstrap-and-membership-management" class="header-anchor">¶</a></h4>
+<h3><span id="conclusion">conclusion</span><a href="#conclusion" class="header-anchor">¶</a></h3>
+<h2><span id="paper-dctcp">Paper: DCTCP</span><a href="#paper-dctcp" class="header-anchor">¶</a></h2>
 <p>Goal: we want applications in datacencer network have these requirements:</p>
 <ol>
 <li>low latency for short flows</li>
 <li>high burst tolerance</li>
 <li>high utilization for long flows</li>
 </ol>
-<h2><span id="ppaper-end-to-end">Paper: end to end</span></h2>
+<h2><span id="paper-end-to-end">Paper: end to end</span><a href="#paper-end-to-end" class="header-anchor">¶</a></h2>
 
   </div>
 </article>

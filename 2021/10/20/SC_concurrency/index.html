@@ -79,7 +79,7 @@
         <li><a class="icon" aria-label="Previous post" href="/sg/2021/10/29/SC_test-debug/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
         
         
-        <li><a class="icon" aria-label="Next post" href="/sg/2021/10/19/db_memory_management/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Next post" href="/sg/2021/10/20/db_b+tr/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
         
         <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
         <li><a class="icon" aria-label="Share post" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
@@ -190,14 +190,14 @@
 </ul>
 <!-- tocstop -->
 </div>
-<h2><span id="pr20-concurrency">R20: concurrency</span></h2>
+<h2><span id="r20-concurrency">R20: concurrency</span><a href="#r20-concurrency" class="header-anchor">¶</a></h2>
 <p>I’ve studied parallelism before however the implementation of locks remains unsolved. The goal of this reading is supposed to deepen the understanding and the process of coding.</p>
-<h3><span id="ptwo-models-for-concurrent-programming">two models for concurrent programming</span></h3>
+<h3><span id="two-models-for-concurrent-programming">two models for concurrent programming</span><a href="#two-models-for-concurrent-programming" class="header-anchor">¶</a></h3>
 <ol>
 <li>message passing: modules share the same memory space</li>
 <li>shared memory: modules communicate through a communication channel</li>
 </ol>
-<h3><span id="pbasic-concepts">basic concepts</span></h3>
+<h3><span id="basic-concepts">basic concepts</span><a href="#basic-concepts" class="header-anchor">¶</a></h3>
 <p><strong>Process</strong></p>
 <blockquote>
 <p>A process is an instance of a running program that is <em>isolated</em> from other processes on the same machine. In particular, it has its own private section of the machine’s memory.</p>
@@ -216,26 +216,26 @@
 <ul>
 <li>the processor switches between threads when there are more threads than processors</li>
 </ul>
-<h3><span id="pstarting-a-thread-with-an-anonymous-class">starting a thread with an anonymous class</span></h3>
+<h3><span id="starting-a-thread-with-an-anonymous-class">starting a thread with an anonymous class</span><a href="#starting-a-thread-with-an-anonymous-class" class="header-anchor">¶</a></h3>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Hello from a thread!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;).start();</span><br><span class="line"></span><br><span class="line"><span class="comment">//named class</span></span><br><span class="line"><span class="comment">/** A comparison function that imposes a total ordering on some objects.</span></span><br><span class="line"><span class="comment"> *  ... */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Comparator</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="comment">/** Compares its two arguments for order.</span></span><br><span class="line"><span class="comment">     *  ...</span></span><br><span class="line"><span class="comment">     *  <span class="doctag">@return</span> a negative integer, zero, or a positive integer if the first</span></span><br><span class="line"><span class="comment">     *          argument is less than, equal to, or greater than the second */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(T o1, T o2)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/** Orders Strings by length (shorter first) and then lexicographically. */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StringLengthComparator</span> <span class="keyword">implements</span> <span class="title">Comparator</span>&lt;<span class="title">String</span>&gt; </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(String s1, String s2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (s1.length() == s2.length()) &#123;</span><br><span class="line">            <span class="keyword">return</span> s1.compareTo(s2);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> s1.length() - s2.length();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">SortedSet&lt;String&gt; strings = <span class="keyword">new</span> TreeSet&lt;&gt;();</span><br><span class="line">strings.addAll(List.of(<span class="string">&quot;yolanda&quot;</span>, <span class="string">&quot;zach&quot;</span>, <span class="string">&quot;alice&quot;</span>, <span class="string">&quot;bob&quot;</span>));</span><br><span class="line"><span class="comment">// strings is &#123; &quot;alice&quot;, &quot;bob&quot;, &quot;yolanda&quot;, &quot;zach&quot; &#125;</span></span><br><span class="line">With a Comparator:</span><br><span class="line"></span><br><span class="line"><span class="comment">// uses StringLengthComparator declared above</span></span><br><span class="line">Comparator&lt;String&gt; compareByLength = <span class="keyword">new</span> StringLengthComparator();</span><br><span class="line">SortedSet&lt;String&gt; strings = <span class="keyword">new</span> TreeSet&lt;&gt;(compareByLength);</span><br><span class="line">strings.addAll(List.of(<span class="string">&quot;yolanda&quot;</span>, <span class="string">&quot;zach&quot;</span>, <span class="string">&quot;alice&quot;</span>, <span class="string">&quot;bob&quot;</span>));</span><br><span class="line"><span class="comment">// strings is &#123; &quot;bob&quot;, &quot;zach&quot;, &quot;alice&quot;, &quot;yolanda&quot; &#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// uses StringLengthComparator declared above</span></span><br><span class="line">SortedSet&lt;String&gt; strings = <span class="keyword">new</span> TreeSet&lt;&gt;(<span class="keyword">new</span> StringLengthComparator());</span><br><span class="line">strings.addAll(List.of(<span class="string">&quot;yolanda&quot;</span>, <span class="string">&quot;zach&quot;</span>, <span class="string">&quot;alice&quot;</span>, <span class="string">&quot;bob&quot;</span>));</span><br><span class="line"><span class="comment">// strings is &#123; &quot;bob&quot;, &quot;zach&quot;, &quot;alice&quot;, &quot;yolanda&quot; &#125;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// no StringLengthComparator class!</span></span><br><span class="line">SortedSet&lt;String&gt; strings = <span class="keyword">new</span> TreeSet&lt;&gt;(<span class="keyword">new</span> Comparator&lt;String&gt;() &#123;</span><br><span class="line">    <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(String s1, String s2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (s1.length() == s2.length()) &#123;</span><br><span class="line">            <span class="keyword">return</span> s1.compareTo(s2);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> s1.length() - s2.length();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line">strings.addAll(List.of(<span class="string">&quot;yolanda&quot;</span>, <span class="string">&quot;zach&quot;</span>, <span class="string">&quot;alice&quot;</span>, <span class="string">&quot;bob&quot;</span>));</span><br><span class="line"><span class="comment">// strings is &#123; &quot;bob&quot;, &quot;zach&quot;, &quot;alice&quot;, &quot;yolanda&quot; &#125;</span></span><br></pre></td></tr></table></figure>
 <p>advantage: one-off implementations</p>
 <p>Disadvantage: a named class is good for needing more than once.</p>
 <p>Never call run() on a thread, or on a runnable that you created for a thread, which uses the same thread.</p>
 <p>Instead, make a new Thread() with an instance of your Runnable, and call start() on the thread to start it.</p>
 <p>junit: test fails if an exception is thrown and not caught by the test code itself.</p>
-<h3><span id="pshared-memory-example">Shared memory example</span></h3>
+<h3><span id="shared-memory-example">Shared memory example</span><a href="#shared-memory-example" class="header-anchor">¶</a></h3>
 <p>Race condition: the correctness of the program depends on the relative timing of events in concurrent computations A and B. “A is in a race with B.”</p>
 <p>It can’t be told what the atomic operations(the individual steps of the computation) will be.</p>
 <p>System.exit(): main() may return while its threads are still running. Use exit to force the process to exit.</p>
-<h3><span id="pmessage-passing-example">Message passing example</span></h3>
+<h3><span id="message-passing-example">Message passing example</span><a href="#message-passing-example" class="header-anchor">¶</a></h3>
 <p>Interleaving of the messages sent to the bank account.</p>
-<h3><span id="pconcurrency-is-hard-to-debug">concurrency is hard to debug</span></h3>
+<h3><span id="concurrency-is-hard-to-debug">concurrency is hard to debug</span><a href="#concurrency-is-hard-to-debug" class="header-anchor">¶</a></h3>
 <p>问题可能存在于多个程序，os？网络？cpu?</p>
 <p>问题很难再现，想想吧，相同的问题位置，出错的地方确不同或者不会发生。</p>
 <p>并且print-debug失效，因为它们相比于运行的程序的操作要慢100倍～1000倍。当使用print时，足够的时间改变操作的时间。</p>
 <p>Nondeterministic behavior causation?</p>
-<h2><span id="pr21-amp-22-thread-safety">R21&amp;22: thread safety</span></h2>
-<h3><span id="pwhat-is-threadsafe">what is threadsafe?</span></h3>
+<h2><span id="r21-amp-22-thread-safety">R21&amp;22: thread safety</span><a href="#r21-amp-22-thread-safety" class="header-anchor">¶</a></h2>
+<h3><span id="what-is-threadsafe">what is threadsafe?</span><a href="#what-is-threadsafe" class="header-anchor">¶</a></h3>
 <blockquote>
 <p>if it behaves correctly when used from multiple threads, regardless of how those threads are executed, and without demanding additional coordination from the calling code.</p>
 <ul>
@@ -244,15 +244,15 @@
 <li>And “without additional coordination” means that the data type can’t put preconditions on its caller related to timing, like “you can’t call <code>get()</code> while <code>set()</code> is in progress.”</li>
 </ul>
 </blockquote>
-<h3><span id="phow-to-make-a-safety-argument">how to make a safety argument?</span></h3>
+<h3><span id="how-to-make-a-safety-argument">how to make a safety argument?</span><a href="#how-to-make-a-safety-argument" class="header-anchor">¶</a></h3>
 <p>how to make code safe in concurrent programming?</p>
 <p>Don’t share data between threads (by confinement, immutability, threadsafe data types).</p>
 <p>The difficult one is how to implement a threadsafe type.</p>
-<h3><span id="pstrategy1-confinement">Strategy1: confinement</span></h3>
+<h3><span id="strategy1-confinement">Strategy1: confinement</span><a href="#strategy1-confinement" class="header-anchor">¶</a></h3>
 <p>idea: Avoid races on reassignable references and mutable data by keeping those confined to a single thread.</p>
 <p>Shared mutable state is the root cause of a race condition.</p>
 <p>don’t use global variables: static variables are accessible to all threads therefore can be changed. While local variables are confined to single thread.</p>
-<h3><span id="pstrategy2-immutability">Strategy2: immutability</span></h3>
+<h3><span id="strategy2-immutability">Strategy2: immutability</span><a href="#strategy2-immutability" class="header-anchor">¶</a></h3>
 <p>keep the data immutable and variables unreassignable.</p>
 <blockquote>
 <p>Threadsafe immutability:</p>
@@ -263,7 +263,7 @@
 <li>no mutation whatsoever of mutable objects in the rep – not even <a target="_blank" rel="noopener" href="https://web.mit.edu/6.031/www/sp21/classes/11-abstraction-functions-rep-invariants/#beneficent_mutation">beneficent mutation</a></li>
 </ul>
 </blockquote>
-<h3><span id="pstrategy3-using-threadsafe-data-types">Strategy3:using threadsafe data types</span></h3>
+<h3><span id="strategy3-using-threadsafe-data-types">Strategy3:using threadsafe data types</span><a href="#strategy3-using-threadsafe-data-types" class="header-anchor">¶</a></h3>
 <p>Store shared data in existing threadsafe data types.</p>
 <p>threadsafe collections:</p>
 <p>wrapper methods that make collections threadsafe while still mutable</p>
@@ -277,7 +277,7 @@
 </li>
 <li>Atomic operations aren’t enough to prevent races</li>
 </ul>
-<h3><span id="pstrategy4-synchronization">Strategy4: synchronization</span></h3>
+<h3><span id="strategy4-synchronization">Strategy4: synchronization</span><a href="#strategy4-synchronization" class="header-anchor">¶</a></h3>
 <p><u>The correctness of a concurrrent program should not depend on accidents of timing.</u></p>
 <p>Problem: bugs in concurrent programming</p>
 <blockquote>
@@ -302,7 +302,7 @@
 </li>
 </ol>
 </blockquote>
-<h2><span id="pr23-queues-amp-message-passing">R23: queues &amp; message-passing</span></h2>
+<h2><span id="r23-queues-amp-message-passing">R23: queues &amp; message-passing</span><a href="#r23-queues-amp-message-passing" class="header-anchor">¶</a></h2>
 <p>主要用java讲了个queue&amp;message-passing的例子。内容：</p>
 <ol>
 <li>与shared memory system对比，message-passing使两个thread间有独立性，出错的概率更小。</li>
@@ -310,7 +310,7 @@
 <li>实例： 放在冰箱里有一些饮料，一些人需要拿饮料。(代码在本地文件夹中)</li>
 </ol>
 <p>相当于6.004的sychronization另外的一个例子。</p>
-<h3><span id="pproducer-consumer-design-pattern">producer-consumer design pattern</span></h3>
+<h3><span id="producer-consumer-design-pattern">producer-consumer design pattern</span><a href="#producer-consumer-design-pattern" class="header-anchor">¶</a></h3>
 <p>problem: how to implement message passing with in single process?</p>
 <p>Design: producer-consumer design pattern</p>
 <p>Problem: how to stop the process?</p>
@@ -321,7 +321,7 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">drinksRequested : FridgeRequest → int</span><br><span class="line">shouldStop : FridgeRequest → boolean</span><br></pre></td></tr></table></figure>
 <p>and when we want to stop the fridge, we enqueue a <code>FridgeRequest</code> where <code>shouldStop</code> returns <code>true</code>.</p>
 <p>Approach3:signal a thread that it should stop working by calling that thread’s <a target="_blank" rel="noopener" href="http://docs.oracle.com/en/java/javase/15/docs/api/java.base/java/lang/Thread.html#interrupt()"><code>interrupt()</code></a> method</p>
-<h3><span id="prace-conditions">race conditions</span></h3>
+<h3><span id="race-conditions">race conditions</span><a href="#race-conditions" class="header-anchor">¶</a></h3>
 <p>prevent deadlock:</p>
 <ol>
 <li>
@@ -332,13 +332,13 @@
 <p>problem: what do you do when that exception is thrown?</p>
 </li>
 </ol>
-<h2><span id="pr24-sockets-amp-networking">R24: sockets &amp; networking</span></h2>
+<h2><span id="r24-sockets-amp-networking">R24: sockets &amp; networking</span><a href="#r24-sockets-amp-networking" class="header-anchor">¶</a></h2>
 <p>compared to producer-consumer pattern, client-server pattern abstracts the communication over the network using the sockets.</p>
-<h3><span id="pclient-server-design-pattern">Client/server design pattern</span></h3>
+<h3><span id="client-server-design-pattern">Client/server design pattern</span><a href="#client-server-design-pattern" class="header-anchor">¶</a></h3>
 <blockquote>
 <p>In this pattern there are two kinds of processes: clients and servers. A client initiates the communication by connecting to a server. The client sends requests to the server, and the server sends replies back. Finally, the client disconnects. A server might handle connections from many clients concurrently, and clients might also connect to multiple servers.</p>
 </blockquote>
-<h3><span id="psockets-and-streams">sockets and streams</span></h3>
+<h3><span id="sockets-and-streams">sockets and streams</span><a href="#sockets-and-streams" class="header-anchor">¶</a></h3>
 <p>Basic concepts related to network communication, and to input/output. (I/O refers to communication into and out of a process.)</p>
 <ul>
 <li>
@@ -351,7 +351,7 @@
 <p>Port numbers</p>
 </li>
 </ul>
-<h4><span id="p-gt-network-sockets">&gt; Network sockets</span></h4>
+<h4><span id="gt-network-sockets">&gt; Network sockets</span><a href="#gt-network-sockets" class="header-anchor">¶</a></h4>
 <p>A <a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/Network_socket"><strong>socket</strong></a> represents one end of the connection between client and server.</p>
 <ul>
 <li>listening socket：used by a server process to wait for connections from remote clients.</li>
@@ -366,14 +366,14 @@
 <p>细节上的区别：在实际的socket连接中，当用户请求被listening socket接收，服务器重新产生一个新的connected socket来管理连接，而保留着listening socker继续接受用户请求。</p>
 </li>
 </ul>
-<h4><span id="p-gt-streams">&gt; streams</span></h4>
+<h4><span id="gt-streams">&gt; streams</span><a href="#gt-streams" class="header-anchor">¶</a></h4>
 <ul>
 <li>buffers</li>
 <li>Byte streams</li>
 <li>character streams</li>
 <li>Blocking</li>
 </ul>
-<h4><span id="p-gt-wire-protocols">&gt; wire protocols</span></h4>
+<h4><span id="gt-wire-protocols">&gt; wire protocols</span><a href="#gt-wire-protocols" class="header-anchor">¶</a></h4>
 <blockquote>
 <p>A <strong>protocol</strong> is a set of messages that can be exchanged by two communicating parties.</p>
 <p>A <strong>wire protocol</strong> in particular is a set of messages represented as byte sequences, like <code>hello world</code> and <code>bye</code> (assuming we’ve agreed on a way to encode those characters into bytes).</p>
@@ -391,7 +391,7 @@
 </ul>
 <p><strong>Design a wire protocol</strong></p>
 <p>use same <a target="_blank" rel="noopener" href="http://web.mit.edu/6.031/www/sp21/classes/24-sockets-networking/#designing_a_wire_protocol">strategy</a> as designing ADT</p>
-<h3><span id="pusing-network-sockets-in-java">Using network sockets in Java</span></h3>
+<h3><span id="using-network-sockets-in-java">Using network sockets in Java</span><a href="#using-network-sockets-in-java" class="header-anchor">¶</a></h3>
 <ul>
 <li>client</li>
 <li>server</li>

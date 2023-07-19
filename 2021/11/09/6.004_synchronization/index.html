@@ -79,10 +79,10 @@
     <span id="actions">
       <ul>
         
-        <li><a class="icon" aria-label="Previous post" href="/sg/2021/11/09/6.006-data_structures/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Previous post" href="/sg/2021/11/09/6.046-divide_and_conquer/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
         
         
-        <li><a class="icon" aria-label="Next post" href="/sg/2021/11/09/6.046-divide_and_conquer/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Next post" href="/sg/2021/11/07/dark/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
         
         <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
         <li><a class="icon" aria-label="Share post" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
@@ -171,7 +171,7 @@
 </ul>
 <!-- tocstop -->
 </div>
-<h2><span id="p20-concurrency-amp-synchronization">20 concurrency &amp; synchronization</span></h2>
+<h2><span id="20-concurrency-amp-synchronization">20 concurrency &amp; synchronization</span><a href="#20-concurrency-amp-synchronization" class="header-anchor">¶</a></h2>
 <p>前言：翻了一下以前看61c的笔记不禁扶额，写得什么鬼。之前的笔记感觉就是简单概念的堆砌加抄写教授讲授的东西，没有太多的思考，所以才感觉学了和没学一样。不管怎么说，既然现在在学6.004，那么就按照课程设置的标准都搞定。</p>
 <blockquote>
 <p>Scenerio 1: video compression algorithms represent each video frame as an array of 8-pixel by 8-pixel macroblocks.</p>
@@ -185,7 +185,7 @@
 <li>Message passing</li>
 </ol>
 <p>goal: synchronization and thread-safe programming</p>
-<h3><span id="psynchronous-communication-in-producer-consumer-model">Synchronous Communication in producer-consumer model</span></h3>
+<h3><span id="synchronous-communication-in-producer-consumer-model">Synchronous Communication in producer-consumer model</span><a href="#synchronous-communication-in-producer-consumer-model" class="header-anchor">¶</a></h3>
 <img src="/sg/2021/11/09/6.004_synchronization/sc1.png" class title="test">
 <p>Producer sends char to consumer and consumer receives char.</p>
 <ul>
@@ -258,13 +258,13 @@ s = s + 1 (one waiting thread may now be able to proceed)</p>
 <p>solution: Establishing and using a global order for shared resources</p>
 </li>
 </ul>
-<h2><span id="p21-system-level-communication">21 system-level communication</span></h2>
+<h2><span id="21-system-level-communication">21 system-level communication</span><a href="#21-system-level-communication" class="header-anchor">¶</a></h2>
 <p>computer system technologies: each part has a detailed specification of the functionality and interface. We can still add things together without knowing the details of those implementations for things evolve rapidly.</p>
 <p>Problem: what is  the appropriate interface choices for interconnecting system components?</p>
-<h3><span id="pcommunication-channel">communication channel</span></h3>
+<h3><span id="communication-channel">communication channel</span><a href="#communication-channel" class="header-anchor">¶</a></h3>
 <p>fact: the synchronous multi-signal channels of earlier systems -&gt; asynchronous point-to-point channels nowadays</p>
 <p>problem 1 : how hard can it be to build a <strong>communication channel</strong>?</p>
-<h2><span id="p22-parallel-processing">22 parallel processing</span></h2>
+<h2><span id="22-parallel-processing">22 parallel processing</span><a href="#22-parallel-processing" class="header-anchor">¶</a></h2>
 <p>CSI, pipeline, date-parallel, cache coherence</p>
 
   </div>

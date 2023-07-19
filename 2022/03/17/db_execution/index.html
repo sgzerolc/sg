@@ -200,7 +200,7 @@
 </div>
 <p>Execution process: the operators are arranged in a tree.</p>
 <img src="/sg/2022/03/17/db_execution/Screenshot-7600728.png" class title="Screenshot-7600728">
-<h2><span id="psorting">sorting</span></h2>
+<h2><span id="sorting">sorting</span><a href="#sorting" class="header-anchor">¶</a></h2>
 <p>supported feature: ORDER BY, DISTINCT, GROUP BY</p>
 <p>Problem: can’t guarantee sorting data to fit in memory</p>
 <p>Approach: external merge sort: splits the data set into separate runs, sorts them individually, and then combine into larger sorted runs.</p>
@@ -274,7 +274,7 @@
 <p>case 2: unclustered b+ tree: else, don’t do it.</p>
 </li>
 </ol>
-<h2><span id="paggregations">aggregations</span></h2>
+<h2><span id="aggregations">aggregations</span><a href="#aggregations" class="header-anchor">¶</a></h2>
 <ol>
 <li>
 <p>Aggregations: Collapse values for a single attribute from multiple tuples into a single scalar value.</p>
@@ -323,7 +323,7 @@
 </ul>
 </li>
 </ol>
-<h2><span id="pjoins">joins</span></h2>
+<h2><span id="joins">joins</span><a href="#joins" class="header-anchor">¶</a></h2>
 <ol>
 <li>
 <p>inner equijoin algorithm: joins tables where keys are equal.</p>
@@ -360,7 +360,7 @@
 </ul>
 </li>
 </ol>
-<h3><span id="pnested-loop-join">Nested loop join</span></h3>
+<h3><span id="nested-loop-join">Nested loop join</span><a href="#nested-loop-join" class="header-anchor">¶</a></h3>
 <ol>
 <li>
 <p>Nested loop join: two nested FOR loops that iterate over the tuples in both tables and compares each unique of them.</p>
@@ -385,7 +385,7 @@
 <p>Index NLJ</p>
 </li>
 </ol>
-<h3><span id="psort-merge-join">Sort-merge join</span></h3>
+<h3><span id="sort-merge-join">Sort-merge join</span><a href="#sort-merge-join" class="header-anchor">¶</a></h3>
 <ol>
 <li>
 <p>Sort-merge join: sorts the two tables on their join key(s)</p>
@@ -395,30 +395,30 @@
 <p>Cost analysis: sort + merge</p>
 </li>
 </ol>
-<h3><span id="phash-join">Hash join</span></h3>
+<h3><span id="hash-join">Hash join</span><a href="#hash-join" class="header-anchor">¶</a></h3>
 <ol>
 <li>hash join: use a hash table to split up the tuples into smaller chunks based on their join attribute(s).</li>
 <li>basic hash join</li>
 <li>Grace hash join/Hybrid hash join</li>
 </ol>
-<h2><span id="pquery-plan">Query plan</span></h2>
-<h3><span id="pprocessing-models">processing models</span></h3>
+<h2><span id="query-plan">Query plan</span><a href="#query-plan" class="header-anchor">¶</a></h2>
+<h3><span id="processing-models">processing models</span><a href="#processing-models" class="header-anchor">¶</a></h3>
 <ol>
 <li>processing model: defines how the system executes a query plan.</li>
 <li>iterator model</li>
 <li>materialization model</li>
 <li>Vectorized/batch model</li>
 </ol>
-<h3><span id="paccess-methods">access methods</span></h3>
-<h3><span id="pmodification-queries">modification queries</span></h3>
-<h3><span id="pexpression-evaluation">expression evaluation</span></h3>
-<h3><span id="prelational-algebra-equivalence">relational algebra equivalence</span></h3>
-<h2><span id="pparallel-execution">Parallel execution</span></h2>
-<h2><span id="poptimization">Optimization</span></h2>
-<h3><span id="pcost-estimations">Cost estimations</span></h3>
-<h3><span id="phistograms">Histograms</span></h3>
-<h2><span id="psampling">Sampling</span></h2>
-<h3><span id="pplan-enumeration">plan enumeration</span></h3>
+<h3><span id="access-methods">access methods</span><a href="#access-methods" class="header-anchor">¶</a></h3>
+<h3><span id="modification-queries">modification queries</span><a href="#modification-queries" class="header-anchor">¶</a></h3>
+<h3><span id="expression-evaluation">expression evaluation</span><a href="#expression-evaluation" class="header-anchor">¶</a></h3>
+<h3><span id="relational-algebra-equivalence">relational algebra equivalence</span><a href="#relational-algebra-equivalence" class="header-anchor">¶</a></h3>
+<h2><span id="parallel-execution">Parallel execution</span><a href="#parallel-execution" class="header-anchor">¶</a></h2>
+<h2><span id="optimization">Optimization</span><a href="#optimization" class="header-anchor">¶</a></h2>
+<h3><span id="cost-estimations">Cost estimations</span><a href="#cost-estimations" class="header-anchor">¶</a></h3>
+<h3><span id="histograms">Histograms</span><a href="#histograms" class="header-anchor">¶</a></h3>
+<h2><span id="sampling">Sampling</span><a href="#sampling" class="header-anchor">¶</a></h2>
+<h3><span id="plan-enumeration">plan enumeration</span><a href="#plan-enumeration" class="header-anchor">¶</a></h3>
 
   </div>
 </article>

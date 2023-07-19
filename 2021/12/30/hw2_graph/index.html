@@ -6,12 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="ps5 ps6 ps7 reminder Recitation  Bfs Dfs weighted graph All pairs shortest paths   olc    ps5 bfs 12345678910111213# bfsdef bfs(Adj, s):    parent &#x3D; [None for v in Adj]    parent[s] &#x3D; s    level &#x3D;">
+    <meta name="description" content="ps5 ps6 ps7 reminder Recitation  Bfs Dfs weighted graph All pairs shortest paths   olc    ps5¶ bfs 12345678910111213# bfsdef bfs(Adj, s):    parent &#x3D; [None for v in Adj]    parent[s] &#x3D; s    level &#x3D;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="hw2 graph">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2021/12/30/hw2_graph/index.html">
 <meta property="og:site_name" content="steins gate zero">
-<meta property="og:description" content="ps5 ps6 ps7 reminder Recitation  Bfs Dfs weighted graph All pairs shortest paths   olc    ps5 bfs 12345678910111213# bfsdef bfs(Adj, s):    parent &#x3D; [None for v in Adj]    parent[s] &#x3D; s    level &#x3D;">
+<meta property="og:description" content="ps5 ps6 ps7 reminder Recitation  Bfs Dfs weighted graph All pairs shortest paths   olc    ps5¶ bfs 12345678910111213# bfsdef bfs(Adj, s):    parent &#x3D; [None for v in Adj]    parent[s] &#x3D; s    level &#x3D;">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2021/12/30/hw2_graph/Screenshot-7934843.png">
 <meta property="article:published_time" content="2021-12-29T16:00:00.000Z">
@@ -178,7 +178,7 @@
 </ul>
 <!-- tocstop -->
 </div>
-<h2><span id="pps5">ps5</span></h2>
+<h2><span id="ps5">ps5</span><a href="#ps5" class="header-anchor">¶</a></h2>
 <p>bfs</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># bfs</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">bfs</span>(<span class="params">Adj, s</span>):</span></span><br><span class="line">    parent = [<span class="literal">None</span> <span class="keyword">for</span> v <span class="keyword">in</span> Adj]</span><br><span class="line">    parent[s] = s</span><br><span class="line">    level = [[s]]</span><br><span class="line">    <span class="keyword">while</span> <span class="number">0</span> &lt; <span class="built_in">len</span>(level[-<span class="number">1</span>]):</span><br><span class="line">        level.append([])</span><br><span class="line">        <span class="keyword">for</span> u <span class="keyword">in</span> level[-<span class="number">2</span>]:</span><br><span class="line">            <span class="keyword">for</span> v <span class="keyword">in</span> Adj[u]:</span><br><span class="line">                <span class="keyword">if</span> parent[v] <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">                    parent[v] = u</span><br><span class="line">                    level[-<span class="number">1</span>].append(v)</span><br><span class="line">    <span class="keyword">return</span> parent</span><br></pre></td></tr></table></figure>
 <p>Analysis:</p>
@@ -202,7 +202,7 @@
 <p>search for connected components</p>
 </li>
 </ol>
-<h2><span id="pps6">ps6</span></h2>
+<h2><span id="ps6">ps6</span><a href="#ps6" class="header-anchor">¶</a></h2>
 <p>dfs</p>
 <ol>
 <li>
@@ -241,7 +241,7 @@
 </ul>
 </li>
 </ol>
-<h2><span id="pps7">ps7</span></h2>
+<h2><span id="ps7">ps7</span><a href="#ps7" class="header-anchor">¶</a></h2>
 <ol>
 <li>Feel smooth when thinking it as water flow.
 <ul>
@@ -267,7 +267,7 @@
 </ul>
 </li>
 </ol>
-<h2><span id="preminder">reminder</span></h2>
+<h2><span id="reminder">reminder</span><a href="#reminder" class="header-anchor">¶</a></h2>
 <ol>
 <li>
 <p>python lambda expression</p>
@@ -278,13 +278,13 @@
 <p>I think the tight bound is Dijkstra not allowing negative loops that will destroy its minimal property.</p>
 </li>
 </ol>
-<h2><span id="precitation">Recitation</span></h2>
+<h2><span id="recitation">Recitation</span><a href="#recitation" class="header-anchor">¶</a></h2>
 <p>The problem solving process: transform raw input to IN, apply the algorithm we are familiar with, read raw output to OUT.</p>
 <p>Then calculate the runtime and prove for correctness and efficiency.</p>
 <img src="/sg/2021/12/30/hw2_graph/Screenshot-7934843.png" class title="Screenshot-7934843">
-<h3><span id="pbfs">Bfs</span></h3>
+<h3><span id="bfs">Bfs</span><a href="#bfs" class="header-anchor">¶</a></h3>
 <p>connected components</p>
-<h3><span id="pdfs">Dfs</span></h3>
+<h3><span id="dfs">Dfs</span><a href="#dfs" class="header-anchor">¶</a></h3>
 <p><u>the important part is reasoning process so that we can reason by ourselves to get the answer</u></p>
 <p>edge classification</p>
 <ul>
@@ -299,7 +299,7 @@
 <p>Problem 1.1: how that defers to undirected graph compared with directed graph?</p>
 <p>topological sort -&gt; directed, acyclic, graph</p>
 <p>Problem 2: how this concept relates to topological sort?</p>
-<h3><span id="pweighted-graph">weighted graph</span></h3>
+<h3><span id="weighted-graph">weighted graph</span><a href="#weighted-graph" class="header-anchor">¶</a></h3>
 <p>problem 0: how to build a shortest path algorithm?</p>
 <p>simple case: take an edge, split it up, put in fake nodes. Then use bfs</p>
 <p>Problem 1: shortest path with odd edges?</p>
@@ -307,10 +307,10 @@
 <p>Idea: track state during path building</p>
 <p>problem 2: fast way, least fuel. An edge has fixed fuel cost, varying time cost depenTime table Tc (minutes): M = 24*60</p>
 <p>Idea: choose a more reasonable state to track and reason carefully.</p>
-<h4><span id="pbellman-ford">Bellman-ford</span></h4>
+<h4><span id="bellman-ford">Bellman-ford</span><a href="#bellman-ford" class="header-anchor">¶</a></h4>
 <p>Notice: negative weight</p>
 <p>-&gt; detect loops</p>
-<h4><span id="pdijkstra">Dijkstra</span></h4>
+<h4><span id="dijkstra">Dijkstra</span><a href="#dijkstra" class="header-anchor">¶</a></h4>
 <p>Notice: non-negative weight</p>
 <p>讲义中分成两部分来看这个算法。整体上看： Dijkstra 像一个流动的水龙头阀门，水流从起点匀速地流动到下一个开关。算法把连续的过程通过 edge relaxation 离散的表示。</p>
 <ol>
@@ -327,7 +327,7 @@
 </ul>
 </li>
 </ol>
-<h3><span id="pall-pairs-shortest-paths">All pairs shortest paths</span></h3>
+<h3><span id="all-pairs-shortest-paths">All pairs shortest paths</span><a href="#all-pairs-shortest-paths" class="header-anchor">¶</a></h3>
 <p>Runtime: at least O(V^2), because we need find all pairs’ path</p>
 <p>naive approach: use n * SSSP algorithms:</p>
 <ul>
@@ -363,7 +363,7 @@
 </ul>
 </li>
 </ol>
-<h2><span id="polc">olc</span></h2>
+<h2><span id="olc">olc</span><a href="#olc" class="header-anchor">¶</a></h2>
 <ol>
 <li>
 <p>I think the basic idea is date transformation and build intuition about the problems.</p>

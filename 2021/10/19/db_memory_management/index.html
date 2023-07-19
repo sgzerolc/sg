@@ -94,7 +94,7 @@
     <span id="actions">
       <ul>
         
-        <li><a class="icon" aria-label="Previous post" href="/sg/2021/10/20/SC_concurrency/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Previous post" href="/sg/2021/10/20/db_b+tr/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
         
         
         <li><a class="icon" aria-label="Next post" href="/sg/2021/10/03/sicp/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
@@ -198,10 +198,10 @@
 <p>Provide an illusion that it has sufficient memory, avoid large stalls due to expensive disk access, maximize sequential access due to principle of locality.</p>
 <p>Problem: why not use the os for moving the files’ pages in and out of memory?</p>
 <p>Answer: OS doesn’t care about what the file is while DBMS sees the difference of queries.<img src="/sg/2021/10/19/db_memory_management/Screenshot-7504622.png" class title="Screenshot-7504622"></p>
-<h2><span id="pdisk-manager">Disk manager</span></h2>
+<h2><span id="disk-manager">Disk manager</span><a href="#disk-manager" class="header-anchor">¶</a></h2>
 <p><u>Problem: how the DBMS represents the database in files on disk?</u></p>
 <img src="/sg/2021/10/19/db_memory_management/Screenshot-7504676.png" class title="Screenshot-7504676">
-<h3><span id="pwhere-to-store-data">Where to store data?</span></h3>
+<h3><span id="where-to-store-data">Where to store data?</span><a href="#where-to-store-data" class="header-anchor">¶</a></h3>
 <p>Fixed-size db pages.</p>
 <blockquote>
 <p>Storage manager: organize files as a collection of pages.</p>
@@ -230,7 +230,7 @@ page to disk when the system crashes.</p>
 <img src="/sg/2021/10/19/db_memory_management/Screenshot-7504759.png" class title="Screenshot-7504759">
 </li>
 </ol>
-<h3><span id="phow-to-organize-the-data-inside-of-the-page">how to organize the data inside of the page?</span></h3>
+<h3><span id="how-to-organize-the-data-inside-of-the-page">how to organize the data inside of the page?</span><a href="#how-to-organize-the-data-inside-of-the-page" class="header-anchor">¶</a></h3>
 <ol>
 <li>
 <p>Slotted-pages</p>
@@ -261,12 +261,12 @@ page to disk when the system crashes.</p>
 </ul>
 </li>
 </ol>
-<h3><span id="pwhat-is-the-data">what is the data?</span></h3>
+<h3><span id="what-is-the-data">what is the data?</span><a href="#what-is-the-data" class="header-anchor">¶</a></h3>
 <p>System catalog tracks the schema.</p>
-<h4><span id="p-gt-tuple-layout">&gt; tuple layout</span></h4>
+<h4><span id="gt-tuple-layout">&gt; tuple layout</span><a href="#gt-tuple-layout" class="header-anchor">¶</a></h4>
 <p>header:Meta-data about the tuple + data + unique identifier(page_id + (offset/slot))</p>
 <p>Denormalize tuple data: when two tables are related,  they can be pre-joined and it results in one table under the cost of update while it makes reads faster.</p>
-<h4><span id="p-gt-data-representations">&gt; data representations</span></h4>
+<h4><span id="gt-data-representations">&gt; data representations</span><a href="#gt-data-representations" class="header-anchor">¶</a></h4>
 <p>The data in a tuple is essentially just byte arrays. It is up to the DBMS to know how to interpret those bytes to derive the values for attributes. A data representation scheme is how a DBMS stores the bytes for a value.</p>
 <p>Five high level datatypes in tuples:</p>
 <ol>
@@ -307,7 +307,7 @@ page to disk when the system crashes.</p>
 <p>Examples: TIME, DATE, TIMESTAMP</p>
 </li>
 </ol>
-<h3><span id="pworkloads-types">workloads types</span></h3>
+<h3><span id="workloads-types">workloads types</span><a href="#workloads-types" class="header-anchor">¶</a></h3>
 <p>workloads: general nature of requests a system will have to handle.</p>
 <img src="/sg/2021/10/19/db_memory_management/Screenshot-7505252.png" class title="Screenshot-7505252">
 <ol>
@@ -321,7 +321,7 @@ page to disk when the system crashes.</p>
 <p>HTAP: hybrid transaction + analytical processing</p>
 </li>
 </ol>
-<h3><span id="pdata-storage-models">data storage models</span></h3>
+<h3><span id="data-storage-models">data storage models</span><a href="#data-storage-models" class="header-anchor">¶</a></h3>
 <p>assume n-ary storage model in class.</p>
 <ol>
 <li>
@@ -357,14 +357,14 @@ contiguously in a page -&gt; row store</p>
 </ul>
 </li>
 </ol>
-<h2><span id="pbuffer-pool-manager">buffer pool manager</span></h2>
+<h2><span id="buffer-pool-manager">buffer pool manager</span><a href="#buffer-pool-manager" class="header-anchor">¶</a></h2>
 <p><u>Problem: how the DBMS manages its memory and move data back-and-forth from disk?</u></p>
 <p>Two goals of db storage is spatial control and temporal control.</p>
 <ul>
 <li>keep pages that are used together often as physically close together as possible on disk.</li>
 <li>minimize the number of stalls from having to read data from disk.</li>
 </ul>
-<h3><span id="pwhat-is-buffer-pool">What is buffer pool?</span></h3>
+<h3><span id="what-is-buffer-pool">What is buffer pool?</span><a href="#what-is-buffer-pool" class="header-anchor">¶</a></h3>
 <p>The buffer pool is an in-memory cache of pages read from disk. It is essentially a large memory region allocated inside of the database to store pages that are fetched from disk.</p>
 <img src="/sg/2021/10/19/db_memory_management/Screenshot-7506613.png" class title="Screenshot-7506613">
 <ol>
@@ -403,7 +403,7 @@ fying it).</li>
 </ul>
 </li>
 </ol>
-<h3><span id="pbuffer-pool-optimizations">buffer pool optimizations</span></h3>
+<h3><span id="buffer-pool-optimizations">buffer pool optimizations</span><a href="#buffer-pool-optimizations" class="header-anchor">¶</a></h3>
 <ol>
 <li>
 <p>multiple buffer pools</p>
@@ -445,10 +445,10 @@ fying it).</li>
 </ul>
 </li>
 </ol>
-<h3><span id="pos-page-cache">os page cache</span></h3>
+<h3><span id="os-page-cache">os page cache</span><a href="#os-page-cache" class="header-anchor">¶</a></h3>
 <p>another way to access data</p>
 <p>os maintains its own file system cache.</p>
-<h3><span id="pbuffer-replacement-policies">Buffer Replacement Policies</span></h3>
+<h3><span id="buffer-replacement-policies">Buffer Replacement Policies</span><a href="#buffer-replacement-policies" class="header-anchor">¶</a></h3>
 <p>Problem: When the DBMS needs to free up a frame to make room for a new page, it must decide which page to evict from the buffer pool.</p>
 <ol>
 <li>
@@ -466,14 +466,14 @@ fying it).</li>
 <li>localization per query: evict on a per transaction/query basis.</li>
 <li>Priority hints: based on the context of each page during query execution</li>
 </ol>
-<h3><span id="pdirty-pages">dirty pages</span></h3>
+<h3><span id="dirty-pages">dirty pages</span><a href="#dirty-pages" class="header-anchor">¶</a></h3>
 <p>Approaches:</p>
 <ol>
 <li>Fast evictions: drop dirty pages</li>
 <li>Slow evictions: write back</li>
 <li>background writing: the DBMS can periodically walk through the page table and write dirty pages to disk. When a dirty page is safely written, the DBMS can either evict the page or just unset the dirty flag</li>
 </ol>
-<h3><span id="pother-memory-pool">other memory pool</span></h3>
+<h3><span id="other-memory-pool">other memory pool</span><a href="#other-memory-pool" class="header-anchor">¶</a></h3>
 <ol>
 <li>Sorting + join buffers</li>
 <li>query caches</li>

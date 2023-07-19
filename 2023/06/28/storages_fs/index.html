@@ -6,12 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="FS history  btrfs   FS storage layout FS organization Caching and FS integrity    Media -&gt; I&#x2F;O controller -&gt; Device driver -&gt; File systems -&gt; Program(Applications) FS history Thoughts a">
+    <meta name="description" content="FS history  btrfs   FS storage layout FS organization Caching and FS integrity    Media -&gt; I&#x2F;O controller -&gt; Device driver -&gt; File systems -&gt; Program(Applications) FS history¶ Thoughts">
 <meta property="og:type" content="article">
 <meta property="og:title" content="File Systems Notes">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2023/06/28/storages_fs/index.html">
 <meta property="og:site_name" content="steins gate zero">
-<meta property="og:description" content="FS history  btrfs   FS storage layout FS organization Caching and FS integrity    Media -&gt; I&#x2F;O controller -&gt; Device driver -&gt; File systems -&gt; Program(Applications) FS history Thoughts a">
+<meta property="og:description" content="FS history  btrfs   FS storage layout FS organization Caching and FS integrity    Media -&gt; I&#x2F;O controller -&gt; Device driver -&gt; File systems -&gt; Program(Applications) FS history¶ Thoughts">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-06-27T16:00:00.000Z">
 <meta property="article:modified_time" content="2023-07-19T03:30:03.592Z">
@@ -103,7 +103,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">FS history</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">btrfs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">FS storage layout</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text"></span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">FS organization</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Caching and FS integrity</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">FS history</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">btrfs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">FS storage layout</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">¶</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">FS organization</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Caching and FS integrity</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -162,7 +162,7 @@
 <!-- tocstop -->
 </div>
 <p>Media -&gt; I/O controller -&gt; Device driver -&gt; File systems -&gt; Program(Applications)</p>
-<h2><span id="pfs-history">FS history</span></h2>
+<h2><span id="fs-history">FS history</span><a href="#fs-history" class="header-anchor">¶</a></h2>
 <p>Thoughts after reading the fs history blogs<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></p>
 <blockquote>
 <ul>
@@ -176,8 +176,8 @@
 <p>char  	di_addr[40];	  <em>/* disk block addresses */</em></p>
 </blockquote>
 <p>3 8-byte block address: 2^24 = 16M</p>
-<h3><span id="pbtrfs">btrfs</span></h3>
-<h2><span id="pfs-storage-layout">FS storage layout</span></h2>
+<h3><span id="btrfs">btrfs</span><a href="#btrfs" class="header-anchor">¶</a></h3>
+<h2><span id="fs-storage-layout">FS storage layout</span><a href="#fs-storage-layout" class="header-anchor">¶</a></h2>
 <p>trade-off elements: target workload</p>
 <p><u>Organizaing raw data into files:</u></p>
 <p>Problem 1: mapping file sys structure and data to storage locations(logical block numbers)</p>
@@ -191,8 +191,8 @@
 </ol>
 <p>ex: zonefs. It exposes each zone of a zoned block device as a file<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup>.  Superblock is written at LBA 0 which contains the implementations of zonefs. No complex in-disk metadata is involved.</p>
 <p>organizations: /dev/nullb0 -&gt; /mnt, conventional zones -&gt; /mnt/conv/0~C, sequential zones -&gt; /mnt/seq/0~S</p>
-<h3><span id="p"></span></h3>
-<h2><span id="pfs-organization">FS organization</span></h2>
+<h3><span id></span><a href="#" class="header-anchor">¶</a></h3>
+<h2><span id="fs-organization">FS organization</span><a href="#fs-organization" class="header-anchor">¶</a></h2>
 <p>Vahalia1995 ch8: P255</p>
 <p>Application interface and system software<br>
 Data organization and naming<br>
@@ -201,7 +201,7 @@ Cache management<br>
 Metadata integrity and crash recovery<br>
 On-disk data placement<br>
 Access control</p>
-<h2><span id="pcaching-and-fs-integrity">Caching and FS integrity</span></h2>
+<h2><span id="caching-and-fs-integrity">Caching and FS integrity</span><a href="#caching-and-fs-integrity" class="header-anchor">¶</a></h2>
 <hr class="footnotes-sep">
 <section class="footnotes">
 <ol class="footnotes-list">
@@ -238,7 +238,7 @@ Access control</p>
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">FS history</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">btrfs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">FS storage layout</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text"></span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">FS organization</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Caching and FS integrity</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">FS history</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">btrfs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">FS storage layout</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">¶</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">FS organization</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Caching and FS integrity</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
