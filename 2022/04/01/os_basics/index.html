@@ -6,20 +6,19 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="Design points Interfaces  Process File descriptor and I&#x2F;O Pipe Fs   Organization Virtual memory techniques  page table interrupts   Parallelism  lock threads case study: RCU   File systems  xv6 des">
+    <meta name="description" content="Design points Interfaces  Process File descriptor and I&#x2F;O Pipe Fs   Organization Virtual memory techniques  page table traps interrupts   Parallelism  lock threads case study: RCU   File systems  c">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Intro to xv6">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2022/04/01/os_basics/index.html">
 <meta property="og:site_name" content="steins gate zero">
-<meta property="og:description" content="Design points Interfaces  Process File descriptor and I&#x2F;O Pipe Fs   Organization Virtual memory techniques  page table interrupts   Parallelism  lock threads case study: RCU   File systems  xv6 des">
+<meta property="og:description" content="Design points Interfaces  Process File descriptor and I&#x2F;O Pipe Fs   Organization Virtual memory techniques  page table traps interrupts   Parallelism  lock threads case study: RCU   File systems  c">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/04/01/os_basics/boot.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/04/01/os_basics/pt.png">
-<meta property="og:image" content="https://sgzerolc.github.io/sg/2022/04/01/os_basics/kvm.png">
-<meta property="og:image" content="https://sgzerolc.github.io/sg/2022/04/01/os_basics/Screenshot-8963182.png">
+<meta property="og:image" content="https://sgzerolc.github.io/sg/2022/04/01/os_basics/vm.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/04/01/os_basics/Screenshot-9679149.png">
 <meta property="article:published_time" content="2022-03-31T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-07-19T03:55:42.975Z">
+<meta property="article:modified_time" content="2023-08-02T01:11:45.475Z">
 <meta property="article:author" content="Sam Li">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://sgzerolc.github.io/sg/2022/04/01/os_basics/boot.png">
@@ -113,7 +112,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Design points</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Interfaces</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">Process</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">File descriptor and I&#x2F;O</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.3.</span> <span class="toc-text">Pipe</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.4.</span> <span class="toc-text">Fs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Organization</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Virtual memory techniques</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.1.</span> <span class="toc-text">page table</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.2.</span> <span class="toc-text">interrupts</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Parallelism</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.1.</span> <span class="toc-text">lock</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.2.</span> <span class="toc-text">threads</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.3.</span> <span class="toc-text">case study: RCU</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">File systems</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.1.</span> <span class="toc-text">xv6 design</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.2.</span> <span class="toc-text">case study: ext3</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">Network stack</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">Security</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">Basics</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.1.</span> <span class="toc-text">C</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.2.</span> <span class="toc-text">RISC-V convention</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.3.</span> <span class="toc-text">GDB</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Design points</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Interfaces</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">Process</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">File descriptor and I&#x2F;O</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.3.</span> <span class="toc-text">Pipe</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.4.</span> <span class="toc-text">Fs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Organization</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Virtual memory techniques</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.1.</span> <span class="toc-text">page table</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.2.</span> <span class="toc-text">traps</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.3.</span> <span class="toc-text">interrupts</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Parallelism</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.1.</span> <span class="toc-text">lock</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.2.</span> <span class="toc-text">threads</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.3.</span> <span class="toc-text">case study: RCU</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">File systems</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.1.</span> <span class="toc-text">case study: ext3</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">Network stack</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">Security</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">Basics</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.1.</span> <span class="toc-text">C</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.2.</span> <span class="toc-text">RISC-V convention</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.3.</span> <span class="toc-text">GDB</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.4.</span> <span class="toc-text">Lookup table</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">10.</span> <span class="toc-text">Related readings</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -173,6 +172,7 @@
 <li><a href="#virtual-memory-techniques">Virtual memory techniques</a>
 <ul>
 <li><a href="#page-table">page table</a></li>
+<li><a href="#traps">traps</a></li>
 <li><a href="#interrupts">interrupts</a></li>
 </ul>
 </li>
@@ -185,7 +185,6 @@
 </li>
 <li><a href="#file-systems">File systems</a>
 <ul>
-<li><a href="#xv6-design">xv6 design</a></li>
 <li><a href="#case-study-ext3">case study: ext3</a></li>
 </ul>
 </li>
@@ -196,8 +195,10 @@
 <li><a href="#c">C</a></li>
 <li><a href="#risc-v-convention">RISC-V convention</a></li>
 <li><a href="#gdb">GDB</a></li>
+<li><a href="#lookup-table">Lookup table</a></li>
 </ul>
 </li>
+<li><a href="#related-readings">Related readings</a></li>
 </ul>
 <!-- tocstop -->
 </div>
@@ -218,6 +219,8 @@
 <li>xv6’s process has one thread. Modern os supports several threads within a process</li>
 </ul>
 </li>
+<li>Chap3: 3-level page table to save memory when most va is not mapped.</li>
+<li>k/u separation</li>
 </ol>
 <h2><span id="interfaces">Interfaces</span><a href="#interfaces" class="header-anchor">¶</a></h2>
 <h3><span id="process">Process</span><a href="#process" class="header-anchor">¶</a></h3>
@@ -264,11 +267,14 @@
 </ol>
 <h3><span id="pipe">Pipe</span><a href="#pipe" class="header-anchor">¶</a></h3>
 <ol>
-<li>The read on the pipe blocks until it’s improssible to receive new data.</li>
-</ol>
-<p>Pipe[0] read, pipe[1] write.If stdin is associated with either end of pipe, then exec will wait if there is the new data waiting to r/w. So the pipe ends before write/read are alway closed in this chunk.</p>
-   <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// wc &lt; &quot;hello world&quot;</span></span><br><span class="line"><span class="keyword">if</span>(fork() == <span class="number">0</span>) &#123;</span><br><span class="line">	close(<span class="number">0</span>); </span><br><span class="line">	dup(p[<span class="number">0</span>]); <span class="comment">// p[0] donates its data to file descriptor 0</span></span><br><span class="line">	close(p[<span class="number">0</span>]); <span class="comment">// p[0] no longer needed in child since stdin is a copy</span></span><br><span class="line">	close(p[<span class="number">1</span>]);</span><br><span class="line">	exec(<span class="string">&quot;/bin/wc&quot;</span>, argv);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">	close(p[<span class="number">0</span>]);</span><br><span class="line">	write(p[<span class="number">1</span>], <span class="string">&quot;hello world\n&quot;</span>, <span class="number">12</span>);</span><br><span class="line">	close(p[<span class="number">1</span>]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ol start="2">
+<li>
+<p>The read on the pipe blocks until it’s improssible to receive new data.</p>
+<p>If stdin is associated with either end of pipe, then exec will wait if there is the new data waiting to r/w. So the pipe ends before write/read are alway closed in this chunk.</p>
+<ul>
+<li>Pipe[0] read, pipe[1] write.</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// wc &lt; &quot;hello world&quot;</span></span><br><span class="line"><span class="keyword">if</span>(fork() == <span class="number">0</span>) &#123;</span><br><span class="line">	close(<span class="number">0</span>); </span><br><span class="line">	dup(p[<span class="number">0</span>]); <span class="comment">// p[0] donates its data to file descriptor 0</span></span><br><span class="line">	close(p[<span class="number">0</span>]); <span class="comment">// p[0] no longer needed in child since stdin is a copy</span></span><br><span class="line">	close(p[<span class="number">1</span>]);</span><br><span class="line">	exec(<span class="string">&quot;/bin/wc&quot;</span>, argv);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">	close(p[<span class="number">0</span>]);</span><br><span class="line">	write(p[<span class="number">1</span>], <span class="string">&quot;hello world\n&quot;</span>, <span class="number">12</span>);</span><br><span class="line">	close(p[<span class="number">1</span>]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
 <li>
 <p>Process tree: <code>grep fork sh.c | wc -l</code></p>
 <p>The child process creates a pipe to connect the left end of the pipe with the right end. Fork + runcmd will then run the cmd of the left end and the right end. The right end of the pipeline can also be a pipe. Therefore a processes tree generates.</p>
@@ -396,58 +402,63 @@
 </li>
 </ol>
 <h2><span id="virtual-memory-techniques">Virtual memory techniques</span><a href="#virtual-memory-techniques" class="header-anchor">¶</a></h2>
-<p>virtual memory</p>
-<ol>
-<li>
-<p>os booting:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">kinit();         <span class="comment">// physical page allocator</span></span><br><span class="line">kvminit();       <span class="comment">// create kernel page table</span></span><br><span class="line">kvminithart();   <span class="comment">// turn on paging</span></span><br><span class="line">procinit();      <span class="comment">// process table</span></span><br><span class="line">...</span><br><span class="line">virtio_disk_init(); <span class="comment">// emulated hard disk</span></span><br></pre></td></tr></table></figure>
-</li>
-<li>
-<p>Memory allocation</p>
-<p>Real allocator: dynamic allocation-&gt;small chunks</p>
-<p>Xv6 allocator: allocate a 4096-byte block</p>
-</li>
-</ol>
 <h3><span id="page-table">page table</span><a href="#page-table" class="header-anchor">¶</a></h3>
 <ol>
 <li>
-<p>address translation</p>
-<p>RISC-V instructions manipulate virtual addresses; RAM, or physical memory is indexed with physical address. The RISC-V page table hardware provides mapping of virtual address to physical address.</p>
+<p>paging hardware:</p>
+<ul>
+<li>terms
+<ul>
+<li>RISC-V hw supports page table. Its instructions deals with <code>va</code>.</li>
+<li>Sv39 RISC-V only uses the bottom 39 bits to represent <code>va</code>.</li>
+<li>Storage cell DRAM is where r/w physical memory.</li>
+<li>Virtual memory is not physical as va and pa but the abstraction and machanisms to manage va and pa.</li>
+</ul>
+</li>
+<li>geometry: <code>va</code> (39 bit) = PTE_index (27 bit) +  flag bit (12 bit). PA (56 bit) = PPN (upper 44 bits of the PTE) + offset (lower 12 bits of VA). 2^27 = # of PTE.</li>
+<li><code>satp</code>: supervisor address translation and protection, reserves the <code>pa</code> of page tables.
 <ul>
 <li>
 <img src="/sg/2022/04/01/os_basics/pt.png" class title="pt">
 </li>
 </ul>
 </li>
+</ul>
+</li>
 <li>
-<p>kernel address space:</p>
+<p>Cache of (VA, PA) is Translation Lookside Buffer when finding PA for the VA</p>
+<ul>
+<li>TLB will be cleared when switching page table. RISC-V instruction for that is:<code>sfence_vma</code></li>
+</ul>
+</li>
+<li>
+<p>Address space:</p>
 <ul>
 <li>
-<p>Xv6 maintains one page table per process(user address space) and single page table for the kernel address space.</p>
+<p>Xv6 maintains 1 page table per process in the user space and 1 page table for kernel space.</p>
 </li>
 <li>
 <p>Kernel uses <u>direct mapping</u> to get access to RAM and memory mapped devices.</p>
 </li>
 <li>
-<p>Not direct mapped: high-memory mapping</p>
+<p>Not directly mapped: high-memory mapping</p>
 <ul>
 <li>
 <p>trampoline page</p>
 </li>
 <li>
-<p>kernel stack pages: have an unmapped guard page with PTE invalid.</p>
-<img src="/sg/2022/04/01/os_basics/kvm.png" class title="kvm">
-</li>
-</ul>
+<p>stack pages: have an unmapped guard page with PTE invalid.</p>
 </li>
 </ul>
 </li>
 <li>
-<p>user address space</p>
-<img src="/sg/2022/04/01/os_basics/Screenshot-8963182.png" class title="Screenshot-8963182">
+<p>process address space and kernel address space</p>
+<img src="/sg/2022/04/01/os_basics/vm.png" class title="vm">
+</li>
+</ul>
 </li>
 <li>
-<p>process of vm setup</p>
+<p>I/O path</p>
 <ul>
 <li>physical memory allocation: free pages are stored in the linked list.</li>
 <li>Syscall
@@ -459,6 +470,7 @@
 </ul>
 </li>
 </ol>
+<h3><span id="traps">traps</span><a href="#traps" class="header-anchor">¶</a></h3>
 <h3><span id="interrupts">interrupts</span><a href="#interrupts" class="header-anchor">¶</a></h3>
 <ol>
 <li>
@@ -530,6 +542,7 @@
 <p>Terminology:</p>
 <ol>
 <li>Deadlock: unlocking A requires B, unlocking B requires A, A and B are locked. example: deadly embrace</li>
+<li></li>
 </ol>
 <h3><span id="threads">threads</span><a href="#threads" class="header-anchor">¶</a></h3>
 <ol>
@@ -558,13 +571,8 @@
 </ol>
 <p>while cooperative scheduling is user processes explicitly give up control to kernel, like QEMU coroutines.</p>
 <p>Problem2: lost wake-up problem</p>
-<hr>
-<p>Further reading:</p>
-<p>stanford os lab1/cmu dsys thread</p>
-<p>slides from 418 / os exams from 440</p>
 <h3><span id="case-study-rcu">case study: RCU</span><a href="#case-study-rcu" class="header-anchor">¶</a></h3>
 <h2><span id="file-systems">File systems</span><a href="#file-systems" class="header-anchor">¶</a></h2>
-<h3><span id="xv6-design">xv6 design</span><a href="#xv6-design" class="header-anchor">¶</a></h3>
 <p>xv6 features:</p>
 <ol>
 <li>an on-disk structure represets naming system</li>
@@ -582,33 +590,86 @@
 <p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/8011700/how-do-i-extract-specific-n-bits-of-a-32-bit-unsigned-integer-in-c">bit mask</a>:</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Want the last X bits</span></span><br><span class="line"><span class="keyword">unsigned</span>  mask;</span><br><span class="line">mask = (<span class="number">1</span> &lt;&lt; X) - <span class="number">1</span>; <span class="comment">// -1 is like fliping the bit</span></span><br><span class="line">lastXbits = value &amp; mask;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Want X bits in the middle</span></span><br><span class="line"><span class="keyword">unsigned</span>  mask;</span><br><span class="line">mask = ((<span class="number">1</span> &lt;&lt; X) - <span class="number">1</span>) &lt;&lt; startBit;</span><br><span class="line">isolatedXbits = value &amp; mask;</span><br></pre></td></tr></table></figure>
 </li>
+<li>
+<p>struct vs packed struct: if the fileds aligned</p>
+<ul>
+<li>Fact: misaligned load/store can be slow or unsupported (platform-dependent)</li>
+</ul>
+</li>
 </ol>
 <h3><span id="risc-v-convention">RISC-V convention</span><a href="#risc-v-convention" class="header-anchor">¶</a></h3>
+<p>Understanding RISC-V Calling Convention by Nick Riasanovsky:</p>
 <ol>
 <li>
+<p>RISC-V abstract machine: Base ISA: Program counter, 32 general-purpose registers (x0–x31).</p>
 <p>Unlike high-level programming language, convention is a choice to organize code like naming and line &lt; 80. Assembly is built on convention. Three parts is key to understand assembly: <strong>registers, function calls, and entering/exiting a function (prologue/epilogue)</strong>.</p>
 </li>
 <li>
 <p>Registers</p>
 <ul>
-<li>RISC-V has 32 registers. <code>sp</code> holds the current base of the stack. <code>t</code> for temporary.
+<li>RISC-V has 32 registers. <code>sp</code> holds the current base of the stack. <code>ra</code> return address. <code>pc</code> holds the address of the current instruction.  <code>t</code> for temporary. <code>a</code> regs -&gt; 8 arguments, 2 return values in <code>a0-a1</code>.
 <ul>
 <li>
 <img src="/sg/2022/04/01/os_basics/Screenshot-9679149.png" class title="Screenshot-9679149">
 </li>
+<li><code>f</code> reg for floating point</li>
 </ul>
 </li>
 </ul>
 </li>
 <li>
-<p>Calling convention (Understanding RISC-V Calling Convention by Nick Riasanovsky)</p>
+<p>Function calls</p>
+<ul>
+<li>Used after a function call(), <code>s</code> regs; unused after a call(), <code>t</code> regs.</li>
+<li>(not persistent) Making a call, pass arguments in <code>a2-a7</code>; (persistent) after a call, get return values in <code>a0-a1</code></li>
+</ul>
+</li>
+<li>
+<p>Prologue/Epilogue</p>
+<ul>
+<li>
+<p>guarantees:</p>
+<blockquote>
+<ul>
+<li>The sp will have the same value when exiting the function that it did entering (unless we store return values on the stack).</li>
+<li>All s registers will have the same value exiting the function that they did entering.</li>
+<li>The function will return to the value stored in ra, assuming no abnormal execution.</li>
+</ul>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">def prologue():</span><br><span class="line">	sp -= space of (s registers + local var);</span><br><span class="line">	store any saved regs used;</span><br><span class="line">	store ra if call();</span><br><span class="line"></span><br><span class="line">def epilogue():</span><br><span class="line">	reload any saved regs;</span><br><span class="line">	reload ra;</span><br><span class="line">	sp = previous sp;</span><br><span class="line">	jump back to return address</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
 </li>
 <li>
 <p>Stack Frames: stack grows downwards and heap grows upwards</p>
 </li>
 <li>
+<p>Why this convention? Avoid to save every regs</p>
+</li>
+<li>
+<p>Debug tips using convention</p>
+<blockquote>
+<ul>
+<li>Check that you stored <code>ra</code> properly. For recursion make sure you link <code>ra</code> for each recursive call. You can test this by putting a break point at the end of the epilogue and seeing where you return.</li>
+<li>Check that you don’t use any <code>t</code> registers after a function call.</li>
+<li>Check that <code>sp</code> enters and exits with the same value.</li>
+<li>Check the number of times you enter the prologue equals the number of times you enter the epilogue.</li>
+<li>Make sure you restore every register you modified.</li>
+</ul>
+</blockquote>
+</li>
+<li>
 <p>Instructions</p>
 <ul>
+<li>
+<p><code>w</code> (word) is 32 bit in RISC-V, <code>d</code> (double) is 64 bit, <code>i</code> (immediate) is constant (see 6.004 isa reference card for the maximum value it can represent)</p>
+</li>
+<li>
+<p>Reg is 32-bit (4 byte) wide in RV32; 64 bit in RV64 etc.</p>
+</li>
+<li>
+<p><code>ra</code> is the destination reg</p>
+</li>
 <li>
 <p><code>csrr</code>: Read CSR (Control System Register)</p>
 </li>
@@ -616,23 +677,161 @@
 <p><code>mhartid</code> is Hart ID Register: The mhartid CSR is an MXLEN-bit read-only register containing the integer ID of <u>the hardware thread running the code</u> (Riscv privileged spec 3.1.5)</p>
    <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">csrr a1 mhartid</span><br><span class="line">csrr rd, csr  -&gt; csrrs rd, csr, x0</span><br></pre></td></tr></table></figure>
 </li>
+<li>
+<p><code>jal</code>, jump and link; <code>jalr</code>, jump and link register;</p>
+   <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// call()</span><br><span class="line">jal ra lable // link ra with pc + 4 (store pc + 4 in ra), jump to lable (pc = lable); </span><br><span class="line">jalr ra rd imm // link ra with pc + 4, jump to reg (pc = rd + imm)</span><br><span class="line"></span><br><span class="line">// no call(), just jump to lable</span><br><span class="line">jal x0 lable // j lable</span><br><span class="line">jalr x0 rd imm // jr rd imm</span><br></pre></td></tr></table></figure>
+</li>
 </ul>
 </li>
 </ol>
 <h3><span id="gdb">GDB</span><a href="#gdb" class="header-anchor">¶</a></h3>
+<p>gdb notes from lecture and csapp, <a target="_blank" rel="noopener" href="https://sourceware.org/gdb/current/onlinedocs/gdb">more</a>:</p>
 <ol>
 <li>
-<p><code>si</code>: step i</p>
+<p>show source code:<code>tui enable</code>, <code>layout split</code> -&gt; both C and asm,  <code>layout source</code> -&gt; only C</p>
+<ul>
+<li><code>layout reg</code>, <code>layout asm</code>: show reg, assembly</li>
+<li><code>layout next</code>: steps through layouts</li>
+</ul>
 </li>
 <li>
-<p><code>layout split</code>: track file</p>
+<p>info: breakpoints, program, functions, stack, frame, registers,</p>
+<ul>
+<li><code>info b</code></li>
+</ul>
 </li>
 <li>
-<p><code>p</code>: print information</p>
+<p>execution: <code>step</code>, <code>continue</code>, <code>finish</code>, <code>run</code>, <code>until</code></p>
+<ul>
+<li>
+<p><code>until 3</code>: run until breakpoint 3</p>
 </li>
 <li>
-<p>A nice blog explains pipe and inter-process communication in details: <a target="_blank" rel="noopener" href="https://www.rozmichelle.com/pipes-forks-dups/">https://www.rozmichelle.com/pipes-forks-dups/</a></p>
+<p><code>si</code>: execute one instruction</p>
 </li>
+</ul>
+</li>
+<li>
+<p>breakpoints: you can disable/enble, break/delete it</p>
+<ul>
+<li>conditional breakpoints: break, only when a condition holds (e.g. variable has a certain value)</li>
+<li><code>clear sum</code>: Clear any breakpoints at the entry to function sum</li>
+</ul>
+</li>
+<li>
+<p>watchpoints: break when a memory location changes value, <code>wa</code></p>
+<ul>
+<li><code>watch -l address</code>: when the address contents change</li>
+<li><code>watch expression</code>: when expression changes</li>
+</ul>
+</li>
+<li>
+<p>examine data:</p>
+<ul>
+<li><code>print /[format] $rax</code></li>
+<li><code>print /d (int)$rax</code>: Print contents of %rax in decimal after sign-extending lower 32-bits. -&gt; negative value</li>
+<li><code>print *(int *) 0xbffff890</code>: Print integer at address 0xbffff890</li>
+<li><code>print *(int *) ($rsp+8)</code> : Print integer at address %rsp + 8</li>
+<li><code>print (char *) 0xbfff890</code>: Examine a string stored at 0xbffff890</li>
+<li><code>x/[num][size][format] where </code>:  <code>num</code>, number of objects to display, <code>size</code> = size of each object (b=byte, h=half-word, w=word, g=giant (quad-word)), <code>format</code> = how to display each object (d=decimal, x=hex, o=octal, t=binary etc.)</li>
+</ul>
+</li>
+</ol>
+<h3><span id="lookup-table">Lookup table</span><a href="#lookup-table" class="header-anchor">¶</a></h3>
+<p>RISC-V regs:</p>
+<table>
+<thead>
+<tr>
+<th>reg</th>
+<th style="text-align:center">name</th>
+<th>saver</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>x0</td>
+<td style="text-align:center">zero</td>
+<td>-</td>
+<td>hardwired zero, always 0</td>
+</tr>
+<tr>
+<td>x1</td>
+<td style="text-align:center">ra</td>
+<td></td>
+<td>return address</td>
+</tr>
+<tr>
+<td>x2</td>
+<td style="text-align:center">sp</td>
+<td>callee</td>
+<td>stack pointer</td>
+</tr>
+<tr>
+<td>x3</td>
+<td style="text-align:center">gp</td>
+<td>-</td>
+<td>global pointer</td>
+</tr>
+<tr>
+<td>x4</td>
+<td style="text-align:center">tp</td>
+<td>-</td>
+<td>thread pointer</td>
+</tr>
+<tr>
+<td>x5-7</td>
+<td style="text-align:center">t0-2</td>
+<td></td>
+<td>temporary registers</td>
+</tr>
+<tr>
+<td>x8</td>
+<td style="text-align:center">s0/fp</td>
+<td>callee</td>
+<td>saved register / frame pointer</td>
+</tr>
+<tr>
+<td>x9</td>
+<td style="text-align:center">s1</td>
+<td>callee</td>
+<td>saved register</td>
+</tr>
+<tr>
+<td>x10-11</td>
+<td style="text-align:center">a0-1</td>
+<td></td>
+<td>function arguments / return values</td>
+</tr>
+<tr>
+<td>x12-17</td>
+<td style="text-align:center">a2-7</td>
+<td></td>
+<td>function arguments</td>
+</tr>
+<tr>
+<td>x18-27</td>
+<td style="text-align:center">s2-s11</td>
+<td>callee</td>
+<td>saved registers</td>
+</tr>
+<tr>
+<td>x28-31</td>
+<td style="text-align:center">t3-6</td>
+<td></td>
+<td>temporary registers</td>
+</tr>
+<tr>
+<td>pc</td>
+<td style="text-align:center">-</td>
+<td>-</td>
+<td>program counter</td>
+</tr>
+</tbody>
+</table>
+<h2><span id="related-readings">Related readings</span><a href="#related-readings" class="header-anchor">¶</a></h2>
+<ol>
+<li>A nice blog explains pipe and inter-process communication in details: <a target="_blank" rel="noopener" href="https://www.rozmichelle.com/pipes-forks-dups/">https://www.rozmichelle.com/pipes-forks-dups/</a></li>
 </ol>
 
   </div>
@@ -661,7 +860,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Design points</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Interfaces</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">Process</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">File descriptor and I&#x2F;O</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.3.</span> <span class="toc-text">Pipe</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.4.</span> <span class="toc-text">Fs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Organization</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Virtual memory techniques</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.1.</span> <span class="toc-text">page table</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.2.</span> <span class="toc-text">interrupts</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Parallelism</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.1.</span> <span class="toc-text">lock</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.2.</span> <span class="toc-text">threads</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.3.</span> <span class="toc-text">case study: RCU</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">File systems</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.1.</span> <span class="toc-text">xv6 design</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.2.</span> <span class="toc-text">case study: ext3</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">Network stack</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">Security</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">Basics</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.1.</span> <span class="toc-text">C</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.2.</span> <span class="toc-text">RISC-V convention</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.3.</span> <span class="toc-text">GDB</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Design points</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Interfaces</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">Process</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">File descriptor and I&#x2F;O</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.3.</span> <span class="toc-text">Pipe</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.4.</span> <span class="toc-text">Fs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Organization</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Virtual memory techniques</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.1.</span> <span class="toc-text">page table</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.2.</span> <span class="toc-text">traps</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.3.</span> <span class="toc-text">interrupts</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Parallelism</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.1.</span> <span class="toc-text">lock</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.2.</span> <span class="toc-text">threads</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.3.</span> <span class="toc-text">case study: RCU</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">File systems</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.1.</span> <span class="toc-text">case study: ext3</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">Network stack</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">Security</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">Basics</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.1.</span> <span class="toc-text">C</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.2.</span> <span class="toc-text">RISC-V convention</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.3.</span> <span class="toc-text">GDB</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.4.</span> <span class="toc-text">Lookup table</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">10.</span> <span class="toc-text">Related readings</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">

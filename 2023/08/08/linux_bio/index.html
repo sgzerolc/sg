@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Kernel internals Flow control of bio Block io    I wrote this blog to answer two questions:  Layers involved of I&#x2F;O requests like write sth to a file in a local computer? How does md device (or any">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Tracing down Bio in Block Subsystems">
+<meta property="og:url" content="https://sgzerolc.github.io/sg/2023/08/08/linux_bio/index.html">
+<meta property="og:site_name" content="steins gate zero">
+<meta property="og:description" content="Kernel internals Flow control of bio Block io    I wrote this blog to answer two questions:  Layers involved of I&#x2F;O requests like write sth to a file in a local computer? How does md device (or any">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-08-07T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-08-11T06:57:10.656Z">
+<meta property="article:author" content="Sam Li">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/sg/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/sg/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/sg/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Tracing down Bio in Block Subsystems</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/sg/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/sg/">Home</a></li><!--
+     --><!--
+       --><li><a href="/sg/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/sg/categories/">Category</a></li><!--
+     --><!--
+       --><li><a href="/sg/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/sg/CV/">CV</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/sg/2023/08/05/SD_rtp/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://sgzerolc.github.io/sg/2023/08/08/linux_bio/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://sgzerolc.github.io/sg/2023/08/08/linux_bio/&text=Tracing down Bio in Block Subsystems"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://sgzerolc.github.io/sg/2023/08/08/linux_bio/&title=Tracing down Bio in Block Subsystems"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sgzerolc.github.io/sg/2023/08/08/linux_bio/&is_video=false&description=Tracing down Bio in Block Subsystems"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Tracing down Bio in Block Subsystems&body=Check out this article: https://sgzerolc.github.io/sg/2023/08/08/linux_bio/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://sgzerolc.github.io/sg/2023/08/08/linux_bio/&title=Tracing down Bio in Block Subsystems"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://sgzerolc.github.io/sg/2023/08/08/linux_bio/&title=Tracing down Bio in Block Subsystems"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://sgzerolc.github.io/sg/2023/08/08/linux_bio/&title=Tracing down Bio in Block Subsystems"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://sgzerolc.github.io/sg/2023/08/08/linux_bio/&title=Tracing down Bio in Block Subsystems"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://sgzerolc.github.io/sg/2023/08/08/linux_bio/&name=Tracing down Bio in Block Subsystems&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://sgzerolc.github.io/sg/2023/08/08/linux_bio/&t=Tracing down Bio in Block Subsystems"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Kernel internals</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Flow control of bio</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Block io</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Tracing down Bio in Block Subsystems
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Sam Li</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2023-08-07T16:00:00.000Z" itemprop="datePublished">2023-08-08</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/sg/categories/FOSS/">FOSS</a> › <a class="category-link" href="/sg/categories/FOSS/Linux/">Linux</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <div class="toc">
+<!-- toc -->
+<ul>
+<li><a href="#kernel-internals">Kernel internals</a></li>
+<li><a href="#flow-control-of-bio">Flow control of bio</a></li>
+<li><a href="#block-io">Block io</a></li>
+</ul>
+<!-- tocstop -->
+</div>
+<p>I wrote this blog to answer two questions:</p>
+<ol>
+<li>Layers involved of I/O requests like write sth to a file in a local computer?</li>
+<li>How does md device (or any other block device like null block driver) receive its data?</li>
+</ol>
+<h2><span id="kernel-internals">Kernel internals</span><a href="#kernel-internals" class="header-anchor">¶</a></h2>
+<p><a target="_blank" rel="noopener" href="https://www.linux.com/training-tutorials/kernel-newbie-corner-everything-you-wanted-know-about-module-parameters/">moduleparam</a></p>
+<p>v6.3-rc2</p>
+<h2><span id="flow-control-of-bio">Flow control of bio</span><a href="#flow-control-of-bio" class="header-anchor">¶</a></h2>
+<ul>
+<li>Implement flow control for the bios in the md block device (or any other block device like null block driver) in Linux kernel<br>
+Add a user configurable “high” param, which would represent the max number of IOs which can be in-flight at any moment of time. Once in-flight IOs reach this high value, all the other incoming IOs should get blocked and wait. The IOs should stay blocked until the number of in-flights drops to a certain threshold, indicated by a “low” watermark. This threshold can be (3/4)th of the high value. Once the number of in-flights drops below this low mark, IOs can resume.</li>
+</ul>
+<p>Bio is the unit to map data in the memory to generic block offset. Block device drivers receive requests or I/Os from I/O scheduler. The scheduler groups bios to requests and use a multi-queue machanism to dispatch events. Device mapper is on top of I/O scheduler. DM receives BIOs from the user/fs and remap them first according to the DM properties.</p>
+<p>First, look into the null_blk driver. In flight BIO is an operation that has been requested, but hasn’t been initiated yet. The shared resources in flow control are in-flight BIOs. The invariants of flow control for the bios in the null_blk driver are:</p>
+<ol>
+<li>Increasing: If the # of in-flight bios &gt;= high, the thread that is processing bio will be blocked</li>
+<li>Decreasing: If the # of in-flight bios &lt; low, the blocked threads will continue executing.</li>
+</ol>
+<p>Secendly, the null_blk driver receives requests from mq block layer or IOs directly. The request queue model and IO queue model will both handle the BIOs through *_handle_cmd and finish BIOs through *_complete_cmd. Zoned commands are part of processing IO and can be ignored as the other processing part.</p>
+<p>Intuitively, there are two choices to add locking for null_blk driver:</p>
+<ol>
+<li>When the amount of blocking time is comparably smaller than the thread switching time, use spinlock</li>
+<li>spinlock, semaphore + sleep/wakeup</li>
+<li>sleeplock, atomics</li>
+</ol>
+<p>This patch applies method 2. It can be implemented by atomic ops, waitqueue and spinlock. In the end, atomic_t on # of in-flight BIOs is dropped. Bacause the operations sequence around the # of BIOs are a little more complex than pure calculation and the mutex lock can provide atomicity already.</p>
+<p>Finally, cases that increase BIOs are handled in two parts:</p>
+<p>Let n be # of BIO of a req,</p>
+<ol>
+<li>n = 1, bio_in_flight &gt; high</li>
+<li>n + bio_in_flight &gt; high</li>
+</ol>
+<p>Some simple tests for flow control are:</p>
+<p>Results are:</p>
+<h2><span id="block-io">Block io</span><a href="#block-io" class="header-anchor">¶</a></h2>
+<p>high level: app -&gt; fs -&gt; block level</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">application</span><br><span class="line">VFS</span><br><span class="line">File system (XFS, btrfs, etc)</span><br><span class="line">Page cache</span><br><span class="line">Block layer</span><br><span class="line">- Device mapper</span><br><span class="line">Driver Level</span><br><span class="line">- I/O scheduler</span><br><span class="line">- Physical device driver</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://elixir.bootlin.com/linux/v6.3-rc2/source/include/linux/blk_types.h#L252">bio</a> -&gt; <a target="_blank" rel="noopener" href="https://elixir.bootlin.com/linux/v6.3-rc2/source/include/linux/bvec.h#L31">bio_vec</a>/<a target="_blank" rel="noopener" href="https://elixir.bootlin.com/linux/v6.3-rc2/source/include/linux/bvec.h#L78">bi_sector</a> -&gt; memory <a target="_blank" rel="noopener" href="https://elixir.bootlin.com/linux/v6.3-rc2/source/include/linux/mm_types.h#L74">page</a></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">bio</span> &#123;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">bio</span>		*<span class="title">bi_next</span>;</span>	<span class="comment">/* request queue link */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">block_device</span>	*<span class="title">bi_bdev</span>;</span></span><br><span class="line">	<span class="keyword">blk_opf_t</span>		bi_opf;	</span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">short</span>		bi_flags;	<span class="comment">/* BIO_* below */</span></span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">short</span>		bi_ioprio;</span><br><span class="line">	<span class="keyword">blk_status_t</span>		bi_status;</span><br><span class="line">	<span class="keyword">atomic_t</span>		__bi_remaining; <span class="comment">/* usage counter */</span></span><br><span class="line"></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">bvec_iter</span>	<span class="title">bi_iter</span>;</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">blk_qc_t</span>		bi_cookie;</span><br><span class="line">	<span class="keyword">bio_end_io_t</span>		*bi_end_io;</span><br><span class="line">	<span class="keyword">void</span>			*bi_private;</span><br><span class="line">	...</span><br><span class="line">    </span><br><span class="line">	<span class="keyword">atomic_t</span>		__bi_cnt;	<span class="comment">/* pin count */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">bio_vec</span>		*<span class="title">bi_io_vec</span>;</span>	<span class="comment">/* the actual vec list */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">bio_set</span>		*<span class="title">bi_pool</span>;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">bio_vec</span>		<span class="title">bi_inline_vecs</span>[];</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://elixir.bootlin.com/linux/v6.3-rc2/source/include/linux/blkdev.h#L121">gendisk</a> -&gt; <a target="_blank" rel="noopener" href="https://elixir.bootlin.com/linux/v6.3-rc2/source/include/linux/blkdev.h#L396">request queue</a>/block device -&gt; <a target="_blank" rel="noopener" href="https://elixir.bootlin.com/linux/v6.3-rc2/source/include/linux/blk-mq.h#L84">request</a></p>
+<p><a target="_blank" rel="noopener" href="https://elixir.bootlin.com/linux/v6.3-rc2/source/block/blk-core.c#L831">submit_bio()</a> -&gt; <a target="_blank" rel="noopener" href="https://elixir.bootlin.com/linux/v6.3-rc2/source/block/blk-core.c#L638">submit_bio_noaccout</a> -&gt; <a target="_blank" rel="noopener" href="https://elixir.bootlin.com/linux/v6.3-rc2/source/block/blk-core.c#L685">submit_bio_noacct_nocheck</a> -&gt; _submit_bio/_submit_bio_noacct</p>
+<p>(generic_make_request<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>, v&lt;=<a target="_blank" rel="noopener" href="https://elixir.bootlin.com/linux/v5.8/source/block/blk-core.c#L1100">5.8</a>)</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">request_queue</span> &#123;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">request</span>		*<span class="title">last_merge</span>;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">elevator_queue</span>	*<span class="title">elevator</span>;</span></span><br><span class="line">  </span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">percpu_ref</span>	<span class="title">q_usage_counter</span>;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">blk_queue_stats</span>	*<span class="title">stats</span>;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">rq_qos</span>		*<span class="title">rq_qos</span>;</span></span><br><span class="line">	<span class="keyword">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">blk_mq_ops</span>	*<span class="title">mq_ops</span>;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">blk_mq_ctx</span> __<span class="title">percpu</span>	*<span class="title">queue_ctx</span>;</span></span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">int</span>		queue_depth;</span><br><span class="line">	<span class="keyword">void</span>			*queuedata;</span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span>		queue_flags;</span><br><span class="line">...</span><br><span class="line">	<span class="keyword">spinlock_t</span>		queue_lock;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">gendisk</span>		*<span class="title">disk</span>;</span></span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span>		nr_requests;	<span class="comment">/* Max # of requests */</span></span><br><span class="line">...</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">request</span> &#123;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">request_queue</span> *<span class="title">q</span>;</span></span><br><span class="line">	<span class="keyword">blk_opf_t</span> cmd_flags;		<span class="comment">/* op and common flags */</span></span><br><span class="line">	<span class="keyword">req_flags_t</span> rq_flags;</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">	<span class="comment">/* the following two fields are internal, NEVER access directly */</span></span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">int</span> __data_len;	<span class="comment">/* total data len */</span></span><br><span class="line">	<span class="keyword">sector_t</span> __sector;		<span class="comment">/* sector cursor */</span></span><br><span class="line"></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">bio</span> *<span class="title">bio</span>;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">bio</span> *<span class="title">biotail</span>;</span></span><br><span class="line"></span><br><span class="line">	<span class="class"><span class="keyword">union</span> &#123;</span></span><br><span class="line">		<span class="class"><span class="keyword">struct</span> <span class="title">list_head</span> <span class="title">queuelist</span>;</span></span><br><span class="line">		<span class="class"><span class="keyword">struct</span> <span class="title">request</span> *<span class="title">rq_next</span>;</span></span><br><span class="line">	&#125;;</span><br><span class="line">  </span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">block_device</span> *<span class="title">part</span>;</span></span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>bio layer<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup> -&gt; request layer -&gt; device driver<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup></p>
+<p>request queue<sup class="footnote-ref"><a href="#fn4" id="fnref4">[4]</a></sup></p>
+<p>create/delete a rq: <a target="_blank" rel="noopener" href="https://elixir.bootlin.com/linux/v6.3-rc2/source/block/blk-mq.c#L4049">blk_mq_init_queue</a><sup class="footnote-ref"><a href="#fn5" id="fnref5">[5]</a></sup></p>
+<p>process a request: <a target="_blank" rel="noopener" href="https://elixir.bootlin.com/linux/v6.3-rc2/source/block/blk-mq.c#L1249">blk_mq_start_request</a></p>
+<p>device queue plugging</p>
+<p>device mapper<sup class="footnote-ref"><a href="#fn6" id="fnref6">[6]</a></sup></p>
+<blockquote>
+<p>Device mapper is on top of io scheduler ! DM receives BIOs from the user/fs and remap them first according to the DM properties. E.g. dm raid will split a BIO and send the fragments to different physical drives.</p>
+<p>BIO/request scheduling happens at the drive level, once DM has done its remapping.</p>
+</blockquote>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://lwn.net/Articles/736534/">v4.5 block layer</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p><a target="_blank" rel="noopener" href="http://books.gigatux.nl/mirror/kerneldevelopment/0672327201/ch13lev1sec3.html">http://books.gigatux.nl/mirror/kerneldevelopment/0672327201/ch13lev1sec3.html</a> <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn3" class="footnote-item"><p><a target="_blank" rel="noopener" href="http://blog.vmsplice.net/2020/04/how-linux-vfs-block-layer-and-device.html">http://blog.vmsplice.net/2020/04/how-linux-vfs-block-layer-and-device.html</a> <a href="#fnref3" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn4" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://linux-kernel-labs.github.io/refs/heads/master/labs/block_device_drivers.html#request-queues-multi-queue-block-layer">https://linux-kernel-labs.github.io/refs/heads/master/labs/block_device_drivers.html#request-queues-multi-queue-block-layer</a> <a href="#fnref4" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn5" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://linux-kernel-labs.github.io/refs/heads/master/labs/block_device_drivers.html#create-and-delete-a-request-queue">https://linux-kernel-labs.github.io/refs/heads/master/labs/block_device_drivers.html#create-and-delete-a-request-queue</a> <a href="#fnref5" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn6" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://xuechendi.github.io/2013/11/14/device-mapper-deep-dive">https://xuechendi.github.io/2013/11/14/device-mapper-deep-dive</a> <a href="#fnref6" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/sg/">Home</a></li>
+         
+          <li><a href="/sg/about/">About</a></li>
+         
+          <li><a href="/sg/categories/">Category</a></li>
+         
+          <li><a href="/sg/archives/">Writing</a></li>
+         
+          <li><a href="/sg/CV/">CV</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Kernel internals</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Flow control of bio</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Block io</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://sgzerolc.github.io/sg/2023/08/08/linux_bio/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://sgzerolc.github.io/sg/2023/08/08/linux_bio/&text=Tracing down Bio in Block Subsystems"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://sgzerolc.github.io/sg/2023/08/08/linux_bio/&title=Tracing down Bio in Block Subsystems"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sgzerolc.github.io/sg/2023/08/08/linux_bio/&is_video=false&description=Tracing down Bio in Block Subsystems"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Tracing down Bio in Block Subsystems&body=Check out this article: https://sgzerolc.github.io/sg/2023/08/08/linux_bio/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://sgzerolc.github.io/sg/2023/08/08/linux_bio/&title=Tracing down Bio in Block Subsystems"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://sgzerolc.github.io/sg/2023/08/08/linux_bio/&title=Tracing down Bio in Block Subsystems"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://sgzerolc.github.io/sg/2023/08/08/linux_bio/&title=Tracing down Bio in Block Subsystems"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://sgzerolc.github.io/sg/2023/08/08/linux_bio/&title=Tracing down Bio in Block Subsystems"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://sgzerolc.github.io/sg/2023/08/08/linux_bio/&name=Tracing down Bio in Block Subsystems&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://sgzerolc.github.io/sg/2023/08/08/linux_bio/&t=Tracing down Bio in Block Subsystems"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2023
+    Sam Li
+  </div>
+</footer>
+
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/sg/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

@@ -416,7 +416,7 @@ body dt {
   font-weight: bold;
 }
 body table {
-  width: 100pm;
+  width: 100%;
   border-collapse: collapse;
   text-align: left;
   font-size: 14px;
@@ -427,7 +427,7 @@ body table {
 body th {
   border-collapse: collapse;
   text-align: left;
-  padding: 0 20px;
+  padding: 0 45px;
   color: #000;
   font-weight: bold;
   font-size: 15px;

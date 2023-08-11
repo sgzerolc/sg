@@ -6,12 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="Paper:Ethernet  Background Design choice Implementation performance measure protocols   Paper: RON  General goal Design goal Design conclusion   Paper: DCTCP Paper: end to end    Paper:Ethernet¶ Et">
+    <meta name="description" content="Paper:Ethernet  Background Design choice Implementation performance measure protocols   Paper: RON  General goal Design goal Design conclusion   Paper: DCTCP Paper: E2E argument 1981  what performa">
 <meta property="og:type" content="article">
 <meta property="og:title" content="recitation network">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2021/11/29/recitation_network/index.html">
 <meta property="og:site_name" content="steins gate zero">
-<meta property="og:description" content="Paper:Ethernet  Background Design choice Implementation performance measure protocols   Paper: RON  General goal Design goal Design conclusion   Paper: DCTCP Paper: end to end    Paper:Ethernet¶ Et">
+<meta property="og:description" content="Paper:Ethernet  Background Design choice Implementation performance measure protocols   Paper: RON  General goal Design goal Design conclusion   Paper: DCTCP Paper: E2E argument 1981  what performa">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2021/11/29/recitation_network/trans.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2021/11/29/recitation_network/ethernet.png">
@@ -21,7 +21,7 @@
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2021/11/29/recitation_network/df1.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2021/11/29/recitation_network/df2.png">
 <meta property="article:published_time" content="2021-11-28T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-07-19T03:25:21.991Z">
+<meta property="article:modified_time" content="2023-08-05T08:00:33.797Z">
 <meta property="article:author" content="Sam Li">
 <meta property="article:tag" content="paper">
 <meta name="twitter:card" content="summary">
@@ -116,7 +116,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Paper:Ethernet</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">Background</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">Design choice</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.2.1.</span> <span class="toc-text">Choice</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.3.</span> <span class="toc-text">Implementation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.4.</span> <span class="toc-text">performance measure</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.5.</span> <span class="toc-text">protocols</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Paper: RON</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">General goal</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">Design goal</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">2.2.1.</span> <span class="toc-text">1 Fast failure detection and recovery</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">2.2.2.</span> <span class="toc-text">2 Tighter integration with applications</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">2.2.3.</span> <span class="toc-text">3 expressive policy routing</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.3.</span> <span class="toc-text">Design</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">2.3.1.</span> <span class="toc-text">1 Software architecture</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">2.3.2.</span> <span class="toc-text">2 routing and path selection</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">2.3.3.</span> <span class="toc-text">3 policy routing</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">2.3.4.</span> <span class="toc-text">4 data forwarding</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">2.3.5.</span> <span class="toc-text">5 Bootstrap and membership management</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.4.</span> <span class="toc-text">conclusion</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Paper: DCTCP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Paper: end to end</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Paper:Ethernet</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">Background</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">Design choice</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.2.1.</span> <span class="toc-text">Choice</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.3.</span> <span class="toc-text">Implementation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.4.</span> <span class="toc-text">performance measure</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.5.</span> <span class="toc-text">protocols</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Paper: RON</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">General goal</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">Design goal</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">2.2.1.</span> <span class="toc-text">1 Fast failure detection and recovery</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">2.2.2.</span> <span class="toc-text">2 Tighter integration with applications</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">2.2.3.</span> <span class="toc-text">3 expressive policy routing</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.3.</span> <span class="toc-text">Design</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">2.3.1.</span> <span class="toc-text">1 Software architecture</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">2.3.2.</span> <span class="toc-text">2 routing and path selection</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">2.3.3.</span> <span class="toc-text">3 policy routing</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">2.3.4.</span> <span class="toc-text">4 data forwarding</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">2.3.5.</span> <span class="toc-text">5 Bootstrap and membership management</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.4.</span> <span class="toc-text">conclusion</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Paper: DCTCP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Paper: E2E argument 1981</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.1.</span> <span class="toc-text">what</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.2.</span> <span class="toc-text">performance view</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.3.</span> <span class="toc-text">How: identifying the ends</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.4.</span> <span class="toc-text">Some thinking</span></a></li></ol></li></ol>
     </div>
   </span>
 </div>
@@ -186,7 +186,14 @@
 </ul>
 </li>
 <li><a href="#paper-dctcp">Paper: DCTCP</a></li>
-<li><a href="#paper-end-to-end">Paper: end to end</a></li>
+<li><a href="#paper-e2e-argument-1981">Paper: E2E argument 1981</a>
+<ul>
+<li><a href="#what">what</a></li>
+<li><a href="#performance-view">performance view</a></li>
+<li><a href="#how-identifying-the-ends">How: identifying the ends</a></li>
+<li><a href="#some-thinking">Some thinking</a></li>
+</ul>
+</li>
 </ul>
 <!-- tocstop -->
 </div>
@@ -196,7 +203,11 @@
 <ol>
 <li>
 <p>demands of computer-computer interconnection grow</p>
+<ul>
+<li>
 <img src="/sg/2021/11/29/recitation_network/trans.png" class title="trans">
+</li>
+</ul>
 </li>
 <li>
 <p>Reliability:</p>
@@ -240,8 +251,14 @@
 </ol>
 <p><strong>Alternatives of design choice</strong></p>
 <h3><span id="implementation">Implementation</span><a href="#implementation" class="header-anchor">¶</a></h3>
+<ul>
+<li>
 <img src="/sg/2021/11/29/recitation_network/ethernet.png" class title="ethernet">
+</li>
+<li>
 <img src="/sg/2021/11/29/recitation_network/cca.png" class title="cca">
+</li>
+</ul>
 <h3><span id="performance-measure">performance measure</span><a href="#performance-measure" class="header-anchor">¶</a></h3>
 <p>Acquisition probability, waiting time, efficiency</p>
 <h3><span id="protocols">protocols</span><a href="#protocols" class="header-anchor">¶</a></h3>
@@ -365,9 +382,13 @@
 </ol>
 <p>we conclude that the system needs a flexible summarization mechanism.</p>
 <p>-&gt; each RON node or local group of nodes uses a separate performance database to store samples.</p>
+<ul>
+<li>
+<img src="/sg/2021/11/29/recitation_network/pt.png" class title="pt">
+</li>
+</ul>
 </li>
 </ol>
-<img src="/sg/2021/11/29/recitation_network/pt.png" class title="pt">
 <h4><span id="3-policy-routing">3 policy routing</span><a href="#3-policy-routing" class="header-anchor">¶</a></h4>
 <ol>
 <li>Classification：查找信息</li>
@@ -385,18 +406,70 @@
 </li>
 </ol>
 <h4><span id="4-data-forwarding">4 data forwarding</span><a href="#4-data-forwarding" class="header-anchor">¶</a></h4>
+<ul>
+<li>
 <img src="/sg/2021/11/29/recitation_network/df1.png" class title="df1">
+</li>
+<li>
 <img src="/sg/2021/11/29/recitation_network/df2.png" class title="df2">
+</li>
+</ul>
 <h4><span id="5-bootstrap-and-membership-management">5 Bootstrap and membership management</span><a href="#5-bootstrap-and-membership-management" class="header-anchor">¶</a></h4>
 <h3><span id="conclusion">conclusion</span><a href="#conclusion" class="header-anchor">¶</a></h3>
 <h2><span id="paper-dctcp">Paper: DCTCP</span><a href="#paper-dctcp" class="header-anchor">¶</a></h2>
-<p>Goal: we want applications in datacencer network have these requirements:</p>
+<p>Applications in datacencer network are expected to have these requirements:</p>
 <ol>
 <li>low latency for short flows</li>
 <li>high burst tolerance</li>
 <li>high utilization for long flows</li>
 </ol>
-<h2><span id="paper-end-to-end">Paper: end to end</span><a href="#paper-end-to-end" class="header-anchor">¶</a></h2>
+<h2><span id="paper-e2e-argument-1981">Paper: E2E argument 1981</span><a href="#paper-e2e-argument-1981" class="header-anchor">¶</a></h2>
+<blockquote>
+<p>The function in question can completely and correctly be implemented only with the knowledge and help of the application standing at the end points of the communication system. Therefore, providing that questioned function as a feature of the communication system itself is not possible. (Sometimes an incomplete version of the function provided by the communication system may be useful as a performance enhancement.)</p>
+</blockquote>
+<h3><span id="what">what</span><a href="#what" class="header-anchor">¶</a></h3>
+<p>E2E argument is a reasoning against low-level function implementation. It is applied in many contexts but this paper chose data communication networks to provide more concrete details about it. For designers, it’s a guideline that helps in application and protocol design analysis rather than a rule.</p>
+<p>ex: reliable data transmission in file transfer - “the function in question”</p>
+<p>The same example as in the book with extra details on the file transfer machanism which is to retry/commit after dectect checksum failures.</p>
+<p>Conclusion:</p>
+<blockquote>
+<p>The end-to-end check of the file transfer application must still be implemented no matter how reliable the communication system becomes.</p>
+</blockquote>
+<ol>
+<li>Apps that perform file transfer must supply a file-transfer-specific, end-to-end reliability guarantee.</li>
+<li>Reliable transport does not guarantee the reliablity of apps.</li>
+</ol>
+<h3><span id="performance-view">performance view</span><a href="#performance-view" class="header-anchor">¶</a></h3>
+<ol>
+<li>The lower levels need not provide “perfect” reliability. The effort to provide reliability at the lower level may cost more than the effort and still guarantee nothing.</li>
+<li><u>Engineering tradeoff</u>: The effort to supply reliablity measures on the data communication networks is a tradeoff of <strong>performance</strong>.</li>
+<li>Function placement at the lower level may not be efficient for two reasons:
+<ul>
+<li>Function at the low level affects many applications. Other applications may not need this function.</li>
+<li>The low-level subsystem has less information that high levels.</li>
+</ul>
+</li>
+<li>ex: where to put reliable technique? File transfer application or communication system.
+<ul>
+<li>More efficient in communication system. Adding the reliable checks on every application is redundant.</li>
+</ul>
+</li>
+</ol>
+<h3><span id="how-identifying-the-ends">How: identifying the ends</span><a href="#how-identifying-the-ends" class="header-anchor">¶</a></h3>
+<blockquote>
+<p>one must use some care to identify the end points to which the argument should be applied.</p>
+</blockquote>
+<p>example 1: network carrying some packet voice connections between two telephones</p>
+<p>example 2: speech message system, user listens to the voice message stored in the file system</p>
+<p>A srong E2E argument will ask in-order delivery to provide reliability. In example 1, if it needs to preserve a bit-perfect communication, enforcements on the delivery order (low-level reliability measures) causing delay are disruptive. It’s better to receive damaged data and add replacement measures as duplication, noise for better performance. However, some applications like real-time communication require the strong E2E argument.</p>
+<p>In example 2, a storage system is at the receiving end of the voice communciation. Short delays are not disruptive. So designers can consider the low-level reliability measure like packet ordering for correctness and performance.</p>
+<h3><span id="some-thinking">Some thinking</span><a href="#some-thinking" class="header-anchor">¶</a></h3>
+<ol>
+<li>My opinions of E2E argument?</li>
+<li>How might one use the end-to-end argument when designing a system?</li>
+<li>What role does trust play in the end-to-end argument?</li>
+<li>Packet acknowledgement is ignored in this paper but becomes an esstial part of reliable tranport. Though, the E2E argument still influenced the design of TCP as being a layer above IP (From recitation notice).</li>
+</ol>
 
   </div>
 </article>
@@ -424,7 +497,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Paper:Ethernet</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">Background</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">Design choice</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.2.1.</span> <span class="toc-text">Choice</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.3.</span> <span class="toc-text">Implementation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.4.</span> <span class="toc-text">performance measure</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.5.</span> <span class="toc-text">protocols</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Paper: RON</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">General goal</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">Design goal</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">2.2.1.</span> <span class="toc-text">1 Fast failure detection and recovery</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">2.2.2.</span> <span class="toc-text">2 Tighter integration with applications</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">2.2.3.</span> <span class="toc-text">3 expressive policy routing</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.3.</span> <span class="toc-text">Design</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">2.3.1.</span> <span class="toc-text">1 Software architecture</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">2.3.2.</span> <span class="toc-text">2 routing and path selection</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">2.3.3.</span> <span class="toc-text">3 policy routing</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">2.3.4.</span> <span class="toc-text">4 data forwarding</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">2.3.5.</span> <span class="toc-text">5 Bootstrap and membership management</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.4.</span> <span class="toc-text">conclusion</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Paper: DCTCP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Paper: end to end</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Paper:Ethernet</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">Background</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">Design choice</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.2.1.</span> <span class="toc-text">Choice</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.3.</span> <span class="toc-text">Implementation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.4.</span> <span class="toc-text">performance measure</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.5.</span> <span class="toc-text">protocols</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Paper: RON</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">General goal</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">Design goal</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">2.2.1.</span> <span class="toc-text">1 Fast failure detection and recovery</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">2.2.2.</span> <span class="toc-text">2 Tighter integration with applications</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">2.2.3.</span> <span class="toc-text">3 expressive policy routing</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.3.</span> <span class="toc-text">Design</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">2.3.1.</span> <span class="toc-text">1 Software architecture</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">2.3.2.</span> <span class="toc-text">2 routing and path selection</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">2.3.3.</span> <span class="toc-text">3 policy routing</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">2.3.4.</span> <span class="toc-text">4 data forwarding</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">2.3.5.</span> <span class="toc-text">5 Bootstrap and membership management</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.4.</span> <span class="toc-text">conclusion</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Paper: DCTCP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Paper: E2E argument 1981</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.1.</span> <span class="toc-text">what</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.2.</span> <span class="toc-text">performance view</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.3.</span> <span class="toc-text">How: identifying the ends</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.4.</span> <span class="toc-text">Some thinking</span></a></li></ol></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">

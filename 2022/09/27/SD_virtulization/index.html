@@ -6,19 +6,19 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="Client&#x2F;server organization Virtual links Enforce modularity in memory Application: virtual machine    chapter 5 Enforcing Modularity with Virtualization Problem: how to build a virtual computer? ho">
+    <meta name="description" content="Client&#x2F;server organization Virtual links  coordination of concurrent activities lock machanisms   Enforce modularity in memory  controlled sharing      chapter 5 Enforcing Modularity with Virtualiz">
 <meta property="og:type" content="article">
 <meta property="og:title" content="From Virtualization to Virtual Machines">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2022/09/27/SD_virtulization/index.html">
 <meta property="og:site_name" content="steins gate zero">
-<meta property="og:description" content="Client&#x2F;server organization Virtual links Enforce modularity in memory Application: virtual machine    chapter 5 Enforcing Modularity with Virtualization Problem: how to build a virtual computer? ho">
+<meta property="og:description" content="Client&#x2F;server organization Virtual links  coordination of concurrent activities lock machanisms   Enforce modularity in memory  controlled sharing      chapter 5 Enforcing Modularity with Virtualiz">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/09/27/SD_virtulization/Screenshot-1835251.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/09/27/SD_virtulization/Screenshot-4268665.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/09/27/SD_virtulization/Screenshot-4283451.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/09/27/SD_virtulization/Screenshot-4281799.png">
 <meta property="article:published_time" content="2022-09-26T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-07-19T03:25:05.206Z">
+<meta property="article:modified_time" content="2023-08-05T10:24:31.136Z">
 <meta property="article:author" content="Sam Li">
 <meta property="article:tag" content="CS books">
 <meta name="twitter:card" content="summary">
@@ -113,7 +113,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Client&#x2F;server organization</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Virtual links</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Enforce modularity in memory</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Application: virtual machine</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Client&#x2F;server organization</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Virtual links</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">coordination of concurrent activities</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">lock machanisms</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Enforce modularity in memory</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.1.</span> <span class="toc-text">controlled sharing</span></a></li></ol></li></ol>
     </div>
   </span>
 </div>
@@ -166,9 +166,17 @@
 <!-- toc -->
 <ul>
 <li><a href="#client-server-organization">Client/server organization</a></li>
-<li><a href="#virtual-links">Virtual links</a></li>
-<li><a href="#enforce-modularity-in-memory">Enforce modularity in memory</a></li>
-<li><a href="#application-virtual-machine">Application: virtual machine</a></li>
+<li><a href="#virtual-links">Virtual links</a>
+<ul>
+<li><a href="#coordination-of-concurrent-activities">coordination of concurrent activities</a></li>
+<li><a href="#lock-machanisms">lock machanisms</a></li>
+</ul>
+</li>
+<li><a href="#enforce-modularity-in-memory">Enforce modularity in memory</a>
+<ul>
+<li><a href="#controlled-sharing">controlled sharing</a></li>
+</ul>
+</li>
 </ul>
 <!-- tocstop -->
 </div>
@@ -216,7 +224,11 @@
 </li>
 </ol>
 <p>Ex: Editor want to send ‘x’ to File service to store.</p>
+<ul>
+<li>
 <img src="/sg/2022/09/27/SD_virtulization/Screenshot-1835251.png" class title="Screenshot-1835251">
+</li>
+</ul>
 <h2><span id="virtual-links">Virtual links</span><a href="#virtual-links" class="header-anchor">¶</a></h2>
 <p>Scenario : how to share a bounded buffer between SENDER and RECEIVER?</p>
 <p>Fact: all threads share the same physical memory</p>
@@ -252,7 +264,7 @@
 <li>the bounded buffer is implemented in a different way. Like linked list where the sender and receriver can update a shared variable at the same time.</li>
 </ol>
 <p>Then, these updates need to be coordinated.</p>
-<hr>
+<h3><span id="coordination-of-concurrent-activities">coordination of concurrent activities</span><a href="#coordination-of-concurrent-activities" class="header-anchor">¶</a></h3>
 <blockquote>
 <p>Concurrent programming needs the attention of specialists: all it takes is one subtle change to make a correct program wrong.</p>
 </blockquote>
@@ -275,8 +287,7 @@
 <p>Livelock:  an interaction among a group of threads in which each thread is repeatedly performing some operations but is never able to complete the whole sequence of operations.</p>
 </li>
 </ol>
-<hr>
-<p>lock mechanism</p>
+<h3><span id="lock-machanisms">lock machanisms</span><a href="#lock-machanisms" class="header-anchor">¶</a></h3>
 <ol>
 <li>
 <p>Single-acquire protocol : only one thread can acquire the lock</p>
@@ -286,7 +297,6 @@
 </li>
 </ol>
 <p>Notice: all threads can still access the shared variables unless it is told not to. Instead of mechanically protecting the shared resources, locks serve as a flag to indicate if one thread holds the variable, the other thread should wait for it.</p>
-<hr>
 <p>how to avoid those cases?</p>
 <p>problem:  how the protected shared variables will be used?</p>
 <p>Bootstrapping: Reduce a general problem to some narrower particular version of the same problem. Then solve the narrow problem using special cases. Finally, construct the solution to the general problem which is a mthod for solving the special case and a mthod for reducing problem. (sounds like divide-and-conquer method for me)</p>
@@ -294,29 +304,34 @@
 <p>making multistep operations on shared variables before-or-after actions</p>
 <p>-&gt; making an operation on a single shared lock a before-or-after action</p>
 <p>-&gt; build a hw instruction that is a before-or-after action</p>
-<hr>
 <p>arbiter: how arbiters can fail? 5.2.8</p>
 <h2><span id="enforce-modularity-in-memory">Enforce modularity in memory</span><a href="#enforce-modularity-in-memory" class="header-anchor">¶</a></h2>
 <p>Scenario: enforce mudularity on sharing memory which is assumed to have a large address space.</p>
 <p>Invariant: a thread can access only its references.</p>
+<ul>
+<li>
 <img src="/sg/2022/09/27/SD_virtulization/Screenshot-4283451.png" class title="Screenshot-4283451">
+</li>
+</ul>
 <p>Threads need more features:</p>
 <ol>
 <li>one thread needs more than one domains</li>
 <li>one thread cannot change to another domain by itself (modularity, it cannot access other thread’s references, aka data)</li>
 </ol>
-<hr>
-<p>controlled sharing</p>
+<h3><span id="controlled-sharing">controlled sharing</span><a href="#controlled-sharing" class="header-anchor">¶</a></h3>
 <ul>
 <li>
 <p>cliend thread and server thread share the bounded buffer.</p>
+<ul>
+<li>
 <img src="/sg/2022/09/27/SD_virtulization/Screenshot-4281799.png" class title="Screenshot-4281799">
+</li>
+</ul>
 </li>
 <li>
 <p>the trade-offs involved in implementing parts of the memory manager in software 5.4.4</p>
 </li>
 </ul>
-<h2><span id="application-virtual-machine">Application: virtual machine</span><a href="#application-virtual-machine" class="header-anchor">¶</a></h2>
 
   </div>
 </article>
@@ -344,7 +359,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Client&#x2F;server organization</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Virtual links</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Enforce modularity in memory</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Application: virtual machine</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Client&#x2F;server organization</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Virtual links</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">coordination of concurrent activities</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">lock machanisms</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Enforce modularity in memory</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.1.</span> <span class="toc-text">controlled sharing</span></a></li></ol></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">

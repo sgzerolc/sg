@@ -16,9 +16,12 @@
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2021/12/18/hw1_structure/sc.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2021/12/18/hw1_structure/sc2.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2021/12/18/hw1_structure/sc3.png">
+<meta property="og:image" content="https://sgzerolc.github.io/sg/2021/12/18/hw1_structure/Screenshot-0952489.png">
+<meta property="og:image" content="https://sgzerolc.github.io/sg/2021/12/18/hw1_structure/Screenshot-0952518.png">
+<meta property="og:image" content="https://sgzerolc.github.io/sg/2021/12/18/hw1_structure/Screenshot-0959596.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2021/12/18/hw1_structure/sc4.png">
 <meta property="article:published_time" content="2021-12-17T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-07-19T03:23:59.956Z">
+<meta property="article:modified_time" content="2023-08-02T07:42:42.839Z">
 <meta property="article:author" content="Sam Li">
 <meta property="article:tag" content="hw">
 <meta name="twitter:card" content="summary">
@@ -360,8 +363,8 @@
 <li>
 <p>SCLR: 设计一个数据结构满足：</p>
 <p>new_bid(d,b), O(logn);</p>
-<p>update_bid(d, b) O(logn);</p>
-<p>get_revenue() O(1).</p>
+<p>update_bid(d,b), O(logn);</p>
+<p>get_revenue(), O(1).</p>
 <p>we should ask ourselves these questions before writing down the answer:</p>
 <ul>
 <li>what is stored in data structures? -&gt;</li>
@@ -377,18 +380,33 @@
 <p>Idea 3: we need to link two data structures to support fast find.</p>
 <p>Approach: we want to find the bidder’s current bid quickly. -&gt; cross linking</p>
 <ul>
-<li>That’s why we don’t save bid directly in the dictionary, in which case we save the time in updating the dictionary every time we change the bidder’s bid.</li>
-</ul>
+<li>
+<p>That’s why we don’t save bid directly in the dictionary, in which case we save the time in updating the dictionary every time we change the bidder’s bid.</p>
+</li>
+<li>
 <img src="/sg/2021/12/18/hw1_structure/sc3.png" class title="sc3">
+</li>
+</ul>
 </li>
 <li>
 <p>It seems right but where goes wrong?</p>
 <p>这部分看了又看,仍旧没发现错误在哪里。后来把问题定位到了一个测试进而找到了问题。忽略了max_temp是所在class的instance，所以在bug版第一个判断语句永远都会返回None.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># bug</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">subtree_max_in_range</span>(<span class="params">A, d1, d2</span>):</span></span><br><span class="line">    max_temp = <span class="literal">None</span></span><br><span class="line">    <span class="comment"># ------------------------------------ #</span></span><br><span class="line">    <span class="keyword">if</span> A.max_date &lt;= d2 <span class="keyword">and</span> A.min_date &gt;= d1:</span><br><span class="line">        <span class="keyword">return</span> A.max_temp</span><br><span class="line">    <span class="keyword">if</span> A.max_date &lt; d1 <span class="keyword">or</span> A.min_date &gt; d2:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">    <span class="keyword">if</span> d1 &lt;= A.item.key &lt;= d2:</span><br><span class="line">        max_temp = A.item.temp</span><br><span class="line">    <span class="keyword">if</span> A.left:</span><br><span class="line">        l_temp = A.left.subtree_max_in_range(d1, d2)</span><br><span class="line">        <span class="keyword">if</span> l_temp:</span><br><span class="line">            <span class="keyword">if</span> max_temp:</span><br><span class="line">                max_temp = <span class="built_in">max</span>(l_temp, max_temp)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                max_temp = l_temp</span><br><span class="line">    <span class="keyword">if</span> A.right:</span><br><span class="line">        r_temp = A.right.subtree_max_in_range(d1, d2)</span><br><span class="line">        <span class="keyword">if</span> r_temp:</span><br><span class="line">            <span class="keyword">if</span> max_temp:</span><br><span class="line">                max_temp = <span class="built_in">max</span>(r_temp, max_temp)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                mex_temp = r_temp</span><br><span class="line">    <span class="comment"># ------------------------------------ #</span></span><br><span class="line">    <span class="keyword">return</span> max_temp</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># fixed version</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">subtree_max_in_range</span>(<span class="params">A, d1, d2</span>):</span></span><br><span class="line">    temp = <span class="literal">None</span></span><br><span class="line">    <span class="comment"># ------------------------------------ #</span></span><br><span class="line">    <span class="keyword">if</span> A.max_date &lt;= d2 <span class="keyword">and</span> A.min_date &gt;= d1:</span><br><span class="line">        <span class="keyword">return</span> A.max_temp</span><br><span class="line">    <span class="keyword">if</span> A.max_date &lt; d1 <span class="keyword">or</span> A.min_date &gt; d2:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">    <span class="keyword">if</span> d1 &lt;= A.item.key &lt;= d2:</span><br><span class="line">        temp = A.item.temp</span><br><span class="line">    <span class="keyword">if</span> A.left:</span><br><span class="line">        l_temp = A.left.subtree_max_in_range(d1, d2)</span><br><span class="line">        <span class="keyword">if</span> l_temp:</span><br><span class="line">            <span class="keyword">if</span> temp:</span><br><span class="line">                temp = <span class="built_in">max</span>(l_temp, temp)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                temp = l_temp</span><br><span class="line">    <span class="keyword">if</span> A.right:</span><br><span class="line">        r_temp = A.right.subtree_max_in_range(d1, d2)</span><br><span class="line">        <span class="keyword">if</span> r_temp:</span><br><span class="line">            <span class="keyword">if</span> temp:</span><br><span class="line">                temp = <span class="built_in">max</span>(r_temp, temp)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                temp = r_temp</span><br><span class="line">    <span class="comment"># ------------------------------------ #</span></span><br><span class="line">    <span class="keyword">return</span> temp</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># bug</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">subtree_max_in_range</span>(<span class="params">A, d1, d2</span>):</span></span><br><span class="line">    max_temp = <span class="literal">None</span> // <span class="comment"># fixed by changing all max_temp to another name like temp</span></span><br><span class="line">    <span class="comment"># ------------------------------------ #</span></span><br><span class="line">    <span class="keyword">if</span> A.max_date &lt;= d2 <span class="keyword">and</span> A.min_date &gt;= d1:</span><br><span class="line">        <span class="keyword">return</span> A.max_temp</span><br><span class="line">    <span class="keyword">if</span> A.max_date &lt; d1 <span class="keyword">or</span> A.min_date &gt; d2:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">    <span class="keyword">if</span> d1 &lt;= A.item.key &lt;= d2:</span><br><span class="line">        max_temp = A.item.temp</span><br><span class="line">    <span class="keyword">if</span> A.left:</span><br><span class="line">        l_temp = A.left.subtree_max_in_range(d1, d2)</span><br><span class="line">        <span class="keyword">if</span> l_temp:</span><br><span class="line">            <span class="keyword">if</span> max_temp:</span><br><span class="line">                max_temp = <span class="built_in">max</span>(l_temp, max_temp)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                max_temp = l_temp</span><br><span class="line">    <span class="keyword">if</span> A.right:</span><br><span class="line">        r_temp = A.right.subtree_max_in_range(d1, d2)</span><br><span class="line">        <span class="keyword">if</span> r_temp:</span><br><span class="line">            <span class="keyword">if</span> max_temp:</span><br><span class="line">                max_temp = <span class="built_in">max</span>(r_temp, max_temp)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                mex_temp = r_temp</span><br><span class="line">    <span class="comment"># ------------------------------------ #</span></span><br><span class="line">    <span class="keyword">return</span> max_temp</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
 <h2><span id="recitation">recitation</span><a href="#recitation" class="header-anchor">¶</a></h2>
+<ul>
+<li>
+<img src="/sg/2021/12/18/hw1_structure/Screenshot-0952489.png" class title="Screenshot-0952489">
+</li>
+<li>
+<img src="/sg/2021/12/18/hw1_structure/Screenshot-0952518.png" class title="Screenshot-0952518">
+</li>
+<li>
+<img src="/sg/2021/12/18/hw1_structure/Screenshot-0959596.png" class title="Screenshot-0959596">
+</li>
+<li>visualization tools: <a target="_blank" rel="noopener" href="https://codepen.io/mit6006/full/NOWddZ">BST by 6.006</a>, <a target="_blank" rel="noopener" href="https://codepen.io/mit6006/full/KxOpep">binary heap</a>, <a target="_blank" rel="noopener" href="https://www.cs.usfca.edu/~galles/visualization/Algorithms.html">Data structure visualization</a></li>
+</ul>
 <h3><span id="avl-tree">AVL tree</span><a href="#avl-tree" class="header-anchor">¶</a></h3>
 <p>full binary tree guarantees the height of O(logn)</p>
 <p>Build a AVL tree with fewer nodes as possible -&gt; prove h = O(logn)</p>
@@ -396,7 +414,7 @@
 <p>Rotation:</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">rotateRight(A):</span><br><span class="line">	<span class="comment"># A&#x27;s original parent e; A could be e&#x27;s left/right child =&gt; B</span></span><br><span class="line">	B.p = e</span><br><span class="line">	<span class="keyword">if</span> e.r == A <span class="comment"># pointer comparison</span></span><br><span class="line">		e.r = B</span><br><span class="line">	<span class="keyword">else</span>:</span><br><span class="line">		e.l = B</span><br><span class="line">	<span class="comment"># A&#x27;s original left child B =&gt; A is B&#x27;s right child</span></span><br><span class="line">	B.r = A</span><br><span class="line">	(A.p = B)</span><br><span class="line">	<span class="comment"># B&#x27;s original right child c =&gt; A&#x27;s left child</span></span><br><span class="line">	A.l = c</span><br><span class="line">	(c.p = A)</span><br></pre></td></tr></table></figure>
 <h3><span id="principle-of-algorithm">Principle of algorithm</span><a href="#principle-of-algorithm" class="header-anchor">¶</a></h3>
-<p><u>thghout process matters</u>: take 30-60 minutes to think about a problem</p>
+<p><u>thinking process matters</u>: take 30-60 minutes to think about a problem</p>
 <p><u>problem 0</u>: shifted array, find e in N sorted items shifted length of k,</p>
 <ul>
 <li>if k is defined</li>
@@ -434,7 +452,7 @@
 <ol>
 <li>
 <p>simple idea: hash into [i,…,j], we can get H[[i,…,j],…], N**2 pair; then take min in O(N) time in each pair</p>
-<p>=&gt; O(N**3)time</p>
+<p>=&gt; O(N**3) time</p>
 <p>Improve to O(N**2) time by comparing current pair result with previous result which takes O(1) time</p>
 </li>
 <li>
@@ -462,7 +480,7 @@
 <blockquote>
 <p>An array of distinct integers is k-proximate if every integer of the array is at most k places away from its place in the array after being sorted, i.e., if the ith integer of the unsorted input array is the jth largest integer contained in the array, then |i −j| ≤ k. In this problem, we will show how to sort a k-proximate array faster than Θ(n log n)</p>
 </blockquote>
-<p>这里关于insertion sort k-proximate array takes O(nk) time, heap sort takes O(nlogk)time的讨论还挺有意思的。</p>
+<p>这里关于 insertion sort k-proximate array takes O(nk) time, heap sort takes O(nlogk)time 的讨论还挺有意思的。</p>
 </li>
 <li>
 <p>a general/naive approach and subsequent analysis</p>

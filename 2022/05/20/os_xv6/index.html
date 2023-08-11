@@ -6,16 +6,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="Lab1 unix utilities  primes find xargs   Lab2 syscalls  trace sysinfo   Lab3 page tables  print pt kernel page table copyin   Lab4 Lab5 Lab6 Lab7 Lab8 Lab9 fs Lab10 mmap Tool    Lab1 unix utilities">
+    <meta name="description" content="Lab1 unix utilities  primes find xargs   Lab2 syscalls  trace sysinfo   Lab3 page tables  print pt kernel page table copyin   Lab4 Lab5 Lab6 Lab7 thread Lab8 lock Lab9 fs Lab10 mmap Tool    Lab1 un">
 <meta property="og:type" content="article">
 <meta property="og:title" content="OS Lab Notes">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2022/05/20/os_xv6/index.html">
 <meta property="og:site_name" content="steins gate zero">
-<meta property="og:description" content="Lab1 unix utilities  primes find xargs   Lab2 syscalls  trace sysinfo   Lab3 page tables  print pt kernel page table copyin   Lab4 Lab5 Lab6 Lab7 Lab8 Lab9 fs Lab10 mmap Tool    Lab1 unix utilities">
+<meta property="og:description" content="Lab1 unix utilities  primes find xargs   Lab2 syscalls  trace sysinfo   Lab3 page tables  print pt kernel page table copyin   Lab4 Lab5 Lab6 Lab7 thread Lab8 lock Lab9 fs Lab10 mmap Tool    Lab1 un">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/05/20/os_xv6/step-by-step-debugging.png">
 <meta property="article:published_time" content="2022-05-19T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-07-19T03:34:09.114Z">
+<meta property="article:modified_time" content="2023-07-29T23:16:29.374Z">
 <meta property="article:author" content="Sam Li">
 <meta property="article:tag" content="lab">
 <meta name="twitter:card" content="summary">
@@ -110,7 +110,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Lab1 unix utilities</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">primes</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">find</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.3.</span> <span class="toc-text">xargs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Lab2 syscalls</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">trace</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">sysinfo</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Lab3 page tables</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.1.</span> <span class="toc-text">print pt</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.2.</span> <span class="toc-text">kernel page table</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.3.</span> <span class="toc-text">copyin</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Lab4</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Lab5</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">Lab6</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">Lab7</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">Lab8</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">Lab9 fs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">10.</span> <span class="toc-text">Lab10 mmap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">11.</span> <span class="toc-text">Tool</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Lab1 unix utilities</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">primes</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">find</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.3.</span> <span class="toc-text">xargs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Lab2 syscalls</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">trace</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">sysinfo</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Lab3 page tables</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.1.</span> <span class="toc-text">print pt</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.2.</span> <span class="toc-text">kernel page table</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.3.</span> <span class="toc-text">copyin</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Lab4</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Lab5</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">Lab6</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">Lab7 thread</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">Lab8 lock</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">Lab9 fs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">10.</span> <span class="toc-text">Lab10 mmap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">11.</span> <span class="toc-text">Tool</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -185,8 +185,8 @@
 <li><a href="#lab4">Lab4</a></li>
 <li><a href="#lab5">Lab5</a></li>
 <li><a href="#lab6">Lab6</a></li>
-<li><a href="#lab7">Lab7</a></li>
-<li><a href="#lab8">Lab8</a></li>
+<li><a href="#lab7-thread">Lab7 thread</a></li>
+<li><a href="#lab8-lock">Lab8 lock</a></li>
 <li><a href="#lab9-fs">Lab9 fs</a></li>
 <li><a href="#lab10-mmap">Lab10 mmap</a></li>
 <li><a href="#tool">Tool</a></li>
@@ -242,6 +242,7 @@
 </ul>
 <p>Btw, the “many $” sentence is an explanation not a bug.</p>
 <h2><span id="lab2-syscalls">Lab2 syscalls</span><a href="#lab2-syscalls" class="header-anchor">¶</a></h2>
+<p>Create a syscall in xv6: uapp.c -&gt; user.h -&gt; <s>user/usys.pl</s> usys.S -&gt; <code>ecall</code>| -&gt; syscall -&gt; process</p>
 <h3><span id="trace">trace</span><a href="#trace" class="header-anchor">¶</a></h3>
 <p>Problem: what is trace?</p>
 <p>Trace is a user call helping to track one particular syscall in the execution process.</p>
@@ -250,57 +251,68 @@
 <p>It’s easy to overlook the spelling error. One bracket makes you question about everything:)</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (copyout(myproc()-&gt;pagetable, addr, (<span class="keyword">char</span> *)&amp;info, <span class="keyword">sizeof</span>(info) &lt; <span class="number">0</span>); <span class="comment">// off-by-one-bracket error</span></span><br><span class="line"><span class="keyword">if</span> (copyout(myproc()-&gt;pagetable, addr, (<span class="keyword">char</span> *)&amp;info, <span class="keyword">sizeof</span>(info)) &lt; <span class="number">0</span>);  <span class="comment">// correct one</span></span><br></pre></td></tr></table></figure>
 <h2><span id="lab3-page-tables">Lab3 page tables</span><a href="#lab3-page-tables" class="header-anchor">¶</a></h2>
-<p>Goal: allow the kernel to directly dereference user pointers</p>
 <h3><span id="print-pt">print pt</span><a href="#print-pt" class="header-anchor">¶</a></h3>
 <p>You can’t write it without knowing the page table implementation in xv6. At first, it needs a simple and straightforward solution and then optimize it. I was thinking about using iteration or recursion, which took a while.</p>
 <h3><span id="kernel-page-table">kernel page table</span><a href="#kernel-page-table" class="header-anchor">¶</a></h3>
-<p>problem: page table set up: panic</p>
-<ul>
-<li>When to start paging?</li>
-</ul>
-<p>Hypothesis:</p>
 <ol>
+<li>
+<p>problem: When to start paging? -&gt; page table set up: panic</p>
+</li>
+<li>
+<p>Hypothesis:</p>
+<ul>
 <li>Traps due to missing mappings</li>
 <li>scheduler</li>
-</ol>
+</ul>
+</li>
+<li>
 <p>Experiment:</p>
-<ol>
-<li>
-<p>modify allocproc: seems correct</p>
+<ul>
+<li>modify allocproc: seems correct</li>
+<li>modify scheduler: move around w_satp, errors occur -&gt; scheduler goes wrong</li>
+</ul>
 </li>
 <li>
-<p>modify scheduler: move around w_satp, errors occur</p>
-<p>-&gt; scheduler goes wrong</p>
+<p>Problem 1: how scheduler goes wrong? -&gt; Key point: context switching (thanks to @GuoZhi)</p>
+<ul>
+<li><code>pit</code>: Problem 2: why truncate2 OK but truncate3 not? -&gt; We shouldn’t be worried if we can get grade part ok. And it’s time to move to real problem.</li>
+<li>aside: Problem 3: lost some freepages in kernmem</li>
+</ul>
 </li>
-</ol>
-<p>Problem 1: how scheduler goes wrong?</p>
-<p>Key point: context switching (thanks to @GuoZhi)</p>
-<p><code>pit</code>: Problem 2: why truncate2 OK but truncate3 not?</p>
-<p>We shouldn’t be worried if we can get grade part ok. And it’s time to move to real problem.</p>
-<p>aside: Problem 3: lost some freepages in kernmem</p>
-<p>Predictions:</p>
+<li>
 <p>Observations:</p>
-<ol>
+<ul>
 <li>Allocproc sets up one process’s kernel stack</li>
+</ul>
+</li>
 </ol>
 <h3><span id="copyin">copyin</span><a href="#copyin" class="header-anchor">¶</a></h3>
 <p>Task: add user mappings to user process’s kernel page table</p>
-<p>Problem:</p>
 <ol>
-<li>when user mappings  are changed in <code>exec</code> ? what should be done in <code>exec</code> ?</li>
-</ol>
+<li>
+<p>Problem: when user mappings  are changed in <code>exec</code> ? what should be done in <code>exec</code> ?</p>
+</li>
+<li>
 <p>Hypothesis:</p>
+</li>
+<li>
 <p>Experiment:</p>
-<ol>
+<ul>
 <li><code>pit</code>: no need to change copyin_new yet. The task is to make it work.</li>
-</ol>
+</ul>
+</li>
+<li>
 <p>Predictions:</p>
+</li>
+<li>
 <p>Observations:</p>
+</li>
+</ol>
 <h2><span id="lab4">Lab4</span><a href="#lab4" class="header-anchor">¶</a></h2>
 <h2><span id="lab5">Lab5</span><a href="#lab5" class="header-anchor">¶</a></h2>
 <h2><span id="lab6">Lab6</span><a href="#lab6" class="header-anchor">¶</a></h2>
-<h2><span id="lab7">Lab7</span><a href="#lab7" class="header-anchor">¶</a></h2>
-<h2><span id="lab8">Lab8</span><a href="#lab8" class="header-anchor">¶</a></h2>
+<h2><span id="lab7-thread">Lab7 thread</span><a href="#lab7-thread" class="header-anchor">¶</a></h2>
+<h2><span id="lab8-lock">Lab8 lock</span><a href="#lab8-lock" class="header-anchor">¶</a></h2>
 <h2><span id="lab9-fs">Lab9 fs</span><a href="#lab9-fs" class="header-anchor">¶</a></h2>
 <h2><span id="lab10-mmap">Lab10 mmap</span><a href="#lab10-mmap" class="header-anchor">¶</a></h2>
 <h2><span id="tool">Tool</span><a href="#tool" class="header-anchor">¶</a></h2>
@@ -343,7 +355,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Lab1 unix utilities</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">primes</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">find</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.3.</span> <span class="toc-text">xargs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Lab2 syscalls</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">trace</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">sysinfo</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Lab3 page tables</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.1.</span> <span class="toc-text">print pt</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.2.</span> <span class="toc-text">kernel page table</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.3.</span> <span class="toc-text">copyin</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Lab4</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Lab5</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">Lab6</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">Lab7</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">Lab8</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">Lab9 fs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">10.</span> <span class="toc-text">Lab10 mmap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">11.</span> <span class="toc-text">Tool</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Lab1 unix utilities</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">primes</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">find</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.3.</span> <span class="toc-text">xargs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Lab2 syscalls</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">trace</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">sysinfo</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Lab3 page tables</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.1.</span> <span class="toc-text">print pt</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.2.</span> <span class="toc-text">kernel page table</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.3.</span> <span class="toc-text">copyin</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Lab4</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Lab5</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">Lab6</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">Lab7 thread</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">Lab8 lock</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">Lab9 fs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">10.</span> <span class="toc-text">Lab10 mmap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">11.</span> <span class="toc-text">Tool</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
