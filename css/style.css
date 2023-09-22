@@ -1157,6 +1157,48 @@ article .content blockquote footer cite:before {
   padding: 0 0.5em;
   content: "—";
 }
+article .content .colorquote {
+  position: relative;
+  padding: 0.1em 1.5em;
+  color: #4a4a4a;
+  margin-bottom: 1em;
+}
+article .content .colorquote:before {
+  content: " ";
+  position: absolute;
+  top: 50%;
+  left: -14.5px;
+  margin-top: -12px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  text-align: center;
+  color: #fff;
+  background-size: 16px 16px;
+  background-position: 4px 4px;
+  background-repeat: no-repeat;
+}
+article .content .colorquote.blue {
+  border-color: #69c;
+  background-color: #d9e6f2;
+}
+article .content .colorquote.blue:before {
+  background-color: #69c;
+}
+article .content .colorquote.green {
+  border-color: #23d160;
+  background-color: #cbf6da;
+}
+article .content .colorquote.green:before {
+  background-color: #23d160;
+}
+article .content .colorquote.grey {
+  border-color: #999;
+  background-color: #e6e6e6;
+}
+article .content .colorquote.grey:before {
+  background-color: #999;
+}
 article .content .pullquote {
   margin: 0;
   width: 45%;

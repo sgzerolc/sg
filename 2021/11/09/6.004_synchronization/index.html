@@ -51,7 +51,7 @@
     
 	<!-- mathjax -->
 	
-<meta name="generator" content="Hexo 6.0.0"></head>
+<meta name="generator" content="Hexo 6.3.0"></head>
 
 <body class="max-width mx-auto px3 ltr">
     
@@ -82,7 +82,7 @@
         <li><a class="icon" aria-label="Previous post" href="/sg/2021/11/13/6.046_amortization/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
         
         
-        <li><a class="icon" aria-label="Next post" href="/sg/2021/11/09/6.006-data_structures/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Next post" href="/sg/2021/11/09/6.046-divide_and_conquer/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
         
         <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
         <li><a class="icon" aria-label="Share post" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
@@ -245,7 +245,7 @@ s = s + 1 (one waiting thread may now be able to proceed)</p>
 </li>
 </ul>
 <p>scenerio3: in the transfer scenario, account A transfer M money to account B.</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">transfer</span><span class="params">(<span class="keyword">int</span> account1, <span class="keyword">int</span> account2, <span class="keyword">int</span> amount)</span> </span>&#123;</span><br><span class="line">  <span class="comment">//int a = min(account1, account2); dead lock solution</span></span><br><span class="line">	<span class="comment">//int b = max(account1, account2);</span></span><br><span class="line">	wait(lock[account1]);</span><br><span class="line">	wait(lock[account2]);</span><br><span class="line">	balance[account1] = balance[account1] - amount;</span><br><span class="line">  balance[account2] = balance[account2] + amount;</span><br><span class="line">	signal(lock[account2]);</span><br><span class="line">	signal(lock[account1]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">transfer</span><span class="params">(<span class="type">int</span> account1, <span class="type">int</span> account2, <span class="type">int</span> amount)</span> &#123;</span><br><span class="line">  <span class="comment">//int a = min(account1, account2); dead lock solution</span></span><br><span class="line">	<span class="comment">//int b = max(account1, account2);</span></span><br><span class="line">	wait(lock[account1]);</span><br><span class="line">	wait(lock[account2]);</span><br><span class="line">	balance[account1] = balance[account1] - amount;</span><br><span class="line">  balance[account2] = balance[account2] + amount;</span><br><span class="line">	signal(lock[account2]);</span><br><span class="line">	signal(lock[account1]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>Downside: dead lock: no thread can make progress because all the process are locked.</p>
 <ul>
 <li>

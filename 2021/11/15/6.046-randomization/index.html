@@ -6,15 +6,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="randomization    randomization¶ 随机算法有很多种，比较有趣的三类是：  Probably correct(determined fast) : Monte Carlo algorithm Probably fast(determined correct): Las Vegas algorithm not guaranteed to be fast or cor">
+    <meta name="description" content="randomization  Matrix multiply quicksort R4: Randomized median skip lists Universal hashing perfect hashing      randomization¶ 随机算法有很多种，比较有趣的三类是：  Probably correct(determined fast) : Monte Carlo a">
 <meta property="og:type" content="article">
 <meta property="og:title" content="6.046 randomization">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2021/11/15/6.046-randomization/index.html">
 <meta property="og:site_name" content="steins gate zero">
-<meta property="og:description" content="randomization    randomization¶ 随机算法有很多种，比较有趣的三类是：  Probably correct(determined fast) : Monte Carlo algorithm Probably fast(determined correct): Las Vegas algorithm not guaranteed to be fast or cor">
+<meta property="og:description" content="randomization  Matrix multiply quicksort R4: Randomized median skip lists Universal hashing perfect hashing      randomization¶ 随机算法有很多种，比较有趣的三类是：  Probably correct(determined fast) : Monte Carlo a">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-11-14T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-07-19T03:26:12.672Z">
+<meta property="article:modified_time" content="2023-09-07T15:37:44.305Z">
 <meta property="article:author" content="Sam Li">
 <meta name="twitter:card" content="summary">
     
@@ -48,7 +48,7 @@
     
 	<!-- mathjax -->
 	
-<meta name="generator" content="Hexo 6.0.0"></head>
+<meta name="generator" content="Hexo 6.3.0"></head>
 
 <body class="max-width mx-auto px3 ltr">
     
@@ -107,7 +107,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">randomization</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">Matrix multiply</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">quicksort</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.3.</span> <span class="toc-text">R4: Randomized median</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.4.</span> <span class="toc-text">skip lists</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.5.</span> <span class="toc-text">Universal hashing</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.6.</span> <span class="toc-text">perfect hashing</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">randomization</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">Matrix multiply</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">quicksort</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.3.</span> <span class="toc-text">R4: Randomized median</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.4.</span> <span class="toc-text">skip lists</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.5.</span> <span class="toc-text">Universal hashing</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.6.</span> <span class="toc-text">perfect hashing</span></a></li></ol></li></ol>
     </div>
   </span>
 </div>
@@ -154,28 +154,37 @@
     <div class="toc">
 <!-- toc -->
 <ul>
-<li><a href="#randomization">randomization</a></li>
+<li><a href="#randomization">randomization</a>
+<ul>
+<li><a href="#matrix-multiply">Matrix multiply</a></li>
+<li><a href="#quicksort">quicksort</a></li>
+<li><a href="#r4-randomized-median">R4: Randomized median</a></li>
+<li><a href="#skip-lists">skip lists</a></li>
+<li><a href="#universal-hashing">Universal hashing</a></li>
+<li><a href="#perfect-hashing">perfect hashing</a></li>
+</ul>
+</li>
 </ul>
 <!-- tocstop -->
 </div>
-<h3><span id="randomization">randomization</span><a href="#randomization" class="header-anchor">¶</a></h3>
+<h2><span id="randomization">randomization</span><a href="#randomization" class="header-anchor">¶</a></h2>
 <p>随机算法有很多种，比较有趣的三类是：</p>
 <ol>
 <li>Probably correct(determined fast) : <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Monte_Carlo_algorithm">Monte Carlo algorithm</a></li>
 <li>Probably fast(determined correct): <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Las_Vegas_algorithm">Las Vegas algorithm</a></li>
 <li>not guaranteed to be fast or correct: <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Atlantic_City_algorithm">Atlantic City algorithms</a></li>
 </ol>
-<h4><span id="matrix-multiply">Matrix multiply</span><a href="#matrix-multiply" class="header-anchor">¶</a></h4>
-<p><strong>problem</strong>: Matrix product checker</p>
+<h3><span id="matrix-multiply">Matrix multiply</span><a href="#matrix-multiply" class="header-anchor">¶</a></h3>
+<p>problem: Matrix product checker</p>
 <p>Given  n × n  matrices  A, B, C,  the  goal  is to  check  if A × B  = C  or not.<br>
-<strong>Question</strong>:  a such matrix multiplication would take O(n**3) time. We want a checker algorithm to take less time than that, or else the checker doesn’t make sense.</p>
+Question:  a such matrix multiplication would take O(n**3) time. We want a checker algorithm to take less time than that, or else the checker doesn’t make sense.</p>
 <p>We  will  see an  O(n**2)  algorithm  that:</p>
 <ul>
 <li>if A × B = C, then  Pr[output=YES] = 1.</li>
 <li>if A × B = C, then  Pr[output=YES] ≤ 1/2</li>
 </ul>
-<p><strong>Frievald’s algorithm</strong>: Choose a random binary vector r[1…n] such that Pr[ri  = 1] = 1 /2 independently for  r = 1 , …, n.  The algorithm  will output  ’YES’  if A(Br) =   Cr and  ’NO’ otherwise.</p>
-<p><strong>Analysis of correctness if AB != C</strong></p>
+<p><u>Frievald’s algorithm</u>: Choose a random binary vector r[1…n] such that Pr[ri  = 1] = 1 /2 independently for  r = 1 , …, n.  The algorithm  will output  ’YES’  if A(Br) =   Cr and  ’NO’ otherwise.</p>
+<p><u>Analysis of correctness if AB != C</u></p>
 <p>Claim:  If  AB != C, then  Pr[ABr != Cr] ≥ 1/2.</p>
 <p><u>want to show</u>: ABr != Cr =&gt; Dr != 0 where D=AB-C. The goal is to show that there are many r such that Dr != 0.(many &gt;= 1/2)</p>
 <p><em>Proof</em>:</p>
@@ -195,18 +204,18 @@
 </li>
 </ol>
 <p>we can conclude that Pr[ABr != Cr] ≥ 1/2.</p>
-<h4><span id="quicksort">quicksort</span><a href="#quicksort" class="header-anchor">¶</a></h4>
+<h3><span id="quicksort">quicksort</span><a href="#quicksort" class="header-anchor">¶</a></h3>
 <p>Quick sort is in-place sort, which need not require auxiliary space as merge sort. Divide and conquer algorithm doesn’t work well in the combine step.</p>
 <p>We can use median finding in pivot selection. It takes theta(n*logn) time. However, it is slow in practice and loses to merge sort.</p>
 <p>randomized quicksort comes to solution.</p>
 <p>“paranoid” quicksort analysis and expected runtime analysis</p>
-<h4><span id="r4-randomized-median">R4: Randomized median</span><a href="#r4-randomized-median" class="header-anchor">¶</a></h4>
+<h3><span id="r4-randomized-median">R4: Randomized median</span><a href="#r4-randomized-median" class="header-anchor">¶</a></h3>
 <p>Quick find, quick sort</p>
 <p>expected runtime, amoritized runtime are just fancier way saying average runtime.</p>
-<h4><span id="skip-lists">skip lists</span><a href="#skip-lists" class="header-anchor">¶</a></h4>
+<h3><span id="skip-lists">skip lists</span><a href="#skip-lists" class="header-anchor">¶</a></h3>
 <p>With high probability bound</p>
-<h4><span id="universal-hashing">Universal hashing</span><a href="#universal-hashing" class="header-anchor">¶</a></h4>
-<h4><span id="perfect-hashing">perfect hashing</span><a href="#perfect-hashing" class="header-anchor">¶</a></h4>
+<h3><span id="universal-hashing">Universal hashing</span><a href="#universal-hashing" class="header-anchor">¶</a></h3>
+<h3><span id="perfect-hashing">perfect hashing</span><a href="#perfect-hashing" class="header-anchor">¶</a></h3>
 
   </div>
 </article>
@@ -234,7 +243,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">randomization</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">Matrix multiply</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">quicksort</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.3.</span> <span class="toc-text">R4: Randomized median</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.4.</span> <span class="toc-text">skip lists</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.5.</span> <span class="toc-text">Universal hashing</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.6.</span> <span class="toc-text">perfect hashing</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">randomization</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">Matrix multiply</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">quicksort</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.3.</span> <span class="toc-text">R4: Randomized median</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.4.</span> <span class="toc-text">skip lists</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.5.</span> <span class="toc-text">Universal hashing</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.6.</span> <span class="toc-text">perfect hashing</span></a></li></ol></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">

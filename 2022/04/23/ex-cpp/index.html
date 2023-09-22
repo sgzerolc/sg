@@ -51,7 +51,7 @@
     
 	<!-- mathjax -->
 	
-<meta name="generator" content="Hexo 6.0.0"></head>
+<meta name="generator" content="Hexo 6.3.0"></head>
 
 <body class="max-width mx-auto px3 ltr">
     
@@ -190,11 +190,11 @@
 <ol>
 <li>
 <p>const</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// const pointer point to const member function which takes const pointer </span></span><br><span class="line"><span class="comment">// to a const int. The last const means this is a const member function</span></span><br><span class="line"><span class="comment">// (can&#x27;t modify variables of the this instance)</span></span><br><span class="line"><span class="function"><span class="keyword">const</span> <span class="keyword">int</span>* <span class="keyword">const</span> <span class="title">myClassMethod</span><span class="params">(<span class="keyword">const</span> <span class="keyword">int</span>* <span class="keyword">const</span> &amp; param)</span> <span class="keyword">const</span></span>; </span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// const pointer point to const member function which takes const pointer </span></span><br><span class="line"><span class="comment">// to a const int. The last const means this is a const member function</span></span><br><span class="line"><span class="comment">// (can&#x27;t modify variables of the this instance)</span></span><br><span class="line"><span class="function"><span class="type">const</span> <span class="type">int</span>* <span class="type">const</span> <span class="title">myClassMethod</span><span class="params">(<span class="type">const</span> <span class="type">int</span>* <span class="type">const</span> &amp; param)</span> <span class="type">const</span></span>; </span><br></pre></td></tr></table></figure>
 </li>
 <li>
 <p>type casting</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// internal metadata</span></span><br><span class="line">std::unordered_map&lt;<span class="keyword">uintptr_t</span>, <span class="keyword">size_t</span>&gt; payload;</span><br><span class="line">payload.<span class="built_in">insert</span>(&#123;(<span class="keyword">uintptr_t</span>)ptr, sz&#125;);</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// internal metadata</span></span><br><span class="line">std::unordered_map&lt;<span class="type">uintptr_t</span>, <span class="type">size_t</span>&gt; payload;</span><br><span class="line">payload.<span class="built_in">insert</span>(&#123;(<span class="type">uintptr_t</span>)ptr, sz&#125;);</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
 <p>Problem:</p>

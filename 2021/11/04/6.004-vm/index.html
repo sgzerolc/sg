@@ -56,7 +56,7 @@
     
 	<!-- mathjax -->
 	
-<meta name="generator" content="Hexo 6.0.0"></head>
+<meta name="generator" content="Hexo 6.3.0"></head>
 
 <body class="max-width mx-auto px3 ltr">
     
@@ -470,7 +470,7 @@
 <li>sketch: cpu needs access device status and data</li>
 <li>approach:Memory-mapper I/O: a portion of the kernel address space is devoted to servicing I/O devices.</li>
 </ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Device</span>&#123;</span></span><br><span class="line">  <span class="keyword">char</span> Flag, Data;</span><br><span class="line">&#125;keyboard;</span><br><span class="line"></span><br><span class="line">keyHit_h()&#123;</span><br><span class="line">  Buffer[inptr] = keyboard.Data;</span><br><span class="line">  inptr = (...)...;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Device</span>&#123;</span></span><br><span class="line">  <span class="type">char</span> Flag, Data;</span><br><span class="line">&#125;keyboard;</span><br><span class="line"></span><br><span class="line">keyHit_h()&#123;</span><br><span class="line">  Buffer[inptr] = keyboard.Data;</span><br><span class="line">  inptr = (...)...;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 <li>
 <p>现实中更复杂：</p>
@@ -480,7 +480,7 @@
 <h3><span id="implementations-of-readkey">Implementations of ReadKey</span><a href="#implementations-of-readkey" class="header-anchor">¶</a></h3>
 <p>Goal: the associated supervisor call that lets user programs read characters.</p>
 <p>Attempt1: 直接写</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ReadKey_h()&#123;</span><br><span class="line">  <span class="keyword">int</span> kbdnum = ProcTbl[Cur].DPYNum;</span><br><span class="line">  <span class="keyword">while</span> (BufferEmpty(kbdnum))&#123;</span><br><span class="line">    <span class="comment">/* busy wait loop*/</span></span><br><span class="line">  &#125;</span><br><span class="line">	UserMState.Reqs[<span class="number">0</span>] = ReadInputBuffer (kbdnum) ;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ReadKey_h()&#123;</span><br><span class="line">  <span class="type">int</span> kbdnum = ProcTbl[Cur].DPYNum;</span><br><span class="line">  <span class="keyword">while</span> (BufferEmpty(kbdnum))&#123;</span><br><span class="line">    <span class="comment">/* busy wait loop*/</span></span><br><span class="line">  &#125;</span><br><span class="line">	UserMState.Reqs[<span class="number">0</span>] = ReadInputBuffer (kbdnum) ;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>​	kbdnum:keyboard num;proctbl: process table</p>
 <ul>
 <li>
@@ -499,7 +499,7 @@
 </li>
 </ul>
 <p>Attempt2: fix the looping problem by adding code to subtract 4 from the saved value of the XP register before returning</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">ReadKey_h()&#123;</span><br><span class="line">  <span class="keyword">int</span> kbdnum = ProcTbl[Cur].DPYNum;</span><br><span class="line">	<span class="keyword">if</span> (BufferEmpty(kbdnum))&#123;</span><br><span class="line">	<span class="comment">/* busy wait loop*/</span></span><br><span class="line">		UserMState.Regs[XP] = UserMState.Regs [XP]<span class="number">-4</span> ;</span><br><span class="line">    Scheduler(); <span class="comment">//attempt3</span></span><br><span class="line">	&#125; <span class="keyword">else</span></span><br><span class="line">	UserMState.Reqs[<span class="number">0</span>] = ReadInputBuffer (kbdnum) ;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">ReadKey_h()&#123;</span><br><span class="line">  <span class="type">int</span> kbdnum = ProcTbl[Cur].DPYNum;</span><br><span class="line">	<span class="keyword">if</span> (BufferEmpty(kbdnum))&#123;</span><br><span class="line">	<span class="comment">/* busy wait loop*/</span></span><br><span class="line">		UserMState.Regs[XP] = UserMState.Regs [XP]<span class="number">-4</span> ;</span><br><span class="line">    Scheduler(); <span class="comment">//attempt3</span></span><br><span class="line">	&#125; <span class="keyword">else</span></span><br><span class="line">	UserMState.Reqs[<span class="number">0</span>] = ReadInputBuffer (kbdnum) ;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <ul>
 <li>
 <p>和Attempt1的区别是：</p>
