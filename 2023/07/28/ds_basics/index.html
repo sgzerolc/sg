@@ -14,8 +14,8 @@
 <meta property="og:description" content="case study: MapReduce 2004 Go basics case study: GFS 2003 Primary&#x2F;Backup Replication  terms   case study: VMware FT 2010 Raft  Raft elections log handling Raft persistence client behavior snapshots">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2023/07/28/ds_basics/Screenshot-0937373.png">
-<meta property="article:published_time" content="2023-07-27T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-08-12T04:39:43.092Z">
+<meta property="article:published_time" content="2023-07-27T22:00:00.000Z">
+<meta property="article:modified_time" content="2023-12-17T02:04:01.336Z">
 <meta property="article:author" content="Sam Li">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://sgzerolc.github.io/sg/2023/07/28/ds_basics/Screenshot-0937373.png">
@@ -132,7 +132,7 @@
       
     <div class="postdate">
       
-        <time datetime="2023-07-27T16:00:00.000Z" itemprop="datePublished">2023-07-28</time>
+        <time datetime="2023-07-27T22:00:00.000Z" itemprop="datePublished">2023-07-28</time>
         
       
     </div>
@@ -306,11 +306,7 @@
 <p>Problem 0: How does VM-FT handle network partitions? That is, is it possible that if the primary and the backup end up in different network partitions that the backup will become a primary too and the system will run with two primaries?</p>
 <p>There will be only one primary executing in network partitions. The primary VM may not send an output to the external world until the backup receives and acknowledges the log entry associated with the operation. When network partitions happen, the primary cannot get a response from the backup and the backup cannot get a heartbeat from the primary. Either failures occur to the servers or network connectivity is lost.</p>
 <p>VM-FT hence performs an atomic op test-and-set on shared storage that stores the virtual disks of vms when the primary or the backup wants to go live.If the op suceeds, then the vm is allowed to go live. If not, that means a vm must have been live, so the current vm halts itself. If the vm cannot access shared storage, it just waits until it can.</p>
-<ul>
-<li>
 <img src="/sg/2023/07/28/ds_basics/Screenshot-0937373.png" class title="Screenshot-0937373">
-</li>
-</ul>
 <h2><span id="raft">Raft</span><a href="#raft" class="header-anchor">¶</a></h2>
 <h3><span id="raft-elections">Raft elections</span><a href="#raft-elections" class="header-anchor">¶</a></h3>
 <h3><span id="log-handling">log handling</span><a href="#log-handling" class="header-anchor">¶</a></h3>

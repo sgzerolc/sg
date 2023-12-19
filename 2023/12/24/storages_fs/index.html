@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="FS storage layout  Co-locating FFS   FS organization Caching and FS integrity Multi-disk systems and disk array data organizations Disk array systems Distributed File Systems Multi-server Storage r">
+<meta property="og:type" content="article">
+<meta property="og:title" content="File Systems Internals">
+<meta property="og:url" content="https://sgzerolc.github.io/sg/2023/12/24/storages_fs/index.html">
+<meta property="og:site_name" content="steins gate zero">
+<meta property="og:description" content="FS storage layout  Co-locating FFS   FS organization Caching and FS integrity Multi-disk systems and disk array data organizations Disk array systems Distributed File Systems Multi-server Storage r">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-12-23T23:00:00.000Z">
+<meta property="article:modified_time" content="2023-12-19T20:21:41.382Z">
+<meta property="article:author" content="Sam Li">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/sg/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/sg/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/sg/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>File Systems Internals</title><meta name="robots" content="noindex">
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/sg/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/sg/">Home</a></li><!--
+     --><!--
+       --><li><a href="/sg/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/sg/categories/">Category</a></li><!--
+     --><!--
+       --><li><a href="/sg/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/sg/CV/">CV</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://sgzerolc.github.io/sg/2023/12/24/storages_fs/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://sgzerolc.github.io/sg/2023/12/24/storages_fs/&text=File Systems Internals"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://sgzerolc.github.io/sg/2023/12/24/storages_fs/&title=File Systems Internals"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sgzerolc.github.io/sg/2023/12/24/storages_fs/&is_video=false&description=File Systems Internals"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=File Systems Internals&body=Check out this article: https://sgzerolc.github.io/sg/2023/12/24/storages_fs/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://sgzerolc.github.io/sg/2023/12/24/storages_fs/&title=File Systems Internals"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://sgzerolc.github.io/sg/2023/12/24/storages_fs/&title=File Systems Internals"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://sgzerolc.github.io/sg/2023/12/24/storages_fs/&title=File Systems Internals"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://sgzerolc.github.io/sg/2023/12/24/storages_fs/&title=File Systems Internals"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://sgzerolc.github.io/sg/2023/12/24/storages_fs/&name=File Systems Internals&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://sgzerolc.github.io/sg/2023/12/24/storages_fs/&t=File Systems Internals"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">FS storage layout</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">Co-locating FFS</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">FS organization</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Caching and FS integrity</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Multi-disk systems and disk array data organizations</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Disk array systems</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">Distributed File Systems</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">Multi-server Storage</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">reliability &amp; scalability</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">GFS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">10.</span> <span class="toc-text">RAID reliability</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">11.</span> <span class="toc-text">Data Protection</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">12.</span> <span class="toc-text">Case study: scalable table stores BigTable</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        File Systems Internals
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Sam Li</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2023-12-23T23:00:00.000Z" itemprop="datePublished">2023-12-24</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/sg/categories/computer-systems/">computer systems</a> › <a class="category-link" href="/sg/categories/computer-systems/storage-systems/">storage systems</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <div class="toc">
+<!-- toc -->
+<ul>
+<li><a href="#fs-storage-layout">FS storage layout</a>
+<ul>
+<li><a href="#co-locating-ffs">Co-locating FFS</a></li>
+</ul>
+</li>
+<li><a href="#fs-organization">FS organization</a></li>
+<li><a href="#caching-and-fs-integrity">Caching and FS integrity</a></li>
+<li><a href="#multi-disk-systems-and-disk-array-data-organizations">Multi-disk systems and disk array data organizations</a></li>
+<li><a href="#disk-array-systems">Disk array systems</a></li>
+<li><a href="#distributed-file-systems">Distributed File Systems</a></li>
+<li><a href="#multi-server-storage">Multi-server Storage</a></li>
+<li><a href="#reliability-scalability">reliability &amp; scalability</a></li>
+<li><a href="#gfs">GFS</a></li>
+<li><a href="#raid-reliability">RAID reliability</a></li>
+<li><a href="#data-protection">Data Protection</a></li>
+<li><a href="#case-study-scalable-table-stores-bigtable">Case study: scalable table stores BigTable</a></li>
+</ul>
+<!-- tocstop -->
+</div>
+<p>This blog is the third part of NVMe ZNS emulation. We will explore cluster storage and all the things behind.</p>
+<h2><span id="fs-storage-layout">FS storage layout</span><a href="#fs-storage-layout" class="header-anchor">¶</a></h2>
+<p>Readings:<br>
+Chap 8 of Unix Internals, Vahalia 1995;<br>
+A Solution to the Metadata Update Problem in File systems, Ganger 2000<br>
+Chap 7 of Practical File System Design, Giampaolo 1998</p>
+<p>Problem 1: mapping raw data into files converts into mapping fs structures and data to LBNs</p>
+<p>Need a structure to keep track of available space (granularity: blocks). And to choose which free block.</p>
+<p>Solution 1:</p>
+<ul>
+<li>Free list: Linked list of free blocks -&gt; simple but performance issues</li>
+<li>Bitmap (common): large array of bits, one per allocatable unit. Two state: free or in use -&gt; better lookup</li>
+<li>Free extent structure (s.t. better): extent is a contiguous range of free blocks -&gt; better management but fragmentation issues</li>
+</ul>
+<p>E.g. Fs storage layout for HDD: FFS 1984<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup> has advantages on locality and larger transfer size over pre-FFS fs world. <strong>Allocation groups</strong> are inode and the first data blocks in the same cylinder group, which is also used in modern FSs like xfs 1994, ext*.</p>
+<p>Larger transfter size is meant to amortizing overall positioning costs.</p>
+<ol>
+<li>larger fs block size</li>
+<li>allocate contiguous blocks</li>
+<li>prefetch: fetch more data than requested. Read-ahead is for sequential access. When paying positioning cost once, the trade-off is that a large request can delay requests of normal size. -&gt; heavy streaming of sequential I/O (locality helps)</li>
+</ol>
+<p>Small (&lt;= 8kb, 80%) files are fragmented in real world. And it leads to small I/Os caused by independence of files and levels of indirection.</p>
+<p>Problem 2: small files lead to small I/Os. Need to increase locality and transfer size for small files</p>
+<p>Solution 2: group small files and metadata for larger I/Os.</p>
+<p>How to group?</p>
+<ol>
+<li>Co-locate?</li>
+<li>Over aggressiveness costs little?</li>
+</ol>
+<p>Log-structured FS -&gt; amortization, large write</p>
+<p>Data and metadata are written sequentially to a circular buffer called log</p>
+<p>shadow paging: write a segment to replace several older smaller blocks and reclaim space. The idea is increasing empty blocks. Its cost may more expensive than benefit gained.</p>
+<p>TableFS using LSM trees</p>
+<p>FUSE is a fs in user space. It presents user VFS to the kernel<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup>.</p>
+<h3><span id="co-locating-ffs">Co-locating FFS</span><a href="#co-locating-ffs" class="header-anchor">¶</a></h3>
+<h2><span id="fs-organization">FS organization</span><a href="#fs-organization" class="header-anchor">¶</a></h2>
+<p>Vahalia1995 ch8: P255</p>
+<p>Application interface and system software<br>
+Data organization and naming<br>
+Basic operations<br>
+Cache management<br>
+Metadata integrity and crash recovery<br>
+On-disk data placement<br>
+Access control</p>
+<h2><span id="caching-and-fs-integrity">Caching and FS integrity</span><a href="#caching-and-fs-integrity" class="header-anchor">¶</a></h2>
+<h2><span id="multi-disk-systems-and-disk-array-data-organizations">Multi-disk systems and disk array data organizations</span><a href="#multi-disk-systems-and-disk-array-data-organizations" class="header-anchor">¶</a></h2>
+<h2><span id="disk-array-systems">Disk array systems</span><a href="#disk-array-systems" class="header-anchor">¶</a></h2>
+<h2><span id="distributed-file-systems">Distributed File Systems</span><a href="#distributed-file-systems" class="header-anchor">¶</a></h2>
+<h2><span id="multi-server-storage">Multi-server Storage</span><a href="#multi-server-storage" class="header-anchor">¶</a></h2>
+<h2><span id="reliability-amp-scalability">reliability &amp; scalability</span><a href="#reliability-amp-scalability" class="header-anchor">¶</a></h2>
+<h2><span id="gfs">GFS</span><a href="#gfs" class="header-anchor">¶</a></h2>
+<h2><span id="raid-reliability">RAID reliability</span><a href="#raid-reliability" class="header-anchor">¶</a></h2>
+<h2><span id="data-protection">Data Protection</span><a href="#data-protection" class="header-anchor">¶</a></h2>
+<h2><span id="case-study-scalable-table-stores-bigtable">Case study: scalable table stores BigTable</span><a href="#case-study-scalable-table-stores-bigtable" class="header-anchor">¶</a></h2>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://afterhoursacademic.medium.com/a-fast-file-system-for-unix-15117fb7425b">https://afterhoursacademic.medium.com/a-fast-file-system-for-unix-15117fb7425b</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/2910229/what-is-a-virtual-file-system-or-a-file-system-in-userspace">https://stackoverflow.com/questions/2910229/what-is-a-virtual-file-system-or-a-file-system-in-userspace</a> <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+<!-- flag of hidden posts -->
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/sg/">Home</a></li>
+         
+          <li><a href="/sg/about/">About</a></li>
+         
+          <li><a href="/sg/categories/">Category</a></li>
+         
+          <li><a href="/sg/archives/">Writing</a></li>
+         
+          <li><a href="/sg/CV/">CV</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">FS storage layout</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">Co-locating FFS</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">FS organization</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Caching and FS integrity</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Multi-disk systems and disk array data organizations</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Disk array systems</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">Distributed File Systems</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">Multi-server Storage</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">reliability &amp; scalability</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">GFS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">10.</span> <span class="toc-text">RAID reliability</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">11.</span> <span class="toc-text">Data Protection</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">12.</span> <span class="toc-text">Case study: scalable table stores BigTable</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://sgzerolc.github.io/sg/2023/12/24/storages_fs/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://sgzerolc.github.io/sg/2023/12/24/storages_fs/&text=File Systems Internals"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://sgzerolc.github.io/sg/2023/12/24/storages_fs/&title=File Systems Internals"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sgzerolc.github.io/sg/2023/12/24/storages_fs/&is_video=false&description=File Systems Internals"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=File Systems Internals&body=Check out this article: https://sgzerolc.github.io/sg/2023/12/24/storages_fs/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://sgzerolc.github.io/sg/2023/12/24/storages_fs/&title=File Systems Internals"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://sgzerolc.github.io/sg/2023/12/24/storages_fs/&title=File Systems Internals"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://sgzerolc.github.io/sg/2023/12/24/storages_fs/&title=File Systems Internals"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://sgzerolc.github.io/sg/2023/12/24/storages_fs/&title=File Systems Internals"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://sgzerolc.github.io/sg/2023/12/24/storages_fs/&name=File Systems Internals&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://sgzerolc.github.io/sg/2023/12/24/storages_fs/&t=File Systems Internals"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2023
+    Sam Li
+  </div>
+</footer>
+
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/sg/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>

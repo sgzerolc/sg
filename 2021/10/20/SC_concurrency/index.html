@@ -13,8 +13,8 @@
 <meta property="og:site_name" content="steins gate zero">
 <meta property="og:description" content="R20: concurrency  two models for concurrent programming basic concepts starting a thread with an anonymous class Shared memory example Message passing example concurrency is hard to debug   R21&amp;amp">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2021-10-19T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-07-19T03:29:57.211Z">
+<meta property="article:published_time" content="2021-10-19T22:00:00.000Z">
+<meta property="article:modified_time" content="2023-10-03T12:00:39.199Z">
 <meta property="article:author" content="Sam Li">
 <meta name="twitter:card" content="summary">
     
@@ -130,7 +130,7 @@
       
     <div class="postdate">
       
-        <time datetime="2021-10-19T16:00:00.000Z" itemprop="datePublished">2021-10-20</time>
+        <time datetime="2021-10-19T22:00:00.000Z" itemprop="datePublished">2021-10-20</time>
         
       
     </div>
@@ -190,7 +190,7 @@
 <!-- tocstop -->
 </div>
 <h2><span id="r20-concurrency">R20: concurrency</span><a href="#r20-concurrency" class="header-anchor">¶</a></h2>
-<p>I’ve studied parallelism before however the implementation of locks remains unsolved. The goal of this reading is supposed to deepen the understanding and the process of coding.</p>
+<p>Concurrency is handling tasks in the overlapping period (multitask on a single-core computer) while parallelism is when tasks run at the same time (multi-processor)<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>.</p>
 <h3><span id="two-models-for-concurrent-programming">two models for concurrent programming</span><a href="#two-models-for-concurrent-programming" class="header-anchor">¶</a></h3>
 <ol>
 <li>message passing: modules share the same memory space</li>
@@ -400,6 +400,13 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> (</span><br><span class="line">    <span class="comment">// preamble: declare variables initialized to objects that need closing after use</span></span><br><span class="line">) &#123;</span><br><span class="line">    <span class="comment">// body: runs with those variables in scope</span></span><br><span class="line">&#125; <span class="keyword">catch</span>(...) &#123;</span><br><span class="line">    <span class="comment">// catch clauses: optional, handles exceptions thrown by the preamble or body</span></span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    <span class="comment">// finally clause: optional, runs after the body and any catch clause</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// no matter how the try statement exits, it automatically calls</span></span><br><span class="line"><span class="comment">// close() on all variables declared in the preamble</span></span><br></pre></td></tr></table></figure>
 <p><strong>testing</strong></p>
 <p><a target="_blank" rel="noopener" href="http://web.mit.edu/6.031/www/sp21/classes/24-sockets-networking/#testing_clientserver_code">Example</a></p>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/1050222/what-is-the-difference-between-concurrency-and-parallelism">https://stackoverflow.com/questions/1050222/what-is-the-difference-between-concurrency-and-parallelism</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
 
   </div>
 </article>

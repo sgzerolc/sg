@@ -6,20 +6,22 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="Design points Interfaces  Process File descriptor and I&#x2F;O Pipe Fs   Organization Virtual memory techniques  Page table Interrupts Page fault   Traps Parallelism  Lock Threads Case study: RCU   File">
+    <meta name="description" content="Design points Interfaces  Process File descriptor and I&#x2F;O Pipe Fs   Organization Virtual memory techniques  Page table   Traps  Trap machanism Page fault exceptions Device interrupts   Parallelism">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Intro to xv6">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2022/04/01/os_basics/index.html">
 <meta property="og:site_name" content="steins gate zero">
-<meta property="og:description" content="Design points Interfaces  Process File descriptor and I&#x2F;O Pipe Fs   Organization Virtual memory techniques  Page table Interrupts Page fault   Traps Parallelism  Lock Threads Case study: RCU   File">
+<meta property="og:description" content="Design points Interfaces  Process File descriptor and I&#x2F;O Pipe Fs   Organization Virtual memory techniques  Page table   Traps  Trap machanism Page fault exceptions Device interrupts   Parallelism">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/04/01/os_basics/boot.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/04/01/os_basics/pt.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/04/01/os_basics/vm.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/04/01/os_basics/Screenshot-4834686.png">
+<meta property="og:image" content="https://sgzerolc.github.io/sg/2022/04/01/os_basics/trap.png">
+<meta property="og:image" content="https://sgzerolc.github.io/sg/2022/04/01/os_basics/Screenshot-6244321.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/04/01/os_basics/Screenshot-9679149.png">
-<meta property="article:published_time" content="2022-03-31T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-09-23T12:29:18.487Z">
+<meta property="article:published_time" content="2022-03-31T22:00:00.000Z">
+<meta property="article:modified_time" content="2023-10-02T10:59:20.363Z">
 <meta property="article:author" content="Sam Li">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://sgzerolc.github.io/sg/2022/04/01/os_basics/boot.png">
@@ -112,7 +114,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Design points</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Interfaces</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">Process</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">File descriptor and I&#x2F;O</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.3.</span> <span class="toc-text">Pipe</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.4.</span> <span class="toc-text">Fs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Organization</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Virtual memory techniques</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.1.</span> <span class="toc-text">Page table</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.2.</span> <span class="toc-text">Interrupts</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.3.</span> <span class="toc-text">Page fault</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Traps</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">Parallelism</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.1.</span> <span class="toc-text">Lock</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.2.</span> <span class="toc-text">Threads</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.3.</span> <span class="toc-text">Case study: RCU</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">File systems</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">7.1.</span> <span class="toc-text">Case study: ext3</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">Network stack</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">Security</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">10.</span> <span class="toc-text">Basics</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">10.1.</span> <span class="toc-text">C</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">10.2.</span> <span class="toc-text">RISC-V convention</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">10.3.</span> <span class="toc-text">GDB</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">10.4.</span> <span class="toc-text">Lookup table</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">11.</span> <span class="toc-text">Related readings</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Design points</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Interfaces</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">Process</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">File descriptor and I&#x2F;O</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.3.</span> <span class="toc-text">Pipe</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.4.</span> <span class="toc-text">Fs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Organization</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Virtual memory techniques</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.1.</span> <span class="toc-text">Page table</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Traps</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.1.</span> <span class="toc-text">Trap machanism</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.2.</span> <span class="toc-text">Page fault exceptions</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.3.</span> <span class="toc-text">Device interrupts</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">Parallelism</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.1.</span> <span class="toc-text">Lock</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.2.</span> <span class="toc-text">Threads</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.3.</span> <span class="toc-text">Case study: RCU</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">File systems</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">7.1.</span> <span class="toc-text">Case study: ext3</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">Network stack</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">Security</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.1.</span> <span class="toc-text">case study: meltdown</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">10.</span> <span class="toc-text">Basics</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">10.1.</span> <span class="toc-text">C</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">10.2.</span> <span class="toc-text">RISC-V convention</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">10.3.</span> <span class="toc-text">GDB</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">10.4.</span> <span class="toc-text">Lookup table</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">11.</span> <span class="toc-text">Related readings</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -136,7 +138,7 @@
       
     <div class="postdate">
       
-        <time datetime="2022-03-31T16:00:00.000Z" itemprop="datePublished">2022-04-01</time>
+        <time datetime="2022-03-31T22:00:00.000Z" itemprop="datePublished">2022-04-01</time>
         
       
     </div>
@@ -172,11 +174,15 @@
 <li><a href="#virtual-memory-techniques">Virtual memory techniques</a>
 <ul>
 <li><a href="#page-table">Page table</a></li>
-<li><a href="#interrupts">Interrupts</a></li>
-<li><a href="#page-fault">Page fault</a></li>
 </ul>
 </li>
-<li><a href="#traps">Traps</a></li>
+<li><a href="#traps">Traps</a>
+<ul>
+<li><a href="#trap-machanism">Trap machanism</a></li>
+<li><a href="#page-fault-exceptions">Page fault exceptions</a></li>
+<li><a href="#device-interrupts">Device interrupts</a></li>
+</ul>
+</li>
 <li><a href="#parallelism">Parallelism</a>
 <ul>
 <li><a href="#lock">Lock</a></li>
@@ -190,7 +196,11 @@
 </ul>
 </li>
 <li><a href="#network-stack">Network stack</a></li>
-<li><a href="#security">Security</a></li>
+<li><a href="#security">Security</a>
+<ul>
+<li><a href="#case-study-meltdown">case study: meltdown</a></li>
+</ul>
+</li>
 <li><a href="#basics">Basics</a>
 <ul>
 <li><a href="#c">C</a></li>
@@ -221,9 +231,14 @@
 </ul>
 </li>
 <li>Chap3: 3-level page table to save memory when most va is not mapped.</li>
-<li>k/u separation</li>
+<li>Chap4:  Xv6 kernel handles all traps. It has separate io path for three cases for convenience (<s>for commonality only single path</s>): traps from user space, traps from kernel space, timer interrupts.
+<ul>
+<li>k/u isolation security: Xv6 simplifies the CPU h/w’s trap handling sequence by making kernel s/w switch to kpgtbl, kstack and save regs except pc.</li>
+</ul>
+</li>
 <li>Chap5: device and timer interrupts while executing in the kernel and user programs.</li>
-<li>Chap7: the scheduling policy is running processes in turn, <code>round robin</code></li>
+<li>Chap7: the scheduling policy is running processes in turn as is <code>round robin</code></li>
+<li>Chap8: xv6 provides Unix-like fs and stores data on a virtio disk for persistence.</li>
 </ol>
 <h2><span id="interfaces">Interfaces</span><a href="#interfaces" class="header-anchor">¶</a></h2>
 <h3><span id="process">Process</span><a href="#process" class="header-anchor">¶</a></h3>
@@ -318,14 +333,12 @@
 </ol>
 <h2><span id="organization">Organization</span><a href="#organization" class="header-anchor">¶</a></h2>
 <ol>
-<li>
-<p>Os MUST provides time-sharing resources and applicable isolation(interact when required) among processes.</p>
+<li>Os MUST provides time-sharing resources and applicable isolation(interact when required) among processes.
 <ul>
 <li>Fancy terms: <code>multiplexing, isolation, interaction</code></li>
 </ul>
 </li>
-<li>
-<p>Let’s count what does xv6 have:</p>
+<li>Let’s count what does xv6 have:
 <ul>
 <li>1 monolithic kernel</li>
 <li>many processes (the unit of isolation)</li>
@@ -333,8 +346,7 @@
 <li>hardwares: RAM, ROM, screen, disk (simulated by qemu -machine virt)</li>
 </ul>
 </li>
-<li>
-<p>Design points:</p>
+<li>Design points:
 <ul>
 <li>Abstract physical resources: Library Vs Outside manager
 <ul>
@@ -358,47 +370,29 @@
 </li>
 </ul>
 </li>
-<li>
-<p>Process provides strong isolation</p>
+<li>Process provides strong isolation
 <ul>
 <li>mechanisms implementing process: user/super mode flag, address spaces, time-slicing of threads</li>
 <li>hw support: Xv6 manages process memory via page tables (RISC-V support).</li>
 </ul>
 </li>
-<li>
-<p>Process internals:</p>
+<li>Process internals:
 <ul>
-<li>
-<p>Process has private memory system/address space. An address space contains user memory starting at va 0. Xv6 uses 38 bits of 39 bits. Max address is 2^38 - 1.</p>
-<p>| user text and data | user stack |  heap| trapframe|trampoline|</p>
-<p>0 ------------------------------------------------------------&gt;                              MAXVA</p>
-</li>
-<li>
-<p>Process has kernel states and user states. Kernel states are its pgtbl, kernel stack, run state.</p>
-</li>
-<li>
-<p>A process has a <u>thread</u> of execution that <u>executes the process’s instructions</u>. Thread state (local variables, function call,return address) is stored on the thread’s stacks.</p>
-</li>
-<li>
-<p>A process has two stacks: u stack, k stack.</p>
-</li>
-<li>
-<p>A process makes sys call by <code>ecall</code>, exit k space by <code>sret</code>.</p>
-</li>
+<li>Process has private memory system/address space. An address space contains user memory starting at va 0. Xv6 uses 38 bits of 39 bits. Max address is 2^38 - 1.<br>
+| user text and data | user stack |  heap| trapframe|trampoline|<br>
+0 ------------------------------------------------------------&gt;                              MAXVA</li>
+<li>Process has kernel states and user states. Kernel states are its pgtbl, kernel stack, run state.</li>
+<li>A process has a <u>thread</u> of execution that <u>executes the process’s instructions</u>. Thread state (local variables, function call,return address) is stored on the thread’s stacks.</li>
+<li>A process has two stacks: u stack, k stack.</li>
+<li>A process makes sys call by <code>ecall</code>, exit k space by <code>sret</code>.</li>
 </ul>
 </li>
-<li>
-<p>I/O path</p>
+<li>I/O path
 <ul>
-<li>
-<p>Initialization: console,  vm stuff (page table,process table, trap vector, interrupt handler, device interrupts), fs stuff (buffer cache, inode cache, file table, hard disk)</p>
-</li>
-<li>
-<p>Boot xv6 and start the first process</p>
+<li>Initialization: console,  vm stuff (page table,process table, trap vector, interrupt handler, device interrupts), fs stuff (buffer cache, inode cache, file table, hard disk)</li>
+<li>Boot xv6 and start the first process
 <ul>
-<li>
-<img src="/sg/2022/04/01/os_basics/boot.png" class title="boot">
-</li>
+<li>RISC-V Machine mode -&gt; Supervisor mode; xv6 jumps to kernel space<img src="/sg/2022/04/01/os_basics/boot.png" class title="boot"></li>
 </ul>
 </li>
 </ul>
@@ -422,7 +416,7 @@
 <li><code>satp</code>: supervisor address translation and protection, reserves the <code>pa</code> of page tables.
 <ul>
 <li>
-<img src="/sg/2022/04/01/os_basics/pt.png" class title="pt">
+<img src="/sg/2022/04/01/os_basics/pt.png" class title="pt">   
 </li>
 </ul>
 </li>
@@ -446,21 +440,17 @@
 <li>
 <p>Not directly mapped: high-memory mapping</p>
 <ul>
-<li>
-<p>trampoline page</p>
-</li>
-<li>
-<p>stack pages: have an unmapped guard page with PTE invalid.</p>
-</li>
+<li>trampoline page</li>
+<li>stack pages: have an unmapped guard page with PTE invalid.</li>
 </ul>
 </li>
 <li>
 <p>process address space and kernel address space</p>
-<img src="/sg/2022/04/01/os_basics/vm.png" class title="vm">
+<img src="/sg/2022/04/01/os_basics/vm.png" class title="vm">     
 <ul>
 <li>
 <p>Linux user space<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>:</p>
-<img src="/sg/2022/04/01/os_basics/Screenshot-4834686.png" class title="Screenshot-4834686">
+<img src="/sg/2022/04/01/os_basics/Screenshot-4834686.png" class title="Screenshot-4834686">  
 </li>
 </ul>
 </li>
@@ -479,85 +469,91 @@
 </ul>
 </li>
 </ol>
-<h3><span id="interrupts">Interrupts</span><a href="#interrupts" class="header-anchor">¶</a></h3>
+<h2><span id="traps">Traps</span><a href="#traps" class="header-anchor">¶</a></h2>
+<h3><span id="trap-machanism">Trap machanism</span><a href="#trap-machanism" class="header-anchor">¶</a></h3>
 <ol>
-<li>
-<p>Interrupts are one type of trap. Trap handler recognizes a device interrupt and calls the driver’s interrupt handler.</p>
+<li>What: <code>trap</code> refers to event that mandatorily forces a transfer of control from the execution of ordinary instructions to special code that handles the event. Three kinds of such event are.syscalls, exception and device interrupt.
+<ul>
+<li>syscalls: <code>ecall</code></li>
+<li>exception: u/k illegal instruction, e.g. divide by zero, invalid virtual address</li>
+<li>device interrupt: device signals when r/w req finishes</li>
+</ul>
 </li>
-<li>
-<p>Device drivers execute in two contexts:</p>
+<li>RISC-V machinery:
+<ul>
+<li>The kernel writes address/value to registers to control io path (risc-v detects regs)
+<ul>
+<li><code>stvec</code>, addr of trap handler</li>
+<li><code>sepc</code>, risc-v saves program counter when a trap occurs. <code>sret</code> copies <code>sepc</code> to <code>pc</code> when returned from trap.</li>
+<li><code>scause</code>, risc-v saves the cause of the trap</li>
+<li><code>sscratch</code>, a value at the start of a trap handler (as from scratch)</li>
+<li><code>sstatus</code>, <code>SIE</code> set if interrupts are enabled. <code>SPP</code> tells user/supervisor mode a trap came from and controls what <code>sret</code> returns</li>
+</ul>
+</li>
+<li>The registers related to traps handled in supervisor mode. Xv6 has a similar set of registers for traps handled in machine mode.</li>
+<li>Each CPU has its own set of registers. &gt;=1 CPU may be handling a trap at anytime.</li>
+<li>Procedures of risc-v h/w: if an interrupt -&gt; no, disable SIE -&gt; <code>pc =&gt; sepc</code>, <code>sw SPP =&gt; sstatus</code> -&gt; set scause, su mode -&gt; <code>stvec =&gt; pc</code> -&gt; execute new pc</li>
+</ul>
+</li>
+<li>Trap machanism
 <ul>
 <li>
-<p><code>Top half</code>: run in a process’s kernel thread, read/write()</p>
-</li>
-<li>
-<p><code>Bottom half</code>: interrupt handler copies the input data to buffer and wake up top-half code to do op. It runs in the <code>interrupt context</code> which is also referred to <code>atomic context</code>, unable to block.</p>
-</li>
-<li>
-<p>Linux has opposite names for those two contexts.</p>
+<img src="/sg/2022/04/01/os_basics/trap.png" class title="trap">
 </li>
 </ul>
 </li>
-<li>
-<p>Terms</p>
-<ul>
-<li><code>interrupt context</code> is time-critical that is not associated with processes. Interrupt handler putting one process sleep may let other process blocking therefore it cannot sleep in this context.</li>
-<li><code>process context</code> is the mode of operation the kernel is in while it is executing on behalf of a process (LKD3 Chap7). Process can sleep or invoke the schedulor</li>
-</ul>
-</li>
-<li>
-<p>Driver is programmed by memory mapped I/O.</p>
-</li>
-<li>
-<p>How xv6 displays “$” in console?</p>
-<p>device -&gt; (uart-&gt;interrupt -&gt;) console</p>
-</li>
-<li>
-<p>How xv6 displays “ls” in console?</p>
-<p>key stroke -&gt; keyboard -&gt; (uart input -&gt; merge to byte -&gt; interrupt)-&gt;interrupt handler</p>
-</li>
-<li>
-<p>Riscv interrupts related registers:</p>
-<ul>
-<li>SIE(supervisor interrupt enable),</li>
-<li>SSTATUS(supervisor status)</li>
-<li>SIP(supervisor interrupt pending)</li>
-<li>SCAUSE: means interrupts</li>
-<li>STVEC: program counter of user program that cpu runs when trap/interrupts/page faults occur</li>
-</ul>
-</li>
-<li>
-<p>timer interrupts: to maintain its clock and enable it to switch among processes. Execute in the machine mode.</p>
-<ul>
-<li>CLINT (core-local interruptor)</li>
-<li>time-slice CPU</li>
-</ul>
-</li>
-<li>
-<p>Interrupts have high CPU overhead, ways to reduce the need for interrupts</p>
-<ul>
-<li>single interrupt for a batch of incoming requests</li>
-<li>disable interrupts and check the device for attention: <code>polling</code>, wastes CPU time when the device is mostly idle</li>
-<li>dynamically switch between interrupts and polling</li>
-</ul>
-</li>
-<li>
-<p>Date movement to h/w</p>
-<ul>
-<li>programmed I/O: UART driver, kernel buffer =&gt; user buffer =&gt; h/w, low speed</li>
-<li>DMA (direct memory access): most modern drivers, user-space buffers &lt;=&gt; device hardware, high speed</li>
-</ul>
-</li>
+<li>Traps from user space</li>
+<li>Traps from kernel space</li>
 </ol>
-<h3><span id="page-fault">Page fault</span><a href="#page-fault" class="header-anchor">¶</a></h3>
+<h3><span id="page-fault-exceptions">Page fault exceptions</span><a href="#page-fault-exceptions" class="header-anchor">¶</a></h3>
 <ol>
 <li>lazy allocation</li>
 <li>Copy-on-write</li>
 <li>demand paging</li>
 <li>memory mapped file</li>
 </ol>
-<h2><span id="traps">Traps</span><a href="#traps" class="header-anchor">¶</a></h2>
-<p>k/u</p>
+<h3><span id="device-interrupts">Device interrupts</span><a href="#device-interrupts" class="header-anchor">¶</a></h3>
+<ol>
+<li>Interrupts are one type of trap. Trap handler recognizes a device interrupt and calls the driver’s interrupt handler.</li>
+<li>Device drivers execute in two contexts:
+<ul>
+<li><code>Top half</code>: run in a process’s kernel thread, read/write()</li>
+<li><code>Bottom half</code>: interrupt handler copies the input data to buffer and wake up top-half code to do op. It runs in the <code>interrupt context</code> which is also referred to <code>atomic context</code>, unable to block.</li>
+<li>Linux has opposite names for those two contexts.</li>
+</ul>
+</li>
+<li>Terms
+<ul>
+<li><code>interrupt context</code> is time-critical that is not associated with processes. Interrupt handler putting one process sleep may let other process blocking therefore it cannot sleep in this context.</li>
+<li><code>process context</code> is the mode of operation the kernel is in while it is executing on behalf of a process (LKD3 Chap7). Process can sleep or invoke the schedulor</li>
+</ul>
+</li>
+<li>Driver is programmed by memory mapped I/O.</li>
+<li>How xv6 displays “$” in console?<br>
+device -&gt; (uart-&gt;interrupt -&gt;) console</li>
+<li>How xv6 displays “ls” in console?<br>
+key stroke -&gt; keyboard -&gt; (uart input -&gt; merge to byte -&gt; interrupt)-&gt;interrupt handler</li>
+<li>Riscv interrupts related registers: SIE(supervisor interrupt enable), SSTATUS(supervisor status), SIP(supervisor interrupt pending), SCAUSE: means interrupts, STVEC: program counter of user program that cpu runs when trap/interrupts/page faults occur</li>
+<li>timer interrupts: to maintain its clock and enable it to switch among processes. Execute in the machine mode.
+<ul>
+<li>CLINT (core-local interruptor)</li>
+<li>time-slice CPU</li>
+</ul>
+</li>
+<li>Interrupts have high CPU overhead, ways to reduce the need for interrupts
+<ul>
+<li>single interrupt for a batch of incoming requests</li>
+<li>disable interrupts and check the device for attention: <code>polling</code>, wastes CPU time when the device is mostly idle</li>
+<li>dynamically switch between interrupts and polling</li>
+</ul>
+</li>
+<li>Date movement to h/w
+<ul>
+<li>programmed I/O: UART driver, kernel buffer =&gt; user buffer =&gt; h/w, low speed</li>
+<li>DMA (direct memory access): most modern drivers, user-space buffers &lt;=&gt; device hardware, high speed</li>
+</ul>
+</li>
+</ol>
 <h2><span id="parallelism">Parallelism</span><a href="#parallelism" class="header-anchor">¶</a></h2>
 <h3><span id="lock">Lock</span><a href="#lock" class="header-anchor">¶</a></h3>
 <ol>
@@ -667,16 +663,18 @@
 </ul>
 <h3><span id="case-study-rcu">Case study: RCU</span><a href="#case-study-rcu" class="header-anchor">¶</a></h3>
 <h2><span id="file-systems">File systems</span><a href="#file-systems" class="header-anchor">¶</a></h2>
-<p>xv6 features:</p>
+<p>Design points:</p>
 <ol>
-<li>an on-disk structure represets naming system</li>
+<li>on-disk data structures for dir and files tree</li>
 <li>crash recovery</li>
-<li>coordinate multiple processes</li>
-<li>cache</li>
+<li>coordinate multi-process to maintain invariants</li>
+<li>in-memory cache for fast retrieval of data</li>
 </ol>
+<img src="/sg/2022/04/01/os_basics/Screenshot-6244321.png" class title="A file on disk">
 <h3><span id="case-study-ext3">Case study: ext3</span><a href="#case-study-ext3" class="header-anchor">¶</a></h3>
 <h2><span id="network-stack">Network stack</span><a href="#network-stack" class="header-anchor">¶</a></h2>
 <h2><span id="security">Security</span><a href="#security" class="header-anchor">¶</a></h2>
+<h3><span id="case-study-meltdown">case study: meltdown</span><a href="#case-study-meltdown" class="header-anchor">¶</a></h3>
 <h2><span id="basics">Basics</span><a href="#basics" class="header-anchor">¶</a></h2>
 <h3><span id="c">C</span><a href="#c" class="header-anchor">¶</a></h3>
 <ol>
@@ -977,7 +975,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Design points</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Interfaces</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">Process</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">File descriptor and I&#x2F;O</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.3.</span> <span class="toc-text">Pipe</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.4.</span> <span class="toc-text">Fs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Organization</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Virtual memory techniques</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.1.</span> <span class="toc-text">Page table</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.2.</span> <span class="toc-text">Interrupts</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.3.</span> <span class="toc-text">Page fault</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Traps</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">Parallelism</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.1.</span> <span class="toc-text">Lock</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.2.</span> <span class="toc-text">Threads</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.3.</span> <span class="toc-text">Case study: RCU</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">File systems</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">7.1.</span> <span class="toc-text">Case study: ext3</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">Network stack</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">Security</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">10.</span> <span class="toc-text">Basics</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">10.1.</span> <span class="toc-text">C</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">10.2.</span> <span class="toc-text">RISC-V convention</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">10.3.</span> <span class="toc-text">GDB</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">10.4.</span> <span class="toc-text">Lookup table</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">11.</span> <span class="toc-text">Related readings</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Design points</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Interfaces</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">Process</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">File descriptor and I&#x2F;O</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.3.</span> <span class="toc-text">Pipe</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.4.</span> <span class="toc-text">Fs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Organization</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Virtual memory techniques</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.1.</span> <span class="toc-text">Page table</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Traps</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.1.</span> <span class="toc-text">Trap machanism</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.2.</span> <span class="toc-text">Page fault exceptions</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.3.</span> <span class="toc-text">Device interrupts</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">Parallelism</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.1.</span> <span class="toc-text">Lock</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.2.</span> <span class="toc-text">Threads</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.3.</span> <span class="toc-text">Case study: RCU</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">File systems</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">7.1.</span> <span class="toc-text">Case study: ext3</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">Network stack</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">Security</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.1.</span> <span class="toc-text">case study: meltdown</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">10.</span> <span class="toc-text">Basics</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">10.1.</span> <span class="toc-text">C</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">10.2.</span> <span class="toc-text">RISC-V convention</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">10.3.</span> <span class="toc-text">GDB</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">10.4.</span> <span class="toc-text">Lookup table</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">11.</span> <span class="toc-text">Related readings</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">

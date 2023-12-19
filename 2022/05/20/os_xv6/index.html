@@ -8,14 +8,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
     <meta name="description" content="Lab1 unix utilities  primes find xargs   Lab2 syscalls  trace sysinfo   Lab3 page tables  print pt kernel page table copyin   Lab4 Lab5 Lab6 Lab7 thread  thread_switch uthread barrier   Lab8 lock L">
 <meta property="og:type" content="article">
-<meta property="og:title" content="OS Lab Notes">
+<meta property="og:title" content="&lt;OS Lab Notes">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2022/05/20/os_xv6/index.html">
 <meta property="og:site_name" content="steins gate zero">
 <meta property="og:description" content="Lab1 unix utilities  primes find xargs   Lab2 syscalls  trace sysinfo   Lab3 page tables  print pt kernel page table copyin   Lab4 Lab5 Lab6 Lab7 thread  thread_switch uthread barrier   Lab8 lock L">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/05/20/os_xv6/step-by-step-debugging.png">
-<meta property="article:published_time" content="2022-05-19T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-09-23T09:20:07.705Z">
+<meta property="article:published_time" content="2022-05-19T22:00:00.000Z">
+<meta property="article:modified_time" content="2023-10-14T06:03:44.626Z">
 <meta property="article:author" content="Sam Li">
 <meta property="article:tag" content="lab">
 <meta name="twitter:card" content="summary">
@@ -39,7 +39,7 @@
       
     
     <!-- title -->
-    <title>OS Lab Notes</title>
+    <title>&lt;OS Lab Notes</title>
     <!-- styles -->
     
 <link rel="stylesheet" href="/sg/css/style.css">
@@ -95,21 +95,21 @@
     <div id="share" style="display: none">
       <ul>
   <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://sgzerolc.github.io/sg/2022/05/20/os_xv6/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://sgzerolc.github.io/sg/2022/05/20/os_xv6/&text=OS Lab Notes"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://sgzerolc.github.io/sg/2022/05/20/os_xv6/&title=OS Lab Notes"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sgzerolc.github.io/sg/2022/05/20/os_xv6/&is_video=false&description=OS Lab Notes"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=OS Lab Notes&body=Check out this article: https://sgzerolc.github.io/sg/2022/05/20/os_xv6/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://sgzerolc.github.io/sg/2022/05/20/os_xv6/&title=OS Lab Notes"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://sgzerolc.github.io/sg/2022/05/20/os_xv6/&title=OS Lab Notes"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://sgzerolc.github.io/sg/2022/05/20/os_xv6/&title=OS Lab Notes"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://sgzerolc.github.io/sg/2022/05/20/os_xv6/&title=OS Lab Notes"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://sgzerolc.github.io/sg/2022/05/20/os_xv6/&name=OS Lab Notes&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://sgzerolc.github.io/sg/2022/05/20/os_xv6/&t=OS Lab Notes"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://sgzerolc.github.io/sg/2022/05/20/os_xv6/&text=&lt;OS Lab Notes"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://sgzerolc.github.io/sg/2022/05/20/os_xv6/&title=&lt;OS Lab Notes"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sgzerolc.github.io/sg/2022/05/20/os_xv6/&is_video=false&description=&lt;OS Lab Notes"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=&lt;OS Lab Notes&body=Check out this article: https://sgzerolc.github.io/sg/2022/05/20/os_xv6/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://sgzerolc.github.io/sg/2022/05/20/os_xv6/&title=&lt;OS Lab Notes"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://sgzerolc.github.io/sg/2022/05/20/os_xv6/&title=&lt;OS Lab Notes"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://sgzerolc.github.io/sg/2022/05/20/os_xv6/&title=&lt;OS Lab Notes"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://sgzerolc.github.io/sg/2022/05/20/os_xv6/&title=&lt;OS Lab Notes"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://sgzerolc.github.io/sg/2022/05/20/os_xv6/&name=&lt;OS Lab Notes&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://sgzerolc.github.io/sg/2022/05/20/os_xv6/&t=&lt;OS Lab Notes"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Lab1 unix utilities</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">primes</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">find</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.3.</span> <span class="toc-text">xargs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Lab2 syscalls</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">trace</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">sysinfo</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Lab3 page tables</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.1.</span> <span class="toc-text">print pt</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.2.</span> <span class="toc-text">kernel page table</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.3.</span> <span class="toc-text">copyin</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Lab4</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Lab5</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">Lab6</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">Lab7 thread</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">7.1.</span> <span class="toc-text">thread_switch</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">7.2.</span> <span class="toc-text">uthread</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">7.3.</span> <span class="toc-text">barrier</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">Lab8 lock</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">Lab9 fs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">10.</span> <span class="toc-text">Lab10 mmap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">11.</span> <span class="toc-text">Tool</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">11.1.</span> <span class="toc-text">C</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Lab1 unix utilities</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">primes</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">find</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.3.</span> <span class="toc-text">xargs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Lab2 syscalls</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">trace</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">sysinfo</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Lab3 page tables</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.1.</span> <span class="toc-text">print pt</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.2.</span> <span class="toc-text">kernel page table</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.3.</span> <span class="toc-text">copyin</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Lab4</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Lab5</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">Lab6</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">Lab7 thread</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">7.1.</span> <span class="toc-text">thread_switch</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">7.2.</span> <span class="toc-text">uthread</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">7.3.</span> <span class="toc-text">barrier</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">Lab8 lock</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">Lab9 fs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">10.</span> <span class="toc-text">Lab10 mmap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">11.</span> <span class="toc-text">Lab11</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">12.</span> <span class="toc-text">Tool</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">12.1.</span> <span class="toc-text">C</span></a></li></ol></li></ol>
     </div>
   </span>
 </div>
@@ -121,7 +121,7 @@
   <header>
     
     <h1 class="posttitle" itemprop="name headline">
-        OS Lab Notes
+        &lt;OS Lab Notes
     </h1>
 
 
@@ -133,7 +133,7 @@
       
     <div class="postdate">
       
-        <time datetime="2022-05-19T16:00:00.000Z" itemprop="datePublished">2022-05-20</time>
+        <time datetime="2022-05-19T22:00:00.000Z" itemprop="datePublished">2022-05-20</time>
         
       
     </div>
@@ -194,6 +194,7 @@
 <li><a href="#lab8-lock">Lab8 lock</a></li>
 <li><a href="#lab9-fs">Lab9 fs</a></li>
 <li><a href="#lab10-mmap">Lab10 mmap</a></li>
+<li><a href="#lab11">Lab11</a></li>
 <li><a href="#tool">Tool</a>
 <ul>
 <li><a href="#c">C</a></li>
@@ -218,9 +219,9 @@
 <p>Understood this we could break this lab into two parts, the main part feeds numbers to a function which will produce primes from the numbers. Feeding is in the parent process and function execution is in the child process. In this way, the function can share the parent’s data memory and they can run simultaneously.</p>
 </li>
 <li>
-<p>Fd resources: fds are limited.</p>
-<p><u>Read blocks until it is impossible for new data to arrive (book).</u></p>
-<p>Princle: close file descriptors that a process doesn’t need.</p>
+<p>Fd resources: fds are limited.<br>
+<u>Read blocks until it is impossible for new data to arrive (book).</u><br>
+Princle: close file descriptors that a process doesn’t need.</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (fork() == <span class="number">0</span>) &#123;</span><br><span class="line">    close(<span class="number">0</span>);</span><br><span class="line">    dup(numbers[<span class="number">0</span>]);</span><br><span class="line">    close(numbers[<span class="number">1</span>]);</span><br><span class="line">    getPrimes(numbers);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    close(numbers[<span class="number">0</span>]);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">2</span>; i &lt;= RANGE; ++i) &#123;</span><br><span class="line">        write(numbers[<span class="number">1</span>], &amp;i, <span class="keyword">sizeof</span>(i));</span><br><span class="line">    &#125;</span><br><span class="line">    close(numbers[<span class="number">1</span>]);</span><br><span class="line">    wait(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 <li>
@@ -230,32 +231,26 @@
 <h3><span id="find">find</span><a href="#find" class="header-anchor">¶</a></h3>
 <p>c basics: <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/18481740/pointer-expressions-ptr-ptr-and-ptr">++, pointer</a></p>
 <ul>
-<li>
-<p>value of ++p is p after the increment, value of p++ is p before the increment,</p>
-</li>
-<li>
-<p>*ptr++, *(ptr++), first dereferences the pointer, then increments the pointer<br>
+<li>value of ++p is p after the increment, value of p++ is p before the increment,</li>
+<li>*ptr++, *(ptr++), first dereferences the pointer, then increments the pointer<br>
 *++ptr, first increments the pointer, then dereferences the pointer<br>
-++*ptr, first dereferences the pointer, then increments dereferenced value</p>
-</li>
-<li>
-<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/24853/what-is-the-difference-between-i-and-i">i++ vs ++i</a></p>
-<p>“++i” is known as the pre-increment operator, which increments the value of ‘i’ immediately and returns the incremented value. On the other hand, “i++” is known as the post-increment operator, which increments the value of ‘i’ but returns the original value that ‘i’ held before being incremented (from codeforce answers).</p>
-</li>
+++*ptr, first dereferences the pointer, then increments dereferenced value</li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/24853/what-is-the-difference-between-i-and-i">i++ vs ++i</a><br>
+“++i” is known as the pre-increment operator, which increments the value of ‘i’ immediately and returns the incremented value. On the other hand, “i++” is known as the post-increment operator, which increments the value of ‘i’ but returns the original value that ‘i’ held before being incremented (from codeforce answers).</li>
 </ul>
 <h3><span id="xargs">xargs</span><a href="#xargs" class="header-anchor">¶</a></h3>
 <p>c basics: <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/8824057/pointer-to-string-array-in-c">string array</a></p>
 <ul>
 <li>r/w in low level, read char to lines</li>
-<li>int getline(char line[], int lim); int readlines(char *lineptr[], int maxlines);</li>
+<li>int getline(char line[], int lim); int readlines(char *lineptr[], int maxlines);<br>
+Btw, the “many $” sentence is an explanation not a bug.</li>
 </ul>
-<p>Btw, the “many $” sentence is an explanation not a bug.</p>
 <h2><span id="lab2-syscalls">Lab2 syscalls</span><a href="#lab2-syscalls" class="header-anchor">¶</a></h2>
 <p>Create a syscall in xv6: uapp.c -&gt; user.h -&gt; <s>user/usys.pl</s> usys.S -&gt; <code>ecall</code>| -&gt; syscall -&gt; process</p>
 <h3><span id="trace">trace</span><a href="#trace" class="header-anchor">¶</a></h3>
 <p>Problem: what is trace?</p>
-<p>Trace is a user call helping to track one particular syscall in the execution process.</p>
-<p>Problem: what’s the relation between sys_call and sys_proc?</p>
+<p>Trace is a user call helping to track one particular syscall in the execution process.<br>
+Problem: what’s the relation between sys_call and sys_proc?</p>
 <h3><span id="sysinfo">sysinfo</span><a href="#sysinfo" class="header-anchor">¶</a></h3>
 <p>It’s easy to overlook the spelling error. One bracket makes you question about everything:)</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (copyout(myproc()-&gt;pagetable, addr, (<span class="type">char</span> *)&amp;info, <span class="keyword">sizeof</span>(info) &lt; <span class="number">0</span>); <span class="comment">// off-by-one-bracket error</span></span><br><span class="line"><span class="keyword">if</span> (copyout(myproc()-&gt;pagetable, addr, (<span class="type">char</span> *)&amp;info, <span class="keyword">sizeof</span>(info)) &lt; <span class="number">0</span>);  <span class="comment">// correct one</span></span><br></pre></td></tr></table></figure>
@@ -264,32 +259,26 @@
 <p>You can’t write it without knowing the page table implementation in xv6. At first, it needs a simple and straightforward solution and then optimize it. I was thinking about using iteration or recursion, which took a while.</p>
 <h3><span id="kernel-page-table">kernel page table</span><a href="#kernel-page-table" class="header-anchor">¶</a></h3>
 <ol>
-<li>
-<p>problem: When to start paging? -&gt; page table set up: panic</p>
-</li>
-<li>
-<p>Hypothesis:</p>
+<li>problem: When to start paging? -&gt; page table set up: panic</li>
+<li>Hypothesis:
 <ul>
 <li>Traps due to missing mappings</li>
 <li>scheduler</li>
 </ul>
 </li>
-<li>
-<p>Experiment:</p>
+<li>Experiment:
 <ul>
 <li>modify allocproc: seems correct</li>
 <li>modify scheduler: move around w_satp, errors occur -&gt; scheduler goes wrong</li>
 </ul>
 </li>
-<li>
-<p>Problem 1: how scheduler goes wrong? -&gt; Key point: context switching (thanks to @GuoZhi)</p>
+<li>Problem 1: how scheduler goes wrong? -&gt; Key point: context switching (thanks to @GuoZhi)
 <ul>
 <li><code>pit</code>: Problem 2: why truncate2 OK but truncate3 not? -&gt; We shouldn’t be worried if we can get grade part ok. And it’s time to move to real problem.</li>
 <li>aside: Problem 3: lost some freepages in kernmem</li>
 </ul>
 </li>
-<li>
-<p>Observations:</p>
+<li>Observations:
 <ul>
 <li>Allocproc sets up one process’s kernel stack</li>
 </ul>
@@ -298,24 +287,15 @@
 <h3><span id="copyin">copyin</span><a href="#copyin" class="header-anchor">¶</a></h3>
 <p>Task: add user mappings to user process’s kernel page table</p>
 <ol>
-<li>
-<p>Problem: when user mappings  are changed in <code>exec</code> ? what should be done in <code>exec</code> ?</p>
-</li>
-<li>
-<p>Hypothesis:</p>
-</li>
-<li>
-<p>Experiment:</p>
+<li>Problem: when user mappings  are changed in <code>exec</code> ? what should be done in <code>exec</code> ?</li>
+<li>Hypothesis:</li>
+<li>Experiment:
 <ul>
 <li><code>pit</code>: no need to change copyin_new yet. The task is to make it work.</li>
 </ul>
 </li>
-<li>
-<p>Predictions:</p>
-</li>
-<li>
-<p>Observations:</p>
-</li>
+<li>Predictions:</li>
+<li>Observations:</li>
 </ol>
 <h2><span id="lab4">Lab4</span><a href="#lab4" class="header-anchor">¶</a></h2>
 <h2><span id="lab5">Lab5</span><a href="#lab5" class="header-anchor">¶</a></h2>
@@ -333,6 +313,7 @@ the stack (if needed) by the calling C code while caller-save registers lost val
 <p>…</p>
 <h2><span id="lab9-fs">Lab9 fs</span><a href="#lab9-fs" class="header-anchor">¶</a></h2>
 <h2><span id="lab10-mmap">Lab10 mmap</span><a href="#lab10-mmap" class="header-anchor">¶</a></h2>
+<h2><span id="lab11">Lab11</span><a href="#lab11" class="header-anchor">¶</a></h2>
 <h2><span id="tool">Tool</span><a href="#tool" class="header-anchor">¶</a></h2>
 <h3><span id="c">C</span><a href="#c" class="header-anchor">¶</a></h3>
 <ol>
@@ -378,22 +359,22 @@ the stack (if needed) by the calling C code while caller-save registers lost val
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Lab1 unix utilities</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">primes</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">find</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.3.</span> <span class="toc-text">xargs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Lab2 syscalls</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">trace</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">sysinfo</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Lab3 page tables</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.1.</span> <span class="toc-text">print pt</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.2.</span> <span class="toc-text">kernel page table</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.3.</span> <span class="toc-text">copyin</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Lab4</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Lab5</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">Lab6</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">Lab7 thread</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">7.1.</span> <span class="toc-text">thread_switch</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">7.2.</span> <span class="toc-text">uthread</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">7.3.</span> <span class="toc-text">barrier</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">Lab8 lock</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">Lab9 fs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">10.</span> <span class="toc-text">Lab10 mmap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">11.</span> <span class="toc-text">Tool</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">11.1.</span> <span class="toc-text">C</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Lab1 unix utilities</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">primes</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">find</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.3.</span> <span class="toc-text">xargs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Lab2 syscalls</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">trace</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">sysinfo</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Lab3 page tables</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.1.</span> <span class="toc-text">print pt</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.2.</span> <span class="toc-text">kernel page table</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.3.</span> <span class="toc-text">copyin</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Lab4</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Lab5</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">Lab6</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">Lab7 thread</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">7.1.</span> <span class="toc-text">thread_switch</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">7.2.</span> <span class="toc-text">uthread</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">7.3.</span> <span class="toc-text">barrier</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">Lab8 lock</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">Lab9 fs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">10.</span> <span class="toc-text">Lab10 mmap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">11.</span> <span class="toc-text">Lab11</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">12.</span> <span class="toc-text">Tool</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">12.1.</span> <span class="toc-text">C</span></a></li></ol></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
       <ul>
   <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://sgzerolc.github.io/sg/2022/05/20/os_xv6/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://sgzerolc.github.io/sg/2022/05/20/os_xv6/&text=OS Lab Notes"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://sgzerolc.github.io/sg/2022/05/20/os_xv6/&title=OS Lab Notes"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sgzerolc.github.io/sg/2022/05/20/os_xv6/&is_video=false&description=OS Lab Notes"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=OS Lab Notes&body=Check out this article: https://sgzerolc.github.io/sg/2022/05/20/os_xv6/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://sgzerolc.github.io/sg/2022/05/20/os_xv6/&title=OS Lab Notes"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://sgzerolc.github.io/sg/2022/05/20/os_xv6/&title=OS Lab Notes"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://sgzerolc.github.io/sg/2022/05/20/os_xv6/&title=OS Lab Notes"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://sgzerolc.github.io/sg/2022/05/20/os_xv6/&title=OS Lab Notes"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://sgzerolc.github.io/sg/2022/05/20/os_xv6/&name=OS Lab Notes&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://sgzerolc.github.io/sg/2022/05/20/os_xv6/&t=OS Lab Notes"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://sgzerolc.github.io/sg/2022/05/20/os_xv6/&text=&lt;OS Lab Notes"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://sgzerolc.github.io/sg/2022/05/20/os_xv6/&title=&lt;OS Lab Notes"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sgzerolc.github.io/sg/2022/05/20/os_xv6/&is_video=false&description=&lt;OS Lab Notes"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=&lt;OS Lab Notes&body=Check out this article: https://sgzerolc.github.io/sg/2022/05/20/os_xv6/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://sgzerolc.github.io/sg/2022/05/20/os_xv6/&title=&lt;OS Lab Notes"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://sgzerolc.github.io/sg/2022/05/20/os_xv6/&title=&lt;OS Lab Notes"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://sgzerolc.github.io/sg/2022/05/20/os_xv6/&title=&lt;OS Lab Notes"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://sgzerolc.github.io/sg/2022/05/20/os_xv6/&title=&lt;OS Lab Notes"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://sgzerolc.github.io/sg/2022/05/20/os_xv6/&name=&lt;OS Lab Notes&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://sgzerolc.github.io/sg/2022/05/20/os_xv6/&t=&lt;OS Lab Notes"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
