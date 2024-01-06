@@ -21,7 +21,7 @@
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/04/01/os_basics/Screenshot-6244321.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/04/01/os_basics/Screenshot-9679149.png">
 <meta property="article:published_time" content="2022-03-31T22:00:00.000Z">
-<meta property="article:modified_time" content="2023-10-02T10:59:20.363Z">
+<meta property="article:modified_time" content="2024-01-04T07:18:27.063Z">
 <meta property="article:author" content="Sam Li">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://sgzerolc.github.io/sg/2022/04/01/os_basics/boot.png">
@@ -114,7 +114,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Design points</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Interfaces</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">Process</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">File descriptor and I&#x2F;O</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.3.</span> <span class="toc-text">Pipe</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.4.</span> <span class="toc-text">Fs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Organization</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Virtual memory techniques</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.1.</span> <span class="toc-text">Page table</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Traps</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.1.</span> <span class="toc-text">Trap machanism</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.2.</span> <span class="toc-text">Page fault exceptions</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.3.</span> <span class="toc-text">Device interrupts</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">Parallelism</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.1.</span> <span class="toc-text">Lock</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.2.</span> <span class="toc-text">Threads</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.3.</span> <span class="toc-text">Case study: RCU</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">File systems</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">7.1.</span> <span class="toc-text">Case study: ext3</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">Network stack</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">Security</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.1.</span> <span class="toc-text">case study: meltdown</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">10.</span> <span class="toc-text">Basics</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">10.1.</span> <span class="toc-text">C</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">10.2.</span> <span class="toc-text">RISC-V convention</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">10.3.</span> <span class="toc-text">GDB</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">10.4.</span> <span class="toc-text">Lookup table</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">11.</span> <span class="toc-text">Related readings</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Design points</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Interfaces</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">Process</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">File descriptor and I&#x2F;O</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.3.</span> <span class="toc-text">Pipe</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.4.</span> <span class="toc-text">Fs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Organization</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Virtual memory techniques</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.1.</span> <span class="toc-text">Page table</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Traps</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.1.</span> <span class="toc-text">Trap machanism</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.2.</span> <span class="toc-text">Page fault exceptions</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.3.</span> <span class="toc-text">Device interrupts</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">Parallelism</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.1.</span> <span class="toc-text">Lock</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.2.</span> <span class="toc-text">Threads</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">File systems</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">case study: ext3</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">Network stack</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">10.</span> <span class="toc-text">case study: meltdown</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">11.</span> <span class="toc-text">case study: RCU</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">12.</span> <span class="toc-text">Basics</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">12.1.</span> <span class="toc-text">C</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">12.2.</span> <span class="toc-text">RISC-V convention</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">12.3.</span> <span class="toc-text">GDB</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">12.4.</span> <span class="toc-text">Lookup table</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">13.</span> <span class="toc-text">Related readings</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -187,20 +187,13 @@
 <ul>
 <li><a href="#lock">Lock</a></li>
 <li><a href="#threads">Threads</a></li>
-<li><a href="#case-study-rcu">Case study: RCU</a></li>
 </ul>
 </li>
-<li><a href="#file-systems">File systems</a>
-<ul>
-<li><a href="#case-study-ext3">Case study: ext3</a></li>
-</ul>
-</li>
+<li><a href="#file-systems">File systems</a></li>
+<li><a href="#case-study-ext3">case study: ext3</a></li>
 <li><a href="#network-stack">Network stack</a></li>
-<li><a href="#security">Security</a>
-<ul>
 <li><a href="#case-study-meltdown">case study: meltdown</a></li>
-</ul>
-</li>
+<li><a href="#case-study-rcu">case study: RCU</a></li>
 <li><a href="#basics">Basics</a>
 <ul>
 <li><a href="#c">C</a></li>
@@ -661,7 +654,6 @@ key stroke -&gt; keyboard -&gt; (uart input -&gt; merge to byte -&gt; interrupt)
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># sched:swtch(&amp;p-&gt;context, &amp;mycpu()-&gt;context);</span><br><span class="line">swtch:</span><br><span class="line">        sd ra, 0(a0)</span><br><span class="line">        sd sp, 8(a0) # sw contents of sp, Offset(RegSource)</span><br><span class="line">        ...</span><br><span class="line"></span><br><span class="line">        ld ra, 0(a1) # ld RegDest, Offset(RegSource)</span><br><span class="line">        ld sp, 8(a1)</span><br><span class="line">        ...</span><br><span class="line">        ret</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<h3><span id="case-study-rcu">Case study: RCU</span><a href="#case-study-rcu" class="header-anchor">¶</a></h3>
 <h2><span id="file-systems">File systems</span><a href="#file-systems" class="header-anchor">¶</a></h2>
 <p>Design points:</p>
 <ol>
@@ -671,10 +663,48 @@ key stroke -&gt; keyboard -&gt; (uart input -&gt; merge to byte -&gt; interrupt)
 <li>in-memory cache for fast retrieval of data</li>
 </ol>
 <img src="/sg/2022/04/01/os_basics/Screenshot-6244321.png" class title="A file on disk">
-<h3><span id="case-study-ext3">Case study: ext3</span><a href="#case-study-ext3" class="header-anchor">¶</a></h3>
+<h2><span id="case-study-ext3">case study: ext3</span><a href="#case-study-ext3" class="header-anchor">¶</a></h2>
 <h2><span id="network-stack">Network stack</span><a href="#network-stack" class="header-anchor">¶</a></h2>
-<h2><span id="security">Security</span><a href="#security" class="header-anchor">¶</a></h2>
-<h3><span id="case-study-meltdown">case study: meltdown</span><a href="#case-study-meltdown" class="header-anchor">¶</a></h3>
+<h2><span id="case-study-meltdown">case study: meltdown</span><a href="#case-study-meltdown" class="header-anchor">¶</a></h2>
+<h2><span id="case-study-rcu">case study: RCU</span><a href="#case-study-rcu" class="header-anchor">¶</a></h2>
+<p>Readings:</p>
+<ol>
+<li>RCU Usage In the Linux Kernel: One Decade Later, 2013</li>
+<li><a target="_blank" rel="noopener" href="https://lwn.net/Articles/262464/">https://lwn.net/Articles/262464/</a></li>
+</ol>
+<p>Terms:</p>
+<ol>
+<li>detry, directory entry metadata</li>
+<li>NMI, non maskable interrupts (cannot be disabled)</li>
+<li>type safe memory is memory that keeps its type after being deallocated.</li>
+</ol>
+<p>RCU is faster than other synchronization mechanisms in the kernel by allowing a single updater and multiple readers. It starts from three needs: read while updating, low computation + storage overhead (a few bytes/dentry) and deterministic completion.</p>
+<p>Design:</p>
+<ol>
+<li>It has a read-side critical section and a synchronization section.
+<ul>
+<li>Read_lock, read_unlock: By disabling thread preemption (a thread cannot context switch in the critical section). Can be called many times. -&gt; non-blocking</li>
+<li>call_rcu, synchronize_rcu: wait for the completion of all the previous caller of rcu into the critical section. It does not wait for the caller after synchronize_rcu is invoked.</li>
+</ul>
+</li>
+<li>The design is based on scheduler context switch, maintaining state shared between CPUs.</li>
+<li>Handles compiler and memory reordering (processor) carefully. Assign_pointer, dereference.</li>
+<li>RCU maintains multiple versions of objects and only frees them until all pre-existing critical sections completes.</li>
+</ol>
+<p>Mechanisms:</p>
+<ol>
+<li>publish-subscribe, for insertions</li>
+<li>wait for pre-existing rcu readers to complete, for deletion</li>
+<li>multiple versions of recently updated objects, for reader</li>
+</ol>
+<p>Usages:</p>
+<ol>
+<li>wait for completion. Put a spin_lock around rcu critical section. The NMI sys runs every NMI handler in the critical section.</li>
+<li>reference counting. Users of the data item execute in the critical section. When freeing a data item, use call_rcu to free the memory after no other threads using the data item. It’s efficient for getting rid of updates, memory barriers, atomic operations, etc…</li>
+<li>type safe memory. Reverse page map maps a physical page (page_t) to all the virtual address (anon_vma_t) mappings that include that physical page.   Deallocating a page without waiting for all threads to relinquish the pointer to the page.</li>
+<li>publish-subscribe. Rcu_assign_pointer publishes a pointer and concurrent readers read through rcu_dereference.</li>
+<li>read-write lock alternative. Read in the critical section, write synchronize with other writes using spin locks.</li>
+</ol>
 <h2><span id="basics">Basics</span><a href="#basics" class="header-anchor">¶</a></h2>
 <h3><span id="c">C</span><a href="#c" class="header-anchor">¶</a></h3>
 <ol>
@@ -975,7 +1005,7 @@ key stroke -&gt; keyboard -&gt; (uart input -&gt; merge to byte -&gt; interrupt)
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Design points</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Interfaces</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">Process</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">File descriptor and I&#x2F;O</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.3.</span> <span class="toc-text">Pipe</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.4.</span> <span class="toc-text">Fs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Organization</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Virtual memory techniques</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.1.</span> <span class="toc-text">Page table</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Traps</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.1.</span> <span class="toc-text">Trap machanism</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.2.</span> <span class="toc-text">Page fault exceptions</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.3.</span> <span class="toc-text">Device interrupts</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">Parallelism</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.1.</span> <span class="toc-text">Lock</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.2.</span> <span class="toc-text">Threads</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.3.</span> <span class="toc-text">Case study: RCU</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">File systems</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">7.1.</span> <span class="toc-text">Case study: ext3</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">Network stack</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">Security</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.1.</span> <span class="toc-text">case study: meltdown</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">10.</span> <span class="toc-text">Basics</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">10.1.</span> <span class="toc-text">C</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">10.2.</span> <span class="toc-text">RISC-V convention</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">10.3.</span> <span class="toc-text">GDB</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">10.4.</span> <span class="toc-text">Lookup table</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">11.</span> <span class="toc-text">Related readings</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Design points</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Interfaces</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">Process</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">File descriptor and I&#x2F;O</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.3.</span> <span class="toc-text">Pipe</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.4.</span> <span class="toc-text">Fs</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Organization</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Virtual memory techniques</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.1.</span> <span class="toc-text">Page table</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Traps</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.1.</span> <span class="toc-text">Trap machanism</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.2.</span> <span class="toc-text">Page fault exceptions</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.3.</span> <span class="toc-text">Device interrupts</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">Parallelism</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.1.</span> <span class="toc-text">Lock</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.2.</span> <span class="toc-text">Threads</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">File systems</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">case study: ext3</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">Network stack</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">10.</span> <span class="toc-text">case study: meltdown</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">11.</span> <span class="toc-text">case study: RCU</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">12.</span> <span class="toc-text">Basics</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">12.1.</span> <span class="toc-text">C</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">12.2.</span> <span class="toc-text">RISC-V convention</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">12.3.</span> <span class="toc-text">GDB</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">12.4.</span> <span class="toc-text">Lookup table</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">13.</span> <span class="toc-text">Related readings</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
@@ -1011,7 +1041,7 @@ key stroke -&gt; keyboard -&gt; (uart input -&gt; merge to byte -&gt; interrupt)
     Copyright &copy;
     
     
-    2023
+    2024
     Sam Li
   </div>
 </footer>
