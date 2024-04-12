@@ -18,9 +18,12 @@
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/03/01/recitation_ds/line_score.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/03/01/recitation_ds/scores_read.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/03/01/recitation_ds/state_machine.png">
+<meta property="og:image" content="https://sgzerolc.github.io/sg/2022/03/01/recitation_ds/fig6.png">
+<meta property="og:image" content="https://sgzerolc.github.io/sg/2022/03/01/recitation_ds/fig7.png">
+<meta property="og:image" content="https://sgzerolc.github.io/sg/2022/03/01/recitation_ds/fig10.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/03/01/recitation_ds/fig2.png">
 <meta property="article:published_time" content="2022-02-28T23:00:00.000Z">
-<meta property="article:modified_time" content="2023-08-01T11:17:00.610Z">
+<meta property="article:modified_time" content="2024-04-12T13:51:14.910Z">
 <meta property="article:author" content="Sam Li">
 <meta property="article:tag" content="paper">
 <meta name="twitter:card" content="summary">
@@ -210,7 +213,7 @@
 </blockquote>
 <p>The paper describes four intermediate consistency protocols between strong consistency and eventual consistency, which gives more flexibility while preserving correctness. Giving the example of baseball game, it lists six peoples to use the data store for different purposes. Here, I will give the reasoning process to the table 2.</p>
 <p>The consitency and performance have inverse correlation. In other words, if the data is more consistent, it means the server which updates the data needs to pass on the new data to every other servers. One server crashed would cause the wrong data got transferred. Therefore strong consistency model has excellent consistency and poor performance and vice versa.</p>
-<p>The four intermediate consistency models can get higher performance than strong consistency due to partial correctness of the data. They don’t need the data in every server is consistent at the same time giving the specific applications providing. Bounded staleness has poor availability as the strong consistency for the same reason of requiremet for time. The server can not guarantee the correctness in specific time.</p>
+<p>The four intermediate consistency models can get higher performance than strong consistency due to partial correctness of the data. They don’t need the data in every server is consistent at the same time giving the specific applications providing. Bounded staleness has poor availability as the strong consistency for the same reason of requirement for time. The server can not guarantee the correctness in specific time.</p>
 <ul>
 <li>
 <img src="/sg/2022/03/01/recitation_ds/tradeoffs.png" class title="tradeoffs">
@@ -219,21 +222,27 @@
 <h3><span id="baseball-example">Baseball example</span><a href="#baseball-example" class="header-anchor">¶</a></h3>
 <p>A baseball game example: minimal consistency of read operation in a simple data store(replicated storage systems) containing only two teams’ scores.</p>
 <ol>
-<li>Official scorekeeper: the scorekeeper is the only person to write the data. They need the most updated scores so that strong consistency seems the appropriate one. However they are the only server to write the data and pass on to others. Therefore read my writes would be sufficient.</li>
-<li>umpire: strong consistency. They can’t provide wrong scores because it’s a fair game.</li>
-<li>Radio reporter: They need tell the audience a more updated scores than before. Consistent prefix is not enough because they are using scorekeeper’s data and old scores can emerge later than new ones. Therefore it have to maintain the monotonic reads at the same time. Alternatively, monotonic reads with bounded staleness can achieve the same goal.</li>
-<li>sportswriter: bounded staleness. They need the most updated scores but not in a hurry. So they can wait for the final score at least it is correct one.</li>
-<li>statistician: for one team’s score, they need strong consistency; for one season’s score, they need read my writes for the same reason as scorekeeper.</li>
-<li>stat watcher: eventual consistency. It’s ok to provide out-of-date data.</li>
-</ol>
-<ul>
 <li>
-<img src="/sg/2022/03/01/recitation_ds/line_score.png" class title="line_score">
+<p>Official scorekeeper: the scorekeeper is the only person to write the data. They need the most updated scores so that strong consistency seems the appropriate one. However they are the only server to write the data and pass on to others. Therefore read my writes would be sufficient.</p>
 </li>
 <li>
+<p>umpire: strong consistency. They can’t provide wrong scores because it’s a fair game.</p>
+</li>
+<li>
+<p>Radio reporter: They need tell the audience a more updated scores than before. Consistent prefix is not enough because they are using scorekeeper’s data and old scores can emerge later than new ones. Therefore it have to maintain the monotonic reads at the same time. Alternatively, monotonic reads with bounded staleness can achieve the same goal.</p>
+</li>
+<li>
+<p>sportswriter: bounded staleness. They need the most updated scores but not in a hurry. So they can wait for the final score at least it is correct one.</p>
+</li>
+<li>
+<p>statistician: for one team’s score, they need strong consistency; for one season’s score, they need read my writes for the same reason as scorekeeper.</p>
+</li>
+<li>
+<p>stat watcher: eventual consistency. It’s ok to provide out-of-date data.</p>
+<img src="/sg/2022/03/01/recitation_ds/line_score.png" class title="line_score">
 <img src="/sg/2022/03/01/recitation_ds/scores_read.png" class title="scores_read">
 </li>
-</ul>
+</ol>
 <h3><span id="some-thinking">Some thinking</span><a href="#some-thinking" class="header-anchor">¶</a></h3>
 <ol>
 <li>
@@ -251,15 +260,15 @@
 <p>Raft is a protocol for implementing distributed consensus algorithms so that distributed system can reach agreements having same states. Simply speaking, it’s a way that makes client and its many servers have x = 3 when the client sets x to 3.</p>
 <p>Rules: A Raft cluster has several servers (&gt;=5). A server node has 3 states: follower, candidate, leader. Each node has a log and a state machine.</p>
 <ul>
-<li>state machine of servers
-<ul>
 <li>
+<p>state machine of servers: an election term</p>
 <img src="/sg/2022/03/01/recitation_ds/state_machine.png" class title="state machine">
 </li>
-</ul>
+<li>
+<p>Time is split into <code>terms</code>, like logical clocks in Raft.</p>
 </li>
-<li>Time is split into <code>terms</code>, like logical clocks in Raft.</li>
-<li>Raft servers communicate through RPCs in parallel. Servers retry RPC if they donot receive a response in a timely manner.
+<li>
+<p>Raft servers communicate through RPCs in parallel. Servers retry RPC if they donot receive a response in a timely manner.</p>
 <ul>
 <li>RequestVote RPCs</li>
 <li>AppendEntries RPCs</li>
@@ -267,7 +276,7 @@
 </li>
 </ul>
 <p>Problem 1: a split vote if 2 nodes become candidates at the same time in leader election</p>
-<p>Re-elect until one node becomes leader (receive a <strong>majority</strong> votes). Majority != max.</p>
+<p>Re-elect until one node becomes leader (receive a <strong>majority</strong> of votes. Majority means over a half of members.). Majority != max.</p>
 <p>Problem 2: network partition in log replication</p>
 <p>The system will reach consensus again when the network partition is healed for following reason. When a node sees the higher election term, it will step down, which means to roll back its uncommitted entries and match the new leader’s log.</p>
 <h3><span id="background">Background</span><a href="#background" class="header-anchor">¶</a></h3>
@@ -279,14 +288,14 @@
 <p>Backgroud: Paxos, the previous main-stream consensus algorithms, is hard to understand and complicate to maintain the systems built on top of that.</p>
 </li>
 <li>
-<p>Replicated state machine, a replicated log containing the state machine commands from clients. Consensus algorithms usually have properties: safety (network delay/partition, packet loss, duplication, reordering), availabilty (if the majority of servers in the system is running, the sys can work. The failed ones can work after recovering from state on storage), time irrelevant consistency, <strong>Majority Rules</strong>.</p>
+<p>Replicated state machine, a replicated log containing the state machine commands from clients. Consensus algorithms usually have properties as: safety (network delay/partition, packet loss, duplication, reordering), availabilty (if a majority of servers in the system is running, the sys can work. The failed ones can work after recovering from state on storage), time irrelevant consistency, <strong>Majority Rules</strong>.</p>
 </li>
 <li>
 <p>Why leave Paxos? Error prone, hard to implement/maintain/understand</p>
 <p>(lol a section to describe why Paxos is so hard)</p>
 <ul>
 <li>
-<p>Single-decree decomposition is hard to maintain replicated log where it separates partial logs of the system and them merges them into one in the end. Consensus algorithms should have constraints on the order of commited logs.</p>
+<p>Single-decree decomposition is hard to maintain replicated log where it separates partial logs of the system and then merges them into one in the end. Consensus algorithms should have constraints on the order of commited logs.</p>
 </li>
 <li>
 <p>Big gap between the theory and real systems in multi-Paxos. And correctness is hard to maintain when the system built on top of Paxos eventually produces its own architecture.</p>
@@ -302,12 +311,70 @@
 </li>
 </ol>
 <h3><span id="consensus-algorithms">Consensus algorithms</span><a href="#consensus-algorithms" class="header-anchor">¶</a></h3>
-<p>How Raft works?</p>
-<img src="/sg/2022/03/01/recitation_ds/fig2.png" class title="fig2">
+<p>First, keep in mind that Raft is a protocol to manage replicated logs.</p>
+<p>Problem 1: what is the leader of a Raft cluster? How it works?</p>
+<ol>
+<li>A leader manages the replicated log</li>
+<li>A leader’s tasks
+<ul>
+<li>receives/handles requests from client: client -&gt; leader; client -&gt; follower -&gt; leader</li>
+<li>sends messages to all its followers: replicates its log entries/heartbeat</li>
+</ul>
+</li>
+<li>A follower that receives no communication over a period of time will become a candidate with <code>current_term += 1</code> &amp; state transition.</li>
+<li>Randomized retry approach: Raft randomly chooses election timeouts from a fixed interval (150-300 ms) to reduce the frequency of mulitple servers having timeouts together. It means each candidate has random election timeout. This approach is to solve the availability issues that a ranking systems can not.</li>
+<li>Eventually, after a leader is elected, the log consistency converges due to consistency check of appendEntries RPCs.</li>
+</ol>
+<p>Problem 2: log replication</p>
+<ol>
+<li>A log entry is <strong>committed</strong> when the leader replicates it on a <strong>majoritiy</strong> of the servers.</li>
+<li>A log entry represents a command not the result of a command, which makes preceding entries trackable.</li>
+<li>Consistency check:
+<ul>
+<li>send (i): [entry(i-1)][entry(i)] to server S_i, S_i checks if entry(i-1) in its log and only replicates entry(i) when the check passed.</li>
+<li>if the follower is inconsistent with the leader, the check will find the latest entries that both servers agree and overwrite the following with the leader’s after that point.</li>
+</ul>
+</li>
+<li>A <code>nextIndex</code> approach.</li>
+<li>A leader’s right
+<ul>
+<li>A leader can modify its followers’ log entries.</li>
+<li>A leader can append new entries to its own log (but cannot delete/overwrite its log)</li>
+</ul>
+</li>
+</ol>
+<img src="/sg/2022/03/01/recitation_ds/fig6.png" class title="fig6">
+<p>Operation sequences lead to the failure cases:</p>
+<ol>
+<li>has missing entries<br>
+(a) server a crashed at term 6<br>
+(b) server b crashed at term 4</li>
+<li>has extra uncommitted entries<br>
+(c) server c was the leader for term 6, added serveral entries to its log but only commited some of its entries.<br>
+(d) server d was the leader for term 7, added serveral entries to its log but commited none of its entries.</li>
+<li>has missing entries and extra uncommited entries<br>
+(e) server e was the leader for term 4, added serveral entries to its log but only commited some of its entries. Then it crashed and remained down for several terms.<br>
+(f) &gt; Server f was the leader for term 2, added several entries, then crashed before committing any of them. It restarted quickly and became the leader for term 3, behaved the same as term 2. Then it crashed again and never came back for several terms.<br>
+-&gt; Implies that a server having more entries than other servers in one term could be the leader for that term.<br>
+-&gt; And no entries will get replicated after a server receiving the entries crashed. No entries will get commited after a leader crashed.</li>
+</ol>
+<img src="/sg/2022/03/01/recitation_ds/fig7.png" class title="fig7">
+<p>Problem 3: Why does Raft need a leader?</p>
+<p>Problem 4: Safety measures and restrictions</p>
+<p>Problem 5: failures</p>
+<ol>
+<li>leader crashes: consistency guarantees</li>
+<li>follower/candidate crashes: retry RPCs indefinitely. Supported by idempotent property of Raft RPCs.</li>
+<li>network partition</li>
+</ol>
+<p>Problem 6: cluster membership changes. Operatiosn like replacing disks/servers, changing the degree of replication.</p>
+<img src="/sg/2022/03/01/recitation_ds/fig10.png" class title="fig10">
+<p>Problem 7: log compaction</p>
+<p>Snapshotting in Raft</p>
 <h3><span id="intuition-of-terms">Intuition of terms</span><a href="#intuition-of-terms" class="header-anchor">¶</a></h3>
 <ol>
 <li>
-<p><code>Leader Election</code>: When an election term starts, the candidate sends <code>&quot;VOTE FOR ME&quot;</code> messages to others. If the receiving node hasn’t voted yet in this term then it votes for the candidate and the node resets its <code>election timeout</code>. Once a candidate has a majority of votes it becomes leader and the node resets its election timeout. Once a candidate has a majority of votes it becomes leader. The leader begins sending out <code>Append Entries</code> messages to its followers. Followers then respond to each <code>Append Entries</code> message in <code>heartbeat timeout</code>. This election term will continue until a follower stops receiving heartbeats and becomes a candidate<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup>.</p>
+<p><code>Leader Election</code>: When an election term starts, the candidate sends <code>&quot;VOTE FOR ME&quot;</code> messages to others. If the receiving node hasn’t voted yet in this term then it votes for the candidate and the node resets its <code>election timeout</code>. Once a candidate has a majority of votes it becomes leader and the node resets its election timeout. The leader begins sending out <code>Append Entries</code> messages to its followers. Followers then respond to each <code>Append Entries</code> message in <code>heartbeat timeout</code>. This election term will continue until a follower stops receiving heartbeats and becomes a candidate<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup>.</p>
 </li>
 <li>
 <p><code>Log Replication</code>: Leader notifies its followers the committed entry by replicating all changes to all nodes from it. An entry is committed once a majority of followers acknowledge it and a response is sent to the client.</p>
@@ -329,7 +396,21 @@
 <li>
 <p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Byzantine_fault">Byzantine Fault</a>: a metaphor for untrusted components in systems. Every component can go wrong and it’s hard to infer which one is wrong.</p>
 </li>
+<li>
+<p>An operation is idempotent which means performing the same op multiple times has the same effect as performing it once.</p>
+</li>
+<li>
+<blockquote>
+<p>Availabilty of Raft is the ability of the system to respond to clients in a timely manner.</p>
+</blockquote>
+</li>
+<li>
+<blockquote>
+<p>MTBF, mean time between failures. Typical server MTBFs are several months+</p>
+</blockquote>
+</li>
 </ol>
+<img src="/sg/2022/03/01/recitation_ds/fig2.png" class title="fig2">
 <h3><span id="some-thinking">Some thinking</span><a href="#some-thinking" class="header-anchor">¶</a></h3>
 <ol>
 <li>
@@ -354,7 +435,7 @@
 </li>
 <li id="fn2" class="footnote-item"><p>A <a target="_blank" rel="noopener" href="https://raft.github.io/">visualization</a> of Raft <a href="#fnref2" class="footnote-backref">↩︎</a></p>
 </li>
-<li id="fn3" class="footnote-item"><p>The explanations in the Terms passage come from a visualization of Raft <a href="#fnref3" class="footnote-backref">↩︎</a></p>
+<li id="fn3" class="footnote-item"><p>The explanations of terms come from a visualization of Raft <a href="#fnref3" class="footnote-backref">↩︎</a></p>
 </li>
 </ol>
 </section>
