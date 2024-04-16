@@ -23,7 +23,7 @@
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/03/01/recitation_ds/fig10.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/03/01/recitation_ds/fig2.png">
 <meta property="article:published_time" content="2022-02-28T23:00:00.000Z">
-<meta property="article:modified_time" content="2024-04-12T13:51:14.910Z">
+<meta property="article:modified_time" content="2024-04-15T12:54:59.032Z">
 <meta property="article:author" content="Sam Li">
 <meta property="article:tag" content="paper">
 <meta name="twitter:card" content="summary">
@@ -295,7 +295,7 @@
 <p>(lol a section to describe why Paxos is so hard)</p>
 <ul>
 <li>
-<p>Single-decree decomposition is hard to maintain replicated log where it separates partial logs of the system and then merges them into one in the end. Consensus algorithms should have constraints on the order of commited logs.</p>
+<p>Single-decree decomposition is hard to maintain replicated log where it separates partial logs of the system and then merges them into one in the end. Consensus algorithms should have constraints on the order of committed logs.</p>
 </li>
 <li>
 <p>Big gap between the theory and real systems in multi-Paxos. And correctness is hard to maintain when the system built on top of Paxos eventually produces its own architecture.</p>
@@ -350,13 +350,13 @@
 (a) server a crashed at term 6<br>
 (b) server b crashed at term 4</li>
 <li>has extra uncommitted entries<br>
-(c) server c was the leader for term 6, added serveral entries to its log but only commited some of its entries.<br>
-(d) server d was the leader for term 7, added serveral entries to its log but commited none of its entries.</li>
-<li>has missing entries and extra uncommited entries<br>
-(e) server e was the leader for term 4, added serveral entries to its log but only commited some of its entries. Then it crashed and remained down for several terms.<br>
+(c) server c was the leader for term 6, added serveral entries to its log but only committed some of its entries.<br>
+(d) server d was the leader for term 7, added serveral entries to its log but committed none of its entries.</li>
+<li>has missing entries and extra uncommitted entries<br>
+(e) server e was the leader for term 4, added serveral entries to its log but only committed some of its entries. Then it crashed and remained down for several terms.<br>
 (f) &gt; Server f was the leader for term 2, added several entries, then crashed before committing any of them. It restarted quickly and became the leader for term 3, behaved the same as term 2. Then it crashed again and never came back for several terms.<br>
 -&gt; Implies that a server having more entries than other servers in one term could be the leader for that term.<br>
--&gt; And no entries will get replicated after a server receiving the entries crashed. No entries will get commited after a leader crashed.</li>
+-&gt; And no entries will get replicated after a server receiving the entries crashed. No entries will get committed after a leader crashed.</li>
 </ol>
 <img src="/sg/2022/03/01/recitation_ds/fig7.png" class title="fig7">
 <p>Problem 3: Why does Raft need a leader?</p>
