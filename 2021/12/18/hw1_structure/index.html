@@ -21,7 +21,7 @@
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2021/12/18/hw1_structure/Screenshot-0959596.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2021/12/18/hw1_structure/sc4.png">
 <meta property="article:published_time" content="2021-12-17T23:00:00.000Z">
-<meta property="article:modified_time" content="2023-08-02T07:42:42.839Z">
+<meta property="article:modified_time" content="2024-04-17T20:26:25.439Z">
 <meta property="article:author" content="Sam Li">
 <meta property="article:tag" content="hw">
 <meta name="twitter:card" content="summary">
@@ -322,7 +322,7 @@
 <li>
 <p>Dynamic operation: add or remove items in a binary tree</p>
 <p>problem 2: maintain the tree balance while insertion/deletion</p>
-<p>The logic is that if skew is not in the balance range(-1,0,1) in such condition it changes into (2,-2), we should rebalance the tree. First, we need to detect such conditions, then we should modify that by rebalance(namely, by rotations). After each rebalance operation, we need to update the subtree heigh to calculate update skew. Then we walk up the tree and maintain balance in each recursion step until there is none.</p>
+<p>The logic is that if the skew of node is not in the balance range(-1,0,1) but in the range of (2,-2), we should rebalance the tree. First, we need to detect such conditions. Then we should modify that by rebalance(namely, by rotations). After each rebalance operation, we need to update the subtree height to calculate the updated skew of node. Then we walk up the tree and maintain balance in each recursive step until there is none.</p>
 <ul>
 <li>
 <p>Rotation</p>
@@ -334,13 +334,13 @@
 </ul>
 </li>
 </ul>
-<p>觉得讲义上的insert B before A有点怪</p>
-<p>Problem 3: BST and AVL have nuances in insertion/deletion.</p>
+<p>觉得讲义上的 insert B before A 有点怪</p>
+<p>Problem 3: BST and AVL tree have nuances in insertion/deletion.</p>
 <p>这一点我看错了，我把插入节点的大小搞错了，这两个树结构的差异是由于AVL会维持树结构的平衡。</p>
 <p>BST: deletion: swap down predecessor/successor</p>
 </li>
 </ol>
-<p>the difference between BST and AVL is: AVL maintains balance: AVL will check skew of every node in the traverse order to decide rotation operations; BST mains binary search.(AVL can use binary search as well)</p>
+<p>The difference between BST and AVL is: AVL maintains balance: AVL will check the skew of every node in the traverse order to decide rotation operations; BST maintains binary search.(AVL can use binary search as well)</p>
 <h3><span id="heap">heap</span><a href="#heap" class="header-anchor">¶</a></h3>
 <p>Build heap in linear time:</p>
 <ul>
@@ -408,7 +408,7 @@
 </ul>
 <h3><span id="avl-tree">AVL tree</span><a href="#avl-tree" class="header-anchor">¶</a></h3>
 <p>full binary tree guarantees the height of O(logn)</p>
-<p>Build a AVL tree with fewer nodes as possible -&gt; prove h = O(logn)</p>
+<p>Build an AVL tree with fewer nodes as possible -&gt; prove h = O(logn)</p>
 <p>why rotations -&gt; balance -&gt; tree search</p>
 <p>Rotation:</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">rotateRight(A):</span><br><span class="line">	<span class="comment"># A&#x27;s original parent e; A could be e&#x27;s left/right child =&gt; B</span></span><br><span class="line">	B.p = e</span><br><span class="line">	<span class="keyword">if</span> e.r == A <span class="comment"># pointer comparison</span></span><br><span class="line">		e.r = B</span><br><span class="line">	<span class="keyword">else</span>:</span><br><span class="line">		e.l = B</span><br><span class="line">	<span class="comment"># A&#x27;s original left child B =&gt; A is B&#x27;s right child</span></span><br><span class="line">	B.r = A</span><br><span class="line">	(A.p = B)</span><br><span class="line">	<span class="comment"># B&#x27;s original right child c =&gt; A&#x27;s left child</span></span><br><span class="line">	A.l = c</span><br><span class="line">	(c.p = A)</span><br></pre></td></tr></table></figure>
@@ -469,7 +469,10 @@
 <h2><span id="reminder">Reminder</span><a href="#reminder" class="header-anchor">¶</a></h2>
 <ol>
 <li>
-<p>two-finger algorithm:</p>
+<p>Balance conception: a <strong>skew</strong> of a node is defined as the height of its right subtree minus the height of its left subtree.</p>
+</li>
+<li>
+<p>two-finger algorithm</p>
 </li>
 <li>
 <p>cross linking: by store pointers to another data structures.</p>

@@ -6,19 +6,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="case study: MapReduce 2004 case study: GFS 2003 Primary&#x2F;Backup Replication  terms   case study: VMware FT 2010 Raft  Raft elections log handling Raft persistence client behavior snapshots   case st">
+    <meta name="description" content="Case study: MapReduce 2004 Consistency and linearizability Case study: GFS 2003 Primary&#x2F;Backup Replication Case study: VMware FT 2010  FT design failure handling design alternatives   Verified Prim">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Distributed Systems notes">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2023/07/28/ds_basics/index.html">
 <meta property="og:site_name" content="steins gate zero">
-<meta property="og:description" content="case study: MapReduce 2004 case study: GFS 2003 Primary&#x2F;Backup Replication  terms   case study: VMware FT 2010 Raft  Raft elections log handling Raft persistence client behavior snapshots   case st">
+<meta property="og:description" content="Case study: MapReduce 2004 Consistency and linearizability Case study: GFS 2003 Primary&#x2F;Backup Replication Case study: VMware FT 2010  FT design failure handling design alternatives   Verified Prim">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://sgzerolc.github.io/sg/2023/07/28/ds_basics/Screenshot-0937373.png">
 <meta property="article:published_time" content="2023-07-27T22:00:00.000Z">
-<meta property="article:modified_time" content="2024-02-08T18:47:23.980Z">
+<meta property="article:modified_time" content="2024-06-30T20:59:36.403Z">
 <meta property="article:author" content="Sam Li">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://sgzerolc.github.io/sg/2023/07/28/ds_basics/Screenshot-0937373.png">
     
     
       
@@ -108,7 +106,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">case study: MapReduce 2004</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">case study: GFS 2003</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Primary&#x2F;Backup Replication</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.1.</span> <span class="toc-text">terms</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">case study: VMware FT 2010</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Raft</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.1.</span> <span class="toc-text">Raft elections</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.2.</span> <span class="toc-text">log handling</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.3.</span> <span class="toc-text">Raft persistence</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.4.</span> <span class="toc-text">client behavior</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.5.</span> <span class="toc-text">snapshots</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">case study: ZooKeeper 2010</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">chain replication</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">case study: cr 2004</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">distributed transations</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">10.</span> <span class="toc-text">case study: scalable dfs 1997</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">11.</span> <span class="toc-text">case study: spanner 2012</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">12.</span> <span class="toc-text">case study: optimistic concurrency control 2015</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">13.</span> <span class="toc-text">case study: spark 2012</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">14.</span> <span class="toc-text">case study: scaling memcache at Facebook 2013</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">15.</span> <span class="toc-text">case study: causal consistency 2011</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">16.</span> <span class="toc-text">case study: SUNDR 2004</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Case study: MapReduce 2004</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Consistency and linearizability</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Case study: GFS 2003</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Primary&#x2F;Backup Replication</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Case study: VMware FT 2010</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.1.</span> <span class="toc-text">FT design</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.2.</span> <span class="toc-text">failure handling</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.3.</span> <span class="toc-text">design alternatives</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">Verified Primary&#x2F;Backup</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">case study: Grove 2023</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">Raft</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">Paxos</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -155,34 +153,21 @@
     <div class="toc">
 <!-- toc -->
 <ul>
-<li><a href="#case-study-mapreduce-2004">case study: MapReduce 2004</a></li>
-<li><a href="#case-study-gfs-2003">case study: GFS 2003</a></li>
-<li><a href="#primary-backup-replication">Primary/Backup Replication</a>
+<li><a href="#case-study-mapreduce-2004">Case study: MapReduce 2004</a></li>
+<li><a href="#consistency-and-linearizability">Consistency and linearizability</a></li>
+<li><a href="#case-study-gfs-2003">Case study: GFS 2003</a></li>
+<li><a href="#primary-backup-replication">Primary/Backup Replication</a></li>
+<li><a href="#case-study-vmware-ft-2010">Case study: VMware FT 2010</a>
 <ul>
-<li><a href="#terms">terms</a></li>
+<li><a href="#ft-design">FT design</a></li>
+<li><a href="#failure-handling">failure handling</a></li>
+<li><a href="#design-alternatives">design alternatives</a></li>
 </ul>
 </li>
-<li><a href="#case-study-vmware-ft-2010">case study: VMware FT 2010</a></li>
-<li><a href="#raft">Raft</a>
-<ul>
-<li><a href="#raft-elections">Raft elections</a></li>
-<li><a href="#log-handling">log handling</a></li>
-<li><a href="#raft-persistence">Raft persistence</a></li>
-<li><a href="#client-behavior">client behavior</a></li>
-<li><a href="#snapshots">snapshots</a></li>
-</ul>
-</li>
-<li><a href="#case-study-zookeeper-2010">case study: ZooKeeper 2010</a></li>
-<li><a href="#chain-replication">chain replication</a></li>
-<li><a href="#case-study-cr-2004">case study: cr 2004</a></li>
-<li><a href="#distributed-transations">distributed transations</a></li>
-<li><a href="#case-study-scalable-dfs-1997">case study: scalable dfs 1997</a></li>
-<li><a href="#case-study-spanner-2012">case study: spanner 2012</a></li>
-<li><a href="#case-study-optimistic-concurrency-control-2015">case study: optimistic concurrency control 2015</a></li>
-<li><a href="#case-study-spark-2012">case study: spark 2012</a></li>
-<li><a href="#case-study-scaling-memcache-at-facebook-2013">case study: scaling memcache at Facebook 2013</a></li>
-<li><a href="#case-study-causal-consistency-2011">case study: causal consistency 2011</a></li>
-<li><a href="#case-study-sundr-2004">case study: SUNDR 2004</a></li>
+<li><a href="#verified-primary-backup">Verified Primary/Backup</a></li>
+<li><a href="#case-study-grove-2023">case study: Grove 2023</a></li>
+<li><a href="#raft">Raft</a></li>
+<li><a href="#paxos">Paxos</a></li>
 </ul>
 <!-- tocstop -->
 </div>
@@ -261,8 +246,9 @@
 </ul>
 </li>
 </ul>
-<h2><span id="case-study-mapreduce-2004">case study: MapReduce 2004</span><a href="#case-study-mapreduce-2004" class="header-anchor">¶</a></h2>
-<h2><span id="case-study-gfs-2003">case study: GFS 2003</span><a href="#case-study-gfs-2003" class="header-anchor">¶</a></h2>
+<h2><span id="case-study-mapreduce-2004">Case study: MapReduce 2004</span><a href="#case-study-mapreduce-2004" class="header-anchor">¶</a></h2>
+<h2><span id="consistency-and-linearizability">Consistency and linearizability</span><a href="#consistency-and-linearizability" class="header-anchor">¶</a></h2>
+<h2><span id="case-study-gfs-2003">Case study: GFS 2003</span><a href="#case-study-gfs-2003" class="header-anchor">¶</a></h2>
 <h2><span id="primary-backup-replication">Primary/Backup Replication</span><a href="#primary-backup-replication" class="header-anchor">¶</a></h2>
 <ol>
 <li>One way of providing fault tolerance: Replication.</li>
@@ -272,7 +258,7 @@
 <li>Two main approaches:
 <ul>
 <li>state transfer: primary sends internal memory (state) to backup</li>
-<li>replicated state machine: clients send operations to primary and primary sends those external events to backups. All replicas have deterministic same state as primary if execute the operations in the same order.</li>
+<li>replicated state machine: clients send operations to primary and primary sends those external events to backups. All replicas have deterministic same state as the primary if they execute the operations in the same order.</li>
 </ul>
 </li>
 <li>tradeoffs:
@@ -295,37 +281,141 @@
 <p>Problem 1: At what level do we want replicas to be identical?</p>
 <p>application state: forward op stream, can be efficient. ex: GFS.</p>
 <p>machine level, registers and RAM content: forward machine events (interrupts, DMA, &amp;c), not as efficient. ex: run an existing software without modification</p>
-<h3><span id="terms">terms</span><a href="#terms" class="header-anchor">¶</a></h3>
+<h2><span id="case-study-vmware-ft-2010">Case study: VMware FT 2010</span><a href="#case-study-vmware-ft-2010" class="header-anchor">¶</a></h2>
+<p>Terms:</p>
 <ol>
-<li>fail-stop: if something goes wrong, the computer would stop executing instead of generating incorrect results. Like unplug the powercable out of the server, CPU overheats.</li>
+<li>vm-ft: fault-tolerant virtual machines</li>
+<li>failstop: if something goes wrong, the computer would stop executing instead of generating incorrect results. E.g. unplug the power cable out of the server, CPU overheats.</li>
+<li>failover: if something goes wrong, the computer will be replaced by another one.</li>
+<li>virtual lockstep</li>
+<li>mode: logging, replaying, normal</li>
+<li>a deferred-execution context (similar to a tasklet in Linux) is a mechanism for deferring work to be executed later at a more appropriate time</li>
 </ol>
-<h2><span id="case-study-vmware-ft-2010">case study: VMware FT 2010</span><a href="#case-study-vmware-ft-2010" class="header-anchor">¶</a></h2>
-<p>Problem 0: How does VM-FT handle network partitions? That is, is it possible that if the primary and the backup end up in different network partitions that the backup will become a primary too and the system will run with two primaries?</p>
-<p>There will be only one primary executing in network partitions. The primary VM may not send an output to the external world until the backup receives and acknowledges the log entry associated with the operation. When network partitions happen, the primary cannot get a response from the backup and the backup cannot get a heartbeat from the primary. Either failures occur to the servers or network connectivity is lost.</p>
-<p>VM-FT hence performs an atomic op test-and-set on shared storage that stores the virtual disks of vms when the primary or the backup wants to go live.If the op suceeds, then the vm is allowed to go live. If not, that means a vm must have been live, so the current vm halts itself. If the vm cannot access shared storage, it just waits until it can.</p>
-<img src="/sg/2023/07/28/ds_basics/Screenshot-0937373.png" class title="Screenshot-0937373">
+<h3><span id="ft-design">FT design</span><a href="#ft-design" class="header-anchor">¶</a></h3>
+<ol>
+<li>Synchronization of primary and backup VMs is based on the technique of deterministic replay. Briefly talking, deterministic replay transfers the non-deterministic operations/events to the log entries of the file. The backup can read from the file and replay execution of the primary.
+<ul>
+<li>non-determinism of events and operations in VMs: virtual interrupts, reading the clock cycle counter of the processor</li>
+<li>question: non-deterministic input (capture and apply) -&gt; deterministic execution + performance unaffected (at instruction level)</li>
+<li>However, that technique for VMware vSphere platform is introduced in 2007.</li>
+</ul>
+</li>
+<li>FT protocol: No data is lost if a backup takes over after the primary fails.
+<ul>
+<li>Output requirement &lt;- output rule: The backup is supposed to execute consistently as the primary after it takes over the primary VM. The rule to guarantee that is two phase commit. The primary delays sending the output until the backup VM has received and acknowledged the log entries of the output operations.</li>
+<li>Can tolerate lost packets: incoming packets may be dropped during failure of the primary due to reasons unrelated to that failure.</li>
+</ul>
+</li>
+</ol>
+<h3><span id="failure-handling">failure handling</span><a href="#failure-handling" class="header-anchor">¶</a></h3>
+<ol>
+<li>
+<p>context: time lag on the execution of the backup VM. To control the time lag to be less than 100ms and no greater than 1s, the primary VM’s CPU limit is managed to increase/decrease to occupy/spare more execution time.</p>
+</li>
+<li>
+<p>failure detection: use heartbeating (UDP) to monitor the traffic on the logging channel that connects primary and backup. A timeout in the flow of log entries and acknowledgements is detected as a failure.</p>
+</li>
+<li>
+<p>split-brain problem: solution: (requirement) only one VM (primary or backup) takes over the execution.</p>
+<blockquote class="colorquote blue"><p>Problem 0: How does VM-FT handle network partitions? That is, is it possible that if the primary and the backup end up in different network partitions that the backup will become a primary too and the system will run with two primaries?</p>
+</blockquote>
+<p>There will be only one VM executing during network partitions. The primary VM delays sending outputs to the external world until the backup receives and acknowledges the log entries sent by it. When network partitions occur, the primary and backup VMs lost information of each other. The failure whether caused by network connection or VM faults is unknown.</p>
+<p>VM-FT hence performs an atomic op test-and-set on shared storage that stores the virtual disks of VMs when the primary or the backup wants to go live. If the op succeeds, then the VM is allowed to go live. If not, that means a VM must have been live, so the current VM halts itself. If the VM cannot access shared storage, it waits until it can.</p>
+</li>
+<li>
+<p>Start a new backup on another host: (primary, backup) = (P1, B1) -&gt; (P1 is down, B1 takes over) -&gt; (B1, ?) -&gt; (B1, B2)</p>
+<ul>
+<li>Based on VMware VMotion: migration of a running VM from one server to another server within one second.</li>
+<li>Modified FT VMotion clones a VM to a remote host rather than migrating it within minutes or unnoticeable interruption.</li>
+<li>Simplified steps: the mode of B1, B2: (logging, replaying) -&gt; choose a server to run B2: cluster service decides it -&gt; cloning…</li>
+</ul>
+</li>
+<li>
+<p>To eliminate non-determinism</p>
+<ul>
+<li>
+<p>on disk IO issues:</p>
+<ul>
+<li>parallel disk IOs try to access the same location on the shared storage -&gt; detect IO races and make it sequential</li>
+<li>a disk op races with an application op when they are reading the same memory block at the same time -&gt;  MMU protection on pages - traps - (too expensive) =&gt; bounce buffers (cheaper) to read/write from/at</li>
+<li>when failures happen, no way to find out the IOs issuing during that time are completed or not. -&gt; reissue the pending IOs</li>
+</ul>
+</li>
+<li>
+<p>network IO issues: async updates to a VM’s state while executing ?-&gt; VM traps and interrupts + delaying the sending packets-&gt; performance challenges</p>
+</li>
+</ul>
+</li>
+</ol>
+<p>Aside: <s>Ignored: operations on VM-FT</s></p>
+<h3><span id="design-alternatives">design alternatives</span><a href="#design-alternatives" class="header-anchor">¶</a></h3>
+<p>non-shared storage vs shared storage</p>
+<p>advantages:</p>
+<ol>
+<li>no delaying disk writes for the primary VM</li>
+<li>adds availability when the primary and backup VMs are far apart</li>
+</ol>
+<p>disadvantages:</p>
+<ol>
+<li>need the alternative to handle network partition</li>
+<li>need to sync disks of VMs</li>
+</ol>
+<h2><span id="verified-primary-backup">Verified Primary/Backup</span><a href="#verified-primary-backup" class="header-anchor">¶</a></h2>
+<h2><span id="case-study-grove-2023">case study: Grove 2023</span><a href="#case-study-grove-2023" class="header-anchor">¶</a></h2>
 <h2><span id="raft">Raft</span><a href="#raft" class="header-anchor">¶</a></h2>
-<p>Readings:</p>
+<blockquote class="colorquote blue"><p>Problem 1: Suppose we have the scenario shown in the Raft paper’s Figure 7: a cluster of seven servers, with the log contents shown. The first server crashes (the one at the top of the figure), and cannot be contacted. A leader election ensues. For each of the servers marked (a), (d), and (f), could that server be elected? If yes, which servers would vote for it? If no, what specific Raft mechanism(s) would prevent it from being elected?</p>
+</blockquote>
+<blockquote class="colorquote blue"><p>Problem 2: Could a received InstallSnapshot RPC cause the state machine to go backwards in time? That is, could step 8 in Figure 13 cause the state machine to be reset so that it reflects fewer executed operations? If yes, explain how this could happen. If no, explain why it can’t happen.</p>
+</blockquote>
+<h2><span id="paxos">Paxos</span><a href="#paxos" class="header-anchor">¶</a></h2>
+<p>Assumptions: non-Byzantine failures. Allows failures of missing messages and unordered requests.</p>
+<p>P1. An acceptor must accept the first proposal that it receives.</p>
+<p>For the acceptance of majority, one acceptor must accecpt &gt;= 1 proposals. Assign number to the proposal as (seq_number, value).</p>
+<p>A value is chosen only when it is accepted by a majority of acceptors. -&gt; A value is chosen only when the proposal is chosen.</p>
+<p>If multiple proposals are chosen, then it is guaranteed that all chosen proposals have the same value.</p>
+<p>P2. If a proposal with value v is chosen, then every higher-numbered proposal <u>that is chosen</u> has value v.<br>
+-&gt; 2a. accepted by any acceptor<br>
+-&gt; 2b. issued by any proposer<br>
+-&gt; 2c. For any v and n, if a proposal(n, v) is issued, then there is a set S consisting of a majority of acceptors such that either (a) no acceptor in S has accepted any proposal numbered less than n, or (b) v is the value of the highest-numbered proposal among all proposals numbered less than n accepted by the acceptors in S.</p>
+<p>To prove 2c, the proposer (n, v) controls future acceptance by <strong>requesting a promise from acceptors that no more such acceptances of proposals numbered less than n</strong>.</p>
+<p>Proposer’s algorithm:<br>
+(1) a <code>prepare</code> req<br>
+A proposer send a prososal (n)  and demands its acceptors to respond with:</p>
 <ol>
-<li>Raft (2014): In Search of an Understandable Consensus Algorithm (Extended Version)</li>
+<li>a promise never again to agree a proposal numbered less than n</li>
+<li>the proposal with the highest number less than n that it has accepted (previous accepted value), if any.</li>
 </ol>
-<h3><span id="raft-elections">Raft elections</span><a href="#raft-elections" class="header-anchor">¶</a></h3>
-<h3><span id="log-handling">log handling</span><a href="#log-handling" class="header-anchor">¶</a></h3>
-<h3><span id="raft-persistence">Raft persistence</span><a href="#raft-persistence" class="header-anchor">¶</a></h3>
-<h3><span id="client-behavior">client behavior</span><a href="#client-behavior" class="header-anchor">¶</a></h3>
-<h3><span id="snapshots">snapshots</span><a href="#snapshots" class="header-anchor">¶</a></h3>
-<h2><span id="case-study-zookeeper-2010">case study: ZooKeeper 2010</span><a href="#case-study-zookeeper-2010" class="header-anchor">¶</a></h2>
-<p>case study:</p>
-<h2><span id="chain-replication">chain replication</span><a href="#chain-replication" class="header-anchor">¶</a></h2>
-<h2><span id="case-study-cr-2004">case study: cr 2004</span><a href="#case-study-cr-2004" class="header-anchor">¶</a></h2>
-<h2><span id="distributed-transations">distributed transations</span><a href="#distributed-transations" class="header-anchor">¶</a></h2>
-<h2><span id="case-study-scalable-dfs-1997">case study: scalable dfs 1997</span><a href="#case-study-scalable-dfs-1997" class="header-anchor">¶</a></h2>
-<h2><span id="case-study-spanner-2012">case study: spanner 2012</span><a href="#case-study-spanner-2012" class="header-anchor">¶</a></h2>
-<h2><span id="case-study-optimistic-concurrency-control-2015">case study: optimistic concurrency control 2015</span><a href="#case-study-optimistic-concurrency-control-2015" class="header-anchor">¶</a></h2>
-<h2><span id="case-study-spark-2012">case study: spark 2012</span><a href="#case-study-spark-2012" class="header-anchor">¶</a></h2>
-<h2><span id="case-study-scaling-memcache-at-facebook-2013">case study: scaling memcache at Facebook 2013</span><a href="#case-study-scaling-memcache-at-facebook-2013" class="header-anchor">¶</a></h2>
-<h2><span id="case-study-causal-consistency-2011">case study: causal consistency 2011</span><a href="#case-study-causal-consistency-2011" class="header-anchor">¶</a></h2>
-<h2><span id="case-study-sundr-2004">case study: SUNDR 2004</span><a href="#case-study-sundr-2004" class="header-anchor">¶</a></h2>
+<p>After the proposer gets the responses from a majority of the acceptors, it is getting into phase 2.</p>
+<p>(2) an <code>accept</code> req, sharing the same set of acceptors as phase-1.<br>
+The proposer issues a proposal (n, v) where v is the value either the highest-numbered proposal among the responses or the any one selected by the proposer if reported no proposals.</p>
+<p>P1a. An acceptor can accept a proposal numbered n iff it has not responded to a prepare request having a number greater than n.</p>
+<p>Phase 1:<br>
+(1) proposer: sends a prepare req (n)<br>
+(2) acceptor: responds the proposal(n, v) or null</p>
+<p>Phase 2:<br>
+(1) proposer: sends an accept req (n, v) to the same majority group of acceptors<br>
+(2) acceptor: accepts (n, v) unless there are prepare requests numbered greater than n.</p>
+<p>Optimizations:</p>
+<ol>
+<li>acceptors ignore the prepare requests numbered less than its accepted request number.</li>
+<li>acceptors notify the proposers the highest number of its prepare requests so that proposers can drop the proposals with lower numbered req.</li>
+</ol>
+<p>Phase 3: learner: the acceptors can respond their acceptances to some set of distinguished learners.</p>
+<p># of distinguished learners^, reliability^ &amp; communication complexity^.</p>
+<p>Termination policy: a distinguished proposer must be selected as the only one to issue proposals. A reliable algorithm for electing a proposer must use either randomness or real time (timeouts).</p>
+<p>implementation:</p>
+<p>Paxos chooses a leader to perform the role of the distinguished proposer and the distinguished learner.</p>
+<p>For persistence, an acceptor records its response in storage before sending. And each proposer keeps the highest-numbered proposal in storage before issuing.</p>
+<p>state machine: ???</p>
+<blockquote class="colorquote blue"><p>Suppose that the acceptors are <em>A</em>, <em>B</em>, and <em>C</em>. <em>A</em> and <em>B</em> are also proposers. How does Paxos ensure that the following sequence of events can’t happen? What actually happens, and which value is ultimately chosen?</p>
+<ol>
+<li><em>A</em> sends prepare requests with proposal number 1, and gets responses from <em>A</em>, <em>B</em>, and <em>C</em>.</li>
+<li><em>A</em> sends <code>accept(1, &quot;foo&quot;)</code> to <em>A</em> and <em>C</em> and gets responses from both. Because a majority accepted, <em>A</em> thinks that <code>&quot;foo&quot;</code> has been chosen. However, <em>A</em> crashes before sending an <code>accept</code> to <em>B</em>.</li>
+<li><em>B</em> sends prepare messages with proposal number 2, and gets responses from <em>B</em> and <em>C</em>.</li>
+<li><em>B</em> sends <code>accept(2, &quot;bar&quot;)</code> messages to <em>B</em> and <em>C</em> and gets responses from both, so <em>B</em> thinks that <code>&quot;bar&quot;</code> has been chosen.</li>
+</ol>
+</blockquote>
+<p>After step 2, B and C have had the prepare message from A which is #1. After step 3, B would get response from C with value “foo” and gets null from B. At step 4, B will not send accecpt(2, “bar”) but (2, “foo”).</p>
 
   </div>
 </article>
@@ -353,7 +443,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">case study: MapReduce 2004</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">case study: GFS 2003</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Primary&#x2F;Backup Replication</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.1.</span> <span class="toc-text">terms</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">case study: VMware FT 2010</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Raft</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.1.</span> <span class="toc-text">Raft elections</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.2.</span> <span class="toc-text">log handling</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.3.</span> <span class="toc-text">Raft persistence</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.4.</span> <span class="toc-text">client behavior</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.5.</span> <span class="toc-text">snapshots</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">case study: ZooKeeper 2010</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">chain replication</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">case study: cr 2004</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">distributed transations</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">10.</span> <span class="toc-text">case study: scalable dfs 1997</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">11.</span> <span class="toc-text">case study: spanner 2012</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">12.</span> <span class="toc-text">case study: optimistic concurrency control 2015</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">13.</span> <span class="toc-text">case study: spark 2012</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">14.</span> <span class="toc-text">case study: scaling memcache at Facebook 2013</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">15.</span> <span class="toc-text">case study: causal consistency 2011</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">16.</span> <span class="toc-text">case study: SUNDR 2004</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Case study: MapReduce 2004</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Consistency and linearizability</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Case study: GFS 2003</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Primary&#x2F;Backup Replication</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Case study: VMware FT 2010</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.1.</span> <span class="toc-text">FT design</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.2.</span> <span class="toc-text">failure handling</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.3.</span> <span class="toc-text">design alternatives</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">Verified Primary&#x2F;Backup</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">case study: Grove 2023</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">Raft</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">Paxos</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">

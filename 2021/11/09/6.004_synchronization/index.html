@@ -6,17 +6,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="20 concurrency &amp; synchronization  Synchronous Communication in producer-consumer model   21 system-level communication  communication channel   22 parallel processing    20 concurrency &amp; sy">
+    <meta name="description" content="20 concurrency &amp; synchronization  Synchronous Communication in producer-consumer model   21 system-level communication  communication channel      20 concurrency &amp; synchronization¶ 前言：翻了一下以">
 <meta property="og:type" content="article">
 <meta property="og:title" content="5 synchronization">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2021/11/09/6.004_synchronization/index.html">
 <meta property="og:site_name" content="steins gate zero">
-<meta property="og:description" content="20 concurrency &amp; synchronization  Synchronous Communication in producer-consumer model   21 system-level communication  communication channel   22 parallel processing    20 concurrency &amp; sy">
+<meta property="og:description" content="20 concurrency &amp; synchronization  Synchronous Communication in producer-consumer model   21 system-level communication  communication channel      20 concurrency &amp; synchronization¶ 前言：翻了一下以">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2021/11/09/6.004_synchronization/sc1.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2021/11/09/6.004_synchronization/sc2.png">
 <meta property="article:published_time" content="2021-11-08T23:00:00.000Z">
-<meta property="article:modified_time" content="2023-07-19T03:21:44.012Z">
+<meta property="article:modified_time" content="2024-06-30T21:09:30.061Z">
 <meta property="article:author" content="Sam Li">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://sgzerolc.github.io/sg/2021/11/09/6.004_synchronization/sc1.png">
@@ -109,7 +109,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">20 concurrency &amp; synchronization</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">Synchronous Communication in producer-consumer model</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">21 system-level communication</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">communication channel</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">22 parallel processing</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">20 concurrency &amp; synchronization</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">Synchronous Communication in producer-consumer model</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">21 system-level communication</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">communication channel</span></a></li></ol></li></ol>
     </div>
   </span>
 </div>
@@ -166,7 +166,6 @@
 <li><a href="#communication-channel">communication channel</a></li>
 </ul>
 </li>
-<li><a href="#22-parallel-processing">22 parallel processing</a></li>
 </ul>
 <!-- tocstop -->
 </div>
@@ -263,8 +262,6 @@ s = s + 1 (one waiting thread may now be able to proceed)</p>
 <h3><span id="communication-channel">communication channel</span><a href="#communication-channel" class="header-anchor">¶</a></h3>
 <p>fact: the synchronous multi-signal channels of earlier systems -&gt; asynchronous point-to-point channels nowadays</p>
 <p>problem 1 : how hard can it be to build a <strong>communication channel</strong>?</p>
-<h2><span id="22-parallel-processing">22 parallel processing</span><a href="#22-parallel-processing" class="header-anchor">¶</a></h2>
-<p>CSI, pipeline, date-parallel, cache coherence</p>
 
   </div>
 </article>
@@ -292,7 +289,7 @@ s = s + 1 (one waiting thread may now be able to proceed)</p>
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">20 concurrency &amp; synchronization</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">Synchronous Communication in producer-consumer model</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">21 system-level communication</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">communication channel</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">22 parallel processing</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">20 concurrency &amp; synchronization</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">Synchronous Communication in producer-consumer model</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">21 system-level communication</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">communication channel</span></a></li></ol></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">

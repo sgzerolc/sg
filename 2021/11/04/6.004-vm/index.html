@@ -21,7 +21,7 @@
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2021/11/04/6.004-vm/sc6.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2021/11/04/6.004-vm/sc7.png">
 <meta property="article:published_time" content="2021-11-03T23:00:00.000Z">
-<meta property="article:modified_time" content="2023-07-19T03:21:47.807Z">
+<meta property="article:modified_time" content="2024-06-30T21:09:04.506Z">
 <meta property="article:author" content="Sam Li">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://sgzerolc.github.io/sg/2021/11/04/6.004-vm/sc1.png">
@@ -649,7 +649,7 @@
 <p>Keyboard handler doesn’t complete until 3 ms after its request was received.</p>
 <p>由于只要有优先级高于键盘的请求，就必须先执行那个程序。所以在实时系统中用ddl作为约束而不是延迟时间的长短。</p>
 <p>面临的问题：当键盘ddl在3ms之前时，强优先系统仍然无法达到实时条件的限制，这时说明在紧张的ddl下没有足够的cpu周期达到对服务的重复要求。</p>
-<img src="/sg/2021/11/04/6.004-vm/sc7.png" class title="截屏2021-11-04 下午5.37.03">
+<img src="/sg/2021/11/04/6.004-vm/sc7.png" class title="sc7">
 <p>calculations of recurring interrupts</p>
 <ul>
 <li>

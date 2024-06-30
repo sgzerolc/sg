@@ -14,7 +14,7 @@
 <meta property="og:description" content="Procedures as building blocks Recursion Procedural abstraction Data abstraction Symbols Mutation and the environment model  Data mutation environment model   Interpretation and evaluation  interpre">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-10-02T22:00:00.000Z">
-<meta property="article:modified_time" content="2023-10-03T07:44:16.321Z">
+<meta property="article:modified_time" content="2024-06-30T20:55:51.139Z">
 <meta property="article:author" content="Sam Li">
 <meta name="twitter:card" content="summary">
     
@@ -106,7 +106,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Procedures as building blocks</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Recursion</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Procedural abstraction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Data abstraction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Symbols</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">Mutation and the environment model</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.1.</span> <span class="toc-text">Data mutation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.2.</span> <span class="toc-text">environment model</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">Interpretation and evaluation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">7.1.</span> <span class="toc-text">interpretation and interpreter</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">Debugging</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">Language design and implementation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">10.</span> <span class="toc-text">Continuations</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">11.</span> <span class="toc-text">Lazy evaluation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">12.</span> <span class="toc-text">Streams</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">13.</span> <span class="toc-text">Concurrency</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">14.</span> <span class="toc-text">Garbage collection</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">15.</span> <span class="toc-text">6.001 in perspective</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">16.</span> <span class="toc-text">Lambda Calculus</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Procedures as building blocks</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Recursion</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Procedural abstraction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Data abstraction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Symbols</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">Mutation and the environment model</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.1.</span> <span class="toc-text">Data mutation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.2.</span> <span class="toc-text">environment model</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">Interpretation and evaluation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">7.1.</span> <span class="toc-text">interpretation and interpreter</span></a></li></ol></li></ol>
     </div>
   </span>
 </div>
@@ -169,15 +169,6 @@
 <li><a href="#interpretation-and-interpreter">interpretation and interpreter</a></li>
 </ul>
 </li>
-<li><a href="#debugging">Debugging</a></li>
-<li><a href="#language-design-and-implementation">Language design and implementation</a></li>
-<li><a href="#continuations">Continuations</a></li>
-<li><a href="#lazy-evaluation">Lazy evaluation</a></li>
-<li><a href="#streams">Streams</a></li>
-<li><a href="#concurrency">Concurrency</a></li>
-<li><a href="#garbage-collection">Garbage collection</a></li>
-<li><a href="#6-001-in-perspective">6.001 in perspective</a></li>
-<li><a href="#lambda-calculus">Lambda Calculus</a></li>
 </ul>
 <!-- tocstop -->
 </div>
@@ -428,15 +419,6 @@
 </ul>
 </li>
 </ul>
-<h2><span id="debugging">Debugging</span><a href="#debugging" class="header-anchor">¶</a></h2>
-<h2><span id="language-design-and-implementation">Language design and implementation</span><a href="#language-design-and-implementation" class="header-anchor">¶</a></h2>
-<h2><span id="continuations">Continuations</span><a href="#continuations" class="header-anchor">¶</a></h2>
-<h2><span id="lazy-evaluation">Lazy evaluation</span><a href="#lazy-evaluation" class="header-anchor">¶</a></h2>
-<h2><span id="streams">Streams</span><a href="#streams" class="header-anchor">¶</a></h2>
-<h2><span id="concurrency">Concurrency</span><a href="#concurrency" class="header-anchor">¶</a></h2>
-<h2><span id="garbage-collection">Garbage collection</span><a href="#garbage-collection" class="header-anchor">¶</a></h2>
-<h2><span id="6-001-in-perspective">6.001 in perspective</span><a href="#6-001-in-perspective" class="header-anchor">¶</a></h2>
-<h2><span id="lambda-calculus">Lambda Calculus</span><a href="#lambda-calculus" class="header-anchor">¶</a></h2>
 
   </div>
 </article>
@@ -464,7 +446,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Procedures as building blocks</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Recursion</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Procedural abstraction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Data abstraction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Symbols</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">Mutation and the environment model</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.1.</span> <span class="toc-text">Data mutation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.2.</span> <span class="toc-text">environment model</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">Interpretation and evaluation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">7.1.</span> <span class="toc-text">interpretation and interpreter</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">Debugging</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">Language design and implementation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">10.</span> <span class="toc-text">Continuations</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">11.</span> <span class="toc-text">Lazy evaluation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">12.</span> <span class="toc-text">Streams</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">13.</span> <span class="toc-text">Concurrency</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">14.</span> <span class="toc-text">Garbage collection</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">15.</span> <span class="toc-text">6.001 in perspective</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">16.</span> <span class="toc-text">Lambda Calculus</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Procedures as building blocks</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Recursion</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Procedural abstraction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Data abstraction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Symbols</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">Mutation and the environment model</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.1.</span> <span class="toc-text">Data mutation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">6.2.</span> <span class="toc-text">environment model</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">Interpretation and evaluation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">7.1.</span> <span class="toc-text">interpretation and interpreter</span></a></li></ol></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">

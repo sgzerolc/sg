@@ -6,15 +6,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="9 Pipelining 10 Design Tradeoffs in Sequential Circuits 11 RISCV-Processor 12 Pipelined Processors 13 Data and Control Hazards in Pipelined Processors 14 the memory hierarchy 15 Cache  Direct-mappe">
+    <meta name="description" content="15 Cache  Direct-mapped cache problem: conflict misses N-way set-associative cache &#x3D; N DM cache Associativity implies choices Write policy      15 Cache¶ Goal: minimize the average memory access ti">
 <meta property="og:type" content="article">
 <meta property="og:title" content="3 processors">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2021/12/31/6.004_processor/index.html">
 <meta property="og:site_name" content="steins gate zero">
-<meta property="og:description" content="9 Pipelining 10 Design Tradeoffs in Sequential Circuits 11 RISCV-Processor 12 Pipelined Processors 13 Data and Control Hazards in Pipelined Processors 14 the memory hierarchy 15 Cache  Direct-mappe">
+<meta property="og:description" content="15 Cache  Direct-mapped cache problem: conflict misses N-way set-associative cache &#x3D; N DM cache Associativity implies choices Write policy      15 Cache¶ Goal: minimize the average memory access ti">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-12-30T23:00:00.000Z">
-<meta property="article:modified_time" content="2023-09-26T12:21:32.831Z">
+<meta property="article:modified_time" content="2024-06-30T21:06:43.727Z">
 <meta property="article:author" content="Sam Li">
 <meta name="twitter:card" content="summary">
     
@@ -106,7 +106,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">9 Pipelining</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">10 Design Tradeoffs in Sequential Circuits</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">11 RISCV-Processor</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">12 Pipelined Processors</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">13 Data and Control Hazards in Pipelined Processors</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">14 the memory hierarchy</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">15 Cache</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">7.1.</span> <span class="toc-text">Direct-mapped cache problem: conflict misses</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">7.2.</span> <span class="toc-text">N-way set-associative cache &#x3D; N DM cache</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">7.3.</span> <span class="toc-text">Associativity implies choices</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">7.4.</span> <span class="toc-text">Write policy</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">16 Cache Coherence</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">15 Cache</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">Direct-mapped cache problem: conflict misses</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">N-way set-associative cache &#x3D; N DM cache</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.3.</span> <span class="toc-text">Associativity implies choices</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.4.</span> <span class="toc-text">Write policy</span></a></li></ol></li></ol>
     </div>
   </span>
 </div>
@@ -153,12 +153,6 @@
     <div class="toc">
 <!-- toc -->
 <ul>
-<li><a href="#9-pipelining">9 Pipelining</a></li>
-<li><a href="#10-design-tradeoffs-in-sequential-circuits">10 Design Tradeoffs in Sequential Circuits</a></li>
-<li><a href="#11-riscv-processor">11 RISCV-Processor</a></li>
-<li><a href="#12-pipelined-processors">12 Pipelined Processors</a></li>
-<li><a href="#13-data-and-control-hazards-in-pipelined-processors">13 Data and Control Hazards in Pipelined Processors</a></li>
-<li><a href="#14-the-memory-hierarchy">14 the memory hierarchy</a></li>
 <li><a href="#15-cache">15 Cache</a>
 <ul>
 <li><a href="#direct-mapped-cache-problem-conflict-misses">Direct-mapped cache problem: conflict misses</a></li>
@@ -167,16 +161,9 @@
 <li><a href="#write-policy">Write policy</a></li>
 </ul>
 </li>
-<li><a href="#16-cache-coherence">16 Cache Coherence</a></li>
 </ul>
 <!-- tocstop -->
 </div>
-<h2><span id="9-pipelining">9 Pipelining</span><a href="#9-pipelining" class="header-anchor">¶</a></h2>
-<h2><span id="10-design-tradeoffs-in-sequential-circuits">10 Design Tradeoffs in Sequential Circuits</span><a href="#10-design-tradeoffs-in-sequential-circuits" class="header-anchor">¶</a></h2>
-<h2><span id="11-riscv-processor">11 RISCV-Processor</span><a href="#11-riscv-processor" class="header-anchor">¶</a></h2>
-<h2><span id="12-pipelined-processors">12 Pipelined Processors</span><a href="#12-pipelined-processors" class="header-anchor">¶</a></h2>
-<h2><span id="13-data-and-control-hazards-in-pipelined-processors">13 Data and Control Hazards in Pipelined Processors</span><a href="#13-data-and-control-hazards-in-pipelined-processors" class="header-anchor">¶</a></h2>
-<h2><span id="14-the-memory-hierarchy">14 the memory hierarchy</span><a href="#14-the-memory-hierarchy" class="header-anchor">¶</a></h2>
 <h2><span id="15-cache">15 Cache</span><a href="#15-cache" class="header-anchor">¶</a></h2>
 <p>Goal: minimize the average memory access time by building a hierarchical memory system that had both low latency and high capacity.</p>
 <p>Choice: block size -&gt; replacement policy -&gt; write policy</p>
@@ -243,7 +230,6 @@
 <li>how to replace a cache line?</li>
 </ul>
 <p>We can avoid unnecessary write-backs by adding another state bit to each cache line: the <em>dirty</em> bit. The dirty bit is set to 0 when a cache line is filled during a cache miss.</p>
-<h2><span id="16-cache-coherence">16 Cache Coherence</span><a href="#16-cache-coherence" class="header-anchor">¶</a></h2>
 
   </div>
 </article>
@@ -271,7 +257,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">9 Pipelining</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">10 Design Tradeoffs in Sequential Circuits</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">11 RISCV-Processor</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">12 Pipelined Processors</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">13 Data and Control Hazards in Pipelined Processors</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">14 the memory hierarchy</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">15 Cache</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">7.1.</span> <span class="toc-text">Direct-mapped cache problem: conflict misses</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">7.2.</span> <span class="toc-text">N-way set-associative cache &#x3D; N DM cache</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">7.3.</span> <span class="toc-text">Associativity implies choices</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">7.4.</span> <span class="toc-text">Write policy</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">16 Cache Coherence</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">15 Cache</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">Direct-mapped cache problem: conflict misses</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">N-way set-associative cache &#x3D; N DM cache</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.3.</span> <span class="toc-text">Associativity implies choices</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.4.</span> <span class="toc-text">Write policy</span></a></li></ol></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">

@@ -21,7 +21,7 @@
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/04/01/os_basics/Screenshot-6244321.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/04/01/os_basics/Screenshot-9679149.png">
 <meta property="article:published_time" content="2022-03-31T22:00:00.000Z">
-<meta property="article:modified_time" content="2024-04-03T19:59:43.097Z">
+<meta property="article:modified_time" content="2024-04-21T16:58:46.818Z">
 <meta property="article:author" content="Sam Li">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://sgzerolc.github.io/sg/2022/04/01/os_basics/boot.png">
@@ -900,6 +900,10 @@ key stroke -&gt; keyboard -&gt; (uart input -&gt; merge to byte -&gt; interrupt)
 <li><code>print (char *) 0xbfff890</code>: Examine a string stored at 0xbffff890</li>
 <li><code>x/[num][size][format] where </code>:  <code>num</code>, number of objects to display, <code>size</code> = size of each object (b=byte, h=half-word, w=word, g=giant (quad-word)), <code>format</code> = how to display each object (d=decimal, x=hex, o=octal, t=binary etc.)</li>
 </ul>
+</li>
+<li>
+<p>Example</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//malloc can fail</span></span><br><span class="line"><span class="type">int</span> *a = (<span class="type">int</span>*)<span class="built_in">malloc</span>(<span class="number">12</span>*<span class="keyword">sizeof</span>(<span class="type">int</span>)); <span class="comment">//allocated memory is not initialized, should change to alloc(12,sizeof(int))</span></span><br><span class="line"><span class="keyword">if</span> (a == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//macro shouldnot be used interchangeably.</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MULT(x,y) ((x)*(y))</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MULT(x,y) (x * y)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> ADD(x,y) x + y</span></span><br></pre></td></tr></table></figure>
 </li>
 </ol>
 <h3><span id="lookup-table">Lookup table</span><a href="#lookup-table" class="header-anchor">¶</a></h3>
