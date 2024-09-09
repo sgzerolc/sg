@@ -14,7 +14,7 @@
 <meta property="og:description" content="Looking back, the first vocabulary term that comes to mind is “building from source.” Throughout the application process, I was required to compile a new kernel and library from source. Though I was u">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-06-16T22:00:00.000Z">
-<meta property="article:modified_time" content="2022-07-02T10:37:37.575Z">
+<meta property="article:modified_time" content="2024-09-03T19:18:14.951Z">
 <meta property="article:author" content="Sam Li">
 <meta name="twitter:card" content="summary">
     
@@ -160,7 +160,7 @@
 <li>Installing a liburing package (v2.0) rather than compiling it from source.</li>
 </ol>
 <p>I thought the QEMU development environment was proper. So I moved to next step which is io uring testing. I couldn’t figure out how the testing framework in QEMU fit together. So I attempted to contact Roosh, the former intern working on io uring support in QEMU. Though it can be intimidating to connect with people, I can’t think of a better way to figure out my problems. She was very nice and recommended that I try Fedora Linux, which makes building a kernel much easier.</p>
-<p>The misunderstandings lingered on. After seeking assistance from mentors at QEMU, I finally understood the real issue of the task. The seeking graph was as follows<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>:</p>
+<p>The misunderstandings lingered on. After seeking assistance from the mentors at QEMU, I finally understood the real issue of the task. The seeking graph was as follows<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">-&gt; gdb/tracing problems? </span><br><span class="line">	-&gt; Nope! </span><br><span class="line">-&gt; Kernel problem(#1,#2) found</span><br><span class="line">	-&gt; Kernel set. Still not working </span><br><span class="line">-&gt; liburing version check</span><br><span class="line">	-&gt; Package built. Still not working</span><br><span class="line">-&gt; liburing problem found(#4)</span><br><span class="line">	-&gt; Build from source. Right version. Still not working</span><br><span class="line">	-&gt; Compilation error. </span><br><span class="line">	-&gt; Change to newest liburing.git. Working.</span><br></pre></td></tr></table></figure>
 <p>It is difficult to determine whether or not to ask questions. During my internship, I am experiencing the same issue, and my mentors provide me with sound advice. Don’t be afraid to ask if you spend more than an hour researching or debugging something. The sooner we can find problems, the better we will be able to solve them.</p>
 <p>One concern about asking questions at open source events is what we can give back to those who help us all the time. I believe the answer is to do our best to contribute to the community.</p>

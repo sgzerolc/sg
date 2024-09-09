@@ -6,15 +6,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="Looking back to what I’ve accomplished so far, it is quite a journey. As for the original internship project timeline, I was thinking about the timeline too naively and took no regard of difficulty of">
+    <meta name="description" content="Looking back to what I’ve accomplished so far, it is quite a journey. As for the original internship project timeline, I was thinking too naively about the timeline and took no regard of difficulty of">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Zoned Storage Emulation So Far">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2022/08/01/qemu_pj_mid/index.html">
 <meta property="og:site_name" content="steins gate zero">
-<meta property="og:description" content="Looking back to what I’ve accomplished so far, it is quite a journey. As for the original internship project timeline, I was thinking about the timeline too naively and took no regard of difficulty of">
+<meta property="og:description" content="Looking back to what I’ve accomplished so far, it is quite a journey. As for the original internship project timeline, I was thinking too naively about the timeline and took no regard of difficulty of">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-07-31T22:00:00.000Z">
-<meta property="article:modified_time" content="2022-12-30T17:29:01.092Z">
+<meta property="article:modified_time" content="2024-09-03T14:32:56.233Z">
 <meta property="article:author" content="Sam Li">
 <meta name="twitter:card" content="summary">
     
@@ -150,9 +150,9 @@
   
 
   <div class="content" itemprop="articleBody">
-    <p>Looking back to what I’ve accomplished so far, it is quite a journey. As for the original internship project timeline, I was thinking about the timeline too naively and took no regard of difficulty of certain project task.</p>
+    <p>Looking back to what I’ve accomplished so far, it is quite a journey. As for the original internship project timeline, I was thinking too naively about the timeline and took no regard of difficulty of certain project task.</p>
 <p>For the rest of the internship, the major goal is to finish the first part of the original proposal - Extending zoned storage emulation support in virtio-blk device - and get it merged. Besides, I think it’s possible to finish part two - Adding support to NVMe ZNS for guest driver testing - before the project ends. Maybe not if unexpected issues appear :)</p>
-<p>If I were starting the project over, I would ask questions earlier rather than get stuck at sth for a really long time. It’s important to ask questions, which is a way to investigate more and find out what is wrong or unknown. I read several PPT slides about the block device and QEMU structure, zoned storage website, and codes in virtio-blk.c etc before the internship begins. It’s not very helpful because I did not know what to ask at first.</p>
+<p>If I were starting the project over, I would ask questions earlier rather than get stuck at sth for a really long time. It’s important to ask questions, which is a way to investigate more and find out what is wrong or unknown. I read several slides about the block device and QEMU structure, zoned storage website, and codes in virtio-blk.c etc before the internship starts. It’s not very helpful because I did not know what to ask at first.</p>
 <p>What I’ve done in last two months is finishing the most of zoned storage emulation, except zone append emulation part. One project task took longer than expected is the zone report emulation. It bothers me that I’ve taken this long to have a simple workable version. At first, I thought it’s a three-week task after talking to my mentors about the developing plan in the first week. However, I have underestimated a lot of details that can mostly be spotted only during the implementations. Going through the major issues in the last several weeks, I found that:</p>
 <ol>
 <li>set up a full guest VM. &lt;1 week&gt;</li>

@@ -18,7 +18,7 @@
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/Screenshot-6787937.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/Screenshot-6799625.png">
 <meta property="article:published_time" content="2022-07-04T22:00:00.000Z">
-<meta property="article:modified_time" content="2023-07-19T03:32:57.032Z">
+<meta property="article:modified_time" content="2024-09-03T14:22:20.532Z">
 <meta property="article:author" content="Sam Li">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://sgzerolc.github.io/sg/2022/07/05/qemu_pj_intro/Screenshot-4060048.png">
@@ -168,7 +168,7 @@
 </ul>
 <!-- tocstop -->
 </div>
-<p>As the <a target="_blank" rel="noopener" href="https://www.qemu.org/">homepage</a> says, QEMU is a generic and open source machine emulator and virtualizer. The project I’ve been working on is adding zoned device support in virtio-blk emulation<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>.</p>
+<p>As the <a target="_blank" rel="noopener" href="https://www.qemu.org/">homepage</a> says, QEMU is a generic and open source machine emulator and virtualizer. The project I’ve been working on is adding zoned device support to virtio-blk emulation<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>.</p>
 <p>QEMU is a big project which looks a bit intimidating at first (and afterward :). It’s also lots of fun investigating different parts to solve problems in the way. Sometimes, I feel like a lousy detective trying to figure out how things fit together. Luckily, my mentors in this project always give me a hand when I am stuck at wrong directions.</p>
 <h2><span id="brief-introduction">Brief introduction</span><a href="#brief-introduction" class="header-anchor">¶</a></h2>
 <table>
@@ -213,11 +213,11 @@
 </tbody>
 </table>
 <h3><span id="zoned-storage">Zoned storage</span><a href="#zoned-storage" class="header-anchor">¶</a></h3>
-<p>Imagining the shingle in the roof, SMR writes data in a similar overlapping manner.  BY removing the gaps, more data tracks placing on each magnetic surface reflects in wider write head of design. The recording head will advance partial width of one data track after a write. Such overlapping tracks are grouped into zones. The gaps between zones prevents data overwrite from write head changing from one zone to another. (Ignoring-physics version)</p>
-<p>What we want to take advantage of SMR in the project is the SWR property. For example, if LBA <code>x</code>, <code>x+a</code> is in zone 1, we can’t write <code>x+a</code> after write <code>x</code> because it is potentially under another zone. The area dencity of SMR results in higher disk capacity, better erasure coding, reducing adjacent-track interference exposure. Meanwhile, SMR also supports random read like CMR. Therefore SWR is good fro data detection and recovery.</p>
+<p>Imagining the shingles in the roof, SMR writes data in a similar overlapping manner.  BY removing the gaps, more data tracks placing on each magnetic surface reflects in wider write head of design. The recording head will advance partial width of one data track after a write. Such overlapping tracks are grouped into zones. The gaps between zones prevents data overwrite from write head changing from one zone to another. (Ignoring-physics version)</p>
+<p>What we want to take advantage of SMR in the project is the SWR property. For example, if LBA <code>x</code>, <code>x+a</code> is in zone 1, we can’t write <code>x+a</code> after write <code>x</code> because it is potentially under another zone. The area dencity of SMR results in higher disk capacity, better erasure coding, reducing adjacent-track interference exposure. Meanwhile, SMR also supports random read like CMR. Therefore SWR is good for data detection and recovery.</p>
 <img src="/sg/2022/07/05/qemu_pj_intro/Screenshot-4060048.png" class title="HDD drives">
 <p>The main purpose of zoned storage emulation is to let VM Guest OS see a zoned block device file on the Host OS. However QEMU sees the zoned device as regular block device right now. Meanwhile, I should enable guest driver testing in NVMe ZNS so we can test if our previous works and benchmark it, which would be a nice topic for another blog(once I figure out how benmarking works :)</p>
-<p>The cool vision about this project is to enable zoned storage on a regular file. It means VM Guest OS can see a regular file as zoned block device file, which is helpful for development related to zoned storage on a machine without such support. Whereas I have some doubts about the overhead and design of such improvement. For example, why should we emulate such zoned device if it maybe not offer enough performance for using? Again, another topic saving later.</p>
+<p>The cool vision about this project is to enable zoned storage on a regular file. It means VM Guest OS can see a regular file as zoned block device file, which is helpful for development related to zoned storage on a machine without such support. Whereas I have some doubts about the overhead and design of such improvement. For example, why should we emulate such zoned device if it maybe not offer enough performance for using? Again, another topic’s saving later.</p>
 <img src="/sg/2022/07/05/qemu_pj_intro/linux-iopath-3ad49009873f1211b8e873f9ba540a38.png" class title="Linux Zoned block device support overview">
 <p><sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup></p>
 <h3><span id="virtio-blk-device">Virtio-blk device</span><a href="#virtio-blk-device" class="header-anchor">¶</a></h3>

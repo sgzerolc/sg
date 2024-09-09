@@ -14,7 +14,7 @@
 <meta property="og:description" content="Content: NVMe Specification (Section 2-2.2.1 [p15-p19] + Section 3.3.1 [p79-p83]), NVMe-tutorial (slides 1-11) Recently, I’ve been working on making the metadata for QEMU NVMe ZNS emulation persistent">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-01-13T23:00:00.000Z">
-<meta property="article:modified_time" content="2023-09-21T07:28:23.836Z">
+<meta property="article:modified_time" content="2024-09-03T19:18:04.163Z">
 <meta property="article:author" content="Sam Li">
 <meta name="twitter:card" content="summary">
     
@@ -151,7 +151,7 @@
 
   <div class="content" itemprop="articleBody">
     <p>Content: NVMe Specification (Section 2-2.2.1 [p15-p19] + Section 3.3.1 [p79-p83]), NVMe-tutorial (slides 1-11)</p>
-<p>Recently, I’ve been working on making the metadata for QEMU NVMe ZNS emulation persistent across QEMU restarts. The state of namespace zones does not persist and will reverse to the empty state once QEMU is restarted. With the support of mentors in QEMU community through weekly discussions, my searching graph for this task is as follows:</p>
+<p>Recently, I’ve been working on making the metadata for QEMU NVMe ZNS emulation persistent across QEMU restarts. The state of namespace zones does not persist and will reverse to the empty state once QEMU is restarted. With the support of the mentors in QEMU community through weekly discussions, my searching graph for this task is as follows:</p>
 <ol>
 <li>
 <p>What is this task and why? I’ve read a little related work about NVMe emulation metadata: 1) Dmitry Fomichev<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup> , use another file to store metadata for NVMe ZNS emulation. If the file is not specified, then the metadata is not persistent as before; 2)  Klaus Jensen<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup>, the metadata for NVMe emulation is stored at the end of the namespace backing block device.</p>
