@@ -6,17 +6,19 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="Case study: MapReduce 2004 Consistency and linearizability Case study: GFS 2003 Primary&#x2F;Backup Replication Case study: VMware FT 2010  FT design failure handling design alternatives   Verified Prim">
+    <meta name="description" content="case studies: MapReduce 2004 Consistency and linearizability case studies: GFS 2003 Primary&#x2F;Backup Replication case studies: VMware FT 2010  FT design failure handling design alternatives   Verifie">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Distributed Systems notes">
+<meta property="og:title" content="Distributed System notes">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2023/07/28/ds_basics/index.html">
 <meta property="og:site_name" content="steins gate zero">
-<meta property="og:description" content="Case study: MapReduce 2004 Consistency and linearizability Case study: GFS 2003 Primary&#x2F;Backup Replication Case study: VMware FT 2010  FT design failure handling design alternatives   Verified Prim">
+<meta property="og:description" content="case studies: MapReduce 2004 Consistency and linearizability case studies: GFS 2003 Primary&#x2F;Backup Replication case studies: VMware FT 2010  FT design failure handling design alternatives   Verifie">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://sgzerolc.github.io/sg/2023/07/28/ds_basics/zab.png">
 <meta property="article:published_time" content="2023-07-27T22:00:00.000Z">
-<meta property="article:modified_time" content="2024-06-30T20:59:36.403Z">
+<meta property="article:modified_time" content="2025-01-27T21:05:30.183Z">
 <meta property="article:author" content="Sam Li">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://sgzerolc.github.io/sg/2023/07/28/ds_basics/zab.png">
     
     
       
@@ -36,7 +38,7 @@
       
     
     <!-- title -->
-    <title>Distributed Systems notes</title>
+    <title>Distributed System notes</title>
     <!-- styles -->
     
 <link rel="stylesheet" href="/sg/css/style.css">
@@ -92,21 +94,21 @@
     <div id="share" style="display: none">
       <ul>
   <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&text=Distributed Systems notes"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&title=Distributed Systems notes"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&is_video=false&description=Distributed Systems notes"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=Distributed Systems notes&body=Check out this article: https://sgzerolc.github.io/sg/2023/07/28/ds_basics/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&title=Distributed Systems notes"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&title=Distributed Systems notes"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&title=Distributed Systems notes"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&title=Distributed Systems notes"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&name=Distributed Systems notes&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&t=Distributed Systems notes"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&text=Distributed System notes"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&title=Distributed System notes"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&is_video=false&description=Distributed System notes"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Distributed System notes&body=Check out this article: https://sgzerolc.github.io/sg/2023/07/28/ds_basics/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&title=Distributed System notes"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&title=Distributed System notes"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&title=Distributed System notes"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&title=Distributed System notes"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&name=Distributed System notes&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&t=Distributed System notes"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Case study: MapReduce 2004</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Consistency and linearizability</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Case study: GFS 2003</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Primary&#x2F;Backup Replication</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Case study: VMware FT 2010</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.1.</span> <span class="toc-text">FT design</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.2.</span> <span class="toc-text">failure handling</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.3.</span> <span class="toc-text">design alternatives</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">Verified Primary&#x2F;Backup</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">case study: Grove 2023</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">Raft</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">Paxos</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">case studies: MapReduce 2004</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Consistency and linearizability</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">case studies: GFS 2003</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Primary&#x2F;Backup Replication</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">case studies: VMware FT 2010</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.1.</span> <span class="toc-text">FT design</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.2.</span> <span class="toc-text">failure handling</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.3.</span> <span class="toc-text">design alternatives</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">Verified Primary&#x2F;Backup</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">case studies: Grove 2023</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">Raft</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.1.</span> <span class="toc-text">Leader election</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.2.</span> <span class="toc-text">Log</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.3.</span> <span class="toc-text">Persistence</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.4.</span> <span class="toc-text">Log compaction and Snapshots</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.5.</span> <span class="toc-text">Linearizability</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.6.</span> <span class="toc-text">Duplicate RPC detection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.7.</span> <span class="toc-text">Read-only operations</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">*Paxos</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.1.</span> <span class="toc-text">handout</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">10.</span> <span class="toc-text">*case studies: ZooKeeper 2010</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -118,7 +120,7 @@
   <header>
     
     <h1 class="posttitle" itemprop="name headline">
-        Distributed Systems notes
+        Distributed System notes
     </h1>
 
 
@@ -153,11 +155,11 @@
     <div class="toc">
 <!-- toc -->
 <ul>
-<li><a href="#case-study-mapreduce-2004">Case study: MapReduce 2004</a></li>
+<li><a href="#case-studies-mapreduce-2004">case studies: MapReduce 2004</a></li>
 <li><a href="#consistency-and-linearizability">Consistency and linearizability</a></li>
-<li><a href="#case-study-gfs-2003">Case study: GFS 2003</a></li>
+<li><a href="#case-studies-gfs-2003">case studies: GFS 2003</a></li>
 <li><a href="#primary-backup-replication">Primary/Backup Replication</a></li>
-<li><a href="#case-study-vmware-ft-2010">Case study: VMware FT 2010</a>
+<li><a href="#case-studies-vmware-ft-2010">case studies: VMware FT 2010</a>
 <ul>
 <li><a href="#ft-design">FT design</a></li>
 <li><a href="#failure-handling">failure handling</a></li>
@@ -165,9 +167,24 @@
 </ul>
 </li>
 <li><a href="#verified-primary-backup">Verified Primary/Backup</a></li>
-<li><a href="#case-study-grove-2023">case study: Grove 2023</a></li>
-<li><a href="#raft">Raft</a></li>
-<li><a href="#paxos">Paxos</a></li>
+<li><a href="#case-studies-grove-2023">case studies: Grove 2023</a></li>
+<li><a href="#raft">Raft</a>
+<ul>
+<li><a href="#leader-election">Leader election</a></li>
+<li><a href="#log">Log</a></li>
+<li><a href="#persistence">Persistence</a></li>
+<li><a href="#log-compaction-and-snapshots">Log compaction and Snapshots</a></li>
+<li><a href="#linearizability">Linearizability</a></li>
+<li><a href="#duplicate-rpc-detection">Duplicate RPC detection</a></li>
+<li><a href="#read-only-operations">Read-only operations</a></li>
+</ul>
+</li>
+<li><a href="#paxos">*Paxos</a>
+<ul>
+<li><a href="#handout">handout</a></li>
+</ul>
+</li>
+<li><a href="#case-studies-zookeeper-2010">*case studies: ZooKeeper 2010</a></li>
 </ul>
 <!-- tocstop -->
 </div>
@@ -246,9 +263,9 @@
 </ul>
 </li>
 </ul>
-<h2><span id="case-study-mapreduce-2004">Case study: MapReduce 2004</span><a href="#case-study-mapreduce-2004" class="header-anchor">¶</a></h2>
+<h2><span id="case-studies-mapreduce-2004">case studies: MapReduce 2004</span><a href="#case-studies-mapreduce-2004" class="header-anchor">¶</a></h2>
 <h2><span id="consistency-and-linearizability">Consistency and linearizability</span><a href="#consistency-and-linearizability" class="header-anchor">¶</a></h2>
-<h2><span id="case-study-gfs-2003">Case study: GFS 2003</span><a href="#case-study-gfs-2003" class="header-anchor">¶</a></h2>
+<h2><span id="case-studies-gfs-2003">case studies: GFS 2003</span><a href="#case-studies-gfs-2003" class="header-anchor">¶</a></h2>
 <h2><span id="primary-backup-replication">Primary/Backup Replication</span><a href="#primary-backup-replication" class="header-anchor">¶</a></h2>
 <ol>
 <li>One way of providing fault tolerance: Replication.</li>
@@ -281,7 +298,7 @@
 <p>Problem 1: At what level do we want replicas to be identical?</p>
 <p>application state: forward op stream, can be efficient. ex: GFS.</p>
 <p>machine level, registers and RAM content: forward machine events (interrupts, DMA, &amp;c), not as efficient. ex: run an existing software without modification</p>
-<h2><span id="case-study-vmware-ft-2010">Case study: VMware FT 2010</span><a href="#case-study-vmware-ft-2010" class="header-anchor">¶</a></h2>
+<h2><span id="case-studies-vmware-ft-2010">case studies: VMware FT 2010</span><a href="#case-studies-vmware-ft-2010" class="header-anchor">¶</a></h2>
 <p>Terms:</p>
 <ol>
 <li>vm-ft: fault-tolerant virtual machines</li>
@@ -361,13 +378,307 @@
 <li>need to sync disks of VMs</li>
 </ol>
 <h2><span id="verified-primary-backup">Verified Primary/Backup</span><a href="#verified-primary-backup" class="header-anchor">¶</a></h2>
-<h2><span id="case-study-grove-2023">case study: Grove 2023</span><a href="#case-study-grove-2023" class="header-anchor">¶</a></h2>
+<h2><span id="case-studies-grove-2023">case studies: Grove 2023</span><a href="#case-studies-grove-2023" class="header-anchor">¶</a></h2>
 <h2><span id="raft">Raft</span><a href="#raft" class="header-anchor">¶</a></h2>
-<blockquote class="colorquote blue"><p>Problem 1: Suppose we have the scenario shown in the Raft paper’s Figure 7: a cluster of seven servers, with the log contents shown. The first server crashes (the one at the top of the figure), and cannot be contacted. A leader election ensues. For each of the servers marked (a), (d), and (f), could that server be elected? If yes, which servers would vote for it? If no, what specific Raft mechanism(s) would prevent it from being elected?</p>
-</blockquote>
-<blockquote class="colorquote blue"><p>Problem 2: Could a received InstallSnapshot RPC cause the state machine to go backwards in time? That is, could step 8 in Figure 13 cause the state machine to be reset so that it reflects fewer executed operations? If yes, explain how this could happen. If no, explain why it can’t happen.</p>
-</blockquote>
-<h2><span id="paxos">Paxos</span><a href="#paxos" class="header-anchor">¶</a></h2>
+<p>site:</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="http://nil.csail.mit.edu/6.824/2022/notes/l-raft.txt">http://nil.csail.mit.edu/6.824/2022/notes/l-raft.txt</a></li>
+<li><a target="_blank" rel="noopener" href="http://nil.csail.mit.edu/6.824/2022/notes/l-raft2.txt">http://nil.csail.mit.edu/6.824/2022/notes/l-raft2.txt</a></li>
+</ol>
+<p>Problem 0: a machine doesn’t understand the real-life events like network broken, disk failures,<br>
+server crashed. All it can notice is the state changes.</p>
+<ul>
+<li>It appears that no response to a query over the network.</li>
+<li>Unless an outside agent will decide when to switch servers/a perfectly reliable network<br>
+(never breaks)/ a single perfectly reliable server (vmware FT’s test-and-set server) -&gt; possible<br>
+single-point failure</li>
+<li>How to automate it?</li>
+</ul>
+<p>Main idea:</p>
+<ul>
+<li>majority rule: same as Paxos. At lease one server is in the intersection of any two intersect<br>
+which can convey info about previous decisions. Such a system often is called quorum systems.</li>
+<li>electing a new leader</li>
+<li>Logs of each server can be different but they will converge to be identical despite failures.</li>
+</ul>
+<p>The crucial property:</p>
+<ul>
+<li>committed: an entry that is commited won’t be forgotten despite failures.</li>
+<li>logs with <strong>ordered</strong> commands:
+<ul>
+<li>It stores the ordered commands in case leader must re-send to followers or or for replay after<br>
+reboot (persistence).</li>
+<li>help to decide if the machines have identical logs</li>
+<li>help replicas agree on a single execution order</li>
+</ul>
+</li>
+<li>leader: leader ensures the identical execution order of the same commands on all servers.</li>
+</ul>
+<p>Raft provides:</p>
+<ul>
+<li>interface:
+<ul>
+<li>Start(command) (index, term, isleader): only leader can start proposals.</li>
+<li>ApplyMsg(index, command): each peer sends this message for each committed entry to local<br>
+service.</li>
+</ul>
+</li>
+<li>more understandable than Paxos</li>
+</ul>
+<p>A little about history of consensus protocols: paxos (1998), viewstamped replication (1988,<br>
+2012). Raft (2014) is more modern. They are all partition-tolerant.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Raft diagram:</span><br><span class="line">Members: Client, Follower, Leader, denoted by C, F, L respectively.</span><br><span class="line"></span><br><span class="line">Client       ----        Leader          ----                    Follower exchange:</span><br><span class="line">        Put/Get(n1) -&gt;  Start(n1)</span><br><span class="line">                        [appendLog(n1)]  AppendEntries(n1) -&gt;</span><br><span class="line">                        [committed(n1)]  &lt;- reply(n1)</span><br><span class="line">                        [execute(c1)]</span><br><span class="line">        &lt;- reply(c1)</span><br><span class="line"></span><br><span class="line">        Put/Get(n2) -&gt;  [appendLog(n2)]  AppendEntries(c1, n2) -&gt;       ApplyMsg(c1)</span><br><span class="line">                        [committed(n2)]   &lt;- reply(n1)                  [execute(c1)]</span><br><span class="line">                        [execute(c2)]</span><br><span class="line">        &lt;- reply(c2)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>Problem 1: How Raft works?</p>
+<h3><span id="leader-election">Leader election</span><a href="#leader-election" class="header-anchor">¶</a></h3>
+<p>Leader (srv, term): the term helps servers to follow latest leader.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Election diagram:</span><br><span class="line"></span><br><span class="line">Follower (S0, term+1) -&gt; Candidate (S0, term+1)  -&gt;  Leader (S0, term+1), if maj</span><br><span class="line">    (election timeout)                      (voting)</span><br><span class="line"></span><br><span class="line">Leader (S1, term)</span><br></pre></td></tr></table></figure>
+<p>Election results:<br>
+Each term has one leader at most despite failures (network partitions, server crashes).</p>
+<ol>
+<li>One leader is newly elected:</li>
+</ol>
+<ul>
+<li>The leader sends heartbeat messages to followers in a heartbeat interval.</li>
+<li>A server learns about newly elected leader from heartbeats with a higher term number in<br>
+AppendEntries requests.</li>
+</ul>
+<ol start="2">
+<li>Election failed for less than a maj or notes: New election starts with new term number. Old<br>
+candidates quit.</li>
+</ol>
+<ul>
+<li>Split votes</li>
+<li>Not enough reachable servers</li>
+</ul>
+<ol start="3">
+<li>Old leader holds hallucination that it is still a leader.</li>
+</ol>
+<p>Election rules:</p>
+<ul>
+<li>A peer stays follower if it hears from current leader with heartbeat message.</li>
+<li>A peer starts leader election when it doesn’t receive the heartbeat message from current leader<br>
+for an <code>election timeout</code>.</li>
+<li>Each server can cast one vote per term.
+<ul>
+<li>A candidate will vote for itself.</li>
+<li>A peer will vote for the first candidate that asks</li>
+</ul>
+</li>
+<li>A candidate becomes a leader when it receives votes from a majority of peers for a given term.</li>
+</ul>
+<p>Problem 1.1: how does Raft avoid split votes?</p>
+<p>Split votes can happen when simutaneous candidates ask for votes from a equal number of peers. Raft<br>
+uses random election timeout to avoid this problem. The election timeout must be chosen wisely. It<br>
+should be at least a few heartbeat intervals in case of network delays, long enough to elect a<br>
+leader before the next election starts. It should also be short enough to allow retries and react to<br>
+failures quickly.</p>
+<h3><span id="log">Log</span><a href="#log" class="header-anchor">¶</a></h3>
+<p>Keeping a log for old commands is common. But changing leader is the reason to have an ordered log<br>
+which helps leader to check follower states.</p>
+<p>Every server should hold an identical log. That means no server can execute a different command for<br>
+a log entry that has been executed a command by any other server.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">Log diagram:</span><br><span class="line"></span><br><span class="line">Example 1:</span><br><span class="line"></span><br><span class="line">A leader (S2 or S3) for term 3 crashes before sending last AE to all.</span><br><span class="line"></span><br><span class="line">S1:  3           &lt;- term #</span><br><span class="line">S2:  3  3</span><br><span class="line">S3:  3  3</span><br><span class="line"></span><br><span class="line">Example 2:</span><br><span class="line"></span><br><span class="line">Next election, S2 is elected and crashed for term 4.</span><br><span class="line">Next election, S3 is elected and crashed for term 5.</span><br><span class="line"></span><br><span class="line">    10 11 12 13  &lt;- log entry #</span><br><span class="line">S1:  3</span><br><span class="line">S2:  3  3  4</span><br><span class="line">S3:  3  3  5</span><br><span class="line"></span><br><span class="line">Leader (S3, 6)</span><br><span class="line"></span><br><span class="line">    10 11 12 13  &lt;- log entry #</span><br><span class="line">S1:  3</span><br><span class="line">S2:  3  3  4</span><br><span class="line">S3:  3  3  5  6</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><u>The first question is could this scenario arise and how.</u></p>
+<p>Example 2: AE(log entry) details after Leader (S3, 6):</p>
+<ol>
+<li>S3 is chosen as new leader for term 6.
+<ul>
+<li>nextIndex[S2] = 13, nextIndex[S1] = 13</li>
+</ul>
+</li>
+<li>It sends AE(13) with prevLogIndex=12, prevLogTerm=5</li>
+<li>S2 replies false, mismatched prevLogTerm.</li>
+<li>S3 decrements nextIndex[S2] to 12 (roll-back scheme, roll back one entry at a time)</li>
+<li>S3 sends AE(12+13) with prevLogIndex=11, prevLogTerm=3</li>
+<li>S2 deleted its entry 12<br>
+The same for S1.</li>
+</ol>
+<p>The result of roll-back: followers hold the identical log with the leader by deleting the tail of log<br>
+with mismatched term and accepting leader’s entries after that point.</p>
+<p>It’s ok to forget about S2’s (12, 4) entry. It’s not received by any server yet and hence not<br>
+committed. The client will resend the discarded commands of that term by and by.</p>
+<p><strong>New leader would not roll back committed entries from end of previous term.</strong><br>
+-&gt; Raft needs to ensure elected leader has all committed log entries.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Example 3:</span><br><span class="line"></span><br><span class="line">S1: 5 6 7</span><br><span class="line">S2: 5 8</span><br><span class="line">S3: 5 8</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>Example 3: the longest log wins? -&gt; disclose voting details.</p>
+<p>step 1: S2 or S3 wins election for term 5. It sends AEs to all.</p>
+<p>step 2: S1 incurs network partition: S1 is isolated from S2 and S3.</p>
+<p>step 3:</p>
+<ul>
+<li>S1: it doesnot hear from leader. Next election for term 6 starts. Can’t get maj and start new<br>
+election for term 7…</li>
+<li>S2 or S3: happily lives after S1 is disconnected since one of them will get maj and become leader.</li>
+</ul>
+<p>The problem is why won’t happy server choose 6 as next term?</p>
+<p>Backing things up a litter, S1 is leader for term 6; crash + reboot; leader in term 7; crash and<br>
+stay down. It crashes after it only sends AE to itself.</p>
+<p>Because of leader (S1, 7), one of S2 or S3 learns about the last term is 7 while voting. So the next<br>
+term will be 8.</p>
+<p>All peers reboot. While S1 holds the longest log, it can’t be a leader since entry 8 could have<br>
+committed.</p>
+<p>end of section 5.4.1:<br>
+<code>election restriction</code>, voters only cast votes for candidate who is <strong>at least as up-to-date</strong>.</p>
+<ul>
+<li>candidate has higher term in last log entry, or</li>
+<li>candidate has same last term and same length or longer log</li>
+</ul>
+<p>The next leader will be S2 or S3. They vote for each other even if network connectivity is intact.<br>
+Because they have higher term.</p>
+<p>Then S1 will be forced to discard 6,7. -&gt; not committed -&gt; clients will resend the discarded commands</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Example 4:</span><br><span class="line"></span><br><span class="line">Leader (S2, 6); S1 crash+reboot; S2 sends AEs</span><br><span class="line"></span><br><span class="line">    Case 1      Case 2       Case 3</span><br><span class="line">S1: 4 5 5       4 4 4        4</span><br><span class="line">S2: 4 6 6 6 or  4 6 6 6  or  4 6 6 6</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>end of section 5.3: a faster roll-back scheme than backs up one entry per request</p>
+<p>How to roll back quickly?</p>
+<p>S2: AE(prevLogTerm=6)<br>
+-&gt; Reply: S1 rejects with (XTerm, XIndex, XLen)</p>
+<ol>
+<li>case 1, leader doesn’t have XTerm -&gt; nextIndex[S1] = XIndex</li>
+<li>case 2, leader has XTerm -&gt; nextIndex[S1] = leader’s last entry for XTerm</li>
+<li>case 3, follwer’s log too short -&gt; nextIndex[S1] = XLen</li>
+</ol>
+<p>(? binary search)</p>
+<p>Phrases:<br>
+XTerm: term in the conflicting entry (if any)<br>
+XIndex: index of first entry with that term (if any)<br>
+XLen: log length</p>
+<h3><span id="persistence">Persistence</span><a href="#persistence" class="header-anchor">¶</a></h3>
+<p>After a server crashes, we can repair it by replacing with a fresh (empty) server or reboot the<br>
+crashed server.</p>
+<ol>
+<li>new: requires transfer of entire log/snapshots to new server, slow but necessary in case failure<br>
+is permanent.</li>
+<li>old: requires state that persists across crashes. Must support this for simultaneous power<br>
+failures. -&gt; persistence</li>
+</ol>
+<p>What to remember?</p>
+<ul>
+<li>Essential info to let a Raft server rejoin the group. Save them after each change or before<br>
+sending RPCs.</li>
+<li>log[], a server that has latest log entries needs to keep that for furture use of new leader.</li>
+<li>currentTerm, to ensure terms of system only increase. Each term has at most one leader to detect<br>
+RPCs from stale leaders and candidates.</li>
+<li>votedFor, a server needs to remember who it voted for in the currrent term in case it is<br>
+rebooted and votes for a different candidate.</li>
+</ul>
+<p>What can be volatile?</p>
+<p>If a state will be reset after reboot, it doesn’t need to be persistent.</p>
+<p>Performance cost:</p>
+<ul>
+<li>Persistence is often the bottleneck for performance.
+<ul>
+<li>SSD (0.1ms per write) writes 100 times faster than a hard disk (10 ms per write), limiting us<br>
+to 100-10,000 ops/sec.</li>
+</ul>
+</li>
+<li>optimizations
+<ul>
+<li>batch many log entries per disk write</li>
+<li>persist to faster storage (battery-backed RAM)</li>
+</ul>
+</li>
+<li>Another bottleneck RPC takes &lt;&lt; 1 ms on a LAN</li>
+</ul>
+<p>How does the service recover its state after a crash+reboot?</p>
+<ul>
+<li>Simple approach: start with empty state and re-play Raft’s entire log.</li>
+<li>Faster approach: snapshot + replay the tail of the log (that snapshot didn’t cover)</li>
+</ul>
+<h3><span id="log-compaction-and-snapshots">Log compaction and Snapshots</span><a href="#log-compaction-and-snapshots" class="header-anchor">¶</a></h3>
+<p>State = operation history</p>
+<p>service states are usually much smaller than the complete log. A server can’t discard un-executed<br>
+entries which is not yet reflected in the state and un-committed entries which could be part of<br>
+leader’s majority.</p>
+<p>To solve the problem of huge replicated log, service periodically creates persistent “snapshot”. A<br>
+snapshot includes copy of service state and index of last included log entry. Service tells Raft it<br>
+is snapshotted through some log index so Raft can discard log before that index. A server can<br>
+create a snapshot and discard prefix of log whenever.</p>
+<p>In the case of crash+restart, service reads snapshot from disk and tells Raft last included index<br>
+to avoid duplicate applying of log entries.</p>
+<p>When follower’s log ends before leader’s log starts, that part p is lost and can’t be recovered by<br>
+AppendEntries RPCs. Instead leader sends InstallSnapshot RPCs.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">L:           |-p-|xxxxxxxxxxxxxx|</span><br><span class="line">F: |xxxxxxxxx|</span><br></pre></td></tr></table></figure>
+<h3><span id="linearizability">Linearizability</span><a href="#linearizability" class="header-anchor">¶</a></h3>
+<p>notion of correctness for strong consistency: linearizability</p>
+<p>An execution history is linearizable if one can find a total order of all operations,<br>
+that matches real-time (for non-overlapping ops), and<br>
+in which each read sees the value from the write preceding it in the order.</p>
+<p>A history is a record of client operations, each with arguments, return value, time of start,<br>
+time completed.</p>
+<p>draw the constraint arrows by time rule + value rule</p>
+<ul>
+<li>the order obeys value constraints (W -&gt; R)</li>
+<li>the order obeys real-time constraints</li>
+</ul>
+<p>Notation:</p>
+<ul>
+<li>Wx1 means write value 1 to record x, Rx1 means a read of rocord x yielded value 1.</li>
+<li>the history is client-centric view of requests. It is linearizable if there is no cycle</li>
+<li>the form of overlapping operations denotes concurrent operations</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">example 4:</span><br><span class="line"></span><br><span class="line">C1: |-Wx3-|          |-Wx4-|</span><br><span class="line">C2:          |-Rx3-------------|</span><br><span class="line">order: Wx3 Rx3 Wx4</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>From the examples in the lecture, it is known that:</p>
+<ol>
+<li>service can pick either order for concurrent operations</li>
+<li>all clients must see the writes in the same order expecially in the cases of replicas and caches</li>
+<li>reads must return fresh data. Stale values aren’t linearizable</li>
+<li>Duplicate request handling:
+<ul>
+<li>supposing clients re-send requests if they don’t get a reply, leader rememembers client<br>
+requests it has seen and replies with saved response from first execution when it sees<br>
+duplicate.</li>
+<li>it is linearizable to return the old saved value in this case. The reason is that the<br>
+duplicate request is seen as the same process of the failed first request, which is concurrent<br>
+to the write request.</li>
+</ul>
+</li>
+</ol>
+<h3><span id="duplicate-rpc-detection">Duplicate RPC detection</span><a href="#duplicate-rpc-detection" class="header-anchor">¶</a></h3>
+<p>Q: what should a client do if an operation times out? -&gt; Re-send th request</p>
+<ul>
+<li>server is dead or request dropped</li>
+<li>server executed but request lost. Client still needs the result.</li>
+</ul>
+<p>The idea is duplicate RPC detection. Client picks an ID for each request. Re-sends will use the<br>
+same ID in same RPC. Service keeps track a table indexed by ID and records value after executing.<br>
+If the second RPC arrives with the same ID, the service knows it’s a duplicate and generates reply<br>
+from the old saved value in the table.</p>
+<p>Q: When can we delete table entries?</p>
+<ul>
+<li>If new leader takes over, how to get the duplicate table?
+<ul>
+<li>No need. Every server updates their duplicate table as they execute.</li>
+</ul>
+</li>
+<li>If server crashes, how to restore its table?
+<ul>
+<li>replay of log populates the table or snapshots which contains a copy of the table</li>
+<li>as discussed in linearizability section, it is allowed to return the old saved value in this<br>
+case.</li>
+</ul>
+</li>
+</ul>
+<p>To keep the table small, service has one table entry per client rather than one per request. Each<br>
+client numbers requests sequentially. When server receives a client request with new number, it can<br>
+forget about client’s lower entries and update the table entry with the new request.</p>
+<p>If a duplicate req arrives before the original executes, the service just call Start() again.<br>
+Server won’t execute a req that is already seen.</p>
+<h3><span id="read-only-operations">Read-only operations</span><a href="#read-only-operations" class="header-anchor">¶</a></h3>
+<p>end of section 8</p>
+<p>Q: does the Raft leader have to commit read-only operations in the log before replying?</p>
+<p>e.g. Get(key)?</p>
+<p>Leader cannot respond immediately to a read-only operation using its current content. The reason is<br>
+that a server might have lost the recent election but not realized it yet in cases of network<br>
+partitions. Then a new leader processes Put()s for the key so that value in that server becomes<br>
+stale. Thus leader must commit read-only operations.</p>
+<p>But read-heavy workload are quite normal. Committing read-only operations can take a long time. In<br>
+practice, people are often willing to exchange higher performance with stale data.</p>
+<p>The idea is leases. Modify Raft as follows: defining a lease period, after each time the leader<br>
+gets an AE maj, it is entitled to respond to read-only requests for a lease period without<br>
+committing those requests to the log (w/o sending AEs).</p>
+<p>A new leader can’t execute write requests until previous lease period has expired. So followers<br>
+keep track of the last time they responded to an AE, and tell the new leader in the RequestVote<br>
+reply.</p>
+<p>As a result, we get faster read-only operations and the history is still linearizable.</p>
+<h2><span id="paxos">*Paxos</span><a href="#paxos" class="header-anchor">¶</a></h2>
 <p>Assumptions: non-Byzantine failures. Allows failures of missing messages and unordered requests.</p>
 <p>P1. An acceptor must accept the first proposal that it receives.</p>
 <p>For the acceptance of majority, one acceptor must accecpt &gt;= 1 proposals. Assign number to the proposal as (seq_number, value).</p>
@@ -406,7 +717,6 @@ The proposer issues a proposal (n, v) where v is the value either the highest-nu
 <p>implementation:</p>
 <p>Paxos chooses a leader to perform the role of the distinguished proposer and the distinguished learner.</p>
 <p>For persistence, an acceptor records its response in storage before sending. And each proposer keeps the highest-numbered proposal in storage before issuing.</p>
-<p>state machine: ???</p>
 <blockquote class="colorquote blue"><p>Suppose that the acceptors are <em>A</em>, <em>B</em>, and <em>C</em>. <em>A</em> and <em>B</em> are also proposers. How does Paxos ensure that the following sequence of events can’t happen? What actually happens, and which value is ultimately chosen?</p>
 <ol>
 <li><em>A</em> sends prepare requests with proposal number 1, and gets responses from <em>A</em>, <em>B</em>, and <em>C</em>.</li>
@@ -416,6 +726,160 @@ The proposer issues a proposal (n, v) where v is the value either the highest-nu
 </ol>
 </blockquote>
 <p>After step 2, B and C have had the prepare message from A which is #1. After step 3, B would get response from C with value “foo” and gets null from B. At step 4, B will not send accecpt(2, “bar”) but (2, “foo”).</p>
+<h3><span id="handout">handout</span><a href="#handout" class="header-anchor">¶</a></h3>
+<p>site:</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="http://nil.csail.mit.edu/6.824/2015/notes/l-paxos.txt">http://nil.csail.mit.edu/6.824/2015/notes/l-paxos.txt</a></li>
+<li><a target="_blank" rel="noopener" href="http://nil.csail.mit.edu/6.824/2015/notes/paxos-code.html">http://nil.csail.mit.edu/6.824/2015/notes/paxos-code.html</a></li>
+</ol>
+<p>There are protocols such as Paxos, Raft, Viewstamped Replication, Raft, Zookeeper providing strong<br>
+consistency. Paxos is different for its simplicity and wide application. Many other protocols can<br>
+be viewed as variants of Paxos.</p>
+<p>Two topics are:</p>
+<p>Problem 1: How Paxos works?</p>
+<p>Agreement is hard :(</p>
+<ul>
+<li>multiple rounds for the op, tentative initialy but don’t know when agreement is permanent</li>
+<li>Agreement has to be able to complete even with failed servers. some servers decides a value but<br>
+other servers don’t respond. Can’t distinguish between network partition (servers are running<br>
+but cannot be reached by other partition) or failed servers.</li>
+</ul>
+<p>Two main ideas in Paxos to address these problems:</p>
+<ul>
+<li>many rounds are possible but they will converge on one value</li>
+<li>majority rule: a key point is any two majorities overlap. At least one server with earlier<br>
+majority is shared by the later majority.</li>
+</ul>
+<p>Paxos sketch:</p>
+<ul>
+<li>each server consists of three logical entities, acceptor, proposer, learner. Maybe more than<br>
+one proposer when multiple clients submit requests to different servers at the same time.</li>
+<li>Proposers contacts acceptors to assemble a majority. if not get a majority, new round.</li>
+</ul>
+<p>The crucial property:</p>
+<ul>
+<li>If a value was chosen, any subsequent choice must be the same value</li>
+<li>chosen is system-wide property</li>
+</ul>
+<p>Why n?</p>
+<ul>
+<li>It distingushes among multiple rounds. Later rounds can supersede earlier rounds.</li>
+<li>n = &lt;time, server_id&gt;, n must be unique and roughly follow time.</li>
+<li>round(=proposal) numbers are WITHIN a particular instance.</li>
+</ul>
+<p>What’s the commit point?</p>
+<p>i.e. a point that agreement has reached or a server has executed the op</p>
+<p>After a majority has the same (v_a, n_a). Neither v_a nor n_a is sufficient.</p>
+<p>Thinking (discussing with Claude):</p>
+<ol>
+<li>why does the proposer need to pick v_a with highest n_a?</li>
+</ol>
+<p>The proposer needs to pick an accepted value which is associated with the highest proposal<br>
+number that acceptors have seen. It represents the most recent accepted value.</p>
+<ol start="2">
+<li>why does prepare handler check that n &gt; n_p?</li>
+</ol>
+<p>It picks a proposal number that is higher than current highest prepare seen. The proposer<br>
+should not send a proposal that is older than previous ones.</p>
+<ol start="3">
+<li>why does accept handler check n &gt;= n_p?</li>
+</ol>
+<p>The acceptor promises not to accept any proposal with number less than n_p.</p>
+<ol start="4">
+<li>why does accept handler update n_p = n?</li>
+</ol>
+<p>The accept handler updates n_a because it’s accepting a value. The real question is why n_p is<br>
+updated too. If n_p &lt; n, then n_p &lt; n_a. The proposal with n_p will be rejected by the<br>
+acceptor.</p>
+<ol start="5">
+<li>what if proposer S2 chooses n &lt; S1’s n?</li>
+</ol>
+<p>It will be rejected by any acceptor that has seen S1’s proposal.</p>
+<ol start="6">
+<li>what if an acceptor crashes after receiving accept?</li>
+</ol>
+<p>Assume that an acceptor receiving accept means that states were updated but it didn’t send<br>
+accept_ok, then the proposer will retry with a new proposal number and get rejected since the<br>
+acceptor is dead.</p>
+<p>One acceptor crash will not affect the the system as long as the majority of the paxos peers<br>
+is alive. Since the paxos lab is not persistent, the peer will lost its states. It will get<br>
+updated when it is alive.</p>
+<ol start="7">
+<li>what if an acceptor reboots after sending prepare_ok?</li>
+</ol>
+<p>The next accept will be rejected because the acceptor forgets the previous prepare which updates<br>
+n_p.</p>
+<p>Paxos gets stuck:</p>
+<ul>
+<li>not a majority that can communicate</li>
+<li>propsers retry immediately after accept_reject (should retry after a random amount of time)</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">example 1 (normal operation):</span><br><span class="line">  S1, S2, S3</span><br><span class="line">  but S3 is dead or slow</span><br><span class="line">  S1 starts proposal, n=1 v=A</span><br><span class="line">S1: p1    a1A    dA</span><br><span class="line">S2: p1    a1A    dA</span><br><span class="line">S3: dead...</span><br><span class="line">&quot;p1&quot; means Sx receives prepare(n=1)</span><br><span class="line">&quot;a1A&quot; means Sx receives accept(n=1, v=A)</span><br><span class="line">&quot;dA&quot; means Sx receives decided(v=A)</span><br><span class="line">these diagrams are not specific about who the proposer is</span><br><span class="line">(I like the diagram in the lecture handout, very concise)</span><br><span class="line"></span><br><span class="line">proposer - acceptor exchange:</span><br><span class="line">    prepare(n) -&gt;</span><br><span class="line">    &lt;- prepare_ok(n, n_a, v_a)</span><br><span class="line">    accept(n, v&#x27;) -&gt;</span><br><span class="line">    &lt;- accept_ok(n)</span><br><span class="line">    decided(v&#x27;) -&gt;</span><br><span class="line"></span><br><span class="line">--- Paxos Proposer ---</span><br><span class="line"></span><br><span class="line">proposer(v):</span><br><span class="line">  while not decided:</span><br><span class="line">    choose n, unique and higher than any n seen so far</span><br><span class="line">    send prepare(n) to all servers including self</span><br><span class="line">    if prepare_ok(n, n_a, v_a) from majority:</span><br><span class="line">      v&#x27; = v_a with highest n_a; choose own v otherwise   </span><br><span class="line">      send accept(n, v&#x27;) to all</span><br><span class="line">      if accept_ok(n) from majority:</span><br><span class="line">        send decided(v&#x27;) to all</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">--- Paxos Acceptor ---</span><br><span class="line"></span><br><span class="line">acceptor state on each node (persistent):</span><br><span class="line"> n_p     --- highest prepare seen</span><br><span class="line"> n_a, v_a --- highest accept seen</span><br><span class="line"></span><br><span class="line">acceptor&#x27;s prepare(n) handler:</span><br><span class="line"> if n &gt; n_p</span><br><span class="line">   n_p = n</span><br><span class="line">   reply prepare_ok(n, n_a, v_a)</span><br><span class="line"> else</span><br><span class="line">   reply prepare_reject</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">acceptor&#x27;s accept(n, v) handler:</span><br><span class="line"> if n &gt;= n_p</span><br><span class="line">   n_p = n</span><br><span class="line">   n_a = n</span><br><span class="line">   v_a = v</span><br><span class="line">   reply accept_ok(n)</span><br><span class="line"> else</span><br><span class="line">   reply accept_reject</span><br></pre></td></tr></table></figure>
+<p><u>Problem 2: How to integrate Paxos into a real system?</u></p>
+<p>Paxos-based replication:</p>
+<p>Each client ops are appended to a replicated log of servers with a separate proposal number.<br>
+Log entries are numbered, called instances (seq). Paxos reaches agreement on each log entry.</p>
+<p>Paxos provides:</p>
+<ul>
+<li>interface:
+<ul>
+<li>Start (seq, v): Propose v for seq, without waiting for agreement to complete</li>
+<li>fate, v := Status(seq): find out the agreed value for seq. Only check local states, w/o<br>
+communications between servers.</li>
+</ul>
+</li>
+<li>correctness: once any agreement reached, never changes. After agreement, servers may update state</li>
+<li>fault tolerance: tolerate non-reachability of a minority of servers</li>
+<li>liveness: will reach agreement if a majority of servers can communicate for long enough</li>
+</ul>
+<p>Example (context): Server Si uses Paxos to get all servers to agree that a log entry x holds a<br>
+client op (Get,  Put, Append).</p>
+<p>Why a log is better than all replicas to agree on each op in lock-step:</p>
+<ul>
+<li>when state is small: agree on entire state -&gt; a tie</li>
+<li>when state is very large: log describes changes -&gt; win</li>
+<li>log helps to recover from failures: slow, miss messages, crash, start</li>
+</ul>
+<p>Summary of how to use Paxos for RSM:</p>
+<p>A log of Paxos instances (client op). Different instances’ Paxos agreements are <strong>independent</strong>.</p>
+<h2><span id="case-studies-zookeeper-2010">*case studies: ZooKeeper 2010</span><a href="#case-studies-zookeeper-2010" class="header-anchor">¶</a></h2>
+<p>ZooKeeper: Wait-free coordination for Internet-scale systems</p>
+<p>Read: 1-2</p>
+<blockquote class="colorquote blue"><p>Problem 0: One use of Zookeeper is as a fault-tolerant lock service (see the section “Simple locks” on page 6). Why isn’t possible for two clients to acquire the same lock? In particular, how does Zookeeper decide if a client has failed and it can give the client’s locks to other clients?</p>
+</blockquote>
+<p>Because a lock can only be created once and held by one client. Once a lock is created, another client that tries to acquire the same lock will read the znode with the watch flag set. Zookeeper decides a client has failed by watch events.</p>
+<p>&gt; Claude: The key safety guarantee comes from combining these mechanisms: locks are typically implemented using ephemeral znodes, and session expiration is what ultimately determines if a client has failed. A client’s lock (ephemeral znode) will only be released when its session expires, ensuring no two clients can hold the same lock simultaneously</p>
+<p>site: <a target="_blank" rel="noopener" href="http://nil.csail.mit.edu/6.824/2020/notes/l-zookeeper.txt">http://nil.csail.mit.edu/6.824/2020/notes/l-zookeeper.txt</a></p>
+<p>Zookeeper is a Raft-like service with leader-based replication.  We care about Zookeeper from two perspectives:</p>
+<ol>
+<li>
+<p>APIs for a general purpose  coordination service</p>
+</li>
+<li>
+<p>performance of replication: will Nx replica server bring Nx performance?</p>
+<p>Normally, it wouldn’t for leader-based replication. The server requires leader to replicate one by one, slowing down the performance inverse proportionally to the number of replicas.</p>
+</li>
+</ol>
+<p>When a replica servers read-only client requests from their local state w/o other peers, reads from followers are not linearizable because they may return stale data. Even if a client is reading from an up-to-date replica, it still risks the possibility of seeing data values go backwards in time.</p>
+<p>Zookeeper avoids this issue by changing the definition of correctness. It looses the constraints of linearizability by allowing reads to yield stale data so that clients are able to read from all replicas, changing total read capacity from O(1) to O(# servers). That highly increases the performance for read-heavy workloads.</p>
+<p>Ordering guarantees:</p>
+<ul>
+<li>linearizable writes: writes are ordered with <code>zxid</code> and execute in zxid order.</li>
+<li>FIFO client order</li>
+</ul>
+<img src="/sg/2023/07/28/ds_basics/zab.png" class title="zab">
+<ol>
+<li>
+<p>API overview</p>
+</li>
+<li>
+<p>atomicity for mini-transaction: Zookeeper is good for small piece of data like 100MB, not as big as 100GB.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># mini-transaction example</span><br><span class="line">while true:</span><br><span class="line">	x, v := getData(&quot;f&quot;)</span><br><span class="line">	if setData(x + 1, version=v):</span><br><span class="line">		break</span><br><span class="line">	(sleep)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>Scalable lock compared to threaded lock of Go:</p>
+<p>: service creates sequential files. Each lock at most has one file requests to acquire. For example, supposing files are numbered with 0 - 3 and f0 holds the lock, the other files trying to acquire the lock look like the following diagram.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># Locks w/o herd effect</span><br><span class="line">f0                   f1              f2          f3</span><br><span class="line">holds the lock &lt;-  wait for f0 &lt;- wait for f1 &lt;- wait for f2</span><br><span class="line"></span><br><span class="line"># Locks w/ herd effect</span><br><span class="line">f0                   f1              f2          f3</span><br><span class="line">holds the lock &lt;-  wait for f0   wait for f0   wait for f0</span><br><span class="line"> ^					 |                 |           |</span><br><span class="line"> |--------------------------------------------------</span><br></pre></td></tr></table></figure>
 
   </div>
 </article>
@@ -443,22 +907,22 @@ The proposer issues a proposal (n, v) where v is the value either the highest-nu
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Case study: MapReduce 2004</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Consistency and linearizability</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Case study: GFS 2003</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Primary&#x2F;Backup Replication</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Case study: VMware FT 2010</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.1.</span> <span class="toc-text">FT design</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.2.</span> <span class="toc-text">failure handling</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.3.</span> <span class="toc-text">design alternatives</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">Verified Primary&#x2F;Backup</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">case study: Grove 2023</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">Raft</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">Paxos</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">case studies: MapReduce 2004</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Consistency and linearizability</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">case studies: GFS 2003</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Primary&#x2F;Backup Replication</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">case studies: VMware FT 2010</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.1.</span> <span class="toc-text">FT design</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.2.</span> <span class="toc-text">failure handling</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.3.</span> <span class="toc-text">design alternatives</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">Verified Primary&#x2F;Backup</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">case studies: Grove 2023</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">Raft</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.1.</span> <span class="toc-text">Leader election</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.2.</span> <span class="toc-text">Log</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.3.</span> <span class="toc-text">Persistence</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.4.</span> <span class="toc-text">Log compaction and Snapshots</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.5.</span> <span class="toc-text">Linearizability</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.6.</span> <span class="toc-text">Duplicate RPC detection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.7.</span> <span class="toc-text">Read-only operations</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">*Paxos</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.1.</span> <span class="toc-text">handout</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">10.</span> <span class="toc-text">*case studies: ZooKeeper 2010</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
       <ul>
   <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&text=Distributed Systems notes"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&title=Distributed Systems notes"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&is_video=false&description=Distributed Systems notes"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=Distributed Systems notes&body=Check out this article: https://sgzerolc.github.io/sg/2023/07/28/ds_basics/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&title=Distributed Systems notes"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&title=Distributed Systems notes"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&title=Distributed Systems notes"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&title=Distributed Systems notes"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&name=Distributed Systems notes&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&t=Distributed Systems notes"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&text=Distributed System notes"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&title=Distributed System notes"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&is_video=false&description=Distributed System notes"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Distributed System notes&body=Check out this article: https://sgzerolc.github.io/sg/2023/07/28/ds_basics/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&title=Distributed System notes"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&title=Distributed System notes"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&title=Distributed System notes"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&title=Distributed System notes"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&name=Distributed System notes&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&t=Distributed System notes"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -479,7 +943,7 @@ The proposer issues a proposal (n, v) where v is the value either the highest-nu
     Copyright &copy;
     
     
-    2024
+    2025
     Sam Li
   </div>
 </footer>
