@@ -6,12 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="sorting aggregations joins  Nested loop join Sort-merge join Hash join      Execution process: the operators are arranged in a tree.  sorting¶ supported feature: ORDER BY, DISTINCT, GROUP BY Proble">
+    <meta name="description" content="Sorting Aggregations Joins  Nested loop join Sort-merge join Hash join      Execution process: the operators are arranged in a tree.  Sorting¶ supported feature: ORDER BY, DISTINCT, GROUP BY Proble">
 <meta property="og:type" content="article">
 <meta property="og:title" content="db execution">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2022/03/17/db_execution/index.html">
 <meta property="og:site_name" content="steins gate zero">
-<meta property="og:description" content="sorting aggregations joins  Nested loop join Sort-merge join Hash join      Execution process: the operators are arranged in a tree.  sorting¶ supported feature: ORDER BY, DISTINCT, GROUP BY Proble">
+<meta property="og:description" content="Sorting Aggregations Joins  Nested loop join Sort-merge join Hash join      Execution process: the operators are arranged in a tree.  Sorting¶ supported feature: ORDER BY, DISTINCT, GROUP BY Proble">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/03/17/db_execution/Screenshot-7600728.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/03/17/db_execution/Screenshot-7652824.png">
@@ -24,7 +24,7 @@
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/03/17/db_execution/Screenshot-7661256.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/03/17/db_execution/Screenshot-7661462.png">
 <meta property="article:published_time" content="2022-03-16T23:00:00.000Z">
-<meta property="article:modified_time" content="2025-06-13T17:48:55.858Z">
+<meta property="article:modified_time" content="2025-07-04T11:11:07.160Z">
 <meta property="article:author" content="Sam Li">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://sgzerolc.github.io/sg/2022/03/17/db_execution/Screenshot-7600728.png">
@@ -117,7 +117,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">sorting</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">aggregations</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">joins</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.1.</span> <span class="toc-text">Nested loop join</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.2.</span> <span class="toc-text">Sort-merge join</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.3.</span> <span class="toc-text">Hash join</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Sorting</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Aggregations</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Joins</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.1.</span> <span class="toc-text">Nested loop join</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.2.</span> <span class="toc-text">Sort-merge join</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.3.</span> <span class="toc-text">Hash join</span></a></li></ol></li></ol>
     </div>
   </span>
 </div>
@@ -164,9 +164,9 @@
     <div class="toc">
 <!-- toc -->
 <ul>
-<li><a href="#sorting">sorting</a></li>
-<li><a href="#aggregations">aggregations</a></li>
-<li><a href="#joins">joins</a>
+<li><a href="#sorting">Sorting</a></li>
+<li><a href="#aggregations">Aggregations</a></li>
+<li><a href="#joins">Joins</a>
 <ul>
 <li><a href="#nested-loop-join">Nested loop join</a></li>
 <li><a href="#sort-merge-join">Sort-merge join</a></li>
@@ -178,7 +178,7 @@
 </div>
 <p>Execution process: the operators are arranged in a tree.</p>
 <img src="/sg/2022/03/17/db_execution/Screenshot-7600728.png" class title="Screenshot-7600728">
-<h2><span id="sorting">sorting</span><a href="#sorting" class="header-anchor">¶</a></h2>
+<h2><span id="sorting">Sorting</span><a href="#sorting" class="header-anchor">¶</a></h2>
 <p>supported feature: ORDER BY, DISTINCT, GROUP BY</p>
 <p>Problem: can’t guarantee sorting data to fit in memory</p>
 <p>Approach: external merge sort: splits the data set into separate runs, sorts them individually, and then combine into larger sorted runs.</p>
@@ -252,7 +252,7 @@
 <p>case 2: unclustered b+ tree: else, don’t do it.</p>
 </li>
 </ol>
-<h2><span id="aggregations">aggregations</span><a href="#aggregations" class="header-anchor">¶</a></h2>
+<h2><span id="aggregations">Aggregations</span><a href="#aggregations" class="header-anchor">¶</a></h2>
 <ol>
 <li>
 <p>Aggregations: Collapse values for a single attribute from multiple tuples into a single scalar value.</p>
@@ -301,7 +301,7 @@
 </ul>
 </li>
 </ol>
-<h2><span id="joins">joins</span><a href="#joins" class="header-anchor">¶</a></h2>
+<h2><span id="joins">Joins</span><a href="#joins" class="header-anchor">¶</a></h2>
 <ol>
 <li>
 <p>inner equijoin algorithm: joins tables where keys are equal.</p>
@@ -316,7 +316,7 @@
 <p>operator output: For a tuple r ∈ R and a tuple s ∈ S that match on join attributes, the join operator concatenates r and s together into a new output tuple.</p>
 <ul>
 <li>
-<p>early materialization(data): Copy the values for the attributes in outer and inner tuples into a new output tuple. -&gt; no need to go back in the query plan</p>
+<p>early materialization (data): Copy the values for the attributes in outer and inner tuples into a new output tuple. -&gt; no need to go back in the query plan</p>
 <img src="/sg/2022/03/17/db_execution/Screenshot-7661256.png" class title="Screenshot-7661256">
 </li>
 <li>
@@ -406,7 +406,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">sorting</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">aggregations</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">joins</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.1.</span> <span class="toc-text">Nested loop join</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.2.</span> <span class="toc-text">Sort-merge join</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.3.</span> <span class="toc-text">Hash join</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Sorting</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Aggregations</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Joins</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.1.</span> <span class="toc-text">Nested loop join</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.2.</span> <span class="toc-text">Sort-merge join</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.3.</span> <span class="toc-text">Hash join</span></a></li></ol></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">

@@ -6,12 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="hash tables  Static hashing schema Dynamic hashing schema   b+ tree  Overview disign choices optimizations   Index  Trie index radix tree inverted index   concurrency control  Locks vs. latches Lat">
+    <meta name="description" content="Hash tables  Static hashing Dynamic hashing   B+ tree  Design choices Optimizations   Index  Trie index Radix tree Inverted index   Concurrency control  Locks vs. latches Latch designs Practice">
 <meta property="og:type" content="article">
 <meta property="og:title" content="db index">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2022/03/05/db_index/index.html">
 <meta property="og:site_name" content="steins gate zero">
-<meta property="og:description" content="hash tables  Static hashing schema Dynamic hashing schema   b+ tree  Overview disign choices optimizations   Index  Trie index radix tree inverted index   concurrency control  Locks vs. latches Lat">
+<meta property="og:description" content="Hash tables  Static hashing Dynamic hashing   B+ tree  Design choices Optimizations   Index  Trie index Radix tree Inverted index   Concurrency control  Locks vs. latches Latch designs Practice">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/03/05/db_index/Screenshot-7503728.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/03/05/db_index/Screenshot-7504450.png">
@@ -55,7 +55,7 @@
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/03/05/db_index/Screenshot-7595952.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/03/05/db_index/Screenshot-7597088.png">
 <meta property="article:published_time" content="2022-03-04T23:00:00.000Z">
-<meta property="article:modified_time" content="2025-06-13T17:48:58.917Z">
+<meta property="article:modified_time" content="2025-07-04T10:57:40.358Z">
 <meta property="article:author" content="Sam Li">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://sgzerolc.github.io/sg/2022/03/05/db_index/Screenshot-7503728.png">
@@ -148,7 +148,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">hash tables</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">Static hashing schema</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">Dynamic hashing schema</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">b+ tree</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">Overview</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">disign choices</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.3.</span> <span class="toc-text">optimizations</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Index</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.1.</span> <span class="toc-text">Trie index</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.2.</span> <span class="toc-text">radix tree</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.3.</span> <span class="toc-text">inverted index</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">concurrency control</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.1.</span> <span class="toc-text">Locks vs. latches</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.2.</span> <span class="toc-text">Latch designs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.3.</span> <span class="toc-text">Practice</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Hash tables</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">Static hashing</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">Dynamic hashing</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">B+ tree</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">Design choices</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">Optimizations</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Index</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.1.</span> <span class="toc-text">Trie index</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.2.</span> <span class="toc-text">Radix tree</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.3.</span> <span class="toc-text">Inverted index</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Concurrency control</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.1.</span> <span class="toc-text">Locks vs. latches</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.2.</span> <span class="toc-text">Latch designs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.3.</span> <span class="toc-text">Practice</span></a></li></ol></li></ol>
     </div>
   </span>
 </div>
@@ -195,27 +195,26 @@
     <div class="toc">
 <!-- toc -->
 <ul>
-<li><a href="#hash-tables">hash tables</a>
+<li><a href="#hash-tables">Hash tables</a>
 <ul>
-<li><a href="#static-hashing-schema">Static hashing schema</a></li>
-<li><a href="#dynamic-hashing-schema">Dynamic hashing schema</a></li>
+<li><a href="#static-hashing">Static hashing</a></li>
+<li><a href="#dynamic-hashing">Dynamic hashing</a></li>
 </ul>
 </li>
-<li><a href="#b-tree">b+ tree</a>
+<li><a href="#b-tree">B+ tree</a>
 <ul>
-<li><a href="#overview">Overview</a></li>
-<li><a href="#disign-choices">disign choices</a></li>
-<li><a href="#optimizations">optimizations</a></li>
+<li><a href="#design-choices">Design choices</a></li>
+<li><a href="#optimizations">Optimizations</a></li>
 </ul>
 </li>
 <li><a href="#index">Index</a>
 <ul>
 <li><a href="#trie-index">Trie index</a></li>
-<li><a href="#radix-tree">radix tree</a></li>
-<li><a href="#inverted-index">inverted index</a></li>
+<li><a href="#radix-tree">Radix tree</a></li>
+<li><a href="#inverted-index">Inverted index</a></li>
 </ul>
 </li>
-<li><a href="#concurrency-control">concurrency control</a>
+<li><a href="#concurrency-control">Concurrency control</a>
 <ul>
 <li><a href="#locks-vs-latches">Locks vs. latches</a></li>
 <li><a href="#latch-designs">Latch designs</a></li>
@@ -231,8 +230,8 @@
 <li>Data organization: memory layout and information to store -&gt; access</li>
 <li>Concurrency: multiple threads to access without causing problems -&gt; efficient access</li>
 </ol>
-<p>There are two types of data structures:hash table, trees.</p>
-<h2><span id="hash-tables">hash tables</span><a href="#hash-tables" class="header-anchor">¶</a></h2>
+<p>There are two types of data structures: hash table, trees.</p>
+<h2><span id="hash-tables">Hash tables</span><a href="#hash-tables" class="header-anchor">¶</a></h2>
 <ol>
 <li>
 <p>Complexity: space: O(n); runtime: amortized O(1) lookup</p>
@@ -249,7 +248,7 @@
 </ul>
 </li>
 </ol>
-<h3><span id="static-hashing-schema">Static hashing schema</span><a href="#static-hashing-schema" class="header-anchor">¶</a></h3>
+<h3><span id="static-hashing">Static hashing</span><a href="#static-hashing" class="header-anchor">¶</a></h3>
 <p>The size of the hash table is fixed. DBMS has to rebuild a larger hash tables if it runs out of storage space.</p>
 <p>Assume: knowing the number of elements it wants to store.</p>
 <ol>
@@ -293,7 +292,7 @@
 <img src="/sg/2022/03/05/db_index/Screenshot-7510099.png" class title="Screenshot-7510099">
 </li>
 </ol>
-<h3><span id="dynamic-hashing-schema">Dynamic hashing schema</span><a href="#dynamic-hashing-schema" class="header-anchor">¶</a></h3>
+<h3><span id="dynamic-hashing">Dynamic hashing</span><a href="#dynamic-hashing" class="header-anchor">¶</a></h3>
 <p>property: Dynamic hash tables resize themselves on demand</p>
 <ol>
 <li>
@@ -330,12 +329,12 @@
 </li>
 </ol>
 <p>​</p>
-<h2><span id="b-tree">b+ tree</span><a href="#b-tree" class="header-anchor">¶</a></h2>
+<h2><span id="b-tree">B+ tree</span><a href="#b-tree" class="header-anchor">¶</a></h2>
 <ol>
 <li>table index: index of a table’s attributes. The table is stored in the sort order specified by the primary key. Can be either heap- or index-organized storage</li>
 <li>Trade-off on the number of indexes to create per database: storage overhead Vs. maintenance overhead</li>
 </ol>
-<h3><span id="overview">Overview</span><a href="#overview" class="header-anchor">¶</a></h3>
+<p>Overview:</p>
 <ol>
 <li>
 <p>b+ tree: a self-balancing tree data structure that keeps data sorted and allows searches, sequential access, insertion, and deletions in O(log(n)). Good at read/write large blocks of data.</p>
@@ -417,7 +416,7 @@ the duplicate keys.</p>
 <img src="/sg/2022/03/05/db_index/Screenshot-7517996.png" class title="Screenshot-7517996">
 </li>
 </ol>
-<h3><span id="disign-choices">disign choices</span><a href="#disign-choices" class="header-anchor">¶</a></h3>
+<h3><span id="design-choices">Design choices</span><a href="#design-choices" class="header-anchor">¶</a></h3>
 <ol>
 <li>
 <p>node size</p>
@@ -482,7 +481,7 @@ the duplicate keys.</p>
 </ul>
 </li>
 </ol>
-<h3><span id="optimizations">optimizations</span><a href="#optimizations" class="header-anchor">¶</a></h3>
+<h3><span id="optimizations">Optimizations</span><a href="#optimizations" class="header-anchor">¶</a></h3>
 <ol>
 <li>
 <p>Prefix compression: extract prefix and store unique suffix for each key -&gt; keys in the same node have overlapping prefix</p>
@@ -571,11 +570,11 @@ to support index-only queries.</p>
 </ul>
 </li>
 </ol>
-<h3><span id="radix-tree">radix tree</span><a href="#radix-tree" class="header-anchor">¶</a></h3>
+<h3><span id="radix-tree">Radix tree</span><a href="#radix-tree" class="header-anchor">¶</a></h3>
 <p>variant of trie index. Omit all nodes with only a single child.</p>
 <img src="/sg/2022/03/05/db_index/Screenshot-7584321.png" class title="Screenshot-7584321">
 <img src="/sg/2022/03/05/db_index/Screenshot-7584401.png" class title="Screenshot-7584401">
-<h3><span id="inverted-index">inverted index</span><a href="#inverted-index" class="header-anchor">¶</a></h3>
+<h3><span id="inverted-index">Inverted index</span><a href="#inverted-index" class="header-anchor">¶</a></h3>
 <ol>
 <li>
 <p>make observations: Tree indexs above are useful for point and range queries; not good for keyword searches</p>
@@ -600,7 +599,7 @@ to support index-only queries.</p>
 </ul>
 </li>
 </ol>
-<h2><span id="concurrency-control">concurrency control</span><a href="#concurrency-control" class="header-anchor">¶</a></h2>
+<h2><span id="concurrency-control">Concurrency control</span><a href="#concurrency-control" class="header-anchor">¶</a></h2>
 <ol>
 <li>make observations: multi-threads world means that cpu cores and disk I/O stalls matters.</li>
 <li>come up with a protocol: a protocol needs criteria
@@ -765,7 +764,7 @@ to support index-only queries.</p>
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">hash tables</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">Static hashing schema</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">Dynamic hashing schema</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">b+ tree</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">Overview</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">disign choices</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.3.</span> <span class="toc-text">optimizations</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Index</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.1.</span> <span class="toc-text">Trie index</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.2.</span> <span class="toc-text">radix tree</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.3.</span> <span class="toc-text">inverted index</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">concurrency control</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.1.</span> <span class="toc-text">Locks vs. latches</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.2.</span> <span class="toc-text">Latch designs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.3.</span> <span class="toc-text">Practice</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Hash tables</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">Static hashing</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">Dynamic hashing</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">B+ tree</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">Design choices</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">Optimizations</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Index</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.1.</span> <span class="toc-text">Trie index</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.2.</span> <span class="toc-text">Radix tree</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">3.3.</span> <span class="toc-text">Inverted index</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Concurrency control</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.1.</span> <span class="toc-text">Locks vs. latches</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.2.</span> <span class="toc-text">Latch designs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.3.</span> <span class="toc-text">Practice</span></a></li></ol></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
