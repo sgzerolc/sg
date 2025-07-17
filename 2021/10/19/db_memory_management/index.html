@@ -6,35 +6,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="Disk manager  Page layout Tuple layout Data storage models   Buffer pool manager  Buffer pool optimizations OS page cache Buffer Replacement Policies Dirty pages Other memory pool      storage: Goa">
+    <meta name="description" content="Buffer Pool Manager    Terminology:  Hardware page: The storage device guarantees an atomic write of the size of the hardware page. A hardware page is the largest block of data that the storage dev">
 <meta property="og:type" content="article">
-<meta property="og:title" content="db memory management">
+<meta property="og:title" content="db buffer poo">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/index.html">
 <meta property="og:site_name" content="steins gate zero">
-<meta property="og:description" content="Disk manager  Page layout Tuple layout Data storage models   Buffer pool manager  Buffer pool optimizations OS page cache Buffer Replacement Policies Dirty pages Other memory pool      storage: Goa">
+<meta property="og:description" content="Buffer Pool Manager    Terminology:  Hardware page: The storage device guarantees an atomic write of the size of the hardware page. A hardware page is the largest block of data that the storage dev">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/Screenshot-7504622.png">
-<meta property="og:image" content="https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/Screenshot-7504676.png">
-<meta property="og:image" content="https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/Screenshot-7504738.png">
-<meta property="og:image" content="https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/Screenshot-7504759.png">
-<meta property="og:image" content="https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/Screenshot-7504840.png">
-<meta property="og:image" content="https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/Screenshot-7504932.png">
-<meta property="og:image" content="https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/Screenshot-7505078.png">
-<meta property="og:image" content="https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/Screenshot-7505252.png">
-<meta property="og:image" content="https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/Screenshot-7505628.png">
-<meta property="og:image" content="https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/Screenshot-7505878.png">
-<meta property="og:image" content="https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/Screenshot-7506226.png">
-<meta property="og:image" content="https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/Screenshot-7506243.png">
-<meta property="og:image" content="https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/Screenshot-7506613.png">
-<meta property="og:image" content="https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/Screenshot-7506974.png">
-<meta property="og:image" content="https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/Screenshot-7507037.png">
-<meta property="og:image" content="https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/Screenshot-7507190.png">
-<meta property="og:image" content="https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/Screenshot-7507995.png">
 <meta property="article:published_time" content="2021-10-18T22:00:00.000Z">
-<meta property="article:modified_time" content="2025-07-04T10:56:58.178Z">
+<meta property="article:modified_time" content="2025-07-17T18:11:45.711Z">
 <meta property="article:author" content="Sam Li">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/Screenshot-7504622.png">
     
     
       
@@ -54,7 +36,7 @@
       
     
     <!-- title -->
-    <title>db memory management</title>
+    <title>db buffer poo</title>
     <!-- styles -->
     
 <link rel="stylesheet" href="/sg/css/style.css">
@@ -110,21 +92,21 @@
     <div id="share" style="display: none">
       <ul>
   <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/&text=db memory management"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/&title=db memory management"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/&is_video=false&description=db memory management"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=db memory management&body=Check out this article: https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/&title=db memory management"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/&title=db memory management"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/&title=db memory management"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/&title=db memory management"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/&name=db memory management&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/&t=db memory management"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/&text=db buffer poo"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/&title=db buffer poo"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/&is_video=false&description=db buffer poo"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=db buffer poo&body=Check out this article: https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/&title=db buffer poo"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/&title=db buffer poo"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/&title=db buffer poo"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/&title=db buffer poo"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/&name=db buffer poo&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/&t=db buffer poo"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Disk manager</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">Page layout</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">Tuple layout</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.3.</span> <span class="toc-text">Data storage models</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Buffer pool manager</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">Buffer pool optimizations</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">OS page cache</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.3.</span> <span class="toc-text">Buffer Replacement Policies</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.4.</span> <span class="toc-text">Dirty pages</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.5.</span> <span class="toc-text">Other memory pool</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Buffer Pool Manager</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -136,7 +118,7 @@
   <header>
     
     <h1 class="posttitle" itemprop="name headline">
-        db memory management
+        db buffer poo
     </h1>
 
 
@@ -171,313 +153,45 @@
     <div class="toc">
 <!-- toc -->
 <ul>
-<li><a href="#disk-manager">Disk manager</a>
-<ul>
-<li><a href="#page-layout">Page layout</a></li>
-<li><a href="#tuple-layout">Tuple layout</a></li>
-<li><a href="#data-storage-models">Data storage models</a></li>
-</ul>
-</li>
-<li><a href="#buffer-pool-manager">Buffer pool manager</a>
-<ul>
-<li><a href="#buffer-pool-optimizations">Buffer pool optimizations</a></li>
-<li><a href="#os-page-cache">OS page cache</a></li>
-<li><a href="#buffer-replacement-policies">Buffer Replacement Policies</a></li>
-<li><a href="#dirty-pages">Dirty pages</a></li>
-<li><a href="#other-memory-pool">Other memory pool</a></li>
-</ul>
-</li>
+<li><a href="#buffer-pool-manager">Buffer Pool Manager</a></li>
 </ul>
 <!-- tocstop -->
 </div>
-<p>storage: Goal:</p>
-<p>Provide an illusion that it has sufficient memory, avoid large stalls due to expensive disk access, maximize sequential access due to principle of locality.</p>
-<p>Problem: why not use the os for moving the files’ pages in and out of memory?</p>
-<p>Answer: OS doesn’t care about what the file is while DBMS sees the difference of queries.<img src="/sg/2021/10/19/db_memory_management/Screenshot-7504622.png" class title="Screenshot-7504622"></p>
-<h2><span id="disk-manager">Disk manager</span><a href="#disk-manager" class="header-anchor">¶</a></h2>
-<p><u>Problem: how the DBMS represents the database in files on disk?</u></p>
-<img src="/sg/2021/10/19/db_memory_management/Screenshot-7504676.png" class title="Screenshot-7504676">
-<p>disk manager:</p>
-<ul>
-<li>
-<p>Fixed-size db pages</p>
-<blockquote>
-<p>Storage manager can organize files as a collection of pages.</p>
-<ul>
-<li>
-<p>represents the files as a collection of pages.</p>
-</li>
-<li>
-<p>keeps track of data read/written to pages and available space</p>
-</li>
-</ul>
-</blockquote>
-</li>
-<li>
-<p>Hardware page: the storage device guarantees an atomic write of the size of the hardware page.</p>
-</li>
-</ul>
-<p>A hardware page is the largest block of data that the storage device can guarantee failsafe writes.  If our database page is larger than our hardware page, the DBMS will have to take extra measures to ensure that the data gets written out safely since the program can get partway through writing a database<br>
-page to disk when the system crashes.</p>
-<p>Database heap: random pages collection.</p>
-<p>Problem: how to locate a page on disk given page_id?</p>
+<p>Terminology:</p>
 <ol>
-<li>
-<p>Linked list: sequential scan</p>
-<img src="/sg/2021/10/19/db_memory_management/Screenshot-7504738.png" class title="Screenshot-7504738">
-</li>
-<li>
-<p>Page directory: translation</p>
-<img src="/sg/2021/10/19/db_memory_management/Screenshot-7504759.png" class title="Screenshot-7504759">
-</li>
+<li>Hardware page: The storage device guarantees an atomic write of the size of the hardware page. A hardware page is the largest block of data that the storage device can guarantee failsafe writes.</li>
+<li>Database heap: Heap file organization is one of ways to organize pages of a DBMS. It helps to find the location of the page that DBMS wants on disk. A heap file consists of unordered pages where tuples are stored in random order.</li>
+<li>Tuple: a tuple is a sequence of bytes, contiguous or not, to interpreted by DBMS into attribute types and values.</li>
 </ol>
-<h3><span id="page-layout">Page layout</span><a href="#page-layout" class="header-anchor">¶</a></h3>
+<p>Storage should prove virtually sufficient memory, maximize sequential access due to principle of locality and prevent I/O delays due to disk access. Databases manage its own storage because operating systems are not aware of the file layout or the difference of queries.</p>
+<p>The DBMS stores database as files on disk in pages. Storage manager can organize files as a collection of pages and keep track of data read/written to pages and available space. Pages in DBMS concepts are divided into hardware page (usually 4 KB), OS page (4 KB), and database page (1-16 KB). A database page is always fixed-size to avoid the engineering overhead to support variable page size. If a database page is larger than a hardware page, the DBMS needs to guarantee write atomicity.</p>
+<p>Data layouts in pages use two main approaches: slotted-pages and log-structured. Slotted pages map slots to offsets. Log-structured architecture stores the log records of changes to the tuples. The log-structured model assumes no overwrites and only allows creation of new pages on a system, which helps to address several problems of slotted pages such as fragmentation, useless and random disk I/O.</p>
+<p>Log-structure storage is built upon LSTF and LSM Tree. To store a log entry, the DBMS does the following operations:</p>
 <ol>
-<li>
-<p>Slotted-pages</p>
-<p>Header + slot array + tuples</p>
-<img src="/sg/2021/10/19/db_memory_management/Screenshot-7504840.png" class title="Screenshot-7504840">
-<blockquote>
-<p>To add a tuple, the slot array will grow from the beginning to the end, and the data of the tuples will grow from end to the beginning. The page is considered full when the slot array and the tuple data meet.</p>
-</blockquote>
-</li>
-<li>
-<p>Log-structured</p>
-<p>Log records: fast writes, slow reads.</p>
-<ul>
-<li>
-<p>Optimizations:</p>
-<ul>
-<li>
-<p>build index</p>
-<img src="/sg/2021/10/19/db_memory_management/Screenshot-7504932.png" class title="Screenshot-7504932">
-</li>
-<li>
-<p>Compact the log</p>
-<p>Concerns: write amplification</p>
-<img src="/sg/2021/10/19/db_memory_management/Screenshot-7505078.png" class title="Screenshot-7505078">
-</li>
-</ul>
-</li>
-</ul>
-</li>
+<li>Apply changes to an in-memory data structure (MemTable)</li>
+<li>Write out the changes sequentially to disk (SSTable)</li>
+<li>Sorts each SSTable based on keys before writing out.</li>
 </ol>
-<h3><span id="tuple-layout">Tuple layout</span><a href="#tuple-layout" class="header-anchor">¶</a></h3>
-<p>System catalog tracks the schema.</p>
-<p>header: Metadata about the tuple + data + unique identifier (page_id + (offset/slot))</p>
-<p>Denormalize tuple data: when two tables are related,  they can be pre-joined and it results in one table under the cost of update while it makes reads faster.</p>
-<p>Data representations: The data in tuples is essentially just byte arrays. It is up to the DBMS to know how to interpret those bytes to derive the values for attributes. A data representation scheme is how a DBMS stores the bytes for a value.</p>
-<p>Five high level datatypes in tuples:</p>
+<p>The read path is to check MemTable first and then check SSTables at each level. To avoid brute force scans of SSTables, the DBMS maintains an in-memory SummaryTable to track system catalogs.</p>
+<p>In a write-heavy workload, the DBMS stockpiles a large number of SSTables. Thus, the DBMS periodically compacts the logs by taking the most recent update. The log compaction can reduce wasted space and accelerate reads. There are three major approaches to log compaction: universal, level, and tiering compaction.</p>
+<p>Analysis of trade-offs of using log-structured storage breaks down to several aspects: writes, reads, compaction, write amplification.</p>
+<p>In the index-organized storage, the DBMS stores indexes as keys and a table’s tuples as the values to those keys. The tables of databases are inherently unsorted. Storages rely on indexes to find a particular tuple.</p>
+<h3><span id="buffer-pool-manager">Buffer Pool Manager</span><a href="#buffer-pool-manager" class="header-anchor">¶</a></h3>
+<p>Terminology:</p>
 <ol>
-<li>
-<p>Integer</p>
-<ul>
-<li>Examples: INTEGER, BIGINT, SMALLINT, TINYINT</li>
-</ul>
-</li>
-<li>
-<p>variable precision numbers</p>
-<p>upside: Operations on variable precision numbers are faster than arbitrary precision numbers.</p>
-<p>downside: rounding errors</p>
-<ul>
-<li>Examples: FLOAT, REAL</li>
-</ul>
-</li>
-<li>
-<p>Fixed-point precision numbers</p>
-<p>Upside: precise</p>
-<p>Downside: slow</p>
-<ul>
-<li>Examples: NUMERIC, DECIMAL</li>
-</ul>
-</li>
-<li>
-<p>Variable-length data</p>
-<p>problem: large values exceeding the page</p>
-<p>Solution:</p>
-<p>​	1. use separate overflow storage pages</p>
-<p>​	2. store data in external files, downside: DBMS lose control of this file</p>
-<ul>
-<li>Examples: VARCHAR, VARBINARY, TEXT, BLOB.</li>
-</ul>
-</li>
-<li>
-<p>Dates and times</p>
-<p>Examples: TIME, DATE, TIMESTAMP</p>
-</li>
+<li>Buffer pool: an in-memory cache of pages between memory and disk.</li>
+<li>write-back cache: dirty pages are buffered and not written to disk immediately on mutation.</li>
+<li>write-through cache: any changes are instantly propagated to disk.</li>
 </ol>
-<p>Workloads types</p>
-<p>A workload is a general nature of requests a system will have to handle.</p>
-<img src="/sg/2021/10/19/db_memory_management/Screenshot-7505252.png" class title="Screenshot-7505252">
-<ol>
-<li>
-<p>OLTP: online transaction processing: simple queries; more writes than reads</p>
-</li>
-<li>
-<p>OLAP: online analytical processing: complex queries; more reads than writes</p>
-</li>
-<li>
-<p>HTAP: hybrid transaction + analytical processing</p>
-</li>
-</ol>
-<h3><span id="data-storage-models">Data storage models</span><a href="#data-storage-models" class="header-anchor">¶</a></h3>
-<p>assume n-ary storage model in class.</p>
-<ol>
-<li>
-<p>N-ary storage model (NSM): stores all attributes for a single tuple<br>
-contiguously in a page -&gt; row store</p>
+<p>mmap vs. buffer pool</p>
+<p>Disadvantages of mmap:</p>
 <ul>
-<li>pro: scanning the entire tuple</li>
-<li>con: not good for scanning large portions of the table/a subset of the attributes</li>
+<li>Mmap must align sizes to a page size.</li>
+<li>The memory mapped file’s content must fit into the calling process’ virtual address space.</li>
+<li>Performance issues: cache coherence.</li>
 </ul>
-<img src="/sg/2021/10/19/db_memory_management/Screenshot-7505628.png" class title="Screenshot-7505628">
-</li>
-<li>
-<p>decomposition storage model(DSM): stores the values of a single attribute for all tuples contiguously in a page -&gt; column store</p>
-<ul>
-<li>pro: scan portiosn of the table; query processing; data compression</li>
-<li>con: because of tuple splitting/stitching, slow for point queries, inserts, updates, deletes</li>
-</ul>
-<img src="/sg/2021/10/19/db_memory_management/Screenshot-7505878.png" class title="Screenshot-7505878">
-<ul>
-<li>
-<p>tuple indentification: put the tuples back together when using a column store</p>
-<ul>
-<li>
-<p>Fixed-length offsets</p>
-<img src="/sg/2021/10/19/db_memory_management/Screenshot-7506226.png" class title="Screenshot-7506226">
-</li>
-<li>
-<p>Embedded tuple ids</p>
-<img src="/sg/2021/10/19/db_memory_management/Screenshot-7506243.png" class title="Screenshot-7506243">
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-<h2><span id="buffer-pool-manager">Buffer pool manager</span><a href="#buffer-pool-manager" class="header-anchor">¶</a></h2>
-<p><u>Problem: how the DBMS manages its memory and move data back-and-forth from disk?</u></p>
-<p>Two goals of db storage is spatial control and temporal control.</p>
-<ul>
-<li>keep pages that are used together often as physically close together as possible on disk.</li>
-<li>minimize the number of stalls from having to read data from disk.</li>
-</ul>
-<p>The buffer pool is an in-memory cache of pages read from disk. It is essentially a large memory region allocated inside of the database to store pages that are fetched from disk.</p>
-<img src="/sg/2021/10/19/db_memory_management/Screenshot-7506613.png" class title="Screenshot-7506613">
-<ol>
-<li>
-<p>memory organization.</p>
-<p>Buffer pool’s region of memory organized as an array of fixed size pages. Each entry is a frame.</p>
-</li>
-<li>
-<p>Metadata</p>
-<ul>
-<li>
-<p>page table: an in-memory hash table that keeps track of pages that are currently in memory.</p>
-<p>(Key: frame location , value: page id)</p>
-</li>
-<li>
-<p>Dirty-flag: set by a thread whenever it modifies a page.</p>
-<ul>
-<li>Indicate: the page must be written back to disk</li>
-</ul>
-</li>
-<li>
-<p>Pin/reference counter</p>
-<ul>
-<li>tracks the number of threads that are currently accessing that page (either reading or modifying it).</li>
-<li>if count &gt; 0, then evicting that page from mem is not allowed.</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>
-<p>allocation policies</p>
-<ul>
-<li>global view: best in all transactions</li>
-<li>local view: make a single query/transaction run faster</li>
-</ul>
-</li>
-</ol>
-<h3><span id="buffer-pool-optimizations">Buffer pool optimizations</span><a href="#buffer-pool-optimizations" class="header-anchor">¶</a></h3>
-<ol>
-<li>
-<p>multiple buffer pools</p>
-<ul>
-<li>
-<p>approach 1: Object ID: mapping from objects to specific buffer pools</p>
-<p>&lt;objectID, pageID, slotNum&gt;</p>
-</li>
-<li>
-<p>approach 2: Hashing: Hash the page id to select which buffer pool to access.</p>
-</li>
-</ul>
-</li>
-<li>
-<p>Pre-fetching: prefetched the following pages based on the query plan.</p>
-<ul>
-<li>
-<p>Scenario: accessing many pages sequentially</p>
-</li>
-<li>
-<p>approach 1: sequential scans</p>
-<img src="/sg/2021/10/19/db_memory_management/Screenshot-7506974.png" class title="Screenshot-7506974">
-</li>
-<li>
-<p>approach 2: index scans</p>
-<img src="/sg/2021/10/19/db_memory_management/Screenshot-7507037.png" class title="Screenshot-7507037">
-</li>
-</ul>
-</li>
-<li>
-<p>Scan-sharing: scanning the same data</p>
-<p>Q2 will attach to Q1 and keep scanning as Q1 moves. When Q1 stops, Q2 continues to scan until meet the attaching point.</p>
-<img src="/sg/2021/10/19/db_memory_management/Screenshot-7507190.png" class title="Screenshot-7507190">
-</li>
-<li>
-<p>Buffer pool bypass: access pages in disk directly</p>
-<ul>
-<li>pro: fetch a large sequence of pages that are contiguous on disk; knows as light scans</li>
-</ul>
-</li>
-</ol>
-<h3><span id="os-page-cache">OS page cache</span><a href="#os-page-cache" class="header-anchor">¶</a></h3>
-<p>another way to access data</p>
-<p>os maintains its own file system cache.</p>
-<h3><span id="buffer-replacement-policies">Buffer Replacement Policies</span><a href="#buffer-replacement-policies" class="header-anchor">¶</a></h3>
-<p>Problem: When the DBMS needs to free up a frame to make room for a new page, it must decide which page to evict from the buffer pool.</p>
-<ol>
-<li>
-<p>LRU: least-recently used</p>
-</li>
-<li>
-<p>CLOCK: use reference bit in each page instead of timestamps in LRU</p>
-<img src="/sg/2021/10/19/db_memory_management/Screenshot-7507995.png" class title="Screenshot-7507995">
-</li>
-</ol>
-<p>Con: susceptible to sequential flooding. Buffer pool’s content are corrupted due to a sequential scan</p>
-<p>Approaches:</p>
-<ol>
-<li>LRU-K: tracks the last K references as timestamps</li>
-<li>localization per query: evict on a per transaction/query basis.</li>
-<li>Priority hints: based on the context of each page during query execution</li>
-</ol>
-<h3><span id="dirty-pages">Dirty pages</span><a href="#dirty-pages" class="header-anchor">¶</a></h3>
-<p>Approaches:</p>
-<ol>
-<li>Fast evictions: drop dirty pages</li>
-<li>Slow evictions: write back</li>
-<li>background writing: the DBMS can periodically walk through the page table and write dirty pages to disk. When a dirty page is safely written, the DBMS can either evict the page or just unset the dirty flag</li>
-</ol>
-<h3><span id="other-memory-pool">Other memory pool</span><a href="#other-memory-pool" class="header-anchor">¶</a></h3>
-<ol>
-<li>Sorting + join buffers</li>
-<li>query caches</li>
-<li>maintenance buffers</li>
-<li>log buffers</li>
-<li>Dictionary caches</li>
-</ol>
+<p>What differentiates them is the management of memory contents in terms of OS or databases. A database can bypass the page cache of OS’ and manage in-memory data matching its own needs.</p>
+<p>Paper: Are You Sure You Want to Use MMAP in Your Database Management System?</p>
 
   </div>
 </article>
@@ -505,22 +219,22 @@ contiguously in a page -&gt; row store</p>
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Disk manager</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">Page layout</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">Tuple layout</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.3.</span> <span class="toc-text">Data storage models</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Buffer pool manager</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.1.</span> <span class="toc-text">Buffer pool optimizations</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text">OS page cache</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.3.</span> <span class="toc-text">Buffer Replacement Policies</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.4.</span> <span class="toc-text">Dirty pages</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.5.</span> <span class="toc-text">Other memory pool</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Buffer Pool Manager</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
       <ul>
   <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/&text=db memory management"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/&title=db memory management"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/&is_video=false&description=db memory management"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=db memory management&body=Check out this article: https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/&title=db memory management"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/&title=db memory management"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/&title=db memory management"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/&title=db memory management"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/&name=db memory management&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/&t=db memory management"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/&text=db buffer poo"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/&title=db buffer poo"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/&is_video=false&description=db buffer poo"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=db buffer poo&body=Check out this article: https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/&title=db buffer poo"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/&title=db buffer poo"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/&title=db buffer poo"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/&title=db buffer poo"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/&name=db buffer poo&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://sgzerolc.github.io/sg/2021/10/19/db_memory_management/&t=db buffer poo"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>

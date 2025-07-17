@@ -6,16 +6,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="ps5 ps6 ps7 reminder Recitation  BFS DFS weighted graph All pairs shortest paths   olc    ps5¶ BFS 12345678910111213# BFSdef BFS(Adj, s):    parent &#x3D; [None for v in Adj]    parent[s] &#x3D; s    level &#x3D;">
+    <meta name="description" content="ps5 ps6 ps7 Recitation  BFS DFS Weighted graph All pairs shortest paths   olc    ps5¶ BFS 12345678910111213# BFSdef BFS(Adj, s):    parent &#x3D; [None for v in Adj]    parent[s] &#x3D; s    level &#x3D; [[s]]">
 <meta property="og:type" content="article">
 <meta property="og:title" content="hw2 graph">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2021/12/30/hw2_graph/index.html">
 <meta property="og:site_name" content="steins gate zero">
-<meta property="og:description" content="ps5 ps6 ps7 reminder Recitation  BFS DFS weighted graph All pairs shortest paths   olc    ps5¶ BFS 12345678910111213# BFSdef BFS(Adj, s):    parent &#x3D; [None for v in Adj]    parent[s] &#x3D; s    level &#x3D;">
+<meta property="og:description" content="ps5 ps6 ps7 Recitation  BFS DFS Weighted graph All pairs shortest paths   olc    ps5¶ BFS 12345678910111213# BFSdef BFS(Adj, s):    parent &#x3D; [None for v in Adj]    parent[s] &#x3D; s    level &#x3D; [[s]]">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2021/12/30/hw2_graph/Screenshot-7934843.png">
+<meta property="og:image" content="https://sgzerolc.github.io/sg/2021/12/30/hw2_graph/edge_relaxation.png">
 <meta property="article:published_time" content="2021-12-29T23:00:00.000Z">
-<meta property="article:modified_time" content="2025-06-13T07:51:42.529Z">
+<meta property="article:modified_time" content="2025-07-17T18:08:46.823Z">
 <meta property="article:author" content="Sam Li">
 <meta property="article:tag" content="hw">
 <meta name="twitter:card" content="summary">
@@ -109,7 +110,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">ps5</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">ps6</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">ps7</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">reminder</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Recitation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.1.</span> <span class="toc-text">BFS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.2.</span> <span class="toc-text">DFS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.3.</span> <span class="toc-text">weighted graph</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">5.3.1.</span> <span class="toc-text">Bellman-ford</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">5.3.2.</span> <span class="toc-text">Dijkstra</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.4.</span> <span class="toc-text">All pairs shortest paths</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">olc</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">ps5</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">ps6</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">ps7</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Recitation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.1.</span> <span class="toc-text">BFS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.2.</span> <span class="toc-text">DFS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.3.</span> <span class="toc-text">Weighted graph</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">4.3.1.</span> <span class="toc-text">Bellman-ford</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">4.3.2.</span> <span class="toc-text">Dijkstra</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.4.</span> <span class="toc-text">All pairs shortest paths</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">olc</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -164,12 +165,11 @@
 <li><a href="#ps5">ps5</a></li>
 <li><a href="#ps6">ps6</a></li>
 <li><a href="#ps7">ps7</a></li>
-<li><a href="#reminder">reminder</a></li>
 <li><a href="#recitation">Recitation</a>
 <ul>
 <li><a href="#bfs">BFS</a></li>
 <li><a href="#dfs">DFS</a></li>
-<li><a href="#weighted-graph">weighted graph</a></li>
+<li><a href="#weighted-graph">Weighted graph</a></li>
 <li><a href="#all-pairs-shortest-paths">All pairs shortest paths</a></li>
 </ul>
 </li>
@@ -266,25 +266,31 @@
 </ul>
 </li>
 </ol>
-<h2><span id="reminder">reminder</span><a href="#reminder" class="header-anchor">¶</a></h2>
-<ol>
-<li>
-<p>python lambda expression</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">lambda</span> x: x**<span class="number">2</span></span><br></pre></td></tr></table></figure>
-</li>
-<li>
-<p>Why doesn’t  Dijkstra’s algorithm work with non-negative edge weights?</p>
-<p>I think the tight bound is Dijkstra not allowing negative loops that will destroy its minimal property.</p>
-</li>
-</ol>
 <h2><span id="recitation">Recitation</span><a href="#recitation" class="header-anchor">¶</a></h2>
+<p>Terminology:</p>
+<ol>
+<li>Bipartite graph: a graph whose vertices can be divided into two disjoint and independent sets U and V, that is, every edge connects a vertex in U to one in V.</li>
+<li>DFS search: search a graph from a specific vertex or an entire.</li>
+<li>DAG: A directed graph containing no directed cycle is called a directed acyclic graph or a DAG</li>
+<li>Topological sort: in a DAG G=(V, E), a linear ordering of the vertices such that for each edge (u, v) in E, vertex u appears before vertex v in the ordering.</li>
+</ol>
 <p>The problem solving process: transform raw input to IN, apply the algorithm we are familiar with, read raw output to OUT.</p>
 <p>Then calculate the runtime and prove for correctness and efficiency.</p>
 <img src="/sg/2021/12/30/hw2_graph/Screenshot-7934843.png" class title="Screenshot-7934843">
 <h3><span id="bfs">BFS</span><a href="#bfs" class="header-anchor">¶</a></h3>
-<p>connected components</p>
+<p><strong>level sets</strong> L_i is the set of vertices reachable from s via a shortest path of length i. Breadth-first search discovers levels in increasing order starting with i = 0 where L_0 = {s}</p>
 <h3><span id="dfs">DFS</span><a href="#dfs" class="header-anchor">¶</a></h3>
-<p><u>the important part is reasoning process so that we can reason by ourselves to get the answer</u></p>
+<p>Relaxation: search for a solution to an optimization problem by sorting with a solution that is not optimal, then iteratively improves the solution until it becomes an optimal solution to the original problem.</p>
+<p>Think of the initial distance values as being very “tight” or “constrained” (e.g., initialized to infinity), and relaxation as <strong>loosening</strong> the constraint when a shorter (better) path is found</p>
+<ul>
+<li>delta (s, v): weight of the shortest path</li>
+<li>d (s, v) = +inf (except d(s, s) = 0)</li>
+<li>if d(s, v) = delta (s, v), d(s, v) fully relaxed</li>
+</ul>
+<p>How to relax? And when to stop relaxing?</p>
+<img src="/sg/2021/12/30/hw2_graph/edge_relaxation.png" class title="edge_relaxation">
+<p>The definition of topological sort depends on the acyclic property of DAG.</p>
+<p><u>The important part is reasoning process so that we can reason by ourselves to get the answer</u></p>
 <p>edge classification</p>
 <ul>
 <li>tree edge(DFS traverse)</li>
@@ -298,7 +304,7 @@
 <p>Problem 1.1: how that defers to undirected graph compared with directed graph?</p>
 <p>topological sort -&gt; directed, acyclic, graph</p>
 <p>Problem 2: how this concept relates to topological sort?</p>
-<h3><span id="weighted-graph">weighted graph</span><a href="#weighted-graph" class="header-anchor">¶</a></h3>
+<h3><span id="weighted-graph">Weighted graph</span><a href="#weighted-graph" class="header-anchor">¶</a></h3>
 <p>problem 0: how to build a shortest path algorithm?</p>
 <p>simple case: take an edge, split it up, put in fake nodes. Then use BFS</p>
 <p>Problem 1: shortest path with odd edges?</p>
@@ -376,6 +382,14 @@
 <li>
 <p>Relaxation: it checks for (u,v) in constructing graph</p>
 </li>
+<li>
+<p>python lambda expression</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">lambda</span> x: x**<span class="number">2</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>Why doesn’t  Dijkstra’s algorithm work with non-negative edge weights?</p>
+<p>I think the tight bound is Dijkstra not allowing negative loops that will destroy its minimal property.</p>
+</li>
 </ol>
 
   </div>
@@ -404,7 +418,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">ps5</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">ps6</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">ps7</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">reminder</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Recitation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.1.</span> <span class="toc-text">BFS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.2.</span> <span class="toc-text">DFS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.3.</span> <span class="toc-text">weighted graph</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">5.3.1.</span> <span class="toc-text">Bellman-ford</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">5.3.2.</span> <span class="toc-text">Dijkstra</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.4.</span> <span class="toc-text">All pairs shortest paths</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">olc</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">ps5</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">ps6</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">ps7</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Recitation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.1.</span> <span class="toc-text">BFS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.2.</span> <span class="toc-text">DFS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.3.</span> <span class="toc-text">Weighted graph</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">4.3.1.</span> <span class="toc-text">Bellman-ford</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">4.3.2.</span> <span class="toc-text">Dijkstra</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">4.4.</span> <span class="toc-text">All pairs shortest paths</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">olc</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
