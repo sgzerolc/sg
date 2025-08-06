@@ -6,15 +6,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="Bottom halves  Interface Block drivers   Block io Flow control    I wrote this blog to answer two questions:  Layers involved of I&#x2F;O requests like write sth to a file in a local computer? How does">
+    <meta name="description" content="Bottom halves  Interface Block drivers   Block IO    This blog is to answer two questions:  Layers involved of I&#x2F;O requests like write sth to a file in a local computer? How does md device (or any">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Tracing down Bio in Block Subsystems">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2023/08/08/linux_bio/index.html">
 <meta property="og:site_name" content="steins gate zero">
-<meta property="og:description" content="Bottom halves  Interface Block drivers   Block io Flow control    I wrote this blog to answer two questions:  Layers involved of I&#x2F;O requests like write sth to a file in a local computer? How does">
+<meta property="og:description" content="Bottom halves  Interface Block drivers   Block IO    This blog is to answer two questions:  Layers involved of I&#x2F;O requests like write sth to a file in a local computer? How does md device (or any">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-08-07T22:00:00.000Z">
-<meta property="article:modified_time" content="2023-09-21T07:13:06.241Z">
+<meta property="article:modified_time" content="2025-08-06T11:29:24.992Z">
 <meta property="article:author" content="Sam Li">
 <meta name="twitter:card" content="summary">
     
@@ -106,7 +106,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Bottom halves</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">Interface</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">Block drivers</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Block io</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Flow control</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Bottom halves</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">Interface</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">Block drivers</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Block IO</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -159,12 +159,11 @@
 <li><a href="#block-drivers">Block drivers</a></li>
 </ul>
 </li>
-<li><a href="#block-io">Block io</a></li>
-<li><a href="#flow-control">Flow control</a></li>
+<li><a href="#block-io">Block IO</a></li>
 </ul>
 <!-- tocstop -->
 </div>
-<p>I wrote this blog to answer two questions:</p>
+<p>This blog is to answer two questions:</p>
 <ol>
 <li>Layers involved of I/O requests like write sth to a file in a local computer?</li>
 <li>How does md device (or any other block device like null block driver) receive its data?</li>
@@ -206,7 +205,7 @@
 <li>Linux is running on the async context.</li>
 <li>flow control on device drivers may not be a good idea. A lot of places in the block layer have already done/could do that, like scheduling layer where requests are regulated.</li>
 </ol>
-<h2><span id="block-io">Block io</span><a href="#block-io" class="header-anchor">¶</a></h2>
+<h2><span id="block-io">Block IO</span><a href="#block-io" class="header-anchor">¶</a></h2>
 <p>v6.3-rc2</p>
 <p>high level: app -&gt; fs -&gt; block level</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">application</span><br><span class="line">VFS</span><br><span class="line">File system (XFS, btrfs, etc)</span><br><span class="line">Page cache</span><br><span class="line">Block layer</span><br><span class="line">- Device mapper</span><br><span class="line">Driver Level</span><br><span class="line">- I/O scheduler</span><br><span class="line">- Physical device driver</span><br></pre></td></tr></table></figure>
@@ -221,29 +220,6 @@
 <p>create/delete a rq: <a target="_blank" rel="noopener" href="https://elixir.bootlin.com/linux/v6.3-rc2/source/block/blk-mq.c#L4049">blk_mq_init_queue</a><sup class="footnote-ref"><a href="#fn6" id="fnref6">[6]</a></sup></p>
 <p>process a request: <a target="_blank" rel="noopener" href="https://elixir.bootlin.com/linux/v6.3-rc2/source/block/blk-mq.c#L1249">blk_mq_start_request</a></p>
 <p>device mapper<sup class="footnote-ref"><a href="#fn7" id="fnref7">[7]</a></sup></p>
-<h2><span id="flow-control">Flow control</span><a href="#flow-control" class="header-anchor">¶</a></h2>
-<p>Problem: Implement flow control for the bios in the md block device (or any other block device like null block driver) in Linux kernel</p>
-<p>Bio is the unit to map data in the memory to generic block offset. Block device drivers receive requests or I/Os from I/O scheduler. The scheduler groups bios to requests and use a multi-queue machanism to dispatch events. Device mapper is on top of I/O scheduler. DM receives BIOs from the user/fs and remap them first according to the DM properties.</p>
-<p>First, look into the null_blk driver. In flight BIO is an operation that has been requested, but hasn’t been initiated yet. The shared resources in flow control are in-flight BIOs. The invariants of flow control for the bios in the null_blk driver are:</p>
-<ol>
-<li>Increasing: If the # of in-flight bios &gt;= high, the thread that is processing bio will be blocked</li>
-<li>Decreasing: If the # of in-flight bios &lt; low, the blocked threads will continue executing.</li>
-</ol>
-<p>Secendly, the null_blk driver receives requests from mq block layer or IOs directly. The request queue model and IO queue model will both handle the BIOs through *_handle_cmd and finish BIOs through *_complete_cmd. Zoned commands are part of processing IO and can be ignored as the other processing part.</p>
-<p>Intuitively, there are two choices to add locking for null_blk driver:</p>
-<ol>
-<li>When the amount of blocking time is comparably smaller than the thread switching time, use spinlock</li>
-<li>spinlock, semaphore + sleep/wakeup</li>
-<li>sleeplock, atomics</li>
-</ol>
-<p>This patch applies method 2. It can be implemented by atomic ops, waitqueue and spinlock.</p>
-<p>Waitqueue has its disadavantages on the interrupted context. Workqueue is better for handling tasks without openning another thread.</p>
-<p>Finally, cases that increase BIOs are handled in two parts:</p>
-<p>Let n be # of BIO of a req,</p>
-<ol>
-<li>n = 1, bio_in_flight &gt; high</li>
-<li>n + bio_in_flight &gt; high</li>
-</ol>
 <hr class="footnotes-sep">
 <section class="footnotes">
 <ol class="footnotes-list">
@@ -290,7 +266,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Bottom halves</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">Interface</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">Block drivers</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Block io</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Flow control</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Bottom halves</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text">Interface</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.2.</span> <span class="toc-text">Block drivers</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Block IO</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
