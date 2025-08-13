@@ -8,14 +8,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
     <meta name="description" content="Case Study: MapReduce 2004 Consistency and Linearizability Case Study: GFS 2003 Primary&#x2F;Backup Replication Case Study: VMware FT 2010  FT design Failure Handling Design Alternatives   Verified Prim">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Distributed System notes">
+<meta property="og:title" content="Distributed System Notes">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2023/07/28/ds_basics/index.html">
 <meta property="og:site_name" content="steins gate zero">
 <meta property="og:description" content="Case Study: MapReduce 2004 Consistency and Linearizability Case Study: GFS 2003 Primary&#x2F;Backup Replication Case Study: VMware FT 2010  FT design Failure Handling Design Alternatives   Verified Prim">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2023/07/28/ds_basics/zab.png">
 <meta property="article:published_time" content="2023-07-27T22:00:00.000Z">
-<meta property="article:modified_time" content="2025-08-06T19:40:32.210Z">
+<meta property="article:modified_time" content="2025-08-13T13:40:55.846Z">
 <meta property="article:author" content="Sam Li">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://sgzerolc.github.io/sg/2023/07/28/ds_basics/zab.png">
@@ -38,7 +38,7 @@
       
     
     <!-- title -->
-    <title>Distributed System notes</title>
+    <title>Distributed System Notes</title>
     <!-- styles -->
     
 <link rel="stylesheet" href="/sg/css/style.css">
@@ -94,21 +94,21 @@
     <div id="share" style="display: none">
       <ul>
   <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&text=Distributed System notes"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&title=Distributed System notes"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&is_video=false&description=Distributed System notes"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=Distributed System notes&body=Check out this article: https://sgzerolc.github.io/sg/2023/07/28/ds_basics/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&title=Distributed System notes"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&title=Distributed System notes"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&title=Distributed System notes"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&title=Distributed System notes"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&name=Distributed System notes&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&t=Distributed System notes"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&text=Distributed System Notes"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&title=Distributed System Notes"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&is_video=false&description=Distributed System Notes"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Distributed System Notes&body=Check out this article: https://sgzerolc.github.io/sg/2023/07/28/ds_basics/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&title=Distributed System Notes"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&title=Distributed System Notes"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&title=Distributed System Notes"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&title=Distributed System Notes"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&name=Distributed System Notes&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&t=Distributed System Notes"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Case Study: MapReduce 2004</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Consistency and Linearizability</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Case Study: GFS 2003</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Primary&#x2F;Backup Replication</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Case Study: VMware FT 2010</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.1.</span> <span class="toc-text">FT design</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.2.</span> <span class="toc-text">Failure Handling</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.3.</span> <span class="toc-text">Design Alternatives</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">Verified Primary&#x2F;Backup</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">Case Study: Grove 2023</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">Raft</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.1.</span> <span class="toc-text">Leader Election</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.2.</span> <span class="toc-text">Log</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.3.</span> <span class="toc-text">Persistence</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.4.</span> <span class="toc-text">Log Compaction and Snapshots</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.5.</span> <span class="toc-text">Linearizability</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.6.</span> <span class="toc-text">Duplicate RPC Detection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.7.</span> <span class="toc-text">Read-only Operations</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">*Paxos</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.1.</span> <span class="toc-text">Paxos Made Simple</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.2.</span> <span class="toc-text">Inference</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">10.</span> <span class="toc-text">*Case Study: ZooKeeper 2010</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">11.</span> <span class="toc-text">*Case Study: Chubby 2006</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">12.</span> <span class="toc-text">*Case Study: Harp 1991</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Case Study: MapReduce 2004</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Consistency and Linearizability</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Case Study: GFS 2003</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Primary&#x2F;Backup Replication</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Case Study: VMware FT 2010</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.1.</span> <span class="toc-text">FT design</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.2.</span> <span class="toc-text">Failure Handling</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.3.</span> <span class="toc-text">Design Alternatives</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">Verified Primary&#x2F;Backup</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">Case Study: Grove 2023</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">Raft</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.1.</span> <span class="toc-text">Leader Election</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.2.</span> <span class="toc-text">Log</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.3.</span> <span class="toc-text">Persistence</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.4.</span> <span class="toc-text">Log Compaction and Snapshots</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.5.</span> <span class="toc-text">Linearizability</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.6.</span> <span class="toc-text">Duplicate RPC Detection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.7.</span> <span class="toc-text">Read-only Operations</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">Paxos</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.1.</span> <span class="toc-text">Paxos Made Simple</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.2.</span> <span class="toc-text">Inference</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">10.</span> <span class="toc-text">*Case Study: ZooKeeper 2010</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">11.</span> <span class="toc-text">*Case Study: Chubby 2006</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">12.</span> <span class="toc-text">*Case Study: Harp 1991</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -120,7 +120,7 @@
   <header>
     
     <h1 class="posttitle" itemprop="name headline">
-        Distributed System notes
+        Distributed System Notes
     </h1>
 
 
@@ -179,7 +179,7 @@
 <li><a href="#read-only-operations">Read-only Operations</a></li>
 </ul>
 </li>
-<li><a href="#paxos">*Paxos</a>
+<li><a href="#paxos">Paxos</a>
 <ul>
 <li><a href="#paxos-made-simple">Paxos Made Simple</a></li>
 <li><a href="#inference">Inference</a></li>
@@ -382,20 +382,22 @@
 </ol>
 <h2><span id="verified-primary-backup">Verified Primary/Backup</span><a href="#verified-primary-backup" class="header-anchor">¶</a></h2>
 <h2><span id="case-study-grove-2023">Case Study: Grove 2023</span><a href="#case-study-grove-2023" class="header-anchor">¶</a></h2>
+<p>Grove: a Separation-Logic Library for Verifying Distributed Systems</p>
 <h2><span id="raft">Raft</span><a href="#raft" class="header-anchor">¶</a></h2>
-<p>Problem 0: a machine doesn’t understand the real-life events like network broken, disk failures,<br>
-server crashed. All it can notice is the state changes.</p>
+<p>site:</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="http://nil.csail.mit.edu/6.824/2022/notes/l-raft.txt">http://nil.csail.mit.edu/6.824/2022/notes/l-raft.txt</a></li>
+<li><a target="_blank" rel="noopener" href="http://nil.csail.mit.edu/6.824/2022/notes/l-raft2.txt">http://nil.csail.mit.edu/6.824/2022/notes/l-raft2.txt</a></li>
+</ol>
+<p>Problem 0: a machine doesn’t understand the real-life events like network broken, disk failures, server crashed. All it can notice is the state changes.</p>
 <ul>
 <li>It appears that no response to a query over the network.</li>
-<li>Unless an outside agent will decide when to switch servers/a perfectly reliable network<br>
-(never breaks)/ a single perfectly reliable server (vmware FT’s test-and-set server) -&gt; possible<br>
-single-point failure</li>
+<li>Unless an outside agent will decide when to switch servers/a perfectly reliable network (never breaks)/ a single perfectly reliable server (vmware FT’s test-and-set server) -&gt; possible single-point failure</li>
 <li>How to automate it?</li>
 </ul>
 <p>Main idea:</p>
 <ul>
-<li>majority rule: same as Paxos. At lease one server is in the intersection of any two intersect<br>
-which can convey info about previous decisions. Such a system often is called quorum systems.</li>
+<li>majority rule: same as Paxos. At lease one server is in the intersection of any two intersect which can convey info about previous decisions. Such a system often is called quorum systems.</li>
 <li>electing a new leader</li>
 <li>Logs of each server can be different but they will converge to be identical despite failures.</li>
 </ul>
@@ -404,8 +406,7 @@ which can convey info about previous decisions. Such a system often is called qu
 <li>committed: an entry that is commited won’t be forgotten despite failures.</li>
 <li>logs with <strong>ordered</strong> commands:
 <ul>
-<li>It stores the ordered commands in case leader must re-send to followers or or for replay after<br>
-reboot (persistence).</li>
+<li>It stores the ordered commands in case leader must re-send to followers or for replay after reboot (persistence).</li>
 <li>help to decide if the machines have identical logs</li>
 <li>help replicas agree on a single execution order</li>
 </ul>
@@ -417,14 +418,12 @@ reboot (persistence).</li>
 <li>interface:
 <ul>
 <li>Start(command) (index, term, isleader): only leader can start proposals.</li>
-<li>ApplyMsg(index, command): each peer sends this message for each committed entry to local<br>
-service.</li>
+<li>ApplyMsg(index, command): each peer sends this message for each committed entry to local service.</li>
 </ul>
 </li>
 <li>more understandable than Paxos</li>
 </ul>
-<p>A little about history of consensus protocols: paxos (1998), viewstamped replication (1988,<br>
-2012). Raft (2014) is more modern. They are all partition-tolerant.</p>
+<p>A little about history of consensus protocols: paxos (1998), viewstamped replication (1988, 2012). Raft (2014) is more modern. They are all partition-tolerant.</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Raft diagram:</span><br><span class="line">Members: Client, Follower, Leader, denoted by C, F, L respectively.</span><br><span class="line"></span><br><span class="line">Client       ----        Leader          ----                    Follower exchange:</span><br><span class="line">        Put/Get(n1) -&gt;  Start(n1)</span><br><span class="line">                        [appendLog(n1)]  AppendEntries(n1) -&gt;</span><br><span class="line">                        [committed(n1)]  &lt;- reply(n1)</span><br><span class="line">                        [execute(c1)]</span><br><span class="line">        &lt;- reply(c1)</span><br><span class="line"></span><br><span class="line">        Put/Get(n2) -&gt;  [appendLog(n2)]  AppendEntries(c1, n2) -&gt;       ApplyMsg(c1)</span><br><span class="line">                        [committed(n2)]   &lt;- reply(n1)                  [execute(c1)]</span><br><span class="line">                        [execute(c2)]</span><br><span class="line">        &lt;- reply(c2)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>Problem 1: How Raft works?</p>
 <h3><span id="leader-election">Leader Election</span><a href="#leader-election" class="header-anchor">¶</a></h3>
@@ -437,12 +436,10 @@ Each term has one leader at most despite failures (network partitions, server cr
 </ol>
 <ul>
 <li>The leader sends heartbeat messages to followers in a heartbeat interval.</li>
-<li>A server learns about newly elected leader from heartbeats with a higher term number in<br>
-AppendEntries requests.</li>
+<li>A server learns about newly elected leader from heartbeats with a higher term number in AppendEntries requests.</li>
 </ul>
 <ol start="2">
-<li>Election failed for less than a maj of votes: New election starts with new term number. Old<br>
-candidates quit.</li>
+<li>Election failed for less than a maj of votes: New election starts with new term number. Old candidates quit.</li>
 </ol>
 <ul>
 <li>Split votes</li>
@@ -454,8 +451,7 @@ candidates quit.</li>
 <p>Election rules:</p>
 <ul>
 <li>A peer stays follower if it hears from current leader with heartbeat message.</li>
-<li>A peer starts leader election when it doesn’t receive the heartbeat message from current leader<br>
-for an <code>election timeout</code>.</li>
+<li>A peer starts leader election when it doesn’t receive the heartbeat message from current leader for an <code>election timeout</code>.</li>
 <li>Each server can cast one vote per term.
 <ul>
 <li>A candidate will vote for itself.</li>
@@ -471,10 +467,8 @@ should be at least a few heartbeat intervals in case of network delays, long eno
 leader before the next election starts. It should also be short enough to allow retries and react to<br>
 failures quickly.</p>
 <h3><span id="log">Log</span><a href="#log" class="header-anchor">¶</a></h3>
-<p>Keeping a log for old commands is common. But changing leader is the reason to have an ordered log<br>
-which helps leader to check follower states.</p>
-<p>Every server should hold an identical log. That means no server can execute a different command for<br>
-a log entry that has been executed a command by any other server.</p>
+<p>Keeping a log for old commands is common. But changing leader is the reason to have an ordered log which helps leader to check follower states.</p>
+<p>Every server should hold an identical log. That means no server can execute a different command for a log entry that has been executed a command by any other server.</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">Log diagram:</span><br><span class="line"></span><br><span class="line">Example 1:</span><br><span class="line"></span><br><span class="line">A leader (S2 or S3) for term 3 crashes before sending last AE to all.</span><br><span class="line"></span><br><span class="line">S1:  3           &lt;- term #</span><br><span class="line">S2:  3  3</span><br><span class="line">S3:  3  3</span><br><span class="line"></span><br><span class="line">Example 2:</span><br><span class="line"></span><br><span class="line">Next election, S2 is elected and crashed for term 4.</span><br><span class="line">Next election, S3 is elected and crashed for term 5.</span><br><span class="line"></span><br><span class="line">    10 11 12 13  &lt;- log entry #</span><br><span class="line">S1:  3</span><br><span class="line">S2:  3  3  4</span><br><span class="line">S3:  3  3  5</span><br><span class="line"></span><br><span class="line">Leader (S3, 6)</span><br><span class="line"></span><br><span class="line">    10 11 12 13  &lt;- log entry #</span><br><span class="line">S1:  3</span><br><span class="line">S2:  3  3  4</span><br><span class="line">S3:  3  3  5  6</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p><u>The first question is could this scenario arise and how.</u></p>
 <p>Example 2: AE(log entry) details after Leader (S3, 6):</p>
@@ -491,10 +485,8 @@ a log entry that has been executed a command by any other server.</p>
 <li>S2 deleted its entry 12<br>
 The same for S1.</li>
 </ol>
-<p>The result of roll-back: followers hold the identical log with the leader by deleting the tail of log<br>
-with mismatched term and accepting leader’s entries after that point.</p>
-<p>It’s ok to forget about S2’s (12, 4) entry. It’s not received by any server yet and hence not<br>
-committed. The client will resend the discarded commands of that term by and by.</p>
+<p>The result of roll-back: followers hold the identical log with the leader by deleting the tail of log with mismatched term and accepting leader’s entries after that point.</p>
+<p>It’s ok to forget about S2’s (12, 4) entry. It’s not received by any server yet and hence not committed. The client will resend the discarded commands of that term by and by.</p>
 <p><strong>New leader would not roll back committed entries from end of previous term.</strong><br>
 -&gt; Raft needs to ensure elected leader has all committed log entries.</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Example 3:</span><br><span class="line"></span><br><span class="line">S1: 5 6 7</span><br><span class="line">S2: 5 8</span><br><span class="line">S3: 5 8</span><br><span class="line"></span><br></pre></td></tr></table></figure>
@@ -503,17 +495,13 @@ committed. The client will resend the discarded commands of that term by and by.
 <p>step 2: S1 incurs network partition: S1 is isolated from S2 and S3.</p>
 <p>step 3:</p>
 <ul>
-<li>S1: it doesnot hear from leader. Next election for term 6 starts. Can’t get maj and start new<br>
-election for term 7…</li>
+<li>S1: it doesnot hear from leader. Next election for term 6 starts. Can’t get maj and start new election for term 7…</li>
 <li>S2 or S3: happily lives after S1 is disconnected since one of them will get maj and become leader.</li>
 </ul>
 <p>The problem is why won’t happy server choose 6 as next term?</p>
-<p>Backing things up a litter, S1 is leader for term 6; crash + reboot; leader in term 7; crash and<br>
-stay down. It crashes after it only sends AE to itself.</p>
-<p>Because of leader (S1, 7), one of S2 or S3 learns about the last term is 7 while voting. So the next<br>
-term will be 8.</p>
-<p>All peers reboot. While S1 holds the longest log, it can’t be a leader since entry 8 could have<br>
-committed.</p>
+<p>Backing things up a litter, S1 is leader for term 6; crash + reboot; leader in term 7; crash and stay down. It crashes after it only sends AE to itself.</p>
+<p>Because of leader (S1, 7), one of S2 or S3 learns about the last term is 7 while voting. So the next term will be 8.</p>
+<p>All peers reboot. While S1 holds the longest log, it can’t be a leader since entry 8 could have committed.</p>
 <p>end of section 5.4.1:<br>
 <code>election restriction</code>, voters only cast votes for candidate who is <strong>at least as up-to-date</strong>.</p>
 <ul>
@@ -523,7 +511,7 @@ committed.</p>
 <p>The next leader will be S2 or S3. They vote for each other even if network connectivity is intact.<br>
 Because they have higher term.</p>
 <p>Then S1 will be forced to discard 6,7. -&gt; not committed -&gt; clients will resend the discarded commands</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Example 4:</span><br><span class="line"></span><br><span class="line">Leader (S2, 6); S1 crash+reboot; S2 sends AEs</span><br><span class="line"></span><br><span class="line">    Case 1      Case 2       Case 3</span><br><span class="line">S1: 4 5 5       4 4 4        4</span><br><span class="line">S2: 4 6 6 6 or  4 6 6 6  or  4 6 6 6</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Example 4:</span><br><span class="line"></span><br><span class="line">Leader (S2, 6); S1 crash+reboot; S2 sends AEs</span><br><span class="line"></span><br><span class="line">    Case 1      Case 2       Case 3</span><br><span class="line">S1: 4 5 5       4 4 4        4</span><br><span class="line">S2: 4 6 6 6 or  4 6 6 6  or  4 6 6 6</span><br></pre></td></tr></table></figure>
 <p>end of section 5.3: a faster roll-back scheme than backs up one entry per request</p>
 <p>How to roll back quickly?</p>
 <p>S2: AE(prevLogTerm=6)<br>
@@ -539,23 +527,17 @@ XTerm: term in the conflicting entry (if any)<br>
 XIndex: index of first entry with that term (if any)<br>
 XLen: log length</p>
 <h3><span id="persistence">Persistence</span><a href="#persistence" class="header-anchor">¶</a></h3>
-<p>After a server crashes, we can repair it by replacing with a fresh (empty) server or reboot the<br>
-crashed server.</p>
+<p>After a server crashes, we can repair it by replacing with a fresh (empty) server or reboot the crashed server.</p>
 <ol>
-<li>new: requires transfer of entire log/snapshots to new server, slow but necessary in case failure<br>
-is permanent.</li>
-<li>old: requires state that persists across crashes. Must support this for simultaneous power<br>
-failures. -&gt; persistence</li>
+<li>new: requires transfer of entire log/snapshots to new server, slow but necessary in case failure is permanent.</li>
+<li>old: requires state that persists across crashes. Must support this for simultaneous power failures. -&gt; persistence</li>
 </ol>
 <p>What to remember?</p>
 <ul>
-<li>Essential info to let a Raft server rejoin the group. Save them after each change or before<br>
-sending RPCs.</li>
+<li>Essential info to let a Raft server rejoin the group. Save them after each change or before sending RPCs.</li>
 <li>log[], a server that has latest log entries needs to keep that for furture use of new leader.</li>
-<li>currentTerm, to ensure terms of system only increase. Each term has at most one leader to detect<br>
-RPCs from stale leaders and candidates.</li>
-<li>votedFor, a server needs to remember who it voted for in the currrent term in case it is<br>
-rebooted and votes for a different candidate.</li>
+<li>currentTerm, to ensure terms of system only increase. Each term has at most one leader to detect RPCs from stale leaders and candidates.</li>
+<li>votedFor, a server needs to remember who it voted for in the currrent term in case it is rebooted and votes for a different candidate.</li>
 </ul>
 <p>What can be volatile?</p>
 <p>If a state will be reset after reboot, it doesn’t need to be persistent.</p>
@@ -563,8 +545,7 @@ rebooted and votes for a different candidate.</li>
 <ul>
 <li>Persistence is often the bottleneck for performance.
 <ul>
-<li>SSD (0.1ms per write) writes 100 times faster than a hard disk (10 ms per write), limiting us<br>
-to 100-10,000 ops/sec.</li>
+<li>SSD (0.1ms per write) writes 100 times faster than a hard disk (10 ms per write), limiting us to 100-10,000 ops/sec.</li>
 </ul>
 </li>
 <li>optimizations
@@ -582,25 +563,15 @@ to 100-10,000 ops/sec.</li>
 </ul>
 <h3><span id="log-compaction-and-snapshots">Log Compaction and Snapshots</span><a href="#log-compaction-and-snapshots" class="header-anchor">¶</a></h3>
 <p>State = operation history</p>
-<p>service states are usually much smaller than the complete log. A server can’t discard un-executed<br>
-entries which is not yet reflected in the state and un-committed entries which could be part of<br>
-leader’s majority.</p>
-<p>To solve the problem of huge replicated log, service periodically creates persistent “snapshot”. A<br>
-snapshot includes copy of service state and index of last included log entry. Service tells Raft it<br>
-is snapshotted through some log index so Raft can discard log before that index. A server can<br>
-create a snapshot and discard prefix of log whenever.</p>
-<p>In the case of crash+restart, service reads snapshot from disk and tells Raft last included index<br>
-to avoid duplicate applying of log entries.</p>
-<p>When follower’s log ends before leader’s log starts, that part p is lost and can’t be recovered by<br>
-AppendEntries RPCs. Instead leader sends InstallSnapshot RPCs.</p>
+<p>service states are usually much smaller than the complete log. A server can’t discard un-executed entries which is not yet reflected in the state and un-committed entries which could be part of leader’s majority.</p>
+<p>To solve the problem of huge replicated log, service periodically creates persistent “snapshot”. A snapshot includes copy of service state and index of last included log entry. Service tells Raft it is snapshotted through some log index so Raft can discard log before that index. A server can create a snapshot and discard prefix of log whenever.</p>
+<p>In the case of crash+restart, service reads snapshot from disk and tells Raft last included index to avoid duplicate applying of log entries.</p>
+<p>When follower’s log ends before leader’s log starts, that part p is lost and can’t be recovered by AppendEntries RPCs. Instead leader sends InstallSnapshot RPCs.</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">L:           |-p-|xxxxxxxxxxxxxx|</span><br><span class="line">F: |xxxxxxxxx|</span><br></pre></td></tr></table></figure>
 <h3><span id="linearizability">Linearizability</span><a href="#linearizability" class="header-anchor">¶</a></h3>
 <p>notion of correctness for strong consistency: linearizability</p>
-<p>An execution history is linearizable if one can find a total order of all operations,<br>
-that matches real-time (for non-overlapping ops), and<br>
-in which each read sees the value from the write preceding it in the order.</p>
-<p>A history is a record of client operations, each with arguments, return value, time of start,<br>
-time completed.</p>
+<p>An execution history is linearizable if one can find a total order of all operations, that matches real-time (for non-overlapping ops), and in which each read sees the value from the write preceding it in the order.</p>
+<p>A history is a record of client operations, each with arguments, return value, time of start, time completed.</p>
 <p>draw the constraint arrows by time rule + value rule</p>
 <ul>
 <li>the order obeys value constraints (W -&gt; R)</li>
@@ -620,12 +591,8 @@ time completed.</p>
 <li>reads must return fresh data. Stale values aren’t linearizable</li>
 <li>Duplicate request handling:
 <ul>
-<li>supposing clients re-send requests if they don’t get a reply, leader rememembers client<br>
-requests it has seen and replies with saved response from first execution when it sees<br>
-duplicate.</li>
-<li>it is linearizable to return the old saved value in this case. The reason is that the<br>
-duplicate request is seen as the same process of the failed first request, which is concurrent<br>
-to the write request.</li>
+<li>supposing clients re-send requests if they don’t get a reply, leader remembers client requests it has seen and replies with saved response from first execution when it sees duplicate.</li>
+<li>it is linearizable to return the old saved value in this case. The reason is that the duplicate request is seen as the same process of the failed first request, which is concurrent to the write request.</li>
 </ul>
 </li>
 </ol>
@@ -635,10 +602,7 @@ to the write request.</li>
 <li>server is dead or request dropped</li>
 <li>server executed but request lost. Client still needs the result.</li>
 </ul>
-<p>The idea is duplicate RPC detection. Client picks an ID for each request. Re-sends will use the<br>
-same ID in same RPC. Service keeps track a table indexed by ID and records value after executing.<br>
-If the second RPC arrives with the same ID, the service knows it’s a duplicate and generates reply<br>
-from the old saved value in the table.</p>
+<p>The idea is duplicate RPC detection. Client picks an ID for each request. Re-sends will use the same ID in same RPC. Service keeps track a table indexed by ID and records value after executing. If the second RPC arrives with the same ID, the service knows it’s a duplicate and generates reply from the old saved value in the table.</p>
 <p>Q: When can we delete table entries?</p>
 <ul>
 <li>If new leader takes over, how to get the duplicate table?
@@ -649,34 +613,22 @@ from the old saved value in the table.</p>
 <li>If server crashes, how to restore its table?
 <ul>
 <li>replay of log populates the table or snapshots which contains a copy of the table</li>
-<li>as discussed in linearizability section, it is allowed to return the old saved value in this<br>
-case.</li>
+<li>as discussed in linearizability section, it is allowed to return the old saved value in this case.</li>
 </ul>
 </li>
 </ul>
-<p>To keep the table small, service has one table entry per client rather than one per request. Each<br>
-client numbers requests sequentially. When server receives a client request with new number, it can<br>
-forget about client’s lower entries and update the table entry with the new request.</p>
-<p>If a duplicate req arrives before the original executes, the service just call Start() again.<br>
-Server won’t execute a req that is already seen.</p>
+<p>To keep the table small, service has one table entry per client rather than one per request. Each client numbers requests sequentially. When server receives a client request with new number, it can forget about client’s lower entries and update the table entry with the new request.</p>
+<p>If a duplicate req arrives before the original executes, the service just call Start() again. Server won’t execute a req that is already seen.</p>
 <h3><span id="read-only-operations">Read-only Operations</span><a href="#read-only-operations" class="header-anchor">¶</a></h3>
 <p>end of section 8</p>
 <p>Q: does the Raft leader have to commit read-only operations in the log before replying?</p>
 <p>e.g. Get(key)?</p>
-<p>Leader cannot respond immediately to a read-only operation using its current content. The reason is<br>
-that a server might have lost the recent election but not realized it yet in cases of network<br>
-partitions. Then a new leader processes Put()s for the key so that value in that server becomes<br>
-stale. Thus leader must commit read-only operations.</p>
-<p>But read-heavy workload are quite normal. Committing read-only operations can take a long time. In<br>
-practice, people are often willing to exchange higher performance with stale data.</p>
-<p>The idea is leases. Modify Raft as follows: defining a lease period, after each time the leader<br>
-gets an AE maj, it is entitled to respond to read-only requests for a lease period without<br>
-committing those requests to the log (w/o sending AEs).</p>
-<p>A new leader can’t execute write requests until previous lease period has expired. So followers<br>
-keep track of the last time they responded to an AE, and tell the new leader in the RequestVote<br>
-reply.</p>
+<p>Leader cannot respond immediately to a read-only operation using its current content. The reason is that a server might have lost the recent election but not realized it yet in cases of network partitions. Then a new leader processes Put()s for the key so that value in that server becomes stale. Thus leader must commit read-only operations.</p>
+<p>But read-heavy workload are quite normal. Committing read-only operations can take a long time. In practice, people are often willing to exchange higher performance with stale data.</p>
+<p>The idea is leases. Modify Raft as follows: defining a lease period, after each time the leader gets an AE maj, it is entitled to respond to read-only requests for a lease period without committing those requests to the log (w/o sending AEs).</p>
+<p>A new leader can’t execute write requests until previous lease period has expired. So followers keep track of the last time they responded to an AE, and tell the new leader in the RequestVote reply.</p>
 <p>As a result, we get faster read-only operations and the history is still linearizable.</p>
-<h2><span id="paxos">*Paxos</span><a href="#paxos" class="header-anchor">¶</a></h2>
+<h2><span id="paxos">Paxos</span><a href="#paxos" class="header-anchor">¶</a></h2>
 <h3><span id="paxos-made-simple">Paxos Made Simple</span><a href="#paxos-made-simple" class="header-anchor">¶</a></h3>
 <p>Assumptions: non-Byzantine failures. Allows failures of missing messages and unordered requests.</p>
 <p>P1. An acceptor must accept the first proposal that it receives.</p>
@@ -726,28 +678,22 @@ The proposer issues a proposal (n, v) where v is the value either the highest-nu
 </blockquote>
 <p>After step 2, B and C have had the prepare message from A which is #1. After step 3, B would get response from C with value “foo” and gets null from B. At step 4, B will not send accecpt(2, “bar”) but (2, “foo”).</p>
 <h3><span id="inference">Inference</span><a href="#inference" class="header-anchor">¶</a></h3>
-<p>There are protocols such as Paxos, Raft, Viewstamped Replication, Raft, Zookeeper providing strong<br>
-consistency. Paxos is different for its simplicity and wide application. Many other protocols can<br>
-be viewed as variants of Paxos.</p>
+<p>There are protocols such as Paxos, Raft, Viewstamped Replication, Raft, Zookeeper providing strong consistency. Paxos is different for its simplicity and wide application. Many other protocols can be viewed as variants of Paxos.</p>
 <p>Two topics are:</p>
 <p>Problem 1: How Paxos works?</p>
 <p>Agreement is hard :(</p>
 <ul>
 <li>multiple rounds for the op, tentative initialy but don’t know when agreement is permanent</li>
-<li>Agreement has to be able to complete even with failed servers. some servers decides a value but<br>
-other servers don’t respond. Can’t distinguish between network partition (servers are running<br>
-but cannot be reached by other partition) or failed servers.</li>
+<li>Agreement has to be able to complete even with failed servers. some servers decides a value but other servers don’t respond. Can’t distinguish between network partition (servers are running but cannot be reached by other partition) or failed servers.</li>
 </ul>
 <p>Two main ideas in Paxos to address these problems:</p>
 <ul>
 <li>many rounds are possible but they will converge on one value</li>
-<li>majority rule: a key point is any two majorities overlap. At least one server with earlier<br>
-majority is shared by the later majority.</li>
+<li>majority rule: a key point is any two majorities overlap. At least one server with earlier majority is shared by the later majority.</li>
 </ul>
 <p>Paxos sketch:</p>
 <ul>
-<li>each server consists of three logical entities, acceptor, proposer, learner. Maybe more than<br>
-one proposer when multiple clients submit requests to different servers at the same time.</li>
+<li>each server consists of three logical entities, acceptor, proposer, learner. Maybe more than one proposer when multiple clients submit requests to different servers at the same time.</li>
 <li>Proposers contacts acceptors to assemble a majority. if not get a majority, new round.</li>
 </ul>
 <p>The crucial property:</p>
@@ -768,13 +714,11 @@ one proposer when multiple clients submit requests to different servers at the s
 <ol>
 <li>why does the proposer need to pick v_a with highest n_a?</li>
 </ol>
-<p>The proposer needs to pick an accepted value which is associated with the highest proposal<br>
-number that acceptors have seen. It represents the most recent accepted value.</p>
+<p>The proposer needs to pick an accepted value which is associated with the highest proposal number that acceptors have seen. It represents the most recent accepted value.</p>
 <ol start="2">
 <li>why does prepare handler check that n &gt; n_p?</li>
 </ol>
-<p>It picks a proposal number that is higher than current highest prepare seen. The proposer<br>
-should not send a proposal that is older than previous ones.</p>
+<p>It picks a proposal number that is higher than current highest prepare seen. The proposer should not send a proposal that is older than previous ones.</p>
 <ol start="3">
 <li>why does accept handler check n &gt;= n_p?</li>
 </ol>
@@ -782,9 +726,7 @@ should not send a proposal that is older than previous ones.</p>
 <ol start="4">
 <li>why does accept handler update n_p = n?</li>
 </ol>
-<p>The accept handler updates n_a because it’s accepting a value. The real question is why n_p is<br>
-updated too. If n_p &lt; n, then n_p &lt; n_a. The proposal with n_p will be rejected by the<br>
-acceptor.</p>
+<p>The accept handler updates n_a because it’s accepting a value. The real question is why n_p is updated too. If n_p &lt; n, then n_p &lt; n_a. The proposal with n_p will be rejected by the acceptor.</p>
 <ol start="5">
 <li>what if proposer S2 chooses n &lt; S1’s n?</li>
 </ol>
@@ -792,17 +734,12 @@ acceptor.</p>
 <ol start="6">
 <li>what if an acceptor crashes after receiving accept?</li>
 </ol>
-<p>Assume that an acceptor receiving accept means that states were updated but it didn’t send<br>
-accept_ok, then the proposer will retry with a new proposal number and get rejected since the<br>
-acceptor is dead.</p>
-<p>One acceptor crash will not affect the the system as long as the majority of the paxos peers<br>
-is alive. Since the paxos lab is not persistent, the peer will lost its states. It will get<br>
-updated when it is alive.</p>
+<p>Assume that an acceptor receiving accept means that states were updated but it didn’t send accept_ok, then the proposer will retry with a new proposal number and get rejected since the acceptor is dead.</p>
+<p>One acceptor crash will not affect the the system as long as the majority of the paxos peers is alive. Since the paxos lab is not persistent, the peer will lost its states. It will get updated when it is alive.</p>
 <ol start="7">
 <li>what if an acceptor reboots after sending prepare_ok?</li>
 </ol>
-<p>The next accept will be rejected because the acceptor forgets the previous prepare which updates<br>
-n_p.</p>
+<p>The next accept will be rejected because the acceptor forgets the previous prepare which updates n_p.</p>
 <p>Paxos gets stuck:</p>
 <ul>
 <li>not a majority that can communicate</li>
@@ -818,16 +755,14 @@ Log entries are numbered, called instances (seq). Paxos reaches agreement on eac
 <li>interface:
 <ul>
 <li>Start (seq, v): Propose v for seq, without waiting for agreement to complete</li>
-<li>fate, v := Status(seq): find out the agreed value for seq. Only check local states, w/o<br>
-communications between servers.</li>
+<li>fate, v := Status(seq): find out the agreed value for seq. Only check local states, w/o communications between servers.</li>
 </ul>
 </li>
 <li>correctness: once any agreement reached, never changes. After agreement, servers may update state</li>
 <li>fault tolerance: tolerate non-reachability of a minority of servers</li>
 <li>liveness: will reach agreement if a majority of servers can communicate for long enough</li>
 </ul>
-<p>Example (context): Server Si uses Paxos to get all servers to agree that a log entry x holds a<br>
-client op (Get,  Put, Append).</p>
+<p>Example (context): Server Si uses Paxos to get all servers to agree that a log entry x holds a client op (Get,  Put, Append).</p>
 <p>Why a log is better than all replicas to agree on each op in lock-step:</p>
 <ul>
 <li>when state is small: agree on entire state -&gt; a tie</li>
@@ -957,22 +892,22 @@ client op (Get,  Put, Append).</p>
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Case Study: MapReduce 2004</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Consistency and Linearizability</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Case Study: GFS 2003</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Primary&#x2F;Backup Replication</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Case Study: VMware FT 2010</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.1.</span> <span class="toc-text">FT design</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.2.</span> <span class="toc-text">Failure Handling</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.3.</span> <span class="toc-text">Design Alternatives</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">Verified Primary&#x2F;Backup</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">Case Study: Grove 2023</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">Raft</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.1.</span> <span class="toc-text">Leader Election</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.2.</span> <span class="toc-text">Log</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.3.</span> <span class="toc-text">Persistence</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.4.</span> <span class="toc-text">Log Compaction and Snapshots</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.5.</span> <span class="toc-text">Linearizability</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.6.</span> <span class="toc-text">Duplicate RPC Detection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.7.</span> <span class="toc-text">Read-only Operations</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">*Paxos</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.1.</span> <span class="toc-text">Paxos Made Simple</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.2.</span> <span class="toc-text">Inference</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">10.</span> <span class="toc-text">*Case Study: ZooKeeper 2010</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">11.</span> <span class="toc-text">*Case Study: Chubby 2006</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">12.</span> <span class="toc-text">*Case Study: Harp 1991</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Case Study: MapReduce 2004</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Consistency and Linearizability</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Case Study: GFS 2003</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Primary&#x2F;Backup Replication</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Case Study: VMware FT 2010</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.1.</span> <span class="toc-text">FT design</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.2.</span> <span class="toc-text">Failure Handling</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.3.</span> <span class="toc-text">Design Alternatives</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">Verified Primary&#x2F;Backup</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">Case Study: Grove 2023</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">Raft</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.1.</span> <span class="toc-text">Leader Election</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.2.</span> <span class="toc-text">Log</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.3.</span> <span class="toc-text">Persistence</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.4.</span> <span class="toc-text">Log Compaction and Snapshots</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.5.</span> <span class="toc-text">Linearizability</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.6.</span> <span class="toc-text">Duplicate RPC Detection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.7.</span> <span class="toc-text">Read-only Operations</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">Paxos</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.1.</span> <span class="toc-text">Paxos Made Simple</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.2.</span> <span class="toc-text">Inference</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">10.</span> <span class="toc-text">*Case Study: ZooKeeper 2010</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">11.</span> <span class="toc-text">*Case Study: Chubby 2006</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">12.</span> <span class="toc-text">*Case Study: Harp 1991</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
       <ul>
   <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&text=Distributed System notes"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&title=Distributed System notes"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&is_video=false&description=Distributed System notes"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=Distributed System notes&body=Check out this article: https://sgzerolc.github.io/sg/2023/07/28/ds_basics/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&title=Distributed System notes"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&title=Distributed System notes"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&title=Distributed System notes"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&title=Distributed System notes"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&name=Distributed System notes&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&t=Distributed System notes"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&text=Distributed System Notes"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&title=Distributed System Notes"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&is_video=false&description=Distributed System Notes"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Distributed System Notes&body=Check out this article: https://sgzerolc.github.io/sg/2023/07/28/ds_basics/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&title=Distributed System Notes"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&title=Distributed System Notes"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&title=Distributed System Notes"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&title=Distributed System Notes"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&name=Distributed System Notes&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://sgzerolc.github.io/sg/2023/07/28/ds_basics/&t=Distributed System Notes"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
