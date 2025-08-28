@@ -15,7 +15,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2023/07/28/ds_basics/zab.png">
 <meta property="article:published_time" content="2023-07-27T22:00:00.000Z">
-<meta property="article:modified_time" content="2025-08-27T16:42:38.449Z">
+<meta property="article:modified_time" content="2025-08-28T08:33:37.875Z">
 <meta property="article:author" content="Sam Li">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://sgzerolc.github.io/sg/2023/07/28/ds_basics/zab.png">
@@ -52,8 +52,7 @@
 	
 <meta name="generator" content="Hexo 6.3.0"></head>
 
-<body class="max-width mx-auto px3 ltr">
-    
+<body class="max-width mx-auto px3 ltr">    
       <div id="header-post">
   <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
   <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
@@ -491,11 +490,7 @@ Each term has one leader at most despite failures (network partitions, server cr
 <li>A candidate becomes a leader when it receives votes from a majority of peers for a given term.</li>
 </ul>
 <p>Problem 1.1: how does Raft avoid split votes?</p>
-<p>Split votes can happen when simutaneous candidates ask for votes from a equal number of peers. Raft<br>
-uses random election timeout to avoid this problem. The election timeout must be chosen wisely. It<br>
-should be at least a few heartbeat intervals in case of network delays, long enough to elect a<br>
-leader before the next election starts. It should also be short enough to allow retries and react to<br>
-failures quickly.</p>
+<p>Split votes can happen when simultaneous candidates ask for votes from a equal number of peers. Raft uses random election timeout to avoid this problem. The election timeout must be chosen wisely. It should be at least a few heartbeat intervals in case of network delays, long enough to elect a leader before the next election starts. It should also be short enough to allow retries and react to failures quickly.</p>
 <h3><span id="log">Log</span><a href="#log" class="header-anchor">¶</a></h3>
 <p>Keeping a log for old commands is common. But changing leader is the reason to have an ordered log which helps leader to check follower states.</p>
 <p>Every server should hold an identical log. That means no server can execute a different command for a log entry that has been executed a command by any other server.</p>
@@ -1021,5 +1016,20 @@ Log entries are numbered, called instances (seq). Paxos reaches agreement on eac
 
 <!-- utterances Comments -->
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>
