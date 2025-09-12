@@ -4,6 +4,27 @@
   
     
     <entry>
+      <title>A Note on Cognitive Offloading with Chatbots</title>
+      <link href="/sg/2025/09/11/llm_notice/"/>
+      <url>/sg/2025/09/11/llm_notice/</url>
+      
+        <content type="html"><![CDATA[<p>Does it sound absurd that big AI techs train models with a lot of QA documents and then users are also trained by the models through QA? Does that make users a part of the AI tools, loosing their autonomy on the thinking process? These kind of questions struck me one day. So I wanted to write a note for myself to establish a boundary when asking quesions towards chatbots, preventing erosion of critical thinking.</p><p>Do:</p><ol><li>Ask low-level programming questions. It’s fine and helps you to grasp basics of a new programming language quickly given you have had some programming experience.</li><li>Ask high-level design questions. You are the one who knows better about the context of the problem and defines the boudary of answers. It involves a fair amount of thinking. A chatbot can help you find more directions that you are not familiar with but that may enlighten you.</li><li>Build a web application. As I don’t specialize in the frontend, I’ll leave the coding part to chatbots and focusing on design aspects. Claude models are good at data processing and writing web applications.</li><li>Use as a language tutor. I learn English and German from ChatGPT.</li><li>Web search.</li><li>Think about what are important and are not when solving a problem.</li></ol><p>Do not:</p><ol><li>Ask direct solutions to the tasks you have.</li><li>Accept answers without running checks, especially in unfamaliar areas where you probably can’t judge. It’s still an unsolved question of hallucinations of language models. The answers are not 100 percently correct. Even if they are, going through answers is a necessary step to verify the factuality. If there are sources, read the web pages provided to you. If there are codes, read them line-by-line.</li><li>Ask questions without original ideas in mind. Original ideas don’t have to be perfect as you can slowly build more thoughts on top of that but they have to come from you.</li><li>Ask simple questions that you can come up with answers in a moment.</li></ol>]]></content>
+      
+      
+      <categories>
+          
+          <category> life </category>
+          
+          <category> EOF </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Across the Mountains</title>
       <link href="/sg/2025/08/30/travel_oberstdorf_summer/"/>
       <url>/sg/2025/08/30/travel_oberstdorf_summer/</url>
