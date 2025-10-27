@@ -6,16 +6,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="Case Study: MapReduce 2004 Consistency and Linearizability Case Study: GFS 2003 Primary&#x2F;Backup Replication Case Study: VMware FT 2010  FT design Failure Handling Design Alternatives   Verified Prim">
+    <meta name="description" content="MapReduce 2004 Consistency and Linearizability GFS 2003 Primary&#x2F;Backup Replication VMware FT 2010  FT design Failure Handling Design Alternatives   Verified Primary&#x2F;Backup Grove 2023 Raft  Raft Rev">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Distributed System Notes">
 <meta property="og:url" content="https://sgzerolc.github.io/sg/2023/07/28/ds_basics/index.html">
 <meta property="og:site_name" content="steins gate zero">
-<meta property="og:description" content="Case Study: MapReduce 2004 Consistency and Linearizability Case Study: GFS 2003 Primary&#x2F;Backup Replication Case Study: VMware FT 2010  FT design Failure Handling Design Alternatives   Verified Prim">
+<meta property="og:description" content="MapReduce 2004 Consistency and Linearizability GFS 2003 Primary&#x2F;Backup Replication VMware FT 2010  FT design Failure Handling Design Alternatives   Verified Primary&#x2F;Backup Grove 2023 Raft  Raft Rev">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2023/07/28/ds_basics/zab.png">
 <meta property="article:published_time" content="2023-07-27T22:00:00.000Z">
-<meta property="article:modified_time" content="2025-08-28T08:33:37.875Z">
+<meta property="article:modified_time" content="2025-10-27T11:07:41.883Z">
 <meta property="article:author" content="Sam Li">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://sgzerolc.github.io/sg/2023/07/28/ds_basics/zab.png">
@@ -108,7 +108,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Case Study: MapReduce 2004</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Consistency and Linearizability</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Case Study: GFS 2003</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Primary&#x2F;Backup Replication</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Case Study: VMware FT 2010</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.1.</span> <span class="toc-text">FT design</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.2.</span> <span class="toc-text">Failure Handling</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.3.</span> <span class="toc-text">Design Alternatives</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">Verified Primary&#x2F;Backup</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">Case Study: Grove 2023</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">Raft</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.1.</span> <span class="toc-text">Raft Review</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.2.</span> <span class="toc-text">Leader Election</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.3.</span> <span class="toc-text">Log</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.4.</span> <span class="toc-text">Persistence</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.5.</span> <span class="toc-text">Log Compaction and Snapshots</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.6.</span> <span class="toc-text">Linearizability</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.7.</span> <span class="toc-text">Duplicate RPC Detection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.8.</span> <span class="toc-text">Read-only Operations</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">Paxos</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.1.</span> <span class="toc-text">Paxos Review</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.2.</span> <span class="toc-text">Inference</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">10.</span> <span class="toc-text">*Case Study: ZooKeeper 2010</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">11.</span> <span class="toc-text">*Case Study: Chubby 2006</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">12.</span> <span class="toc-text">*Case Study: Harp 1991</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">MapReduce 2004</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Consistency and Linearizability</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">GFS 2003</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Primary&#x2F;Backup Replication</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">VMware FT 2010</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.1.</span> <span class="toc-text">FT design</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.2.</span> <span class="toc-text">Failure Handling</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.3.</span> <span class="toc-text">Design Alternatives</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">Verified Primary&#x2F;Backup</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">Grove 2023</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">Raft</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.1.</span> <span class="toc-text">Raft Review</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.2.</span> <span class="toc-text">Leader Election</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.3.</span> <span class="toc-text">Log</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.4.</span> <span class="toc-text">Persistence</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.5.</span> <span class="toc-text">Log Compaction and Snapshots</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.6.</span> <span class="toc-text">Linearizability</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.7.</span> <span class="toc-text">Duplicate RPC Detection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.8.</span> <span class="toc-text">Read-only Operations</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">Paxos</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.1.</span> <span class="toc-text">Paxos Review</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.2.</span> <span class="toc-text">Inference</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">10.</span> <span class="toc-text">ZooKeeper 2010</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">11.</span> <span class="toc-text">Chubby 2006</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">12.</span> <span class="toc-text">Harp 1991</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">13.</span> <span class="toc-text">FaRM 2015</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">13.1.</span> <span class="toc-text">Optimistic Concurrency Control</span></a></li></ol></li></ol>
     </div>
   </span>
 </div>
@@ -155,11 +155,11 @@
     <div class="toc">
 <!-- toc -->
 <ul>
-<li><a href="#case-study-mapreduce-2004">Case Study: MapReduce 2004</a></li>
+<li><a href="#mapreduce-2004">MapReduce 2004</a></li>
 <li><a href="#consistency-and-linearizability">Consistency and Linearizability</a></li>
-<li><a href="#case-study-gfs-2003">Case Study: GFS 2003</a></li>
+<li><a href="#gfs-2003">GFS 2003</a></li>
 <li><a href="#primary-backup-replication">Primary/Backup Replication</a></li>
-<li><a href="#case-study-vmware-ft-2010">Case Study: VMware FT 2010</a>
+<li><a href="#vmware-ft-2010">VMware FT 2010</a>
 <ul>
 <li><a href="#ft-design">FT design</a></li>
 <li><a href="#failure-handling">Failure Handling</a></li>
@@ -167,7 +167,7 @@
 </ul>
 </li>
 <li><a href="#verified-primary-backup">Verified Primary/Backup</a></li>
-<li><a href="#case-study-grove-2023">Case Study: Grove 2023</a></li>
+<li><a href="#grove-2023">Grove 2023</a></li>
 <li><a href="#raft">Raft</a>
 <ul>
 <li><a href="#raft-review">Raft Review</a></li>
@@ -186,9 +186,14 @@
 <li><a href="#inference">Inference</a></li>
 </ul>
 </li>
-<li><a href="#case-study-zookeeper-2010">*Case Study: ZooKeeper 2010</a></li>
-<li><a href="#case-study-chubby-2006">*Case Study: Chubby 2006</a></li>
-<li><a href="#case-study-harp-1991">*Case Study: Harp 1991</a></li>
+<li><a href="#zookeeper-2010">ZooKeeper 2010</a></li>
+<li><a href="#chubby-2006">Chubby 2006</a></li>
+<li><a href="#harp-1991">Harp 1991</a></li>
+<li><a href="#farm-2015">FaRM 2015</a>
+<ul>
+<li><a href="#optimistic-concurrency-control">Optimistic Concurrency Control</a></li>
+</ul>
+</li>
 </ul>
 <!-- tocstop -->
 </div>
@@ -267,9 +272,9 @@
 </ul>
 </li>
 </ul>
-<h2><span id="case-study-mapreduce-2004">Case Study: MapReduce 2004</span><a href="#case-study-mapreduce-2004" class="header-anchor">¶</a></h2>
+<h2><span id="mapreduce-2004">MapReduce 2004</span><a href="#mapreduce-2004" class="header-anchor">¶</a></h2>
 <h2><span id="consistency-and-linearizability">Consistency and Linearizability</span><a href="#consistency-and-linearizability" class="header-anchor">¶</a></h2>
-<h2><span id="case-study-gfs-2003">Case Study: GFS 2003</span><a href="#case-study-gfs-2003" class="header-anchor">¶</a></h2>
+<h2><span id="gfs-2003">GFS 2003</span><a href="#gfs-2003" class="header-anchor">¶</a></h2>
 <h2><span id="primary-backup-replication">Primary/Backup Replication</span><a href="#primary-backup-replication" class="header-anchor">¶</a></h2>
 <ol>
 <li>One way of providing fault tolerance: Replication.</li>
@@ -302,7 +307,7 @@
 <p>Problem 1: At what level do we want replicas to be identical?</p>
 <p>application state: forward op stream, can be efficient. ex: GFS.</p>
 <p>machine level, registers and RAM content: forward machine events (interrupts, DMA, &amp;c), not as efficient. ex: run an existing software without modification</p>
-<h2><span id="case-study-vmware-ft-2010">Case Study: VMware FT 2010</span><a href="#case-study-vmware-ft-2010" class="header-anchor">¶</a></h2>
+<h2><span id="vmware-ft-2010">VMware FT 2010</span><a href="#vmware-ft-2010" class="header-anchor">¶</a></h2>
 <p>Terms:</p>
 <ol>
 <li>vm-ft: fault-tolerant virtual machines</li>
@@ -382,7 +387,7 @@
 <li>need to sync disks of VMs</li>
 </ol>
 <h2><span id="verified-primary-backup">Verified Primary/Backup</span><a href="#verified-primary-backup" class="header-anchor">¶</a></h2>
-<h2><span id="case-study-grove-2023">Case Study: Grove 2023</span><a href="#case-study-grove-2023" class="header-anchor">¶</a></h2>
+<h2><span id="grove-2023">Grove 2023</span><a href="#grove-2023" class="header-anchor">¶</a></h2>
 <p>Grove: a Separation-Logic Library for Verifying Distributed Systems</p>
 <h2><span id="raft">Raft</span><a href="#raft" class="header-anchor">¶</a></h2>
 <p>site:</p>
@@ -654,6 +659,11 @@ XLen: log length</p>
 <p>A new leader can’t execute write requests until previous lease period has expired. So followers keep track of the last time they responded to an AE, and tell the new leader in the RequestVote reply.</p>
 <p>As a result, we get faster read-only operations and the history is still linearizable.</p>
 <h2><span id="paxos">Paxos</span><a href="#paxos" class="header-anchor">¶</a></h2>
+<p>Handout:</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="http://nil.csail.mit.edu/6.824/2015/notes/l-paxos.txt">http://nil.csail.mit.edu/6.824/2015/notes/l-paxos.txt</a></li>
+<li><a target="_blank" rel="noopener" href="http://nil.csail.mit.edu/6.824/2015/notes/paxos-code.html">http://nil.csail.mit.edu/6.824/2015/notes/paxos-code.html</a></li>
+</ol>
 <h3><span id="paxos-review">Paxos Review</span><a href="#paxos-review" class="header-anchor">¶</a></h3>
 <p>Assumptions: non-Byzantine failures. Allows failures of missing messages and unordered requests.</p>
 <p>P1. An acceptor must accept the first proposal that it receives.</p>
@@ -796,7 +806,8 @@ Log entries are numbered, called instances (seq). Paxos reaches agreement on eac
 </ul>
 <p>Summary of how to use Paxos for RSM:</p>
 <p>A log of Paxos instances (client op). Different instances’ Paxos agreements are <strong>independent</strong>.</p>
-<h2><span id="case-study-zookeeper-2010">*Case Study: ZooKeeper 2010</span><a href="#case-study-zookeeper-2010" class="header-anchor">¶</a></h2>
+<h2><span id="zookeeper-2010">ZooKeeper 2010</span><a href="#zookeeper-2010" class="header-anchor">¶</a></h2>
+<p>Handout: <a target="_blank" rel="noopener" href="http://nil.csail.mit.edu/6.824/2020/notes/l-zookeeper.txt">http://nil.csail.mit.edu/6.824/2020/notes/l-zookeeper.txt</a></p>
 <p>ZooKeeper: Wait-free coordination for Internet-scale systems</p>
 <p>Read: 1-2</p>
 <blockquote class="colorquote blue"><p>Problem 0: One use of Zookeeper is as a fault-tolerant lock service (see the section “Simple locks” on page 6). Why isn’t possible for two clients to acquire the same lock? In particular, how does Zookeeper decide if a client has failed and it can give the client’s locks to other clients?</p>
@@ -833,7 +844,7 @@ Log entries are numbered, called instances (seq). Paxos reaches agreement on eac
 <p>Scalable lock compared to threaded lock of Go:</p>
 <p>: service creates sequential files. Each lock at most has one file requests to acquire. For example, supposing files are numbered with 0 - 3 and f0 holds the lock, the other files trying to acquire the lock look like the following diagram.</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># Locks w/o herd effect</span><br><span class="line">f0                   f1              f2          f3</span><br><span class="line">holds the lock &lt;-  wait for f0 &lt;- wait for f1 &lt;- wait for f2</span><br><span class="line"></span><br><span class="line"># Locks w/ herd effect</span><br><span class="line">f0                   f1              f2          f3</span><br><span class="line">holds the lock &lt;-  wait for f0   wait for f0   wait for f0</span><br><span class="line"> ^					 |                 |           |</span><br><span class="line"> |--------------------------------------------------</span><br></pre></td></tr></table></figure>
-<h2><span id="case-study-chubby-2006">*Case Study: Chubby 2006</span><a href="#case-study-chubby-2006" class="header-anchor">¶</a></h2>
+<h2><span id="chubby-2006">Chubby 2006</span><a href="#chubby-2006" class="header-anchor">¶</a></h2>
 <p>The Chubby lock service for loosely-coupled distributed systems</p>
 <p>Terms:</p>
 <ol>
@@ -841,7 +852,8 @@ Log entries are numbered, called instances (seq). Paxos reaches agreement on eac
 <li>Whole-file reads refer to a pattern where applications read entire files from beginning to end, rather than accessing random portions or small parts of files. This was one of the key workload assumptions in systems like Google File System (GFS).</li>
 </ol>
 <p>This paper introduces Chubby, a distributed lock service, for use within a distributed system consisting of fairly large numbers of small machines connected by a high-speed network. It aims to deal with the problem of electing a leader from among a set of servers. The authors only want to discuss the design and implementation through real experience.</p>
-<h2><span id="case-study-harp-1991">*Case Study: Harp 1991</span><a href="#case-study-harp-1991" class="header-anchor">¶</a></h2>
+<h2><span id="harp-1991">Harp 1991</span><a href="#harp-1991" class="header-anchor">¶</a></h2>
+<p>Handout: <a target="_blank" rel="noopener" href="http://nil.csail.mit.edu/6.824/2015/notes/l-harp.txt">http://nil.csail.mit.edu/6.824/2015/notes/l-harp.txt</a></p>
 <p>Replication in the Harp File System</p>
 <p>Read: 1, 3-6</p>
 <blockquote class="colorquote blue"><p>Question: Figures 5-1, 5-2, and 5-3 show that Harp often finishes benchmarks faster than a conventional non-replicated NFS server. This may be surprising, since you might expect Harp to do strictly more work than a conventional NFS server (for example, Harp must manage the replication). Why is Harp often faster? Will all NFS operations be faster with Harp than on a conventional NFS server, or just some of them? Which?</p>
@@ -881,15 +893,84 @@ Log entries are numbered, called instances (seq). Paxos reaches agreement on eac
 <li>q: When can Harp form a new view?</li>
 <li>Optimizations of Harp: pipelining of requests to backup (numbered event records?)</li>
 </ol>
-<p>Reference:</p>
+<h2><span id="farm-2015">FaRM 2015</span><a href="#farm-2015" class="header-anchor">¶</a></h2>
+<p>Handout: <a target="_blank" rel="noopener" href="http://nil.csail.mit.edu/6.824/2020/notes/l-farm.txt">http://nil.csail.mit.edu/6.824/2020/notes/l-farm.txt</a></p>
+<p><a target="_blank" rel="noopener" href="http://nil.csail.mit.edu/6.824/2020/questions.html?q=q-farm&amp;lec=14">Question</a>: What is the evidence that FaRM will use to realize that it must abort the second transaction? At what point in the Section 4 / Figure 4 protocol will FaRM realize that it must abort?</p>
+<p>FaRM aborts at lock step. Assume two transactions are T1, T2. T1 finishes. The object is updated on the primary at commit-primary step. Then T2 starts to commit. T2’s coordinator has recorded the old version which mismatches the new version on the primary at lock step.</p>
+<p>Terminology:</p>
 <ol>
-<li><a target="_blank" rel="noopener" href="http://nil.csail.mit.edu/6.824/2015/notes/l-paxos.txt">http://nil.csail.mit.edu/6.824/2015/notes/l-paxos.txt</a></li>
-<li><a target="_blank" rel="noopener" href="http://nil.csail.mit.edu/6.824/2015/notes/paxos-code.html">http://nil.csail.mit.edu/6.824/2015/notes/paxos-code.html</a></li>
-<li><a target="_blank" rel="noopener" href="http://nil.csail.mit.edu/6.824/2022/notes/l-raft.txt">http://nil.csail.mit.edu/6.824/2022/notes/l-raft.txt</a></li>
-<li><a target="_blank" rel="noopener" href="http://nil.csail.mit.edu/6.824/2022/notes/l-raft2.txt">http://nil.csail.mit.edu/6.824/2022/notes/l-raft2.txt</a></li>
-<li><a target="_blank" rel="noopener" href="http://nil.csail.mit.edu/6.824/2015/notes/l-harp.txt">http://nil.csail.mit.edu/6.824/2015/notes/l-harp.txt</a></li>
-<li><a target="_blank" rel="noopener" href="http://nil.csail.mit.edu/6.824/2020/notes/l-zookeeper.txt">http://nil.csail.mit.edu/6.824/2020/notes/l-zookeeper.txt</a></li>
+<li>lease: a lease is a contract that gives its holder specified rights to some resource for a limited period. Because it is time-limited, a lease is an alternative to a lock for resource serialization.</li>
+<li>consistent hashing: when a hash table is resized, only n/m keys need to be remapped on average where n is the number of keys and m is the number of slots. It uses a hash function that maps both the BLOB (object) and servers to a unit circle, usually 2π radians. The reason of consistent hashing is to evenly distribute a new BLOB and to reduce reassignment of BLOBs when a server fails.</li>
+<li><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Database_transaction_schedule">transaction schedule</a>: conflicting, serial, serializable, conflict-serializable.</li>
+<li>vertical Paxos: vertical refers to reconfiguration of the set of replicas. Imaging log entry on the x-axis, ballot number (attempts of a log entry) on the y-axis, and configurations on the z-axis, horizontal Paxos needs to commit a new log entry to reconfigure the membership. Vertical Paxos can reconfigure in the middle of committing a log entry. Because vertical Paxos has a configuration manager replicated to all peers.</li>
+<li>read-set: version number for each object</li>
 </ol>
+<p>Architecture:</p>
+<ol>
+<li>FaRM/Spanner = replication + transactions + sharding</li>
+<li>FaRM uses vertical Paxos tailored for primary-backup replication and an unreplicated coordinator that communicates to primaries and backups.</li>
+<li>FaRM adopts a centralized approach to assign new regions to machines. Region selection of configuration manager (CM) balances region counts and checks constraints. Then CM sends prepare and commit messages in two phases.</li>
+<li>Spanner requires 4P (2f + 1) messages to survive f failures. 4 indicates 2 round-trips of Paxos messages (prepare + accept phase).</li>
+<li>FaRM requires Pw(f + 3) one-sided RDMA writes and Pr one-sided RDMA reads to tolerate f failures. f (backups) + 3 (lock, commit-primary, truncate) = f + 3.</li>
+</ol>
+<p>FaRM’s commit protocol:</p>
+<ol>
+<li>Lock [write-set]</li>
+<li>Validate [read-set] (optimization step): A “validate” message doesn’t read an object that your own transaction just locked. It reads objects from your read-set to see if another competing transaction has locked or changed them since you first read them</li>
+<li>Commit backup</li>
+<li>Commit primaries</li>
+<li>Truncate log: save memory. RAM is limited.</li>
+</ol>
+<p>Transaction APIs: object_id: &lt;region #, address&gt;.</p>
+<p>Server memory layout: regions of an array of objects.</p>
+<ul>
+<li>Object layout: The header includes lock flag, version number</li>
+</ul>
+<p>Hardware component:</p>
+<ol>
+<li>RDMA: remote NICs reads/writes memory directly. RDMA NICs use reliable protocols. It’s faster than RPC over TCP over LAN.
+<ul>
+<li>FaRM bypasses kernel and uses RDMA reads to alleviate cpu and network bottlenecks.</li>
+</ul>
+</li>
+<li>NVRAM (non-volatile RAM): RAM is faster than SSD, HDD. However, RAM loses content in power failure. NVRAM attaches a battery to every rack which can run machine for a few minutes. When main power fails, s/w writes data to SSD during outage.
+<ul>
+<li>Crash other than power failure must be independent.</li>
+<li>This eliminates persistent write bottleneck.</li>
+</ul>
+</li>
+</ol>
+<p>Problem: reconfiguration</p>
+<h3><span id="optimistic-concurrency-control">Optimistic Concurrency Control</span><a href="#optimistic-concurrency-control" class="header-anchor">¶</a></h3>
+<p>Two classes of concurrency control for transactions:</p>
+<ul>
+<li>
+<p>Pessimistic (PCC): 2PL waits for lock on first use of object and holds until commit/abort. Conflicts of locks cause delay.</p>
+</li>
+<li>
+<p>Optimistic (OCC): Conflicts abort the transactions, return without delay.</p>
+<ol>
+<li>
+<p>Read objects without locking.</p>
+</li>
+<li>
+<p>Don’t install writes until commit</p>
+</li>
+<li>
+<p>Commit “validates” to see if other transactions conflicted.</p>
+<ul>
+<li>
+<p>valid: commit the writes</p>
+</li>
+<li>
+<p>invalid: abort</p>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<p>FaRM’s OOC provides serializability.</p>
 
   </div>
 </article>
@@ -917,7 +998,7 @@ Log entries are numbered, called instances (seq). Paxos reaches agreement on eac
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Case Study: MapReduce 2004</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Consistency and Linearizability</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">Case Study: GFS 2003</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Primary&#x2F;Backup Replication</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">Case Study: VMware FT 2010</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.1.</span> <span class="toc-text">FT design</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.2.</span> <span class="toc-text">Failure Handling</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.3.</span> <span class="toc-text">Design Alternatives</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">Verified Primary&#x2F;Backup</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">Case Study: Grove 2023</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">Raft</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.1.</span> <span class="toc-text">Raft Review</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.2.</span> <span class="toc-text">Leader Election</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.3.</span> <span class="toc-text">Log</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.4.</span> <span class="toc-text">Persistence</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.5.</span> <span class="toc-text">Log Compaction and Snapshots</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.6.</span> <span class="toc-text">Linearizability</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.7.</span> <span class="toc-text">Duplicate RPC Detection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.8.</span> <span class="toc-text">Read-only Operations</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">Paxos</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.1.</span> <span class="toc-text">Paxos Review</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.2.</span> <span class="toc-text">Inference</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">10.</span> <span class="toc-text">*Case Study: ZooKeeper 2010</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">11.</span> <span class="toc-text">*Case Study: Chubby 2006</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">12.</span> <span class="toc-text">*Case Study: Harp 1991</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">MapReduce 2004</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Consistency and Linearizability</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">GFS 2003</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">Primary&#x2F;Backup Replication</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">VMware FT 2010</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.1.</span> <span class="toc-text">FT design</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.2.</span> <span class="toc-text">Failure Handling</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">5.3.</span> <span class="toc-text">Design Alternatives</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">Verified Primary&#x2F;Backup</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">7.</span> <span class="toc-text">Grove 2023</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">8.</span> <span class="toc-text">Raft</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.1.</span> <span class="toc-text">Raft Review</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.2.</span> <span class="toc-text">Leader Election</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.3.</span> <span class="toc-text">Log</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.4.</span> <span class="toc-text">Persistence</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.5.</span> <span class="toc-text">Log Compaction and Snapshots</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.6.</span> <span class="toc-text">Linearizability</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.7.</span> <span class="toc-text">Duplicate RPC Detection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">8.8.</span> <span class="toc-text">Read-only Operations</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">9.</span> <span class="toc-text">Paxos</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.1.</span> <span class="toc-text">Paxos Review</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">9.2.</span> <span class="toc-text">Inference</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">10.</span> <span class="toc-text">ZooKeeper 2010</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">11.</span> <span class="toc-text">Chubby 2006</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">12.</span> <span class="toc-text">Harp 1991</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">13.</span> <span class="toc-text">FaRM 2015</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">13.1.</span> <span class="toc-text">Optimistic Concurrency Control</span></a></li></ol></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">

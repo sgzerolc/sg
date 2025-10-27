@@ -20,7 +20,7 @@
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/04/01/os_basics/Screenshot-6244321.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/04/01/os_basics/Screenshot-9679149.png">
 <meta property="article:published_time" content="2022-03-31T22:00:00.000Z">
-<meta property="article:modified_time" content="2025-08-27T16:45:51.483Z">
+<meta property="article:modified_time" content="2025-10-22T15:19:47.848Z">
 <meta property="article:author" content="Sam Li">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://sgzerolc.github.io/sg/2022/04/01/os_basics/boot.png">
@@ -472,7 +472,7 @@
 <h2><span id="traps">Traps</span><a href="#traps" class="header-anchor">¶</a></h2>
 <h3><span id="trap-machanism">Trap machanism</span><a href="#trap-machanism" class="header-anchor">¶</a></h3>
 <ol>
-<li>What: <code>trap</code> refers to event that mandatorily forces a transfer of control from the execution of ordinary instructions to special code that handles the event. Three kinds of such event are.syscalls, exception and device interrupt.
+<li>What: <code>trap</code> refers to event that mandatorily forces a transfer of control from the execution of ordinary instructions to special code that handles the event. Three kinds of such event are: syscalls, exception and device interrupt.
 <ul>
 <li>syscalls: <code>ecall</code></li>
 <li>exception: u/k illegal instruction, e.g. divide by zero, invalid virtual address</li>
@@ -520,7 +520,7 @@
 <li>Meanwhile, the users of that original physical page can still read it without copying.</li>
 </ol>
 <p>COW fork needs book-keeping to track when the physical page can be freed. An optimization is that if there is only one user of the physical page, no copy is needed.</p>
-<p>COW is an optimization mechanism and needed for a case when two or more processes have separate memory spaces and are isolated[^4]. The kernel optimizes it by allowing copies only when it is needed such as writes. It’s different than the case of shared memory model where multiple processes modify the same memory space and see the change.</p>
+<p>COW is an optimization mechanism and needed for a case when two or more processes have separate memory spaces and are isolated. The kernel optimizes it by allowing copies only when it is needed such as writes. It’s different than the case of shared memory model where multiple processes modify the same memory space and see the change.</p>
 <p>Lazy allocation: When an application asks for more memory, the kernel is aware of the size increase but doesn’t allocate physical memory until a page fault incurs on one of those address.</p>
 <p>Demand paging: The kernel creates the page table for the user address space and marks it invalid.</p>
 <ul>
