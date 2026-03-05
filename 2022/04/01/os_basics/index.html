@@ -20,7 +20,7 @@
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/04/01/os_basics/Screenshot-6244321.png">
 <meta property="og:image" content="https://sgzerolc.github.io/sg/2022/04/01/os_basics/Screenshot-9679149.png">
 <meta property="article:published_time" content="2022-03-31T22:00:00.000Z">
-<meta property="article:modified_time" content="2025-10-22T15:19:47.848Z">
+<meta property="article:modified_time" content="2026-02-02T10:37:20.217Z">
 <meta property="article:author" content="Sam Li">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://sgzerolc.github.io/sg/2022/04/01/os_basics/boot.png">
@@ -57,7 +57,8 @@
 	
 <meta name="generator" content="Hexo 6.3.0"></head>
 
-<body class="max-width mx-auto px3 ltr">    
+<body class="max-width mx-auto px3 ltr">
+    
       <div id="header-post">
   <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
   <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
@@ -551,7 +552,7 @@
 </li>
 <li>Terms
 <ul>
-<li><code>interrupt context</code> is time-critical that is not associated with processes. Interrupt handler putting one process sleep may let other process blocking therefore it cannot sleep in this context.</li>
+<li><code>interrupt context</code> is time-critical that is not associated with processes. Interrupt handler putting one process sleep may let other process block therefore it cannot sleep in this context.</li>
 <li><code>process context</code> is the mode of operation the kernel is in while it is executing on behalf of a process (LKD3 Chap7). Process can sleep or invoke the schedulor</li>
 </ul>
 </li>
@@ -574,7 +575,7 @@ key stroke -&gt; keyboard -&gt; (uart input -&gt; merge to byte -&gt; interrupt)
 <li>dynamically switch between interrupts and polling</li>
 </ul>
 </li>
-<li>Date movement to h/w
+<li>Data movement to h/w
 <ul>
 <li>programmed I/O: UART driver, kernel buffer =&gt; user buffer =&gt; h/w, low speed</li>
 <li>DMA (direct memory access): most modern drivers, user-space buffers &lt;=&gt; device hardware, high speed</li>
@@ -1106,7 +1107,7 @@ key stroke -&gt; keyboard -&gt; (uart input -&gt; merge to byte -&gt; interrupt)
     Copyright &copy;
     
     
-    2025
+    2026
     Sam Li
   </div>
 </footer>
@@ -1169,20 +1170,5 @@ key stroke -&gt; keyboard -&gt; (uart input -&gt; merge to byte -&gt; interrupt)
 
 <!-- utterances Comments -->
 
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>
