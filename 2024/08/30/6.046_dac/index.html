@@ -38,6 +38,10 @@
     
     <!-- title -->
     <title>ps1</title><meta name="robots" content="noindex">
+    <!-- fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;1,400&display=swap">
     <!-- styles -->
     
 <link rel="stylesheet" href="/sg/css/style.css">
@@ -163,8 +167,7 @@ mjx-container[display="true"] + br {
 }
 </style></head>
 
-<body class="max-width mx-auto px3 ltr">
-    
+<body class="max-width mx-auto px3 ltr">    
       <div id="header-post">
   <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
   <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
@@ -173,15 +176,13 @@ mjx-container[display="true"] + br {
     <span id="nav">
       <ul>
         <!--
-       --><li><a href="/sg/">Home</a></li><!--
+       --><li class="logo-item"><a href="/sg/" aria-label="steins gate zero"><span class="post-nav-logo" style="background-image: url(/sg/images/logo.png);"></span></a></li><!--
      --><!--
-       --><li><a href="/sg/about/">About</a></li><!--
+     --><!--
      --><!--
        --><li><a href="/sg/categories/">Category</a></li><!--
      --><!--
        --><li><a href="/sg/archives/">Writing</a></li><!--
-     --><!--
-       --><li><a href="/sg/CV/">CV</a></li><!--
      -->
       </ul>
     </span>
@@ -430,5 +431,20 @@ mjx-container[display="true"] + br {
 
 <!-- utterances Comments -->
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>
